@@ -14,6 +14,7 @@ public class GameMain {
 
 	public static void main(String[] args) {
         System.out.println("Hello World\nI am Ryouri");
+        System.out.println("Marge Test");
 
         //エントリーポイント
         AppGameContainer app;
