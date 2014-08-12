@@ -4,6 +4,7 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
 /**
+ * v0.0
  * ゲームの開始，生成部分
  * FairyTaleSimulationをFTSimulationと略す
  * @author misawa
