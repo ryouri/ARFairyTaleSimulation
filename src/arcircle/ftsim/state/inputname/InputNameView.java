@@ -40,7 +40,7 @@ public class InputNameView implements Renderer {
 		g.setFont(inState.getFont());
 		g.drawImage(NameBack, 0, 0);
 
-		g.drawImage(inState.sprite[0], 100+inModel.CursorX*30,  100 + inModel.CursorY*30);
+		g.drawImage(inState.sprite[0], 60+inModel.CursorX*56,  180 + inModel.CursorY*70);
 
 		int messageWidth = inState.getFont().getWidth(inModel.message);
 		g.drawString(Cursor = inModel.message, (FTSimulationGame.WIDTH - messageWidth) / 2, 150);

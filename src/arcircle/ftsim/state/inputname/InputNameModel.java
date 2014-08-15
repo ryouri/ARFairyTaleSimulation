@@ -33,13 +33,13 @@ public class InputNameModel implements KeyListner {
 			if(CursorY>0){CursorY = CursorY-1;}
 		}
 		if(keyInput.isKeyDown(Input.KEY_DOWN)) {
-			if(CursorY>0){CursorY = CursorY+1;}
+			if(CursorY<7){CursorY = CursorY+1;}
 		}
 		if(keyInput.isKeyDown(Input.KEY_LEFT)) {
-			if(CursorX>0){CursorX = CursorX+1;}
+			if(CursorX>0){CursorX = CursorX-1;}
 		}
 		if(keyInput.isKeyDown(Input.KEY_RIGHT)) {
-			if(CursorX>0){CursorX = CursorX-1;}
+			if(CursorX<17){CursorX = CursorX+1;}
 		}
 	}
 
