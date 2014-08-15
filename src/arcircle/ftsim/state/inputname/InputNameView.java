@@ -9,7 +9,6 @@ import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.state.InputNameState;
 
-
 public class InputNameView implements Renderer {
 	InputNameModel inModel;
 	private InputNameState inState;
@@ -19,6 +18,7 @@ public class InputNameView implements Renderer {
 		this.inState = inState;
 	}
 
+	
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
 		g.setColor(Color.red);
@@ -26,6 +26,9 @@ public class InputNameView implements Renderer {
 
 		g.setColor(Color.black);
 		g.setFont(inState.getFont());
+		g.drawString("Hello World!",200,200);
+		g.drawImage(inState.sprite[0], inModel.x*10, inModel.y*10);
+		
 		int messageWidth = inState.getFont().getWidth(inModel.message);
 		g.drawString(inModel.message, (FTSimulationGame.WIDTH - messageWidth) / 2,
 				150);
