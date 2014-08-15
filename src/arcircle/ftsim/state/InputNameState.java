@@ -39,7 +39,7 @@ public class InputNameState extends KeyInputState {
 		SpriteSheet ssheet = new SpriteSheet(new Image("./image/haniwa.png"), 64, 64);
 		sprite[0] = ssheet.getSubImage(0, 0);
 
-		System.out.println("Enter Select Gender State");
+		System.out.println("Enter input Name State");
 
 		keyInputStack.clear();
 		keyInputStack.push(inModel);

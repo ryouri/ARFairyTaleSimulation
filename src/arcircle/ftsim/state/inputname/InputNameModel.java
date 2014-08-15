@@ -10,10 +10,13 @@ public class InputNameModel implements KeyListner {
 
 	private InputNameState inState;
 
-	public int x = 2;
-	public int y = 2;
-	
+	public int x = 100;
+	public int y = 100;
 	public String message = "S e l e c t  Y o u r N a m e ";
+	public String cursor = "SSSSSSSS";
+	public int CursorX = 0;  //カーソルが選択している座標Xを格納
+	public int CursorY = 0;  //カーソルが選択している座標Yを格納
+	public char [][] sursorchar = new char [10][10];
 
 	public InputNameModel(InputNameState inputNameState) {
 		super();
@@ -27,16 +30,22 @@ public class InputNameModel implements KeyListner {
 			inState.nextState();
 		}
 		if(keyInput.isKeyDown(Input.KEY_UP)) {
-			y = y-1;
+			if(CursorY>0){CursorY = CursorY-1;}
 		}
 		if(keyInput.isKeyDown(Input.KEY_DOWN)) {
-			y = y+1;
+			if(CursorY>0){CursorY = CursorY+1;}
 		}
 		if(keyInput.isKeyDown(Input.KEY_LEFT)) {
-			x = x-1;
+			if(CursorX>0){CursorX = CursorX+1;}
 		}
 		if(keyInput.isKeyDown(Input.KEY_RIGHT)) {
-			x = x+1;
+			if(CursorX>0){CursorX = CursorX-1;}
 		}
 	}
+
+	public String getcursor(){
+		cursor = "現在の座標は(" + CursorX + "," + CursorY + ")" ;
+		return cursor;
+	}
+
 }

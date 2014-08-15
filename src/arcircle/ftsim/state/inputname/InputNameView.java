@@ -15,6 +15,7 @@ public class InputNameView implements Renderer {
 	InputNameModel inModel;
 	private InputNameState inState;
 	private Image NameBack;
+	private String Cursor;
 
 	public InputNameView(InputNameModel inModel, InputNameState inState) {
 		super();
@@ -38,14 +39,13 @@ public class InputNameView implements Renderer {
 		g.setColor(Color.black);
 		g.setFont(inState.getFont());
 		g.drawImage(NameBack, 0, 0);
-		g.drawString("Hello World!",200,200);
 
-
-		g.drawImage(inState.sprite[0], inModel.x*30, inModel.y*30);
+		g.drawImage(inState.sprite[0], 100+inModel.CursorX*30,  100 + inModel.CursorY*30);
 
 		int messageWidth = inState.getFont().getWidth(inModel.message);
-		g.drawString(inModel.message, (FTSimulationGame.WIDTH - messageWidth) / 2,
-				150);
+		g.drawString(Cursor = inModel.message, (FTSimulationGame.WIDTH - messageWidth) / 2, 150);
+
+		g.drawString(inModel.getcursor(), (FTSimulationGame.WIDTH -200), 600);
 	}
 }
 
