@@ -35,10 +35,7 @@ public class SimGameState extends KeyInputState {
 		System.out.println("Enter Sim Game State");
 
 		keyInputStack.clear();
-		keyInputStack.push(sgModel);
 		rendererArray.clear();
-		rendererArray.add(sgView);
+		//rendererArray.add(sgView);
 	}
 }
-
-

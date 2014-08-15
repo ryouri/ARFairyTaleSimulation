@@ -25,10 +25,8 @@ public class SimGameView implements Renderer {
 
 		g.setColor(Color.black);
 		g.setFont(sgState.getFont());
-		int messageWidth = sgState.getFont().getWidth("S i m G a m e");
+		int messageWidth = sgState.getFont().getWidth("S i m  G a m e");
 		g.drawString("S i m G a m e", (FTSimulationGame.WIDTH - messageWidth) / 2,
 				150);
-
 	}
-
 }

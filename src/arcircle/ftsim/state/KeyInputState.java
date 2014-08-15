@@ -116,4 +116,20 @@ abstract public class KeyInputState extends BasicGameState {
 		this.keyInput = new KeyInput();
 		super.leave(container, game);
 	}
+
+	public void keyInputStackPush(KeyListner keyListner) {
+		keyInputStack.push(keyListner);
+	}
+
+	public void keyInputStackRemoveFirst() {
+		keyInputStack.remove();
+	}
+
+	public void rendererArrayAdd(Renderer renderer) {
+		rendererArray.add(renderer);
+	}
+
+	public void rendererArrayRemoveEnd() {
+		rendererArray.remove(rendererArray.size() - 1);
+	}
 }
