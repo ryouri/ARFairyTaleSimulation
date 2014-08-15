@@ -13,10 +13,16 @@ public class InputNameModel implements KeyListner {
 	public int x = 100;
 	public int y = 100;
 	public String message = "S e l e c t  Y o u r N a m e ";
-	public String cursor = "SSS";
+	public String charactor = "S";
 	public int CursorX = 0;  //カーソルが選択している座標Xを格納
 	public int CursorY = 0;  //カーソルが選択している座標Yを格納
-	public char[] cursorchar = new char [] {'あ','い'};
+	public char[][] cursorchar = new char [][] {
+			{'あ','か','さ','た','な','は','ま','や','ら','わ','ぁ','っ','が','ざ'},
+			{'い','き','し','ち','に','ひ','み','　','り','　','ぁ','っ','が','ざ'},
+			{'う','く','す','つ','な','は','ま','や','ら','わ','ぁ','っ','が','ざ'},
+			{'え','け','せ','て','な','は','ま','や','ら','わ','ぁ','っ','が','ざ'},
+			{'お','こ','そ','と','な','は','ま','や','ら','わ','ぁ','っ','が','ざ'}
+	};
 
 	public InputNameModel(InputNameState inputNameState) {
 		super();
@@ -43,9 +49,9 @@ public class InputNameModel implements KeyListner {
 		}
 	}
 
-	public String getcursor(){
-		cursor = "現在の座標は(" + CursorX + "," + CursorY + ")" ;
-		return cursor;
+	public String getCharFromCursor(){
+		charactor = "カーソルの座標(" + CursorX + "," + CursorY + ")    ⇒" + cursorchar[CursorY][CursorX] ;
+		return charactor;
 	}
 
 }
