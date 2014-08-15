@@ -43,6 +43,15 @@ public class SimGameState extends KeyInputState {
 		System.out.println("Enter Sim Game State");
 	}
 
+
+
+	@Override
+	public void update(GameContainer container, StateBasedGame game, int delta)
+			throws SlickException {
+		super.update(container, game, delta);
+		sgModel.update(container, game, delta);
+	}
+
 	public void setReadFilePath(String sectionPath, String subStoryPath,
 			int sectionNum, int subStoryNum) {
 			this.sectionPath = sectionPath;

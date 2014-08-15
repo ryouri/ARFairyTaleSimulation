@@ -1,5 +1,8 @@
 package arcircle.ftsim.state.simgame;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.state.StateBasedGame;
+
 import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.simulation.model.World;
@@ -45,5 +48,9 @@ public class SimGameModel{
 
 	public void init() {
 		world = new World(this);
+	}
+
+	public void update(GameContainer container, StateBasedGame game, int delta) {
+		world.update(container, game, delta);
 	}
 }

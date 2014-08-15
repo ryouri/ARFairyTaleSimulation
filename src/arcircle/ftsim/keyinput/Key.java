@@ -70,6 +70,7 @@ public class Key {
 
 	public void keyReleased() {
 		keyState = KEY_RELEASE;
+		keyDownTime = 0;
 	}
 
 	public int getKeyState() {
