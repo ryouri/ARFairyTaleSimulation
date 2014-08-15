@@ -39,7 +39,7 @@ public class Key {
 		super();
 		this.keyState = KEY_RELEASE;
 		this.keyNumber = keyNumber;
-		this.keyDownTimeSetting = 2;
+		this.keyDownTimeSetting = 1;
 	}
 
 	public Key(int keyNumber, int keyDownTimeSetting) {
