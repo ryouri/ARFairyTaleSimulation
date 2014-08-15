@@ -14,8 +14,7 @@ import arcircle.ftsim.state.InputNameState;
 public class InputNameView implements Renderer {
 	InputNameModel inModel;
 	private InputNameState inState;
-	private Image NameBack;
-	private String Cursor;
+	public Image NameBack;
 
 	public InputNameView(InputNameModel inModel, InputNameState inState) {
 		super();
@@ -24,11 +23,34 @@ public class InputNameView implements Renderer {
 		this.NameBack = null;
 
 		try {
+			this.NameBack = new Image("./image/InputNameHiragana.png");	//最初はひらがな入力
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void InputNameHiragana(){
+		try {
 			this.NameBack = new Image("./image/InputNameHiragana.png");
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 	}
+	public void InputNameKatakana(){
+		try {
+			this.NameBack = new Image("./image/InputNameKatakana.png");
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+	public void InputNameKigou(){
+		try {
+			this.NameBack = new Image("./image/InputNameKigou.png");
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
@@ -40,7 +62,7 @@ public class InputNameView implements Renderer {
 		g.setFont(inState.getFont());
 		g.drawImage(NameBack, 0, 0);
 
-		g.drawImage(inState.sprite[0], 22+inModel.CursorX*56,  218 + inModel.CursorY*80);
+		g.drawImage(inState.sprite[0], 22+inModel.CursorX*56,  220 + inModel.CursorY*80);
 
 		int messageWidth = inState.getFont().getWidth(inModel.message);
 		//g.drawString(Cursor = inModel.message, (FTSimulationGame.WIDTH - messageWidth) / 2, 150);
