@@ -36,7 +36,7 @@ public class InputNameState extends KeyInputState {
 		inModel = new InputNameModel(this);
 		inView = new InputNameView(inModel, this);
 
-		SpriteSheet ssheet = new SpriteSheet(new Image("./image/haniwa.png"), 64, 64);
+		SpriteSheet ssheet = new SpriteSheet(new Image("./image/Cursor.png"), 80, 80);
 		sprite[0] = ssheet.getSubImage(0, 0);
 
 		System.out.println("Enter input Name State");
