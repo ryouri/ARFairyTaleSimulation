@@ -8,6 +8,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import arcircle.JapaneseFont.JapaneseFontGenerater;
 import arcircle.ftsim.state.GameStartState;
 import arcircle.ftsim.state.SelectGenderState;
+import arcircle.ftsim.state.SimGameState;
 import arcircle.ftsim.state.StateConst;
 
 public class FTSimulationGame extends StateBasedGame {
@@ -22,12 +23,14 @@ public class FTSimulationGame extends StateBasedGame {
 		super(name);
 		this.addState(new GameStartState(StateConst.GAME_START));
 		this.addState(new SelectGenderState(StateConst.SELECT_GENDER));
+		this.addState(new SimGameState(StateConst.SIM_GAME));
 	}
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
 		this.getState(StateConst.GAME_START).init(container, this);
 		this.getState(StateConst.SELECT_GENDER).init(container, this);
+		this.getState(StateConst.SIM_GAME).init(container, this);
 		//this.enterState(StateConst.GAME_START);
 
 		//コンストラクタで実行するとエラー発生するよー

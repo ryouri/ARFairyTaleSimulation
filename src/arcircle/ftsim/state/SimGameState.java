@@ -20,7 +20,7 @@ public class SimGameState extends KeyInputState {
 	}
 
 	public void nextState() {
-		stateGame.enterState(StateConst.SELECT_GENDER,
+		stateGame.enterState(StateConst.GAME_START,
 				new FadeOutTransition(Color.black, 500),
 				new FadeInTransition(Color.black, 500));
 	}
@@ -31,7 +31,9 @@ public class SimGameState extends KeyInputState {
 		super.enter(container, game);
 		sgModel = new SimGameModel(this);
 		sgView = new SimGameView(sgModel, this);
-		System.out.println("Enter Game Start State");
+
+		System.out.println("Enter Sim Game State");
+
 		keyInputStack.clear();
 		keyInputStack.push(sgModel);
 		rendererArray.clear();
