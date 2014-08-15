@@ -46,6 +46,7 @@ public class GameStartState extends KeyInputState {
 
 	@Override
 	public void enter(GameContainer container, StateBasedGame game)
+
 			throws SlickException {
 		super.enter(container, game);
 		gsModel = new GameStartModel(this);
