@@ -12,6 +12,10 @@ public class GameStartModel implements KeyListner {
 
 	private GameStartState gsState;
 
+	//テスト用の四角の座標
+	public int x;
+	public int y;
+
 	public GameStartModel(GameStartState gsState) {
 		super();
 		this.gsState = gsState;
@@ -21,6 +25,18 @@ public class GameStartModel implements KeyListner {
 	public void keyInput(KeyInput keyInput) {
 		if(keyInput.isKeyDown(Input.KEY_Z)) {
 			gsState.nextState();
+		}
+		if(keyInput.isKeyDown(Input.KEY_RIGHT)) {
+			x += 1;
+		}
+		if(keyInput.isKeyDown(Input.KEY_LEFT)) {
+			x -= 1;
+		}
+		if(keyInput.isKeyDown(Input.KEY_UP)) {
+			y -= 1;
+		}
+		if(keyInput.isKeyDown(Input.KEY_DOWN)) {
+			y += 1;
 		}
 	}
 }

@@ -28,5 +28,6 @@ public class GameStartView implements Renderer{
 		int titleWidth = gsState.getFont().getWidth(gsModel.title);
 		g.drawString(gsModel.title, (FTSimulationGame.WIDTH - titleWidth) / 2,
 				150);
+		g.drawRect(gsModel.x, gsModel.y, 64, 64);
 	}
 }
