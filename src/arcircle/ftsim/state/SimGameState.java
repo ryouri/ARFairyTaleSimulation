@@ -15,6 +15,11 @@ public class SimGameState extends KeyInputState {
 	private SimGameModel sgModel;
 	private SimGameView sgView;
 
+	public String sectionPath;
+	public String subStoryPath;
+	public int sectionNum;
+	public int subStoryNum;
+
 	public SimGameState(int state) {
 		super(state);
 	}
@@ -30,12 +35,28 @@ public class SimGameState extends KeyInputState {
 			throws SlickException {
 		super.enter(container, game);
 		sgModel = new SimGameModel(this);
+		sgModel.setReadFilePath(sectionPath, subStoryPath,
+				sectionNum, subStoryNum);
+		sgModel.init();
 		sgView = new SimGameView(sgModel, this);
 
 		System.out.println("Enter Sim Game State");
+	}
 
-		keyInputStack.clear();
-		rendererArray.clear();
-		//rendererArray.add(sgView);
+
+
+	@Override
+	public void update(GameContainer container, StateBasedGame game, int delta)
+			throws SlickException {
+		super.update(container, game, delta);
+		sgModel.update(container, game, delta);
+	}
+
+	public void setReadFilePath(String sectionPath, String subStoryPath,
+			int sectionNum, int subStoryNum) {
+			this.sectionPath = sectionPath;
+			this.subStoryPath = subStoryPath;
+			this.sectionNum = sectionNum;
+			this.subStoryNum = subStoryNum;
 	}
 }

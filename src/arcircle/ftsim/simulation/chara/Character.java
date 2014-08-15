@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.command.Command;
 
-import arcircle.ftsim.simulation.item.Item;
-
 public class Character {
 	public String name;
 	public int gender;
@@ -22,6 +20,6 @@ public class Character {
 	public int defence;
 	public int magicDefence;
 
-	public ArrayList<Item> itemList;
+	//public ArrayList<Item> itemList;
 	public ArrayList<Command> commandList;
 }

@@ -23,12 +23,11 @@ public class SelectGenderView implements Renderer {
 		this.sgModel = sgModel;
 		this.sgState = sgState;
 
+		//稲井が画像ファイルをアップロードしていない？
 		try {
-
 			imageMale = new Image("./image/genderimage/male.png");
 			imageFemale = new Image("./image/genderimage/female.png");
 			flame = new Image("./image/genderimage/flame.png");
-
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}

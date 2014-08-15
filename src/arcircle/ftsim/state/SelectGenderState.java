@@ -20,6 +20,14 @@ public class SelectGenderState extends KeyInputState {
 	}
 
 	public void nextState() {
+
+		//misawa用
+//		GameState sbGame = stateGame.getState(StateConst.SIM_GAME);
+//		SimGameState sgState = (SimGameState) sbGame;
+//		sgState.setReadFilePath("01_Story", "01", 1, 1);
+//		stateGame.enterState(StateConst.SIM_GAME,
+
+		//asakura用
 		stateGame.enterState(StateConst.INPUT_NAME,
 				new FadeOutTransition(Color.black, 500),
 				new FadeInTransition(Color.black, 500));
