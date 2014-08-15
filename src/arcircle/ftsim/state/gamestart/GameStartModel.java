@@ -8,7 +8,7 @@ import arcircle.ftsim.state.GameStartState;
 
 public class GameStartModel implements KeyListner {
 
-	public String title = "F a i r y  T a l e  S i m u l a t i o n";
+	public String title = "F a i r y  T a l e  S i m u l a t i o n !!!!!!!!!!!!!!!!!!!";
 
 	private GameStartState gsState;
 
