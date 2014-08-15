@@ -1,5 +1,7 @@
 package arcircle.ftsim.state.simgame;
 
+import org.newdawn.slick.Input;
+
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.state.SimGameState;
@@ -13,5 +15,8 @@ public class SimGameModel implements KeyListner {
 
 	@Override
 	public void keyInput(KeyInput keyInput) {
+		if(keyInput.isKeyDown(Input.KEY_Z)) {
+			sgState.nextState();
+		}
 	}
 }
