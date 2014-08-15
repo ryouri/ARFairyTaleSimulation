@@ -13,10 +13,10 @@ public class InputNameModel implements KeyListner {
 	public int x = 100;
 	public int y = 100;
 	public String message = "S e l e c t  Y o u r N a m e ";
-	public String cursor = "SSSSSSSS";
+	public String cursor = "SSS";
 	public int CursorX = 0;  //カーソルが選択している座標Xを格納
 	public int CursorY = 0;  //カーソルが選択している座標Yを格納
-	public char [][] sursorchar = new char [10][10];
+	public char[] cursorchar = new char [] {'あ','い'};
 
 	public InputNameModel(InputNameState inputNameState) {
 		super();
