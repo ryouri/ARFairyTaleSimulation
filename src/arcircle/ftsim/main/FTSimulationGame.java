@@ -9,10 +9,11 @@ import arcircle.JapaneseFont.JapaneseFontGenerater;
 import arcircle.ftsim.state.GameStartState;
 import arcircle.ftsim.state.SelectGenderState;
 import arcircle.ftsim.state.StateConst;
+import arcircle.ftsim.state.TalkState;
 
 public class FTSimulationGame extends StateBasedGame {
-	public static final int WIDTH  = 960;
-	public static final int HEIGHT = 960;
+	public static final int WIDTH  = 1120;
+	public static final int HEIGHT = 800;
 	public static final int FPS = 60;
 	public static final String GAMENAME = "FairyTaleSimulation";
 
@@ -22,6 +23,7 @@ public class FTSimulationGame extends StateBasedGame {
 		super(name);
 		this.addState(new GameStartState(StateConst.GAME_START));
 		this.addState(new SelectGenderState(StateConst.SELECT_GENDER));
+		this.addState(new TalkState(StateConst.TALK));
 	}
 
 	@Override

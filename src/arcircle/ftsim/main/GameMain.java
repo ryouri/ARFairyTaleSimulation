@@ -16,13 +16,14 @@ public class GameMain {
         System.out.println("Hello World\nの名前はゆきねこです.");
 
         //エントリーポイント
-        AppGameContainer app;
+        AppGameContainer app;	
+        
         try{
             app = new AppGameContainer(new FTSimulationGame(FTSimulationGame.GAMENAME));
             app.setDisplayMode(FTSimulationGame.WIDTH, FTSimulationGame.HEIGHT, false);
             app.setTargetFrameRate(FTSimulationGame.FPS);
-            app.setShowFPS(false);
-            app.start();
+            app.setShowFPS(false);	
+            app.start();	
         }catch(SlickException e){
             e.printStackTrace();
         }

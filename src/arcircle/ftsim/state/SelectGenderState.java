@@ -20,7 +20,7 @@ public class SelectGenderState extends KeyInputState {
 	}
 
 	public void nextState() {
-		stateGame.enterState(StateConst.GAME_START,
+		stateGame.enterState(StateConst.TALK,
 				new FadeOutTransition(Color.black, 500),
 				new FadeInTransition(Color.black, 500));
 	}
