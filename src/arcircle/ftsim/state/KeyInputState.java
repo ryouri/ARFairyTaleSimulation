@@ -81,7 +81,8 @@ abstract public class KeyInputState extends BasicGameState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-		keyInputStack.getFirst().keyInput(keyInput);;
+		keyInputStack.getFirst().keyInput(keyInput);
+		keyInput.keyUpdate();
 	}
 
 	@Override
@@ -114,5 +115,21 @@ abstract public class KeyInputState extends BasicGameState {
 		//keyInputを初期化する
 		this.keyInput = new KeyInput();
 		super.leave(container, game);
+	}
+
+	public void keyInputStackPush(KeyListner keyListner) {
+		keyInputStack.push(keyListner);
+	}
+
+	public void keyInputStackRemoveFirst() {
+		keyInputStack.remove();
+	}
+
+	public void rendererArrayAdd(Renderer renderer) {
+		rendererArray.add(renderer);
+	}
+
+	public void rendererArrayRemoveEnd() {
+		rendererArray.remove(rendererArray.size() - 1);
 	}
 }

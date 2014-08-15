@@ -7,20 +7,20 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import arcircle.ftsim.state.selectgender.SelectGenderModel;
-import arcircle.ftsim.state.selectgender.SelectGenderView;
+import arcircle.ftsim.state.simgame.SimGameModel;
+import arcircle.ftsim.state.simgame.SimGameView;
 
-public class SelectGenderState extends KeyInputState {
 
-	private SelectGenderModel sgModel;
-	private SelectGenderView sgView;
+public class SimGameState extends KeyInputState {
+	private SimGameModel sgModel;
+	private SimGameView sgView;
 
-	public SelectGenderState(int state) {
+	public SimGameState(int state) {
 		super(state);
 	}
 
 	public void nextState() {
-		stateGame.enterState(StateConst.INPUT_NAME,
+		stateGame.enterState(StateConst.GAME_START,
 				new FadeOutTransition(Color.black, 500),
 				new FadeInTransition(Color.black, 500));
 	}
@@ -29,14 +29,13 @@ public class SelectGenderState extends KeyInputState {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enter(container, game);
-		sgModel = new SelectGenderModel(this);
-		sgView = new SelectGenderView(sgModel, this);
+		sgModel = new SimGameModel(this);
+		sgView = new SimGameView(sgModel, this);
 
-		System.out.println("Enter Select Gender State");
+		System.out.println("Enter Sim Game State");
 
 		keyInputStack.clear();
-		keyInputStack.push(sgModel);
 		rendererArray.clear();
-		rendererArray.add(sgView);
+		//rendererArray.add(sgView);
 	}
 }
