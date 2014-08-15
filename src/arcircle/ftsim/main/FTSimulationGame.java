@@ -11,7 +11,7 @@ import arcircle.ftsim.state.SelectGenderState;
 import arcircle.ftsim.state.StateConst;
 
 public class FTSimulationGame extends StateBasedGame {
-	public static final int WIDTH  = 960;
+	public static final int WIDTH  = 1600;
 	public static final int HEIGHT = 960;
 	public static final int FPS = 60;
 	public static final String GAMENAME = "FairyTaleSimulation";
