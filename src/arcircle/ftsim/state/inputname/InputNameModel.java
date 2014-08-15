@@ -13,7 +13,7 @@ public class InputNameModel implements KeyListner {
 	public int x = 100;
 	public int y = 100;
 	public String message = "S e l e c t  Y o u r N a m e ";
-	public String charactor = "";
+	private String charactor = "";
 	public int CursorX = 0;  //カーソルが選択している座標Xを格納
 	public int CursorY = 0;  //カーソルが選択している座標Yを格納
 	public char[][] cursorchar = new char [][] {
@@ -36,7 +36,7 @@ public class InputNameModel implements KeyListner {
 			if(CursorX == 17 && CursorY == 4 ){
 				inState.nextState();							//決定キーが押されたので確定
 			}
-			if(CursorX == 17 && CursorY == 3 ){
+			if(CursorX == 17 && CursorY == 2 ){
 				charactor = "";										//クリアキーが押されたので名前クリア
 			}
 			else{
@@ -64,6 +64,13 @@ public class InputNameModel implements KeyListner {
 		if(charactor.length()>=6){return;}				//名前は6文字まで
 		charactor = charactor + cursorchar[CursorY][CursorX] ;
 		return;
+	}
+
+	/**
+	 * 外部から主人公の名前を得るためのメソッド　返り血はString型
+	 */
+	public String getName(){
+		return charactor;
 	}
 
 }
