@@ -10,8 +10,8 @@ public class InputNameModel implements KeyListner {
 
 	private InputNameState inState;
 
-	public int x = 32;
-	public int y = 32;
+	public int x = 2;
+	public int y = 2;
 	
 	public String message = "S e l e c t  Y o u r N a m e ";
 

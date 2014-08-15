@@ -17,7 +17,7 @@ public class InputNameState extends KeyInputState {
 	private InputNameModel inModel;
 	private InputNameView inView;
 
-	public Image[] sprite = new Image[1];
+	public Image [] sprite = new Image[1];
 
 	public InputNameState(int state) {
 		super(state);
