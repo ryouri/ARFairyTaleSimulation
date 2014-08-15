@@ -32,6 +32,10 @@ public class KeyInput
 	 * 変数にキー状態を保存する。
 	 */
 	public void keyPressed(int key, char c) {
+		if (!keyMap.containsKey(key)) {
+			return;
+		}
+
 		keyMap.get(key).keyPressed();
 
 		//ESCAPEは強制終了
@@ -45,6 +49,10 @@ public class KeyInput
 	 * 押されていたキーを放したときに呼ばれる処理
 	 */
 	public void keyReleased(int key, char c) {
+		if (!keyMap.containsKey(key)) {
+			return;
+		}
+
 		keyMap.get(key).keyReleased();
 	}
 
