@@ -10,7 +10,7 @@ public class SelectGenderModel implements KeyListner {
 
 	public static final int MALE = 0;
 	public static final int FEMALE = 1;
-	public static int GENDER;
+	public int gender;
 
 	private SelectGenderState sgState;
 
@@ -24,10 +24,10 @@ public class SelectGenderModel implements KeyListner {
 	@Override
 	public void keyInput(KeyInput keyInput) {
 		if(keyInput.isKeyDown(Input.KEY_LEFT)) {
-			GENDER = MALE;
+			gender = MALE;
 		}
 		else if(keyInput.isKeyDown(Input.KEY_RIGHT)) {
-			GENDER = FEMALE;
+			gender = FEMALE;
 		}
 		else if(keyInput.isKeyDown(Input.KEY_Z)) {
 			sgState.nextState();

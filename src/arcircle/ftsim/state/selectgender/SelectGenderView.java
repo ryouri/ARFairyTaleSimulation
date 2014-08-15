@@ -45,7 +45,7 @@ public class SelectGenderView implements Renderer{
 			int flameHeight = flame.getHeight();
 
 
-			if(SelectGenderModel.GENDER == SelectGenderModel.MALE){
+			if(sgModel.gender == SelectGenderModel.MALE){
 				g.drawImage(imageMale, FTSimulationGame.WIDTH/4-imageGenderWidth/2,
 						FTSimulationGame.HEIGHT/3*2-imageGenderHeight/2);
 				g.drawImage(imageFemale, FTSimulationGame.WIDTH/4*3-imageGenderWidth/2,
@@ -53,7 +53,7 @@ public class SelectGenderView implements Renderer{
 				g.drawImage(flame, FTSimulationGame.WIDTH/4-flameWidth/2,
 						FTSimulationGame.HEIGHT/3*2-flameHeight/2);
 			}
-			else if(SelectGenderModel.GENDER == SelectGenderModel.FEMALE){
+			else if(sgModel.gender == SelectGenderModel.FEMALE){
 				g.drawImage(imageMale, FTSimulationGame.WIDTH/4-imageGenderWidth/2,
 						FTSimulationGame.HEIGHT/3*2-imageGenderHeight/2);
 				g.drawImage(imageFemale, FTSimulationGame.WIDTH/4*3-imageGenderWidth/2,
