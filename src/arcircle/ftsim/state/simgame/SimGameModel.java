@@ -10,9 +10,13 @@ public class SimGameModel{
 
 	public World world;
 
+	public String sectionPath;
+	public String subStoryPath;
+	public int sectionNum;
+	public int subStoryNum;
+
 	public SimGameModel(SimGameState simGameState) {
 		sgState = simGameState;
-		world = new World(this);
 	}
 
 	public void keyInputStackPush(KeyListner keyListner) {
@@ -29,5 +33,17 @@ public class SimGameModel{
 
 	public void rendererArrayRemoveEnd() {
 		sgState.rendererArrayRemoveEnd();
+	}
+
+	public void setReadFilePath(String sectionPath, String subStoryPath,
+			int sectionNum, int subStoryNum) {
+			this.sectionPath = sectionPath;
+			this.subStoryPath = subStoryPath;
+			this.sectionNum = sectionNum;
+			this.subStoryNum = subStoryNum;
+	}
+
+	public void init() {
+		world = new World(this);
 	}
 }

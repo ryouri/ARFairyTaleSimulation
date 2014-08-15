@@ -81,7 +81,9 @@ abstract public class KeyInputState extends BasicGameState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-		keyInputStack.getFirst().keyInput(keyInput);
+		if (keyInputStack.size() != 0) {
+			keyInputStack.getFirst().keyInput(keyInput);
+		}
 		keyInput.keyUpdate();
 	}
 
@@ -106,6 +108,8 @@ abstract public class KeyInputState extends BasicGameState {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enter(container, game);
+		keyInputStack.clear();
+		rendererArray.clear();
 		this.font = FTSimulationGame.font;
 	}
 
