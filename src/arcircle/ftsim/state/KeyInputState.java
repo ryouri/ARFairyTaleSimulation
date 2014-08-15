@@ -81,7 +81,8 @@ abstract public class KeyInputState extends BasicGameState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-		keyInputStack.getFirst().keyInput(keyInput);;
+		keyInputStack.getFirst().keyInput(keyInput);
+		keyInput.keyUpdate();
 	}
 
 	@Override
