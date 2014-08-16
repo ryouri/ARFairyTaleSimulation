@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -46,7 +47,11 @@ public class TalkState extends KeyInputState {
 	
 	//次の状態へ行くメソッド-------------------------------------------------------------------------------------------
 	public void nextState() {
-		stateGame.enterState(StateConst.SELECT_GENDER,
+		//stateGame.enterState(StateConst.SELECT_GENDER,
+		GameState sbGame = stateGame.getState(StateConst.SIM_GAME);
+		SimGameState sgState = (SimGameState) sbGame;
+		sgState.setReadFilePath("01_Story", "01", 1, 1);
+		stateGame.enterState(StateConst.SIM_GAME,
 				new FadeOutTransition(Color.black, 500),
 				new FadeInTransition(Color.black, 500));
 	}

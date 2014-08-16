@@ -23,6 +23,9 @@ public class GameStartModel implements KeyListner {
 
 	@Override
 	public void keyInput(KeyInput keyInput) {
+		if(keyInput.isKeyDown(Input.KEY_D)){
+			gsState.nextState();
+		}
 		if(keyInput.isKeyDown(Input.KEY_Z)) {
 			gsState.nextState();
 		}

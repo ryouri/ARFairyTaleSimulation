@@ -4,6 +4,7 @@ import org.newdawn.slick.Input;
 
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
+import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.state.SelectGenderState;
 
 public class SelectGenderModel implements KeyListner {
@@ -23,17 +24,16 @@ public class SelectGenderModel implements KeyListner {
 
 	@Override
 	public void keyInput(KeyInput keyInput) {
+		//デバッグ用スキップキー
+		if(keyInput.isKeyDown(Input.KEY_D)){
+			FTSimulationGame.save.getPlayer().gender = MALE;
+			sgState.nextState();
+		}
 		if (keyInput.isKeyDown(Input.KEY_LEFT)) {
 			gender = MALE;
 		} else if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
 			gender = FEMALE;
 		} else if (keyInput.isKeyDown(Input.KEY_Z)) {
-//			File newfile = new File("Save/newfile.txt");
-//			try{
-//			    newfile.createNewFile();
-//			}catch(IOException e){
-//			    System.out.println(e);
-//			}
 			sgState.nextState();
 		}
 	}
