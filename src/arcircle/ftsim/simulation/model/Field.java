@@ -198,6 +198,36 @@ public class Field implements KeyListner, Renderer {
 		if (keyInput.isKeyPressed(Input.KEY_LEFT)) {
 			cursor.pressed(Cursor.LEFT);
 		}
+
+		//決定キーが押されたとき
+		if (keyInput.isKeyDown(Input.KEY_Z)) {
+			for (Character chara : characters.characterArray) {
+				if (chara.isSelect) {
+					pushZKey(chara);
+				}
+			}
+		}
+	}
+
+	private void pushZKey(Character chara) {
+		//CharaCommandWindowはCursorの
+		//左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
+//		int cursorViewPosX = 1;
+//		int cursorViewPosY = 1;
+//		if (cursor.x < 5) {
+//			cursorViewPosX = -1;
+//		}
+//		if (cursor.y < 5) {
+//			cursorViewPosY = 1;
+//		}
+//		if (cursor.x > col - 5) {
+//			cursorViewPosX = -1;
+//		}
+//		if (cursor.y > row - 5) {
+//			cursorViewPosY = -1;
+//		}
+//
+//		CharaCommandWindow ccWindow = new CharaCommandWindow();
 	}
 
 	/**

@@ -27,6 +27,7 @@ public class Characters {
 
 	public HashMap<String, SpriteSheet> walkSheetMap;
 	public HashMap<String, SpriteSheet> readySheetMap;
+	public HashMap<String, SpriteSheet> attackSheetMap;
 
 	public HashMap<String, Animation> upWalkAnimeMap;
 	public HashMap<String, Animation> downWalkAnimeMap;
@@ -36,6 +37,8 @@ public class Characters {
 	public HashMap<String, Animation> stayAnimeMap;
 	public HashMap<String, Animation> cursorAnimeMap;
 
+	public HashMap<String, Animation> attackAnimeMap;
+
 	public ArrayList<Character> characterArray;
 
 	public Characters(SimGameModel sgModel, int row, int col) {
@@ -44,6 +47,7 @@ public class Characters {
 		this.col = col;
 		this.walkSheetMap = new HashMap<String, SpriteSheet>();
 		this.readySheetMap = new HashMap<String, SpriteSheet>();
+		this.attackSheetMap = new HashMap<String, SpriteSheet>();
 
 		this.upWalkAnimeMap = new HashMap<String, Animation>();
 		this.downWalkAnimeMap = new HashMap<String, Animation>();
@@ -51,6 +55,7 @@ public class Characters {
 		this.rightWalkAnimeMap = new HashMap<String, Animation>();
 		this.stayAnimeMap = new HashMap<String, Animation>();
 		this.cursorAnimeMap = new HashMap<String, Animation>();
+		this.attackAnimeMap = new HashMap<String, Animation>();
 
 		this.characterArray = new ArrayList<Character>();
 	}
@@ -68,6 +73,7 @@ public class Characters {
 
 	private static int[] walkPattern = {0, 1, 2, 1};
 	private static int[] duration = {250, 250, 250, 250};
+	private static int[] attackDuration = {100, 100, 700, 100};
 	private void generateAnimation() {
 		for (String charaName : walkSheetMap.keySet()) {
 			SpriteSheet walkSheet = walkSheetMap.get(charaName);
@@ -83,6 +89,9 @@ public class Characters {
 			Image[] stayImages = generateImageArray(readySheet, 0);
 			Image[] cursorImages = generateImageArray(readySheet, 3);
 
+			SpriteSheet attackSheet = attackSheetMap.get(charaName);
+			Image[] nearAttackImages = generateImageArray(attackSheet, 0);
+
 			upWalkAnimeMap.put(charaName, new Animation(upImages, duration, true));
 			downWalkAnimeMap.put(charaName, new Animation(downImages, duration, true));
 			leftWalkAnimeMap.put(charaName, new Animation(leftImages, duration, true));
@@ -90,6 +99,9 @@ public class Characters {
 
 			stayAnimeMap.put(charaName, new Animation(stayImages, duration, true));
 			cursorAnimeMap.put(charaName, new Animation(cursorImages, duration, true));
+
+			attackAnimeMap.put(charaName, new Animation(nearAttackImages, attackDuration, true));
+
 		}
 	}
 
@@ -111,6 +123,7 @@ public class Characters {
 
 	public static String readyFile = "ready.png";
 	public static String walkFile = "walk.png";
+	public static String attackFile = "attack.png";
 	private void loadCharaChip(String charaFolderPath, String charaName){
 		try {
 			walkSheetMap.put(charaName,
@@ -121,6 +134,11 @@ public class Characters {
 			readySheetMap.put(charaName,
 					new SpriteSheet(
 							new Image(charaFolderPath + readyFile),
+							Field.MAP_CHIP_SIZE,
+							Field.MAP_CHIP_SIZE));
+			attackSheetMap.put(charaName,
+					new SpriteSheet(
+							new Image(charaFolderPath + attackFile),
 							Field.MAP_CHIP_SIZE,
 							Field.MAP_CHIP_SIZE));
 		} catch (SlickException e) {
@@ -178,7 +196,7 @@ public class Characters {
 			Animation anime = stayAnimeMap.get(chara.name);
 
 			if (chara.isSelect) {
-				anime = cursorAnimeMap.get(chara.name);
+				anime = attackAnimeMap.get(chara.name);
 			}
 
 			anime.draw(

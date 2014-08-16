@@ -2,7 +2,7 @@ package arcircle.ftsim.simulation.chara;
 
 import java.util.ArrayList;
 
-import org.newdawn.slick.command.Command;
+import org.newdawn.slick.tests.xml.Item;
 
 public class Character {
 	public int x;
@@ -23,8 +23,7 @@ public class Character {
 	public int defence;
 	public int magicDefence;
 
-	//public ArrayList<Item> itemList;
-	public ArrayList<Command> commandList;
+	public ArrayList<Item> itemList;
 
 	public int direction;
 	public static final int UP = 0;
