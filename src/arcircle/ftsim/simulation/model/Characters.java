@@ -46,10 +46,7 @@ public class Characters {
 
 	HashMap<String, Item> itemList;
 
-	public Characters(SimGameModel sgModel, int row, int col, HashMap<String, Item> itemList) {
-		this.sgModel = sgModel;
-		this.row = row;
-		this.col = col;
+	public Characters() {
 		this.walkSheetMap = new HashMap<String, SpriteSheet>();
 		this.readySheetMap = new HashMap<String, SpriteSheet>();
 		this.attackSheetMap = new HashMap<String, SpriteSheet>();
@@ -65,11 +62,14 @@ public class Characters {
 		this.characterArray = new ArrayList<Chara>();
 
 		this.characterData = new HashMap<String, Chara>();
-
-		this.itemList = itemList;
 	}
 
-	public void init() {
+	public void init(SimGameModel sgModel, int row, int col, HashMap<String, Item> itemList) {
+		this.sgModel = sgModel;
+		this.row = row;
+		this.col = col;
+		this.itemList = itemList;
+
 		String charaPath = sgModel.getStoriesFolder() + "/"
 				+ charactersFolderPath;
 		File dir = new File(charaPath);

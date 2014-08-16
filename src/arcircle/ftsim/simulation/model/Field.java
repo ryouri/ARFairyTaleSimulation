@@ -61,6 +61,7 @@ public class Field implements KeyListner, Renderer {
 	public Field(SimGameModel sgModel, HashMap<String, Item> itemList) {
 		this.sgModel = sgModel;
 		this.itemList = itemList;
+		this.characters = new Characters();
 		sSheet = null;
 	}
 
@@ -68,12 +69,11 @@ public class Field implements KeyListner, Renderer {
 		loadMapAndMapChip(subStoryFolderPath + "map.dat", subStoryFolderPath
 				+ "mapchip.txt");
 		initCursor();
-		this.characters = new Characters(sgModel, row, col, itemList);
 		initCharacters(subStoryFolderPath);
 	}
 
 	private void initCharacters(String subStoryFolderPath) {
-		characters.init();
+		characters.init(sgModel, row, col, itemList);
 		characters.addCharacters(subStoryFolderPath + "putCharacter.txt");
 	}
 

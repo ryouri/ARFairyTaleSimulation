@@ -26,7 +26,7 @@ public class World {
 	public HashMap<String, Item> itemList;
 
 	public World(SimGameModel simGameModel) {
-		itemList = new HashMap<String, Item>();
+		this.itemList = new HashMap<String, Item>();
 		loadItemList();
 
 		this.sgModel = simGameModel;
