@@ -86,28 +86,35 @@ public class Field implements KeyListner, Renderer {
 		cursorAnime = new Animation(cursorImage, cursorDuration, true);
 	}
 
+	public int offsetX;
+	public int offsetY;
+	public int firstTileX;
+	public int lastTileX;
+	public int firstTileY;
+	public int lastTileY;
+
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
 		// X方向のオフセットを計算
-		int offsetX = MAP_VIEW_WIDTH / 2 - cursor.pX;
+		offsetX = MAP_VIEW_WIDTH / 2 - cursor.pX;
 		// マップの端ではスクロールしないようにする
 		offsetX = Math.min(offsetX, 0);
 		offsetX = Math.max(offsetX, MAP_VIEW_WIDTH - mapWidth);
 
 		// Y方向のオフセットを計算
-		int offsetY = MAP_VIEW_HEIGHT / 2 - cursor.pY;
+		offsetY = MAP_VIEW_HEIGHT / 2 - cursor.pY;
 		// マップの端ではスクロールしないようにする
 		offsetY = Math.min(offsetY, 0);
 		offsetY = Math.max(offsetY, MAP_VIEW_HEIGHT - mapHeight);
 
         // オフセットを元に描画範囲を求める
-        int firstTileX = pixelsToTiles(-offsetX);
-        int lastTileX = firstTileX + pixelsToTiles(MAP_VIEW_WIDTH) + 2;
+        firstTileX = pixelsToTiles(-offsetX);
+        lastTileX = firstTileX + pixelsToTiles(MAP_VIEW_WIDTH) + 2;
         // 描画範囲がマップの大きさより大きくならないように調整
         lastTileX = Math.min(lastTileX, col);
 
-        int firstTileY = pixelsToTiles(-offsetY);
-        int lastTileY = firstTileY + pixelsToTiles(MAP_VIEW_HEIGHT) + 1;
+        firstTileY = pixelsToTiles(-offsetY);
+        lastTileY = firstTileY + pixelsToTiles(MAP_VIEW_HEIGHT) + 1;
         // 描画範囲がマップの大きさより大きくならないように調整
         lastTileY = Math.min(lastTileY, row);
 
@@ -212,22 +219,50 @@ public class Field implements KeyListner, Renderer {
 	private void pushZKey(Character chara) {
 		//CharaCommandWindowはCursorの
 		//左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
-//		int cursorViewPosX = 1;
-//		int cursorViewPosY = 1;
-//		if (cursor.x < 5) {
-//			cursorViewPosX = -1;
-//		}
-//		if (cursor.y < 5) {
-//			cursorViewPosY = 1;
-//		}
-//		if (cursor.x > col - 5) {
-//			cursorViewPosX = -1;
-//		}
-//		if (cursor.y > row - 5) {
-//			cursorViewPosY = -1;
-//		}
-//
-//		CharaCommandWindow ccWindow = new CharaCommandWindow();
+		int cursorViewPosX = 1;
+		int cursorViewPosY = 1;
+		if (cursor.x < 5) {
+			cursorViewPosX = 1;
+		}
+		if (cursor.y < 5) {
+			cursorViewPosY = 1;
+		}
+		if (cursor.x > col - 5) {
+			cursorViewPosX = -1;
+		}
+		if (cursor.y > row - 5) {
+			cursorViewPosY = -1;
+		}
+
+		int cursorRenderX = cursor.pX + offsetX;
+		int cursorRenderY = cursor.pY + offsetY;
+		int windowX = cursor.pX + offsetX;
+		int windowY = cursor.pY + offsetY;
+		//左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
+		//右下(1, 1)に表示
+		if (cursorViewPosX == 1 && cursorViewPosY == 1) {
+			windowX = cursorRenderX + 40;
+			windowY = cursorRenderY;
+		}
+		//左下(-1, 1)に表示
+		if (cursorViewPosX == -1 && cursorViewPosY == 1) {
+			windowX = cursorRenderX - 128;
+			windowY = cursorRenderY;
+		}
+		//左上(-1, -1)に表示
+		if (cursorViewPosX == -1 && cursorViewPosY == -1) {
+			windowX = cursorRenderX - 128;
+			windowY = cursorRenderY - 160;
+		}
+		//右上(1, -1)に表示
+		if (cursorViewPosX == 1 && cursorViewPosY == -1) {
+			windowX = cursorRenderX + 40;
+			windowY = cursorRenderY - 160;
+		}
+
+		CharaCommandWindow ccWindow = new CharaCommandWindow(sgModel, this, windowX, windowY);
+		sgModel.keyInputStackPush(ccWindow);
+		sgModel.rendererArrayAdd(ccWindow);
 	}
 
 	/**
