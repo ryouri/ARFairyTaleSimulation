@@ -97,8 +97,8 @@ public class InputNameModel implements KeyListner {
 	 * カーソルの位置charactorOption,CursorY,CursorXから文字に変換し、String charactorに8文字まで累加算する
 	 */
 	public void addGetCharFromCursor(){
-		if(charactor.length()>=8){return;}				//名前は8文字まで
-		charactor = charactor + cursorchar[charactorOption][CursorY][CursorX] ;
+		if(charactor.length()>=16){return;}				//名前は8文字まで
+		charactor = charactor + cursorchar[charactorOption][CursorY][CursorX] + " " ;
 		return;
 	}
 

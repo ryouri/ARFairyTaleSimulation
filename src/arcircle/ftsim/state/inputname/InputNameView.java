@@ -59,7 +59,7 @@ public class InputNameView implements Renderer {
 		g.fillRect(0, 0, FTSimulationGame.WIDTH, FTSimulationGame.HEIGHT);
 
 		g.setColor(Color.black);
-		g.setFont(inState.getFont());
+		g.setFont(inState.getInputNameFont());
 
 		switch(inModel.getcharactorOption()){										//charactorOptionの値で文字入力の背景変更
 		case 0: g.drawImage(InputNameHiragana , 0, 0); break;
@@ -67,12 +67,12 @@ public class InputNameView implements Renderer {
 		case 2: g.drawImage(InputNameKigou , 0, 0); break;
 		}
 
-		g.drawImage(NameCursor, 22+inModel.CursorX*56,  220 + inModel.CursorY*80);
+		g.drawImage(NameCursor, 20+inModel.CursorX*56,  212 + inModel.CursorY*80);
 		//g.drawImage(inState.sprite[0], 22+inModel.CursorX*56,  220 + inModel.CursorY*80);
 
 		int messageWidth = inState.getFont().getWidth(inModel.message);
 
-		g.drawString(inModel.getName(), (FTSimulationGame.WIDTH/2 -80), 67);
+		g.drawString(inModel.getName(), (FTSimulationGame.WIDTH/12), 68);
 	}
 }
 
