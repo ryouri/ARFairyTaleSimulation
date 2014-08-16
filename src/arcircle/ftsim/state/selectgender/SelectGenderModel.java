@@ -23,13 +23,11 @@ public class SelectGenderModel implements KeyListner {
 
 	@Override
 	public void keyInput(KeyInput keyInput) {
-		if(keyInput.isKeyDown(Input.KEY_LEFT)) {
+		if (keyInput.isKeyDown(Input.KEY_LEFT)) {
 			gender = MALE;
-		}
-		else if(keyInput.isKeyDown(Input.KEY_RIGHT)) {
+		} else if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
 			gender = FEMALE;
-		}
-		else if(keyInput.isKeyDown(Input.KEY_Z)) {
+		} else if (keyInput.isKeyDown(Input.KEY_Z)) {
 			sgState.nextState();
 		}
 	}
