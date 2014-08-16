@@ -18,6 +18,9 @@ public class SimGameModel{
 	public int sectionNum;
 	public int subStoryNum;
 
+	//TODO: 現在は最上層のフォルダは定数で指定しているが，受け取れるようにするべき
+	public static final String storiesFolder = "Stories";
+
 	public SimGameModel(SimGameState simGameState) {
 		sgState = simGameState;
 	}
@@ -52,5 +55,9 @@ public class SimGameModel{
 
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		world.update(container, game, delta);
+	}
+
+	public String getStoriesFolder() {
+		return storiesFolder;
 	}
 }

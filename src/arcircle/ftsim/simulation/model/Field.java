@@ -68,6 +68,7 @@ public class Field implements KeyListner, Renderer {
 
 	private void initCharacters() {
 		this.characters = new Characters(sgModel, row, col);
+		characters.init();
 	}
 
 	private void initCursor() {

@@ -10,11 +10,12 @@ public class World {
 
 	SimGameModel sgModel;
 
+
 	public World(SimGameModel simGameModel) {
 		this.sgModel = simGameModel;
 		this.field = new Field(simGameModel);
 
-		String filePath = "Stories/"
+		String filePath = sgModel.getStoriesFolder() + "/"
 				+ sgModel.sectionPath + "/"
 				+ sgModel.subStoryPath + "/";
 		field.init(filePath + "map.dat", filePath + "mapchip.txt");
