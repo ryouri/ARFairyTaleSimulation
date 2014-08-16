@@ -107,7 +107,7 @@ public class InputNameModel implements KeyListner {
 	public void GetCharFromCursor(){
 		if(cursorcharArreyLength>7){
 			return;
-		}																	//名前は8文字まで
+		}
 		else {
 		cursorcharArrey[cursorcharArreyLength] = cursorchar[charactorOption][CursorY][CursorX] ;
 		cursorcharArreyLength ++;
