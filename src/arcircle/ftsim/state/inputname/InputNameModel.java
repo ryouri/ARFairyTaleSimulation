@@ -8,7 +8,6 @@ import arcircle.ftsim.state.InputNameState;
 
 public class InputNameModel implements KeyListner {
 	private InputNameState inState;
-	private InputNameView inView;
 	public int x = 100;
 	public int y = 100;
 	public String message = "S e l e c t  Y o u r N a m e ";
@@ -19,7 +18,7 @@ public class InputNameModel implements KeyListner {
 	public int charactorOption =0;
 	public int CursorX = 0;  //カーソルが選択している座標Xを格納
 	public int CursorY = 0;  //カーソルが選択している座標Yを格納
-	public char[][][] cursorchar = new char [][][] {
+	private char[][][] cursorchar = new char [][][] {
 			{
 			{'あ','か','さ','た','な','は','ま','や','ら','わ','ぁ','っ','が','ざ','だ','ば','ぱ','ー'},
 			{'い','き','し','ち','に','ひ','み','　','り','　','ぃ','ゃ','ぎ','じ','ぢ','び','ぴ','～'},
@@ -58,14 +57,14 @@ public class InputNameModel implements KeyListner {
 			else if(CursorX == 17 && CursorY == 3 ){
 				charactor = "";										//クリアキーが押されたので名前クリア
 			}
+			else if(CursorX == 17 && CursorY == 0 ){
+				charactorOption = 0;							//ひら　が押されたのでひらがな入力モード
+			}
 			else if(CursorX == 17 && CursorY == 1 ){
 				charactorOption = 1;							//カナ　が押されたのでカナ入力モード
 			}
 			else if(CursorX == 17 && CursorY == 2 ){
 				charactorOption = 2;							//記号　が押されたので記号入力モード
-			}
-			else if(CursorX == 17 && CursorY == 0 ){
-				charactorOption = 0;							//ひら　が押されたのでひらがな入力モード
 			}
 			else{
 				addGetCharFromCursor();
@@ -86,7 +85,16 @@ public class InputNameModel implements KeyListner {
 	}
 
 	/**
-	 * カーソルの位置charactorOption,CursorY,CursorXから文字に変換し、String charactorに6文字まで累加算する
+	 * 外部からcharactorOptionをint型で得る
+	 * 0=ひらがな入力,　1=かな入力,　2=記号入力
+	 */
+	public int getcharactorOption(){
+		return charactorOption;
+
+	}
+
+	/**
+	 * カーソルの位置charactorOption,CursorY,CursorXから文字に変換し、String charactorに8文字まで累加算する
 	 */
 	public void addGetCharFromCursor(){
 		if(charactor.length()>=8){return;}				//名前は8文字まで

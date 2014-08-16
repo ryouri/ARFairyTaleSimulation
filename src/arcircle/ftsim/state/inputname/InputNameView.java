@@ -14,42 +14,42 @@ import arcircle.ftsim.state.InputNameState;
 public class InputNameView implements Renderer {
 	InputNameModel inModel;
 	private InputNameState inState;
-	public Image NameBack;
+	public Image InputNameHiragana;
+	public Image InputNameKatakana;
+	public Image InputNameKigou;
+	public Image NameCursor;
 
 	public InputNameView(InputNameModel inModel, InputNameState inState) {
 		super();
 		this.inModel = inModel;
 		this.inState = inState;
-		this.NameBack = null;
+		this.InputNameHiragana = null;
+		this.InputNameKatakana = null;
+		this.InputNameKigou = null;
+		this.NameCursor = null;
 
 		try {
-			this.NameBack = new Image("./image/InputNameHiragana.png");	//最初はひらがな入力
+			this.InputNameHiragana = new Image("./image/InputNameHiragana.png");	//ひらがな入力のimage登録
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+		try {
+			this.InputNameKatakana = new Image("./image/InputNameKatakana.png");//カナ入力のimage登録
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+		try {
+			this.InputNameKigou = new Image("./image/InputNameKigou.png");//記号入力のimage登録
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+		try {
+			this.NameCursor = new Image("./image/Cursor.png");//カーソルののimage登録
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void InputNameHiragana(){
-		try {
-			this.NameBack = new Image("./image/InputNameHiragana.png");
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-	}
-	public void InputNameKatakana(){
-		try {
-			this.NameBack = new Image("./image/InputNameKatakana.png");
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-	}
-	public void InputNameKigou(){
-		try {
-			this.NameBack = new Image("./image/InputNameKigou.png");
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-	}
 
 
 	@Override
@@ -60,12 +60,18 @@ public class InputNameView implements Renderer {
 
 		g.setColor(Color.black);
 		g.setFont(inState.getFont());
-		g.drawImage(NameBack, 0, 0);
 
-		g.drawImage(inState.sprite[0], 22+inModel.CursorX*56,  220 + inModel.CursorY*80);
+		System.out.println("charactorOption"+inModel.getcharactorOption());
+		switch(inModel.getcharactorOption()){										//charactorOptionの値で文字入力の背景変更
+		case 0: g.drawImage(InputNameHiragana , 0, 0); break;
+		case 1: g.drawImage(InputNameKatakana , 0, 0); break;
+		case 2: g.drawImage(InputNameKigou , 0, 0); break;
+		}
+
+		g.drawImage(NameCursor, 22+inModel.CursorX*56,  220 + inModel.CursorY*80);
+		//g.drawImage(inState.sprite[0], 22+inModel.CursorX*56,  220 + inModel.CursorY*80);
 
 		int messageWidth = inState.getFont().getWidth(inModel.message);
-		//g.drawString(Cursor = inModel.message, (FTSimulationGame.WIDTH - messageWidth) / 2, 150);
 
 		g.drawString(inModel.getName(), (FTSimulationGame.WIDTH/2 -80), 67);
 	}
