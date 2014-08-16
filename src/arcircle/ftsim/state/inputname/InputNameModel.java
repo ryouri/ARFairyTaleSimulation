@@ -1,5 +1,10 @@
 package arcircle.ftsim.state.inputname;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import org.newdawn.slick.Input;
 
 import arcircle.ftsim.keyinput.KeyInput;
@@ -8,8 +13,7 @@ import arcircle.ftsim.state.InputNameState;
 
 public class InputNameModel implements KeyListner {
 	private InputNameState inState;
-	public int x = 100;
-	public int y = 100;
+
 
 	public String message = "S e l e c t  Y o u r N a m e ";
 	private String charactor = null;
@@ -25,16 +29,16 @@ public class InputNameModel implements KeyListner {
 	private char[][][] cursorchar = new char [][][] {
 			{
 			{'あ','か','さ','た','な','は','ま','や','ら','わ','ぁ','っ','が','ざ','だ','ば','ぱ','ー'},
-			{'い','き','し','ち','に','ひ','み','　','り','　','ぃ','ゃ','ぎ','じ','ぢ','び','ぴ','～'},
+			{'い','き','し','ち','に','ひ','み','　','り','ー','ぃ','ゃ','ぎ','じ','ぢ','び','ぴ','～'},
 			{'う','く','す','つ','ぬ','ふ','む','ゆ','る','を','ぅ','ゅ','ぐ','ず','づ','ぶ','ぷ','〇'},
-			{'え','け','せ','て','ね','へ','め','　','れ','　','ぇ','ょ','げ','ぜ','で','べ','ぺ','〇'},
+			{'え','け','せ','て','ね','へ','め','　','れ','～','ぇ','ょ','げ','ぜ','で','べ','ぺ','〇'},
 			{'お','こ','そ','と','の','ほ','も','よ','ろ','ん','ぉ','ゎ','ご','ぞ','ど','ぼ','ぽ','〇'}
 			},
 			{
 			{'ア','カ','サ','タ','ナ','ハ','マ','ヤ','ラ','ワ','ァ','ッ','ガ','ザ','ダ','バ','パ','ー'},
-			{'イ','キ','シ','チ','ニ','ヒ','ミ','　','リ','　','ィ','ャ','ギ','ジ','ヂ','ビ','ピ','～'},
+			{'イ','キ','シ','チ','ニ','ヒ','ミ','　','リ','ー','ィ','ャ','ギ','ジ','ヂ','ビ','ピ','～'},
 			{'ウ','ク','ス','ツ','ネ','フ','ム','ユ','ル','ヲ','ゥ','ュ','グ','ズ','ヅ','ブ','プ','〇'},
-			{'エ','け','セ','テ','ネ','ヘ','メ','　','レ','　','ェ','ョ','ゲ','ゼ','デ','ベ','ペ','〇'},
+			{'エ','け','セ','テ','ネ','ヘ','メ','　','レ','～','ェ','ョ','ゲ','ゼ','デ','ベ','ペ','〇'},
 			{'オ','コ','ソ','ト','ノ','ホ','モ','ヨ','ロ','ン','ォ','ヮ','ゴ','ゾ','ド','ボ','ポ','〇'}
 			},
 			{
@@ -57,6 +61,7 @@ public class InputNameModel implements KeyListner {
 	public void keyInput(KeyInput keyInput) {
 		if(keyInput.isKeyDown(Input.KEY_Z)) {
 			if(CursorX == 17 && CursorY == 4 ){
+				SaveInputName();								//セーブデータに名前を書き込む
 				inState.nextState();							//決定キーが押されたので確定
 			}
 			else if(CursorX == 17 && CursorY == 3 ){
@@ -76,6 +81,7 @@ public class InputNameModel implements KeyListner {
 				GetCharFromCursor();
 			}
 		}
+
 		if(keyInput.isKeyDown(Input.KEY_UP)) {
 			if(CursorY>0){CursorY = CursorY-1;}
 			else if(CursorY==0){CursorY = 4;}
@@ -122,10 +128,29 @@ public class InputNameModel implements KeyListner {
 	 */
 	public void ClearCursorcharArrey(){
 		for(int i=0; i<8; i++){
-			cursorcharArrey[i] = ' ';
+			cursorcharArrey[i] = '　';
 		}
 		return;
 	}
+
+	/**
+	 * 作成した名前をテキストファイルに書きだす。このメソッド呼ぶだけでOK
+	 */
+	public void SaveInputName(){
+		System.out.println("SavingFiles...");
+        try {
+            FileWriter fw = new FileWriter("c:\\save\\test.txt", true);			   //出力先を作成する tureで追記モード
+            PrintWriter pw = new PrintWriter(new BufferedWriter(fw));
+
+            pw.println(getName() +  ",");
+            pw.close();
+            System.out.println("出力が完了しました。");
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+	}
+
 
 	/**
 	 * 外部から主人公の名前を得るためのメソッド　返り血はString型

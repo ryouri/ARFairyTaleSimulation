@@ -31,6 +31,9 @@ public class FTSimulationGame extends StateBasedGame {
 		this.addState(new TalkState(StateConst.TALK));
 	}
 
+	public static String Savename;
+
+
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
 		this.getState(StateConst.GAME_START).init(container, this);
