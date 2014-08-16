@@ -15,7 +15,7 @@ import arcircle.ftsim.state.TalkState;
 
 public class FTSimulationGame extends StateBasedGame {
 	public static final int WIDTH  = 1120;
-	public static final int HEIGHT = 800;
+	public static final int HEIGHT = 640;
 	public static final int FPS = 60;
 	public static final String GAMENAME = "FairyTaleSimulation";
 
