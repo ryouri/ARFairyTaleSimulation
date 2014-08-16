@@ -28,6 +28,12 @@ public class SelectGenderModel implements KeyListner {
 		} else if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
 			gender = FEMALE;
 		} else if (keyInput.isKeyDown(Input.KEY_Z)) {
+//			File newfile = new File("Save/newfile.txt");
+//			try{
+//			    newfile.createNewFile();
+//			}catch(IOException e){
+//			    System.out.println(e);
+//			}
 			sgState.nextState();
 		}
 	}

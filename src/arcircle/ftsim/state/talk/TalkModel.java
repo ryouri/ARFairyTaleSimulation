@@ -32,7 +32,7 @@ public class TalkModel implements KeyListner {
     // 次のページがあるか？
     private boolean nextFlag = false;
     // ウィンドウを隠せるか？（最後まで表示したらtrueになる）
-    private boolean hideFlag = false;
+    private boolean nextStateFlag = false;
 
     //セーブデータロード用
     private int chapterID;
@@ -46,6 +46,7 @@ public class TalkModel implements KeyListner {
 
 	private int curTagPointer = 0;
 
+	private int tagP = 0;
 
 	// テキストを流すTimerTask
     private Timer timer;
@@ -69,9 +70,6 @@ public class TalkModel implements KeyListner {
 	public boolean isNextFlag() { return nextFlag; }
 	public void setNextFlag(boolean nextFlag) { this.nextFlag = nextFlag; }
 
-	public boolean isHideFlag() { return hideFlag; }
-	public void setHideFlag(boolean hideFlag) { this.hideFlag = hideFlag; }
-
 	//public String getChapterName() { return chapterName; }
 	//public void setChapterName(String chapterName) { this.chapterName = chapterName; }
 	public int getCurPosOfPage() { return curPosOfPage; }
@@ -89,6 +87,7 @@ public class TalkModel implements KeyListner {
 		receiveData("little_red_ridding-hood", "おおかみ", "いづな", "ななこ");
 
 		task = new DrawingMessageTask();
+		task = new DrawingMessageTask();
         timer.schedule(task, 0L, 30L);
 
 	}
@@ -96,26 +95,34 @@ public class TalkModel implements KeyListner {
 	@Override
 	//キーインプット------------------------------------------------------------------------------------
 	public void keyInput(KeyInput keyInput) {
-		if(keyInput.isKeyDown(Input.KEY_Z)) {
-			if(nextFlag){
+		if(keyInput.isKeyDown(Input.KEY_Z)){
+			if(nextFlag && nextStateFlag == true){
+				//System.out.println(curTagPointer + "," + tagP);
+				talkState.nextState();
+			} else if(nextFlag){
 				curTagPointer++;
 				curTagText = tags[curTagPointer].getText();
 				curPosOfPage = 0;
-			    curPage = 0;
-			    nextFlag = false;
-			}else{}
-		}else{}
+				curPage = 0;
+				nextFlag = false;
+
+				if(curTagPointer == tagP){
+					System.out.println(curTagPointer + "," + tagP);
+					nextStateFlag = true;
+				}
+			}
+		}
 	}
 
 
     //セーブデータを受け取るメソッド
     public void receiveData(String chapterName, String subStoryName, String charaName1, String charaName2 ){
     	this.chapterName = chapterName;
-    	if(chapterName == "little_red_ridding-hood"){
+    	if(chapterName.equals("little_red_ridding-hood")){
     		chapterID = 1;
     	}
     	this.subStoryName = subStoryName;
-    	if(subStoryName == "おおかみ"){
+    	if(subStoryName.equals("おおかみ")){
     		chapterID = 3;
     	}
     	this.charaName1 = charaName1;
@@ -131,16 +138,11 @@ public class TalkModel implements KeyListner {
     		String line;
 
     		nextFlag = false;
-            hideFlag = false;
-            
+            nextStateFlag = false;
+
             int p = 0;  // 処理中の文字位置
-            int tagP = 0;	//作成したtagの数
 
             char[] tagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
-            /*// 全角スペースで初期化
-            for (int i = 0 ; i < tagText.length; i++) {
-                tagText[i] = '　';
-            }*/
 
     		String tagName = "";
     		String speakerName = "";
@@ -162,8 +164,11 @@ public class TalkModel implements KeyListner {
 
         		if(strs[0].equals("SPEAK")){
         			tagName = strs[0];
-        			speakerName = strs[1];
-        			
+        			if(strs[1].equals("*")){
+        				strs[1] = "主人公";
+        			}else{
+        				speakerName = strs[1];
+        			}
         		}else if(strs[0].equals("SPEAKEND")){
         			tagText[p++] = '$';
         			tags[tagP] = new TextTag(tagName, speakerName, tagText);
@@ -172,7 +177,7 @@ public class TalkModel implements KeyListner {
         			speakerName = "";
         			p = 0;
         			tagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
-        			
+
         		}else if(strs[0].equals("SELECT_SWITCH")){
         			tagName = strs[0];
         			speakerName = strs[1];
@@ -193,6 +198,7 @@ public class TalkModel implements KeyListner {
         			}
         		}
             }
+
     		br.close();  // ファイルを閉じる
 
     	} catch (FileNotFoundException ex) {
@@ -216,7 +222,7 @@ public class TalkModel implements KeyListner {
                     curPosOfPage = (curPosOfPage / MAX_CHARS_PER_PAGE) * MAX_CHARS_PER_PAGE;
                 } else if (curTagText[p] == '$') {
                 	nextFlag = true;
-                    hideFlag=true;
+                    //hideFlag=true;
                 }
 
                 // 1ページの文字数に達したら▼を表示

@@ -43,6 +43,7 @@ public class TalkState extends KeyInputState {
 			throws SlickException {
 		super.update(container, game, delta);
 	}
+	
 	//次の状態へ行くメソッド-------------------------------------------------------------------------------------------
 	public void nextState() {
 		stateGame.enterState(StateConst.SELECT_GENDER,

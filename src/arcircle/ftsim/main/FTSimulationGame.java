@@ -22,6 +22,8 @@ public class FTSimulationGame extends StateBasedGame {
 	public static UnicodeFont font;
 	public static UnicodeFont InputNamefont;
 
+
+
 	public FTSimulationGame(String name) {
 		super(name);
 		this.addState(new GameStartState(StateConst.GAME_START));
