@@ -1,6 +1,6 @@
 package arcircle.ftsim.simulation.model;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
@@ -15,9 +15,12 @@ public class World {
 
 	SubInfoWindow subInfoWindow;
 
-	public ArrayList<Item> itemList;
+	public HashMap<String, Item> itemList;
 
 	public World(SimGameModel simGameModel) {
+		itemList = new HashMap<String, Item>();
+		loadItem();
+
 		this.sgModel = simGameModel;
 		this.field = new Field(simGameModel);
 
@@ -31,6 +34,10 @@ public class World {
 		sgModel.keyInputStackPush(field);
 		sgModel.rendererArrayAdd(field);
 		sgModel.rendererArrayAdd(subInfoWindow);
+	}
+
+	public void loadItem() {
+		
 	}
 
 	public void update(GameContainer container, StateBasedGame game, int delta) {

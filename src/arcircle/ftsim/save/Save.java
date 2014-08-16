@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import arcircle.ftsim.simulation.chara.Status;
 
+/**
+ * キャラクターの持っている武器が保存されないよ！
+ *
+ */
 public class Save {
 	public static final String PLAYER = "PLAYER";
 	public static final String CHARA = "CHARA";

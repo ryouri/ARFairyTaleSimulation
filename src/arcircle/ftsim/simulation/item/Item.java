@@ -13,4 +13,6 @@ public class Item {
 	//使う
 	public static int TYPE_USE = 2;
 	public static String TYPE_USE_STR = "TYPE_USE";
+
+	public int itemIcon;
 }
