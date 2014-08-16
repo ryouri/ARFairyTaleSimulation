@@ -9,11 +9,13 @@ import arcircle.JapaneseFont.JapaneseFontGenerater;
 import arcircle.ftsim.state.GameStartState;
 import arcircle.ftsim.state.InputNameState;
 import arcircle.ftsim.state.SelectGenderState;
+import arcircle.ftsim.state.SimGameState;
 import arcircle.ftsim.state.StateConst;
+import arcircle.ftsim.state.TalkState;
 
 public class FTSimulationGame extends StateBasedGame {
 	public static final int WIDTH  = 1120;
-	public static final int HEIGHT = 640;
+	public static final int HEIGHT = 800;
 	public static final int FPS = 60;
 	public static final String GAMENAME = "FairyTaleSimulation";
 
@@ -24,6 +26,8 @@ public class FTSimulationGame extends StateBasedGame {
 		this.addState(new GameStartState(StateConst.GAME_START));
 		this.addState(new SelectGenderState(StateConst.SELECT_GENDER));
 		this.addState(new InputNameState(StateConst.INPUT_NAME));
+		this.addState(new SimGameState(StateConst.SIM_GAME));
+		this.addState(new TalkState(StateConst.TALK));
 	}
 
 	@Override
@@ -31,9 +35,10 @@ public class FTSimulationGame extends StateBasedGame {
 		this.getState(StateConst.GAME_START).init(container, this);
 		this.getState(StateConst.SELECT_GENDER).init(container, this);
 		this.getState(StateConst.INPUT_NAME).init(container, this);
-		//this.enterState(StateConst.GAME_START);
+		this.getState(StateConst.SIM_GAME).init(container, this);
+		this.getState(StateConst.TALK).init(container, this);
 
 		//コンストラクタで実行するとエラー発生するよー
-		font = JapaneseFontGenerater.generateFont(20, false, false, null);
+		font = JapaneseFontGenerater.generateFont(24, false, false, null);
 	}
 }

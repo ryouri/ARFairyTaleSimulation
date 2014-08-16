@@ -8,19 +8,29 @@ import arcircle.ftsim.state.SelectGenderState;
 
 public class SelectGenderModel implements KeyListner {
 
-	private SelectGenderState gsState;
+	public static final int MALE = 0;
+	public static final int FEMALE = 1;
+	public int gender;
 
-	public String message = "S e l e c t  Y o u r G e n d e r";
+	private SelectGenderState sgState;
 
-	public SelectGenderModel(SelectGenderState gsState) {
+	public String message = "性別をえらんでください";
+
+	public SelectGenderModel(SelectGenderState sgState) {
 		super();
-		this.gsState = gsState;
+		this.sgState = sgState;
 	}
 
 	@Override
 	public void keyInput(KeyInput keyInput) {
-		if(keyInput.isKeyDown(Input.KEY_Z)) {
-			gsState.nextState();
+		if(keyInput.isKeyDown(Input.KEY_LEFT)) {
+			gender = MALE;
+		}
+		else if(keyInput.isKeyDown(Input.KEY_RIGHT)) {
+			gender = FEMALE;
+		}
+		else if(keyInput.isKeyDown(Input.KEY_Z)) {
+			sgState.nextState();
 		}
 	}
 }

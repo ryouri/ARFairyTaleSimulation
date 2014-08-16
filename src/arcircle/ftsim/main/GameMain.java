@@ -13,11 +13,11 @@ import org.newdawn.slick.SlickException;
 public class GameMain {
 
 	public static void main(String[] args) {
-        System.out.println("Hello World\nI am Ryouri");
-        System.out.println("Marge Test");
+        System.out.println("Hello World");
 
         //エントリーポイント
         AppGameContainer app;
+
         try{
             app = new AppGameContainer(new FTSimulationGame(FTSimulationGame.GAMENAME));
             app.setDisplayMode(FTSimulationGame.WIDTH, FTSimulationGame.HEIGHT, false);

@@ -8,15 +8,24 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import arcircle.ftsim.state.gamestart.GameStartModel;
-import arcircle.ftsim.state.gamestart.GameStartView;
+import arcircle.ftsim.state.talk.TalkModel;
+import arcircle.ftsim.state.talk.TalkView;
 
-public class GameStartState extends KeyInputState {
 
-	private GameStartModel gsModel;
-	private GameStartView gsView;
 
-	public GameStartState(int state) {
+public class TalkState extends KeyInputState {
+	//フィールド//////////////////////////////////////////////////////////////////////////////////////////////////////
+	private TalkModel talkModel;
+	private TalkView talkView;
+
+	//private int chapterID;	//現在の章
+	//private int subStoryID;	//現在の話数
+
+	
+
+
+	//コンストラクタ////////////////////////////////////////////////////////////////////////////////////////////////
+	public TalkState(int state) {
 		super(state);
 	}
 
@@ -32,12 +41,12 @@ public class GameStartState extends KeyInputState {
 		super.render(container, game, g);
 	}
 
-	@Override
+	//@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		super.update(container, game, delta);
 	}
-
+	//次の状態へ行くメソッド-------------------------------------------------------------------------------------------
 	public void nextState() {
 		stateGame.enterState(StateConst.SELECT_GENDER,
 				new FadeOutTransition(Color.black, 500),
@@ -45,16 +54,17 @@ public class GameStartState extends KeyInputState {
 	}
 
 	@Override
+	//TalkStateに入るときに呼び出されるメソッド-----------------------------------------------------------------------
 	public void enter(GameContainer container, StateBasedGame game)
-
 			throws SlickException {
 		super.enter(container, game);
-		gsModel = new GameStartModel(this);
-		gsView = new GameStartView(gsModel, this);
-		System.out.println("Enter Game Start State");
+		talkModel = new TalkModel(this);
+		talkView = new TalkView(talkModel, this);
+		System.out.println("Enter Talk State");
 		keyInputStack.clear();
-		keyInputStack.push(gsModel);
+		keyInputStack.push(talkModel);
 		rendererArray.clear();
-		rendererArray.add(gsView);
+		rendererArray.add(talkView);
 	}
+
 }
