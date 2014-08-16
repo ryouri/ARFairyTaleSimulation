@@ -261,6 +261,8 @@ public class Characters {
 				Chara chara = new Chara(charaPuts[0]);
 				chara.x = Integer.valueOf(charaPuts[1]);
 				chara.y = Integer.valueOf(charaPuts[2]);
+				//TODO; キャラクターデータのコピーが未完成
+				chara.itemList = characterData.get(chara.status.name).itemList;
 
 				characterArray.add(chara);
 			}

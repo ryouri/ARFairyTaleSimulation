@@ -36,6 +36,8 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 
 	ArrayList<Command> commandList;
 
+	public int cursorY;
+
 	public CharaCommandWindow(SimGameModel sgModel, Field field, int windowX,
 			int windowY, Chara chara) {
 		this.sgModel = sgModel;
@@ -104,6 +106,7 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
 		renderCommand(g, commandList.size());
+		renderRect(g);
 	}
 
 	public static int WINDOW_FRAME = 14;
@@ -111,6 +114,7 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 	public static int WINDOW_MIDDLE_HEIGHT = 32;
 
 	public static int FONT_INTERVAL = 4;
+	public static int FONT_SIZE = 24;
 
 	public void renderCommand(Graphics g, int commandNum) {
 		g.setFont(FTSimulationGame.font);
@@ -122,7 +126,7 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 				color);
 		g.drawString(commandList.get(0).name,
 				windowX + WINDOW_FRAME,
-				windowY + WINDOW_FRAME - 4);
+				windowY + WINDOW_FRAME - FONT_INTERVAL);
 		//コマンドが1つなら
 		if (commandNum == 1) {
 			g.drawImage(windowImage[2],
@@ -131,7 +135,7 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 					color);
 			g.drawString(commandList.get(0).name,
 					windowX + WINDOW_FRAME,
-					windowY + WINDOW_FRAME - 4);
+					windowY + WINDOW_FRAME - FONT_INTERVAL);
 		} else {
 			//コマンドが2つ以上なら
 			//2つの場合はすぐにBOTTOMを描画する
@@ -143,7 +147,7 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 						color);
 				g.drawString(commandList.get(i + 1).name,
 						windowX + WINDOW_FRAME,
-						windowY + WINDOW_FRAME + (i + 1) * WINDOW_MIDDLE_HEIGHT - 4);
+						windowY + WINDOW_FRAME + (i + 1) * WINDOW_MIDDLE_HEIGHT - FONT_INTERVAL);
 			}
 			g.drawImage(windowImage[2],
 					windowX,
@@ -151,8 +155,16 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 					color);
 			g.drawString(commandList.get(i + 1).name,
 					windowX + WINDOW_FRAME,
-					windowY + WINDOW_FRAME + (i + 1) * WINDOW_MIDDLE_HEIGHT - 4);
+					windowY + WINDOW_FRAME + (i + 1) * WINDOW_MIDDLE_HEIGHT - FONT_INTERVAL);
 		}
+	}
+
+	private void renderRect(Graphics g) {
+		g.drawRect(
+				windowX + WINDOW_FRAME,
+				windowY + WINDOW_FRAME + (cursorY) * WINDOW_MIDDLE_HEIGHT - FONT_INTERVAL / 2,
+				windowImage[0].getWidth() - WINDOW_FRAME * 2 - FONT_INTERVAL / 2,
+				WINDOW_MIDDLE_HEIGHT);
 	}
 
 	@Override
@@ -161,6 +173,18 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 		if (keyInput.isKeyDown(Input.KEY_X) || keyInput.isKeyPressed(Input.KEY_X)) {
 			sgModel.keyInputStackRemoveFirst();
 			sgModel.rendererArrayRemoveEnd();
+		}
+		if (keyInput.isKeyDown(Input.KEY_DOWN)) {
+			cursorY++;
+			if (cursorY >= commandList.size()) {
+				cursorY = 0;
+			}
+		}
+		if (keyInput.isKeyDown(Input.KEY_UP)) {
+			cursorY--;
+			if (cursorY < 0) {
+				cursorY = commandList.size() - 1;
+			}
 		}
 	}
 }
