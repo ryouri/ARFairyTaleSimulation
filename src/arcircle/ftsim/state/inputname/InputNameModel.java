@@ -58,6 +58,7 @@ public class InputNameModel implements KeyListner {
 		if(keyInput.isKeyDown(Input.KEY_Z)) {
 			if(CursorX == 17 && CursorY == 4 ){
 				setName();											//Statusクラスのnameに名前を書き込む
+				getName();
 				inState.nextState();							//決定キーが押されたので確定
 			}
 			else if(CursorX == 17 && CursorY == 3 ){
@@ -134,5 +135,9 @@ public class InputNameModel implements KeyListner {
 	 */
 	public void setName(){
 		FTSimulationGame.save.getPlayer().name  = String.valueOf(cursorcharArrey);			//cursorcharArreyをStringに結合
+	}
+
+	public void getName(){
+		System.out.println(FTSimulationGame.save.getPlayer().name);			//cursorcharArreyをStringに結合
 	}
 }
