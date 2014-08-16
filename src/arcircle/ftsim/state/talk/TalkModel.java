@@ -12,6 +12,7 @@ import org.newdawn.slick.Input;
 
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
+import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.state.TalkState;
 
 public class TalkModel implements KeyListner {
@@ -95,6 +96,10 @@ public class TalkModel implements KeyListner {
 	@Override
 	//キーインプット------------------------------------------------------------------------------------
 	public void keyInput(KeyInput keyInput) {
+		//デバッグ用キー
+		if(keyInput.isKeyDown(Input.KEY_D)){
+			talkState.nextState();
+		}
 		if(keyInput.isKeyDown(Input.KEY_Z)){
 			if(nextFlag && nextStateFlag == true){
 				//System.out.println(curTagPointer + "," + tagP);
@@ -165,7 +170,7 @@ public class TalkModel implements KeyListner {
         		if(strs[0].equals("SPEAK")){
         			tagName = strs[0];
         			if(strs[1].equals("*")){
-        				strs[1] = "主人公";
+        				speakerName = FTSimulationGame.save.getPlayer().name;
         			}else{
         				speakerName = strs[1];
         			}

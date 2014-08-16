@@ -1,14 +1,10 @@
 package arcircle.ftsim.state.inputname;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import org.newdawn.slick.Input;
 
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
+import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.state.InputNameState;
 
 public class InputNameModel implements KeyListner {
@@ -59,9 +55,13 @@ public class InputNameModel implements KeyListner {
 
 	@Override
 	public void keyInput(KeyInput keyInput) {
+		
+		if(keyInput.isKeyDown(Input.KEY_D)){
+			FTSimulationGame.save.getPlayer().name = "朝倉 こずえ";
+			inState.nextState();
+		}
 		if(keyInput.isKeyDown(Input.KEY_Z)) {
 			if(CursorX == 17 && CursorY == 4 ){
-				SaveInputName();								//セーブデータに名前を書き込む
 				inState.nextState();							//決定キーが押されたので確定
 			}
 			else if(CursorX == 17 && CursorY == 3 ){
@@ -131,24 +131,6 @@ public class InputNameModel implements KeyListner {
 			cursorcharArrey[i] = '　';
 		}
 		return;
-	}
-
-	/**
-	 * 作成した名前をテキストファイルに書きだす。このメソッド呼ぶだけでOK
-	 */
-	public void SaveInputName(){
-		System.out.println("SavingFiles...");
-        try {
-            FileWriter fw = new FileWriter("c:\\save\\test.txt", true);			   //出力先を作成する tureで追記モード
-            PrintWriter pw = new PrintWriter(new BufferedWriter(fw));
-
-            pw.println(getName() +  ",");
-            pw.close();
-            System.out.println("出力が完了しました。");
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
 	}
 
 
