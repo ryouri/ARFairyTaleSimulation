@@ -1,14 +1,10 @@
 package arcircle.ftsim.state.inputname;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import org.newdawn.slick.Input;
 
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
+import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.state.InputNameState;
 
 public class InputNameModel implements KeyListner {
@@ -134,28 +130,9 @@ public class InputNameModel implements KeyListner {
 	}
 
 	/**
-	 * 作成した名前をテキストファイルに書きだす。このメソッド呼ぶだけでOK
+	 * 主人公の名前をstatusクラスのnameにセットするメソッド
 	 */
-	public void SaveInputName(){
-		System.out.println("SavingFiles...");
-        try {
-            FileWriter fw = new FileWriter("c:\\save\\test.txt", true);			   //出力先を作成する tureで追記モード
-            PrintWriter pw = new PrintWriter(new BufferedWriter(fw));
-
-            pw.println(getName() +  ",");
-            pw.close();
-            System.out.println("出力が完了しました。");
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
-	}
-
-
-	/**
-	 * 外部から主人公の名前を得るためのメソッド　返り血はString型
-	 */
-	public String getName(){
-		return String.valueOf(cursorcharArrey);			//cursorcharArreyをStringに結合
+	public void setName(){
+		FTSimulationGame.save.getPlayer().name  = String.valueOf(cursorcharArrey);			//cursorcharArreyをStringに結合
 	}
 }
