@@ -57,7 +57,7 @@ public class InputNameModel implements KeyListner {
 	public void keyInput(KeyInput keyInput) {
 		if(keyInput.isKeyDown(Input.KEY_Z)) {
 			if(CursorX == 17 && CursorY == 4 ){
-				SaveInputName();								//セーブデータに名前を書き込む
+				setName();											//Statusクラスのnameに名前を書き込む
 				inState.nextState();							//決定キーが押されたので確定
 			}
 			else if(CursorX == 17 && CursorY == 3 ){
