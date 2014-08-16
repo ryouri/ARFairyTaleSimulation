@@ -69,16 +69,17 @@ public class TalkView implements Renderer{
 		g.drawImage(rightCharaImg, charaPosX, charaPosY);
 		g.drawImage(msgBoxImg, msgBoxPosX, msgBoxPosY);
 
-        g.setColor(Color.white);	//メッセージボックスに描く文字の色は白
-        g.setFont(talkState.getFont());	//フォントを設定
+		g.setColor(Color.white); // メッセージボックスに描く文字の色は白
+		g.setFont(talkState.getFont()); // フォントを設定
 
-        g.drawString(talkModel.getCurTagSpeakerName(), nameTextPosX, nameTextPosY);
-        
-        char[] curPosText = talkModel.getcurText();
-        // 現在表示しているページのcurPosまで表示
-        // curPosはDrawingTimerTaskで増えていくので流れて表示されるように見える
-        for (int i = 0; i < talkModel.getCurPosOfPage() ; i++) {
-            char c = curPosText[talkModel.getCurPage() * MAX_CHARS_PER_PAGE + i];
+		g.drawString(talkModel.getCurTagSpeakerName(), nameTextPosX,
+				nameTextPosY);
+
+		char[] curPosText = talkModel.getcurText();
+		// 現在表示しているページのcurPosまで表示
+		// curPosはDrawingTimerTaskで増えていくので流れて表示されるように見える
+		for (int i = 0; i < talkModel.getCurPosOfPage(); i++) {
+			char c = curPosText[talkModel.getCurPage() * MAX_CHARS_PER_PAGE + i];
             if (c == '/' || c == '%' || c == '!' || c == '\u0000'){
             	continue;  // コントロール文字は表示しない
             }
@@ -92,7 +93,7 @@ public class TalkView implements Renderer{
         if (talkModel.isNextFlag()) {
             int dx = textBoxPosX + ((MAX_CHARS_PER_LINE - 2) * FONT_WIDTH);
             int dy = textBoxPosY + (MAX_LINES_PER_PAGE * FONT_HEIGHT);
-            
+
             g.drawString("次へ", dx, dy);
         }
 

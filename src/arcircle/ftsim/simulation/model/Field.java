@@ -272,10 +272,8 @@ public class Field implements KeyListner, Renderer {
 			windowY = cursorRenderY - 160;
 		}
 
-		// commandの数を決定
-
 		CharaCommandWindow ccWindow = new CharaCommandWindow(sgModel, this,
-				windowX, windowY, 2);
+				windowX, windowY, chara);
 		sgModel.keyInputStackPush(ccWindow);
 		sgModel.rendererArrayAdd(ccWindow);
 	}

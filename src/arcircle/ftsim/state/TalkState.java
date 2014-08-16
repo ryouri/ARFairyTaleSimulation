@@ -44,7 +44,7 @@ public class TalkState extends KeyInputState {
 			throws SlickException {
 		super.update(container, game, delta);
 	}
-	
+
 	//次の状態へ行くメソッド-------------------------------------------------------------------------------------------
 	public void nextState() {
 		//stateGame.enterState(StateConst.SELECT_GENDER,
@@ -52,8 +52,8 @@ public class TalkState extends KeyInputState {
 		SimGameState sgState = (SimGameState) sbGame;
 		sgState.setReadFilePath("01_Story", "01", 1, 1);
 		stateGame.enterState(StateConst.SIM_GAME,
-				new FadeOutTransition(Color.black, 500),
-				new FadeInTransition(Color.black, 500));
+				new FadeOutTransition(Color.black, 100),
+				new FadeInTransition(Color.black, 100));
 	}
 
 	@Override
