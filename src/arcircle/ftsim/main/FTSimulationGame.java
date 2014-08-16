@@ -6,6 +6,7 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.StateBasedGame;
 
 import arcircle.JapaneseFont.JapaneseFontGenerater;
+import arcircle.ftsim.save.Save;
 import arcircle.ftsim.state.GameStartState;
 import arcircle.ftsim.state.InputNameState;
 import arcircle.ftsim.state.SelectGenderState;
@@ -22,7 +23,7 @@ public class FTSimulationGame extends StateBasedGame {
 	public static UnicodeFont font;
 	public static UnicodeFont InputNamefont;
 
-
+	public static Save save;
 
 	public FTSimulationGame(String name) {
 		super(name);

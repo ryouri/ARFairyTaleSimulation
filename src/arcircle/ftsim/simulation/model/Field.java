@@ -19,7 +19,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.renderer.Renderer;
-import arcircle.ftsim.simulation.chara.Character;
+import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class Field implements KeyListner, Renderer {
@@ -155,7 +155,7 @@ public class Field implements KeyListner, Renderer {
 		cursorAnime.update(delta);
 		cursor.update();
 
-		for (Character chara : characters.characterArray) {
+		for (Chara chara : characters.characterArray) {
 			chara.isSelect = false;
 			if (chara.x == cursor.x && chara.y == cursor.y) {
 				chara.isSelect = true;
@@ -215,7 +215,7 @@ public class Field implements KeyListner, Renderer {
 
 		// 決定キーが押されたとき
 		if (keyInput.isKeyDown(Input.KEY_Z)) {
-			for (Character chara : characters.characterArray) {
+			for (Chara chara : characters.characterArray) {
 				if (chara.isSelect) {
 					pushZKey(chara);
 				}
@@ -223,7 +223,7 @@ public class Field implements KeyListner, Renderer {
 		}
 	}
 
-	private void pushZKey(Character chara) {
+	private void pushZKey(Chara chara) {
 		// まずはcommandを表示する位置を決定する
 		// CharaCommandWindowはCursorの
 		// 左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示

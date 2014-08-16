@@ -14,7 +14,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
-import arcircle.ftsim.simulation.chara.Character;
+import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class Characters {
@@ -39,7 +39,7 @@ public class Characters {
 
 	public HashMap<String, Animation> attackAnimeMap;
 
-	public ArrayList<Character> characterArray;
+	public ArrayList<Chara> characterArray;
 
 	public Characters(SimGameModel sgModel, int row, int col) {
 		this.sgModel = sgModel;
@@ -57,7 +57,7 @@ public class Characters {
 		this.cursorAnimeMap = new HashMap<String, Animation>();
 		this.attackAnimeMap = new HashMap<String, Animation>();
 
-		this.characterArray = new ArrayList<Character>();
+		this.characterArray = new ArrayList<Chara>();
 	}
 
 	public void init() {
@@ -167,7 +167,7 @@ public class Characters {
 					continue;
 				}
 
-				Character chara = new Character(charaPuts[0]);
+				Chara chara = new Chara(charaPuts[0]);
 				chara.x = Integer.valueOf(charaPuts[1]);
 				chara.y = Integer.valueOf(charaPuts[2]);
 
@@ -187,16 +187,16 @@ public class Characters {
 	public void render(Graphics g, int offsetX, int offsetY,
 			int firstTileX, int lastTileX,
 			int firstTileY, int lastTileY) {
-		for (Character chara : characterArray) {
+		for (Chara chara : characterArray) {
 			//範囲内でなければ
 			if (!(firstTileX <= chara.x && chara.x <= lastTileX
 				&& firstTileY <= chara.y && chara.y <= lastTileY)) {
 				continue;
 			}
-			Animation anime = stayAnimeMap.get(chara.name);
+			Animation anime = stayAnimeMap.get(chara.status.name);
 
 			if (chara.isSelect) {
-				anime = attackAnimeMap.get(chara.name);
+				anime = attackAnimeMap.get(chara.status.name);
 			}
 
 			anime.draw(

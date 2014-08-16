@@ -3,6 +3,8 @@ package arcircle.ftsim.main;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
+import arcircle.ftsim.save.Save;
+
 /**
  * v0.0
  * ゲームの開始，生成部分
@@ -27,6 +29,8 @@ public class GameMain {
         }catch(SlickException e){
             e.printStackTrace();
         }
+
+        FTSimulationGame.save = new Save();
 	}
 
 }
