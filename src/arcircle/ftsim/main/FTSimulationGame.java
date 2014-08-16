@@ -20,6 +20,7 @@ public class FTSimulationGame extends StateBasedGame {
 	public static final String GAMENAME = "FairyTaleSimulation";
 
 	public static UnicodeFont font;
+	public static UnicodeFont InputNamefont;
 
 	public FTSimulationGame(String name) {
 		super(name);
@@ -40,5 +41,6 @@ public class FTSimulationGame extends StateBasedGame {
 
 		//コンストラクタで実行するとエラー発生するよー
 		font = JapaneseFontGenerater.generateFont(24, false, false, null);
+		InputNamefont = JapaneseFontGenerater.generateFont(80, false, false, null);
 	}
 }

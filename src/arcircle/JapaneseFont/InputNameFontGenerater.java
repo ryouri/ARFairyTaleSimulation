@@ -11,7 +11,7 @@ import org.newdawn.slick.font.effects.ColorEffect;
  * 自分で調べて理解できたら，プログラムに好きに変更を加えましょう．
  * 参考サイト：http://welovy.hatenablog.com/entry/2013/01/24/193859
  */
-public class JapaneseFontGenerater {
+public class InputNameFontGenerater {
 	/**
 	 * UnicodeFontインスタンスを返す
 	 * @param size
@@ -41,15 +41,13 @@ public class JapaneseFontGenerater {
 			font.addAsciiGlyphs();
 
 			// Hiragana + katakanab + fullwidth punctuations
-			font.addGlyphs(0x3000, 0x30ff);
+			//font.addGlyphs(0x3000, 0x30ff);
 			// Kanji
-			font.addGlyphs(0x4e00, 0x9fc0);
+			//font.addGlyphs(0x4e00, 0x9fc0);
+			//
+			font.addGlyphs("漆黒の");
 
-			font.addGlyphs(0x3300, 0x3380);
 
-			font.addGlyphs(0xff00, 0xff60);
-
-			font.addGlyphs("†");
 
 			// おまじない
 			font.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
