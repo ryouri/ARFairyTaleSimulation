@@ -10,12 +10,16 @@ public class InputNameModel implements KeyListner {
 	private InputNameState inState;
 	public int x = 100;
 	public int y = 100;
+
 	public String message = "S e l e c t  Y o u r N a m e ";
-	private String charactor = "";
+	private String charactor = null;
+
 	/**
 	 * ひらがな=0,  カタカナ=1, 記号=2
 	 */
 	public int charactorOption =0;
+	public char cursorcharArrey[] = new char [8];	//入力された名前をcharで保管、最大8文字
+	public int cursorcharArreyLength  = 0;					//長さ
 	public int CursorX = 0;  //カーソルが選択している座標Xを格納
 	public int CursorY = 0;  //カーソルが選択している座標Yを格納
 	private char[][][] cursorchar = new char [][][] {
@@ -37,14 +41,15 @@ public class InputNameModel implements KeyListner {
 			{'１','２','３','４','５','５','６','７','８','９','０','！','？','＠','＃','＄','＾','＆','〇'},
 			{'Ａ','Ｂ','Ｃ','Ｄ','Ｅ','Ｆ','Ｇ','Ｈ','Ｉ','Ｊ','Ｋ','Ｌ','Ｍ','Ｎ','Ｏ','Ｐ','Ｑ','〇'},
 			{'Ｒ','Ｓ','Ｔ','Ｕ','Ｖ','Ｗ','Ｘ','Ｙ','Ｚ','ａ','ｂ','ｃ','ｄ','ｅ','ｆ','ｇ','ｈ','〇'},
-			{'え','け','せ','て','ね','へ','め','　','れ','　','ぇ','ょ','げ','ぜ','で','べ','ぺ','〇'},
-			{'ｚ','㍿','漆','黒','の','堕','天','使','†','卍','滅','龍','神','Ｘ','充','爆','発','〇'}
+			{'ｉ','ｊ','ｋ','ｌ','ｍ','ｎ','ｏ','ｐ','ｑ','ｒ','ｓ','ｔ','ｕ','ｖ','ｗ','ｘ','ｙ','ｚ'},
+			{'ｚ','†','漆','黒','の','堕','天','使','†','卍','滅','龍','神','卍','充','爆','発','〇'}
 			}
 	};
 
-	public InputNameModel(InputNameState inputNameState) {
+	public InputNameModel(InputNameState inputNameState) {				//コンストラクタ
 		super();
 		this.inState = inputNameState;
+		ClearCursorcharArrey();																				//cuｒsorcharArrey[]を初期化
 	}
 
 
@@ -55,7 +60,8 @@ public class InputNameModel implements KeyListner {
 				inState.nextState();							//決定キーが押されたので確定
 			}
 			else if(CursorX == 17 && CursorY == 3 ){
-				charactor = "";										//クリアキーが押されたので名前クリア
+				cursorcharArreyLength  = 0;			//クリアキーが押されたので名前クリア
+				ClearCursorcharArrey();
 			}
 			else if(CursorX == 17 && CursorY == 0 ){
 				charactorOption = 0;							//ひら　が押されたのでひらがな入力モード
@@ -67,7 +73,7 @@ public class InputNameModel implements KeyListner {
 				charactorOption = 2;							//記号　が押されたので記号入力モード
 			}
 			else{
-				addGetCharFromCursor();
+				GetCharFromCursor();
 			}
 		}
 		if(keyInput.isKeyDown(Input.KEY_UP)) {
@@ -78,9 +84,11 @@ public class InputNameModel implements KeyListner {
 		}
 		if(keyInput.isKeyDown(Input.KEY_LEFT)) {
 			if(CursorX>0){CursorX = CursorX-1;}
+			else if(CursorX==0){CursorX = 17;}
 		}
 		if(keyInput.isKeyDown(Input.KEY_RIGHT)) {
 			if(CursorX<17){CursorX = CursorX+1;}
+			else if(CursorX==17){CursorX = 0;}
 		}
 	}
 
@@ -90,15 +98,30 @@ public class InputNameModel implements KeyListner {
 	 */
 	public int getcharactorOption(){
 		return charactorOption;
+	}
 
+
+	/**
+	 * ｚが押されるたびに呼び出され、カーソルの座標からchar文字に変換しcursorcharArrey[]に格納する
+	 */
+	public void GetCharFromCursor(){
+		if(cursorcharArreyLength>7){
+			return;
+		}																	//名前は8文字まで
+		else {
+		cursorcharArrey[cursorcharArreyLength] = cursorchar[charactorOption][CursorY][CursorX] ;
+		cursorcharArreyLength ++;
+		}
+		return;
 	}
 
 	/**
-	 * カーソルの位置charactorOption,CursorY,CursorXから文字に変換し、String charactorに8文字まで累加算する
+	 * cursorcharArrey[]を全部スペースで埋める
 	 */
-	public void addGetCharFromCursor(){
-		if(charactor.length()>=24){return;}				//名前は8文字まで
-		charactor = charactor + cursorchar[charactorOption][CursorY][CursorX] + "  " ;
+	public void ClearCursorcharArrey(){
+		for(int i=0; i<8; i++){
+			cursorcharArrey[i] = ' ';
+		}
 		return;
 	}
 
@@ -106,7 +129,6 @@ public class InputNameModel implements KeyListner {
 	 * 外部から主人公の名前を得るためのメソッド　返り血はString型
 	 */
 	public String getName(){
-		return charactor;
+		return String.valueOf(cursorcharArrey);			//cursorcharArreyをStringに結合
 	}
-
 }

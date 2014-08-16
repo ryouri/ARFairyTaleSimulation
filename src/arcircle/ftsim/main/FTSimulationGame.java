@@ -41,6 +41,6 @@ public class FTSimulationGame extends StateBasedGame {
 
 		//コンストラクタで実行するとエラー発生するよー
 		font = JapaneseFontGenerater.generateFont(24, false, false, null);
-		InputNamefont = JapaneseFontGenerater.generateFont(76, false, false, null);
+		InputNamefont = JapaneseFontGenerater.generateFont(80, false, false, null);
 	}
 }

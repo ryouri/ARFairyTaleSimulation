@@ -50,8 +50,6 @@ public class InputNameView implements Renderer {
 		}
 	}
 
-
-
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
 
@@ -70,9 +68,11 @@ public class InputNameView implements Renderer {
 		g.drawImage(NameCursor, 22+inModel.CursorX*56,  216 + inModel.CursorY*80);
 		//g.drawImage(inState.sprite[0], 22+inModel.CursorX*56,  220 + inModel.CursorY*80);
 
-		//int messageWidth = inState.getFont().getWidth(inModel.message);
+		int messageWidth = inState.getFont().getWidth(inModel.message);
 
-		g.drawString(inModel.getName(), (FTSimulationGame.WIDTH/11), 73);
+		for(int i=0; i<8; i++){
+		g.drawString(String.valueOf(inModel.cursorcharArrey[i]), (105+i*120),77);
+		}
 	}
 }
 

@@ -44,9 +44,9 @@ public class JapaneseFontGenerater {
 			font.addGlyphs(0x3000, 0x30ff);
 			// Kanji
 			font.addGlyphs(0x4e00, 0x9fc0);
-			
-			font.addGlyphs(0x337e, 0x337f);
-			
+
+			font.addGlyphs(0x3300, 0x3380);
+
 			font.addGlyphs(0xff00, 0xff60);
 
 			font.addGlyphs("†");
