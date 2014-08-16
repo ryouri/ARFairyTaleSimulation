@@ -10,6 +10,8 @@ public class World {
 
 	SimGameModel sgModel;
 
+	SubInfoWindow subInfoWindow;
+
 
 	public World(SimGameModel simGameModel) {
 		this.sgModel = simGameModel;
@@ -20,8 +22,11 @@ public class World {
 				+ sgModel.subStoryPath + "/";
 		field.init(filePath + "map.dat", filePath + "mapchip.txt");
 
+		this.subInfoWindow = new SubInfoWindow();
+
 		sgModel.keyInputStackPush(field);
 		sgModel.rendererArrayAdd(field);
+		sgModel.rendererArrayAdd(subInfoWindow);
 	}
 
 	public void update(GameContainer container, StateBasedGame game, int delta) {
