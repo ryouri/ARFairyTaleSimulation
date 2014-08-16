@@ -14,15 +14,16 @@ public class Save {
 	private Status player;
 	private ArrayList<Status> charaArray;
 	private ArrayList<Switch> switchArray;
-	private ArrayList<Clear> clearArray;
+	//クリアした章（FolderName）の名前を保存する
+	private ArrayList<String> clearStoryNameArray;
 	private NowStage nowStage;
 
 	public Save() {
 		super();
-		this.player = null;
+		this.player = new Status();
 		this.charaArray = new ArrayList<Status>();
 		this.switchArray = new ArrayList<Switch>();
-		this.clearArray = new ArrayList<Clear>();
+		this.clearStoryNameArray = new ArrayList<String>();
 		this.nowStage = null;
 	}
 
@@ -42,8 +43,8 @@ public class Save {
 		return switchArray;
 	}
 
-	public ArrayList<Clear> getClearArray() {
-		return clearArray;
+	public ArrayList<String> getClearStoryNameArray() {
+		return clearStoryNameArray;
 	}
 
 	public NowStage getNowStage() {
