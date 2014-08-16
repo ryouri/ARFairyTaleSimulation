@@ -5,12 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.xml.crypto.Data;
 
 import org.newdawn.slick.Input;
 
@@ -237,7 +233,7 @@ public class TalkModel implements KeyListner {
         }
     }
 
-	
+	/*
 	//セーブデータをロードするメソッド-----------------------------------------------------------------
 	//作成途中
     private Data[] loadSaveData(){
@@ -298,5 +294,5 @@ public class TalkModel implements KeyListner {
     		}
     	}
     	return data;
-    }
+    }*/
 }
