@@ -2,6 +2,8 @@ package arcircle.ftsim.simulation.chara;
 
 public class Status {
 	//セーブデータで利用
+	public static final int MALE = 0;
+	public static final int FEMALE = 1;
 	public int gender;
 	public String name;
 

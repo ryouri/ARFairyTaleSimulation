@@ -17,6 +17,8 @@ public class GameMain {
 	public static void main(String[] args) {
         System.out.println("Hello World");
 
+        FTSimulationGame.save = new Save();
+
         //エントリーポイント
         AppGameContainer app;
 
@@ -29,8 +31,6 @@ public class GameMain {
         }catch(SlickException e){
             e.printStackTrace();
         }
-
-        FTSimulationGame.save = new Save();
 	}
 
 }
