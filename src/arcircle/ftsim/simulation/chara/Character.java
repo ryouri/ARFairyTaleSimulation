@@ -14,6 +14,7 @@ public class Character {
 	public int level;
 	public int exp;
 
+	//パラメータ
 	public int hp;
 	public int power;
 	public int magicPower;
@@ -22,6 +23,20 @@ public class Character {
 	public int luck;
 	public int defence;
 	public int magicDefence;
+	public int move;
+	public int physique;
+
+	//成長率
+	public int growRateHP;
+	public int growRatePower;
+	public int growRateMagicPower;
+	public int growRateSpead;
+	public int growRateTech;
+	public int growRateLuck;
+	public int growRateDefence;
+	public int growRateMagicDefence;
+	public int growRateMove;
+	public int growRatePhysique;
 
 	public ArrayList<Item> itemList;
 

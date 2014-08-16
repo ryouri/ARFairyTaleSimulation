@@ -20,14 +20,17 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 	int windowY;
 
 	Image[] windowImage;
+	int commandNum;
+
 
 
 	public CharaCommandWindow(SimGameModel sgModel, Field field, int windowX,
-			int windowY) {
+			int windowY, int commandNum) {
 		this.sgModel = sgModel;
 		this.field = field;
 		this.windowX = windowX;
 		this.windowY = windowY;
+		this.commandNum = commandNum;
 
 		this.windowImage = new Image[3];
 		try {
@@ -41,15 +44,15 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
-		renderCommand(g, 2);
+		renderCommand(g, commandNum);
 	}
 
 	public static int WINDOW_FRAME = 14;
-	public static int WINDOW_T_B_HEIGHT = 38;//?
+	public static int WINDOW_T_B_HEIGHT = 46;
 	public static int WINDOW_MIDDLE_HEIGHT = 32;
 
 	public void renderCommand(Graphics g, int commandNum) {
-		Color color = new Color(1, 1, 1, 0.8f);
+		Color color = new Color(1, 1, 1, 0.75f);
 		//一番上を描画
 		g.drawImage(windowImage[0],
 				windowX,
@@ -80,7 +83,7 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 
 	@Override
 	public void keyInput(KeyInput keyInput) {
-		//決定キーが押されたとき
+		//キャンセルキーが押されたとき
 		if (keyInput.isKeyDown(Input.KEY_X) || keyInput.isKeyPressed(Input.KEY_X)) {
 			sgModel.keyInputStackRemoveFirst();
 			sgModel.rendererArrayRemoveEnd();

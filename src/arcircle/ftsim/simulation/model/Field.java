@@ -32,9 +32,9 @@ public class Field implements KeyListner, Renderer {
 	public static final int MAP_CHIP_COL = 10;
 	public static final int MAP_CHIP_SIZE = 32;
 
-	public static final int MAP_VIEW_WIDTH  = 800;
+	public static final int MAP_VIEW_WIDTH = 800;
 	public static final int MAP_VIEW_HEIGHT = 640;
-	public static final int MAP_WIDTH_MASS  = 25;
+	public static final int MAP_WIDTH_MASS = 25;
 	public static final int MAP_HEIGHT_MASS = 20;
 
 	SpriteSheet sSheet;
@@ -45,13 +45,13 @@ public class Field implements KeyListner, Renderer {
 	public int mapWidth;
 	public int mapHeight;
 
-	//カーソル関連のデータ
+	// カーソル関連のデータ
 	Cursor cursor;
 	Image[] cursorImage;
 	int[] cursorDuration;
 	Animation cursorAnime;
 
-	//キャラクターを管理するクラス
+	// キャラクターを管理するクラス
 	Characters characters;
 
 	public Field(SimGameModel sgModel) {
@@ -60,7 +60,8 @@ public class Field implements KeyListner, Renderer {
 	}
 
 	public void init(String subStoryFolderPath) {
-		loadMapAndMapChip(subStoryFolderPath + "map.dat", subStoryFolderPath  + "mapchip.txt");
+		loadMapAndMapChip(subStoryFolderPath + "map.dat", subStoryFolderPath
+				+ "mapchip.txt");
 		initCursor();
 		this.characters = new Characters(sgModel, row, col);
 		initCharacters(subStoryFolderPath);
@@ -107,22 +108,24 @@ public class Field implements KeyListner, Renderer {
 		offsetY = Math.min(offsetY, 0);
 		offsetY = Math.max(offsetY, MAP_VIEW_HEIGHT - mapHeight);
 
-        // オフセットを元に描画範囲を求める
-        firstTileX = pixelsToTiles(-offsetX);
-        lastTileX = firstTileX + pixelsToTiles(MAP_VIEW_WIDTH) + 2;
-        // 描画範囲がマップの大きさより大きくならないように調整
-        lastTileX = Math.min(lastTileX, col);
+		// オフセットを元に描画範囲を求める
+		firstTileX = pixelsToTiles(-offsetX);
+		lastTileX = firstTileX + pixelsToTiles(MAP_VIEW_WIDTH) + 2;
+		// 描画範囲がマップの大きさより大きくならないように調整
+		lastTileX = Math.min(lastTileX, col);
 
-        firstTileY = pixelsToTiles(-offsetY);
-        lastTileY = firstTileY + pixelsToTiles(MAP_VIEW_HEIGHT) + 1;
-        // 描画範囲がマップの大きさより大きくならないように調整
-        lastTileY = Math.min(lastTileY, row);
+		firstTileY = pixelsToTiles(-offsetY);
+		lastTileY = firstTileY + pixelsToTiles(MAP_VIEW_HEIGHT) + 1;
+		// 描画範囲がマップの大きさより大きくならないように調整
+		lastTileY = Math.min(lastTileY, row);
 
 		// マップを描く
-		renderMap(g, offsetX, offsetY, firstTileX, lastTileX, firstTileY, lastTileY);
+		renderMap(g, offsetX, offsetY, firstTileX, lastTileX, firstTileY,
+				lastTileY);
 
 		// キャラクターを描く
-		characters.render(g, offsetX, offsetY, firstTileX, lastTileX, firstTileY, lastTileY);
+		characters.render(g, offsetX, offsetY, firstTileX, lastTileX,
+				firstTileY, lastTileY);
 
 		// カーソルを描く
 		renderCursor(g, offsetX, offsetY);
@@ -130,25 +133,24 @@ public class Field implements KeyListner, Renderer {
 
 	private void renderMap(Graphics g, int offsetX, int offsetY,
 			int firstTileX, int lastTileX, int firstTileY, int lastTileY) {
-        for (int y = firstTileY; y < lastTileY; y++) {
-            for (int x = firstTileX; x < lastTileX; x++) {
-            	//一番左上のタイルを描画
-				g.drawImage(sSheet.getSubImage(0, 0),
-					tilesToPixels(x) + offsetX,
-					tilesToPixels(y) + offsetY);
+		for (int y = firstTileY; y < lastTileY; y++) {
+			for (int x = firstTileX; x < lastTileX; x++) {
+				// 一番左上のタイルを描画
+				g.drawImage(sSheet.getSubImage(0, 0), tilesToPixels(x)
+						+ offsetX, tilesToPixels(y) + offsetY);
 				int chipX = map[y][x] % MAP_CHIP_COL;
 				int chipY = map[y][x] / MAP_CHIP_COL;
-				//各マスのタイルを描画
-				g.drawImage(sSheet.getSubImage(chipX, chipY),
-					tilesToPixels(x) + offsetX,
-					tilesToPixels(y) + offsetY);
-            }
-        }
+				// 各マスのタイルを描画
+				g.drawImage(sSheet.getSubImage(chipX, chipY), tilesToPixels(x)
+						+ offsetX, tilesToPixels(y) + offsetY);
+			}
+		}
 	}
+
 	private void renderCursor(Graphics g, int offsetX, int offsetY) {
-		cursorAnime.draw(cursor.pX + offsetX - 4,
-				cursor.pY + offsetY - 4);
+		cursorAnime.draw(cursor.pX + offsetX - 4, cursor.pY + offsetY - 4);
 	}
+
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		cursorAnime.update(delta);
 		cursor.update();
@@ -161,22 +163,27 @@ public class Field implements KeyListner, Renderer {
 		}
 	}
 
-    /**
-     * ピクセル単位をマス単位に変更する
-     * @param pixels ピクセル単位
-     * @return マス単位
-     */
-    public static int pixelsToTiles(double pixels) {
-        return (int)Math.floor(pixels / MAP_CHIP_SIZE);
-    }
-    /**
-     * マス単位をピクセル単位に変更する
-     * @param tiles マス単位
-     * @return ピクセル単位
-     */
-    public static int tilesToPixels(int tiles) {
-        return tiles * MAP_CHIP_SIZE;
-    }
+	/**
+	 * ピクセル単位をマス単位に変更する
+	 *
+	 * @param pixels
+	 *            ピクセル単位
+	 * @return マス単位
+	 */
+	public static int pixelsToTiles(double pixels) {
+		return (int) Math.floor(pixels / MAP_CHIP_SIZE);
+	}
+
+	/**
+	 * マス単位をピクセル単位に変更する
+	 *
+	 * @param tiles
+	 *            マス単位
+	 * @return ピクセル単位
+	 */
+	public static int tilesToPixels(int tiles) {
+		return tiles * MAP_CHIP_SIZE;
+	}
 
 	@Override
 	public void keyInput(KeyInput keyInput) {
@@ -206,7 +213,7 @@ public class Field implements KeyListner, Renderer {
 			cursor.pressed(Cursor.LEFT);
 		}
 
-		//決定キーが押されたとき
+		// 決定キーが押されたとき
 		if (keyInput.isKeyDown(Input.KEY_Z)) {
 			for (Character chara : characters.characterArray) {
 				if (chara.isSelect) {
@@ -217,8 +224,9 @@ public class Field implements KeyListner, Renderer {
 	}
 
 	private void pushZKey(Character chara) {
-		//CharaCommandWindowはCursorの
-		//左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
+		// まずはcommandを表示する位置を決定する
+		// CharaCommandWindowはCursorの
+		// 左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
 		int cursorViewPosX = 1;
 		int cursorViewPosY = 1;
 		if (cursor.x < 5) {
@@ -233,34 +241,36 @@ public class Field implements KeyListner, Renderer {
 		if (cursor.y > row - 5) {
 			cursorViewPosY = -1;
 		}
-
 		int cursorRenderX = cursor.pX + offsetX;
 		int cursorRenderY = cursor.pY + offsetY;
 		int windowX = cursor.pX + offsetX;
 		int windowY = cursor.pY + offsetY;
-		//左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
-		//右下(1, 1)に表示
+		// 左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
+		// 右下(1, 1)に表示
 		if (cursorViewPosX == 1 && cursorViewPosY == 1) {
 			windowX = cursorRenderX + 40;
 			windowY = cursorRenderY;
 		}
-		//左下(-1, 1)に表示
+		// 左下(-1, 1)に表示
 		if (cursorViewPosX == -1 && cursorViewPosY == 1) {
 			windowX = cursorRenderX - 128;
 			windowY = cursorRenderY;
 		}
-		//左上(-1, -1)に表示
+		// 左上(-1, -1)に表示
 		if (cursorViewPosX == -1 && cursorViewPosY == -1) {
 			windowX = cursorRenderX - 128;
 			windowY = cursorRenderY - 160;
 		}
-		//右上(1, -1)に表示
+		// 右上(1, -1)に表示
 		if (cursorViewPosX == 1 && cursorViewPosY == -1) {
 			windowX = cursorRenderX + 40;
 			windowY = cursorRenderY - 160;
 		}
 
-		CharaCommandWindow ccWindow = new CharaCommandWindow(sgModel, this, windowX, windowY);
+		// commandの数を決定
+
+		CharaCommandWindow ccWindow = new CharaCommandWindow(sgModel, this,
+				windowX, windowY, 2);
 		sgModel.keyInputStackPush(ccWindow);
 		sgModel.rendererArrayAdd(ccWindow);
 	}
@@ -271,7 +281,7 @@ public class Field implements KeyListner, Renderer {
 	 * @param mapchipPointerPath
 	 */
 	public void loadMapAndMapChip(String mapPath, String mapchipPointerPath) {
-		//マップチップ読み込み
+		// マップチップ読み込み
 		String mapChipPath = null;
 		try {
 			File file = new File(mapchipPointerPath);
@@ -287,7 +297,7 @@ public class Field implements KeyListner, Renderer {
 		}
 		loadMapChip(mapChipPath);
 
-		//マップの読み込み
+		// マップの読み込み
 		try {
 			FileInputStream in = new FileInputStream(mapPath);
 			// 行数・列数を読み込む
@@ -310,7 +320,9 @@ public class Field implements KeyListner, Renderer {
 
 	/**
 	 * マップチップイメージをロード
-	 * @param mapChipPath mapChipのパス
+	 *
+	 * @param mapChipPath
+	 *            mapChipのパス
 	 */
 	private void loadMapChip(String mapChipPath) {
 		try {
