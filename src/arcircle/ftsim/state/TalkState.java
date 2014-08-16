@@ -21,9 +21,6 @@ public class TalkState extends KeyInputState {
 	//private int chapterID;	//現在の章
 	//private int subStoryID;	//現在の話数
 
-	
-
-
 	//コンストラクタ////////////////////////////////////////////////////////////////////////////////////////////////
 	public TalkState(int state) {
 		super(state);

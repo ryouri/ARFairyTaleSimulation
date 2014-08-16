@@ -27,11 +27,10 @@ public class SelectGenderState extends KeyInputState {
 //		stateGame.enterState(StateConst.SIM_GAME,
 
 		//yukineko用
-//		stateGame.enterState(StateConst.TALK,
+		//stateGame.enterState(StateConst.TALK,
 
 		//asakura用
 		stateGame.enterState(StateConst.INPUT_NAME,
-
 				new FadeOutTransition(Color.black, 500),
 				new FadeInTransition(Color.black, 500));
 	}
