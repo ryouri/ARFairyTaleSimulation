@@ -28,6 +28,4 @@ public class Character {
 	public static final int RIGHT = 1;
 	public static final int DOWN = 2;
 	public static final int LEFT = 3;
-
-
 }

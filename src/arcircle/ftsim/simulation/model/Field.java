@@ -44,13 +44,33 @@ public class Field implements KeyListner, Renderer {
 	public int mapWidth;
 	public int mapHeight;
 
+	//カーソル関連のデータ
 	Cursor cursor;
 	Image[] cursorImage;
 	int[] cursorDuration;
 	Animation cursorAnime;
 
+	//キャラクターを管理するクラス
+	Characters characters;
+
+
 	public Field(SimGameModel sgModel) {
 		this.sgModel = sgModel;
+		sSheet = null;
+	}
+
+	public void init(String mapPath, String mapchipPointerPath) {
+		loadMapAndMapChip(mapPath, mapchipPointerPath);
+		initCursor();
+		initCharacters();
+		sgModel.rendererArrayAdd(characters);
+	}
+
+	private void initCharacters() {
+		this.characters = new Characters(sgModel, row, col);
+	}
+
+	private void initCursor() {
 		cursor = new Cursor(this);
 		cursorImage = new Image[2];
 		try {
@@ -63,8 +83,6 @@ public class Field implements KeyListner, Renderer {
 		cursorDuration[0] = 400;
 		cursorDuration[1] = 400;
 		cursorAnime = new Animation(cursorImage, cursorDuration, true);
-
-		sSheet = null;
 	}
 
 	@Override
@@ -91,12 +109,12 @@ public class Field implements KeyListner, Renderer {
 	private void renderMap(Graphics g, int offsetX, int offsetY) {
         // オフセットを元に描画範囲を求める
         int firstTileX = pixelsToTiles(-offsetX);
-        int lastTileX = firstTileX + pixelsToTiles(MAP_VIEW_WIDTH) + 1;
+        int lastTileX = firstTileX + pixelsToTiles(MAP_VIEW_WIDTH) + 2;
         // 描画範囲がマップの大きさより大きくならないように調整
         lastTileX = Math.min(lastTileX, col);
 
         int firstTileY = pixelsToTiles(-offsetY);
-        int lastTileY = firstTileY + pixelsToTiles(MAP_VIEW_HEIGHT) + 2;
+        int lastTileY = firstTileY + pixelsToTiles(MAP_VIEW_HEIGHT) + 1;
         // 描画範囲がマップの大きさより大きくならないように調整
         lastTileY = Math.min(lastTileY, row);
 

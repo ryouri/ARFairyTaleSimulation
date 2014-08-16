@@ -17,7 +17,7 @@ public class World {
 		String filePath = "Stories/"
 				+ sgModel.sectionPath + "/"
 				+ sgModel.subStoryPath + "/";
-		field.loadMapAndMapChip(filePath + "map.dat", filePath + "mapchip.txt");
+		field.init(filePath + "map.dat", filePath + "mapchip.txt");
 
 		sgModel.keyInputStackPush(field);
 		sgModel.rendererArrayAdd(field);
