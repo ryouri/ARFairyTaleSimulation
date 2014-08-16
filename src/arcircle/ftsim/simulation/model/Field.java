@@ -125,10 +125,10 @@ public class Field implements KeyListner, Renderer {
 				g.drawImage(sSheet.getSubImage(0, 0),
 					tilesToPixels(x) + offsetX,
 					tilesToPixels(y) + offsetY);
-				int chipY = map[y][x] % MAP_CHIP_COL;
-				int chipX = map[y][x] / MAP_CHIP_COL;
+				int chipX = map[y][x] % MAP_CHIP_COL;
+				int chipY = map[y][x] / MAP_CHIP_COL;
 				//各マスのタイルを描画
-				g.drawImage(sSheet.getSubImage(chipY, chipX),
+				g.drawImage(sSheet.getSubImage(chipX, chipY),
 					tilesToPixels(x) + offsetX,
 					tilesToPixels(y) + offsetY);
             }
