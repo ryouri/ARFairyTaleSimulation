@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
@@ -20,6 +21,7 @@ import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class Field implements KeyListner, Renderer {
@@ -54,8 +56,11 @@ public class Field implements KeyListner, Renderer {
 	// キャラクターを管理するクラス
 	Characters characters;
 
-	public Field(SimGameModel sgModel) {
+	HashMap<String, Item> itemList;
+
+	public Field(SimGameModel sgModel, HashMap<String, Item> itemList) {
 		this.sgModel = sgModel;
+		this.itemList = itemList;
 		sSheet = null;
 	}
 
@@ -63,7 +68,7 @@ public class Field implements KeyListner, Renderer {
 		loadMapAndMapChip(subStoryFolderPath + "map.dat", subStoryFolderPath
 				+ "mapchip.txt");
 		initCursor();
-		this.characters = new Characters(sgModel, row, col);
+		this.characters = new Characters(sgModel, row, col, itemList);
 		initCharacters(subStoryFolderPath);
 	}
 

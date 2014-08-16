@@ -1,7 +1,9 @@
 package arcircle.ftsim.simulation.item;
 
+import org.newdawn.slick.Image;
+
 public class Item {
-	public int name;
+	public String name;
 
 	public int type;
 	//武器
@@ -14,5 +16,5 @@ public class Item {
 	public static int TYPE_USE = 2;
 	public static String TYPE_USE_STR = "TYPE_USE";
 
-	public int itemIcon;
+	public Image itemIcon;
 }
