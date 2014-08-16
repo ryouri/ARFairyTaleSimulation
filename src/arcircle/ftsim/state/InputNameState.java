@@ -4,7 +4,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -24,11 +23,16 @@ public class InputNameState extends KeyInputState {
 	}
 
 	public void nextState() {
-		GameState sbGame = stateGame.getState(StateConst.SIM_GAME);
-		SimGameState sgState = (SimGameState) sbGame;
-		sgState.setReadFilePath("01_Story", "01", 1, 1);
-		stateGame.enterState(StateConst.SIM_GAME,
+
+		//misawa
+//		GameState sbGame = stateGame.getState(StateConst.SIM_GAME);
+//		SimGameState sgState = (SimGameState) sbGame;
+//		sgState.setReadFilePath("01_Story", "01", 1, 1);
+//		stateGame.enterState(StateConst.SIM_GAME,
 //		stateGame.enterState(StateConst.GAME_START,
+
+		//yukineko
+		stateGame.enterState(StateConst.TALK,
 				new FadeOutTransition(Color.black, 500),
 				new FadeInTransition(Color.black, 500));
 	}

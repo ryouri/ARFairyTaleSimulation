@@ -4,7 +4,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import arcircle.ftsim.main.FTSimulationGame;
@@ -24,13 +23,13 @@ public class SelectGenderView implements Renderer {
 		this.sgState = sgState;
 
 		//稲井が画像ファイルをアップロードしていない？
-		try {
-			imageMale = new Image("./image/genderimage/male.png");
-			imageFemale = new Image("./image/genderimage/female.png");
-			flame = new Image("./image/genderimage/flame.png");
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			imageMale = new Image("./image/genderimage/male.png");
+//			imageFemale = new Image("./image/genderimage/female.png");
+//			flame = new Image("./image/genderimage/flame.png");
+//		} catch (SlickException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	@Override
@@ -44,30 +43,30 @@ public class SelectGenderView implements Renderer {
 		g.drawString(sgModel.message,
 				(FTSimulationGame.WIDTH - messageWidth) / 2, 100);
 
-		int imageGenderWidth = imageMale.getWidth();
-		int imageGenderHeight = imageMale.getHeight();
-		int flameWidth = flame.getWidth();
-		int flameHeight = flame.getHeight();
-
-		if (sgModel.gender == SelectGenderModel.MALE) {
-			g.drawImage(imageMale, FTSimulationGame.WIDTH / 4
-					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 3 * 2
-					- imageGenderHeight / 2);
-			g.drawImage(imageFemale, FTSimulationGame.WIDTH / 4 * 3
-					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 3 * 2
-					- imageGenderHeight / 2);
-			g.drawImage(flame, FTSimulationGame.WIDTH / 4 - flameWidth / 2,
-					FTSimulationGame.HEIGHT / 3 * 2 - flameHeight / 2);
-		} else if (sgModel.gender == SelectGenderModel.FEMALE) {
-			g.drawImage(imageMale, FTSimulationGame.WIDTH / 4
-					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 3 * 2
-					- imageGenderHeight / 2);
-			g.drawImage(imageFemale, FTSimulationGame.WIDTH / 4 * 3
-					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 3 * 2
-					- imageGenderHeight / 2);
-			g.drawImage(flame, FTSimulationGame.WIDTH / 4 * 3 - flameWidth / 2,
-					FTSimulationGame.HEIGHT / 3 * 2 - flameHeight / 2);
-		}
+//		int imageGenderWidth = imageMale.getWidth();
+//		int imageGenderHeight = imageMale.getHeight();
+//		int flameWidth = flame.getWidth();
+//		int flameHeight = flame.getHeight();
+//
+//		if (sgModel.gender == SelectGenderModel.MALE) {
+//			g.drawImage(imageMale, FTSimulationGame.WIDTH / 4
+//					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 3 * 2
+//					- imageGenderHeight / 2);
+//			g.drawImage(imageFemale, FTSimulationGame.WIDTH / 4 * 3
+//					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 3 * 2
+//					- imageGenderHeight / 2);
+//			g.drawImage(flame, FTSimulationGame.WIDTH / 4 - flameWidth / 2,
+//					FTSimulationGame.HEIGHT / 3 * 2 - flameHeight / 2);
+//		} else if (sgModel.gender == SelectGenderModel.FEMALE) {
+//			g.drawImage(imageMale, FTSimulationGame.WIDTH / 4
+//					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 3 * 2
+//					- imageGenderHeight / 2);
+//			g.drawImage(imageFemale, FTSimulationGame.WIDTH / 4 * 3
+//					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 3 * 2
+//					- imageGenderHeight / 2);
+//			g.drawImage(flame, FTSimulationGame.WIDTH / 4 * 3 - flameWidth / 2,
+//					FTSimulationGame.HEIGHT / 3 * 2 - flameHeight / 2);
+//		}
 
 	}
 }
