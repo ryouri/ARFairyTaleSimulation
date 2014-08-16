@@ -61,7 +61,6 @@ public class InputNameView implements Renderer {
 		g.setColor(Color.black);
 		g.setFont(inState.getFont());
 
-		System.out.println("charactorOption"+inModel.getcharactorOption());
 		switch(inModel.getcharactorOption()){										//charactorOptionの値で文字入力の背景変更
 		case 0: g.drawImage(InputNameHiragana , 0, 0); break;
 		case 1: g.drawImage(InputNameKatakana , 0, 0); break;
