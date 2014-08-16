@@ -41,9 +41,13 @@ public class InputNameFontGenerater {
 			font.addAsciiGlyphs();
 
 			// Hiragana + katakanab + fullwidth punctuations
-			font.addGlyphs(0x3000, 0x30ff);
+			//font.addGlyphs(0x3000, 0x30ff);
 			// Kanji
-			font.addGlyphs(0x4e00, 0x9fc0);
+			//font.addGlyphs(0x4e00, 0x9fc0);
+			//
+			font.addGlyphs("漆黒の");
+
+
 
 			// おまじない
 			font.getEffects().add(new ColorEffect(java.awt.Color.WHITE));

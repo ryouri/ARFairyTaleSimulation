@@ -28,6 +28,7 @@ public class InputNameState extends KeyInputState {
 				new FadeInTransition(Color.black, 500));
 	}
 
+
 	@Override
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
