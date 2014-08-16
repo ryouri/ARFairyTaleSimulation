@@ -1,20 +1,23 @@
 package arcircle.ftsim.simulation.model;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.newdawn.slick.Animation;
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.state.StateBasedGame;
 
-import arcircle.ftsim.renderer.Renderer;
+import arcircle.ftsim.simulation.chara.Character;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
-public class Characters implements Renderer {
+public class Characters {
 	private SimGameModel sgModel;
 
 	private int row;
@@ -33,6 +36,8 @@ public class Characters implements Renderer {
 	public HashMap<String, Animation> stayAnimeMap;
 	public HashMap<String, Animation> cursorAnimeMap;
 
+	public ArrayList<Character> characterArray;
+
 	public Characters(SimGameModel sgModel, int row, int col) {
 		this.sgModel = sgModel;
 		this.row = row;
@@ -46,11 +51,8 @@ public class Characters implements Renderer {
 		this.rightWalkAnimeMap = new HashMap<String, Animation>();
 		this.stayAnimeMap = new HashMap<String, Animation>();
 		this.cursorAnimeMap = new HashMap<String, Animation>();
-	}
 
-	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g) {
-
+		this.characterArray = new ArrayList<Character>();
 	}
 
 	public void init() {
@@ -123,6 +125,65 @@ public class Characters implements Renderer {
 							Field.MAP_CHIP_SIZE));
 		} catch (SlickException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void addCharacters(String putCharacterPath) {
+		BufferedReader br = null;
+		try {
+			File file = new File(putCharacterPath);
+			br = new BufferedReader(new FileReader(file));
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
+			return;
+		} catch (IOException e) {
+			System.out.println(e);
+			return;
+		}
+
+		try {
+			String charaLine;
+			while ((charaLine = br.readLine()) != null) {
+				String[] charaPuts = charaLine.split(" ");
+				if (charaPuts.length == 0) {
+					continue;
+				}
+
+				Character chara = new Character(charaPuts[0]);
+				chara.x = Integer.valueOf(charaPuts[1]);
+				chara.y = Integer.valueOf(charaPuts[2]);
+
+				characterArray.add(chara);
+			}
+		} catch (NumberFormatException | IOException e1) {
+			e1.printStackTrace();
+		}
+
+		try {
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void render(Graphics g, int offsetX, int offsetY,
+			int firstTileX, int lastTileX,
+			int firstTileY, int lastTileY) {
+		for (Character chara : characterArray) {
+			//範囲内でなければ
+			if (!(firstTileX <= chara.x && chara.x <= lastTileX
+				&& firstTileY <= chara.y && chara.y <= lastTileY)) {
+				continue;
+			}
+			Animation anime = stayAnimeMap.get(chara.name);
+
+			if (chara.isSelect) {
+				anime = cursorAnimeMap.get(chara.name);
+			}
+
+			anime.draw(
+					Field.tilesToPixels(chara.x) + offsetX,
+					Field.tilesToPixels(chara.y) + offsetY);
 		}
 	}
 }

@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import org.newdawn.slick.command.Command;
 
 public class Character {
+	public int x;
+	public int y;
+
 	public String name;
 	public int gender;
 
@@ -28,4 +31,10 @@ public class Character {
 	public static final int RIGHT = 1;
 	public static final int DOWN = 2;
 	public static final int LEFT = 3;
+
+	public boolean isSelect;
+
+	public Character(String name) {
+		this.name = name;
+	}
 }

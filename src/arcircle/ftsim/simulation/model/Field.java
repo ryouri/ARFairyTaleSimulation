@@ -19,6 +19,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.renderer.Renderer;
+import arcircle.ftsim.simulation.chara.Character;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class Field implements KeyListner, Renderer {
@@ -53,36 +54,35 @@ public class Field implements KeyListner, Renderer {
 	//キャラクターを管理するクラス
 	Characters characters;
 
-
 	public Field(SimGameModel sgModel) {
 		this.sgModel = sgModel;
 		sSheet = null;
 	}
 
-	public void init(String mapPath, String mapchipPointerPath) {
-		loadMapAndMapChip(mapPath, mapchipPointerPath);
+	public void init(String subStoryFolderPath) {
+		loadMapAndMapChip(subStoryFolderPath + "map.dat", subStoryFolderPath  + "mapchip.txt");
 		initCursor();
-		initCharacters();
-		sgModel.rendererArrayAdd(characters);
+		this.characters = new Characters(sgModel, row, col);
+		initCharacters(subStoryFolderPath);
 	}
 
-	private void initCharacters() {
-		this.characters = new Characters(sgModel, row, col);
+	private void initCharacters(String subStoryFolderPath) {
 		characters.init();
+		characters.addCharacters(subStoryFolderPath + "putCharacter.txt");
 	}
 
 	private void initCursor() {
 		cursor = new Cursor(this);
 		cursorImage = new Image[2];
 		try {
-			cursorImage[0] = new Image("image/cursor/simGameStateCursor1.png");
-			cursorImage[1] = new Image("image/cursor/simGameStateCursor2.png");
+			cursorImage[0] = new Image("image/cursor/simGameStateCorsor1.png");
+			cursorImage[1] = new Image("image/cursor/simGameStateCorsor2.png");
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 		cursorDuration = new int[2];
-		cursorDuration[0] = 400;
-		cursorDuration[1] = 400;
+		cursorDuration[0] = 600;
+		cursorDuration[1] = 600;
 		cursorAnime = new Animation(cursorImage, cursorDuration, true);
 	}
 
@@ -100,14 +100,6 @@ public class Field implements KeyListner, Renderer {
 		offsetY = Math.min(offsetY, 0);
 		offsetY = Math.max(offsetY, MAP_VIEW_HEIGHT - mapHeight);
 
-		// マップを描く
-		renderMap(g, offsetX, offsetY);
-
-		// 勇者を描く
-		renderCursor(g, offsetX, offsetY);
-	}
-
-	private void renderMap(Graphics g, int offsetX, int offsetY) {
         // オフセットを元に描画範囲を求める
         int firstTileX = pixelsToTiles(-offsetX);
         int lastTileX = firstTileX + pixelsToTiles(MAP_VIEW_WIDTH) + 2;
@@ -119,6 +111,18 @@ public class Field implements KeyListner, Renderer {
         // 描画範囲がマップの大きさより大きくならないように調整
         lastTileY = Math.min(lastTileY, row);
 
+		// マップを描く
+		renderMap(g, offsetX, offsetY, firstTileX, lastTileX, firstTileY, lastTileY);
+
+		// キャラクターを描く
+		characters.render(g, offsetX, offsetY, firstTileX, lastTileX, firstTileY, lastTileY);
+
+		// カーソルを描く
+		renderCursor(g, offsetX, offsetY);
+	}
+
+	private void renderMap(Graphics g, int offsetX, int offsetY,
+			int firstTileX, int lastTileX, int firstTileY, int lastTileY) {
         for (int y = firstTileY; y < lastTileY; y++) {
             for (int x = firstTileX; x < lastTileX; x++) {
             	//一番左上のタイルを描画
@@ -141,6 +145,13 @@ public class Field implements KeyListner, Renderer {
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		cursorAnime.update(delta);
 		cursor.update();
+
+		for (Character chara : characters.characterArray) {
+			chara.isSelect = false;
+			if (chara.x == cursor.x && chara.y == cursor.y) {
+				chara.isSelect = true;
+			}
+		}
 	}
 
     /**
