@@ -229,51 +229,8 @@ public class Field implements KeyListner, Renderer {
 	}
 
 	private void pushZKey(Chara chara) {
-		// まずはcommandを表示する位置を決定する
-		// CharaCommandWindowはCursorの
-		// 左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
-		int cursorViewPosX = 1;
-		int cursorViewPosY = 1;
-		if (cursor.x < 5) {
-			cursorViewPosX = 1;
-		}
-		if (cursor.y < 5) {
-			cursorViewPosY = 1;
-		}
-		if (cursor.x > col - 5) {
-			cursorViewPosX = -1;
-		}
-		if (cursor.y > row - 5) {
-			cursorViewPosY = -1;
-		}
-		int cursorRenderX = cursor.pX + offsetX;
-		int cursorRenderY = cursor.pY + offsetY;
-		int windowX = cursor.pX + offsetX;
-		int windowY = cursor.pY + offsetY;
-		// 左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
-		// 右下(1, 1)に表示
-		if (cursorViewPosX == 1 && cursorViewPosY == 1) {
-			windowX = cursorRenderX + 40;
-			windowY = cursorRenderY;
-		}
-		// 左下(-1, 1)に表示
-		if (cursorViewPosX == -1 && cursorViewPosY == 1) {
-			windowX = cursorRenderX - 128;
-			windowY = cursorRenderY;
-		}
-		// 左上(-1, -1)に表示
-		if (cursorViewPosX == -1 && cursorViewPosY == -1) {
-			windowX = cursorRenderX - 128;
-			windowY = cursorRenderY - 160;
-		}
-		// 右上(1, -1)に表示
-		if (cursorViewPosX == 1 && cursorViewPosY == -1) {
-			windowX = cursorRenderX + 40;
-			windowY = cursorRenderY - 160;
-		}
-
 		CharaCommandWindow ccWindow = new CharaCommandWindow(sgModel, this,
-				windowX, windowY, chara);
+				chara);
 		sgModel.keyInputStackPush(ccWindow);
 		sgModel.rendererArrayAdd(ccWindow);
 	}

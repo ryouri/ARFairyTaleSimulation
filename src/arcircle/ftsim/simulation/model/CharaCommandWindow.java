@@ -38,12 +38,11 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 
 	public int cursorY;
 
-	public CharaCommandWindow(SimGameModel sgModel, Field field, int windowX,
-			int windowY, Chara chara) {
+	public CharaCommandWindow(SimGameModel sgModel, Field field, Chara chara) {
 		this.sgModel = sgModel;
 		this.field = field;
-		this.windowX = windowX;
-		this.windowY = windowY;
+		this.windowX = 0;
+		this.windowY = 0;
 		this.chara = chara;
 		this.commandList = new ArrayList<Command>();
 
@@ -61,6 +60,7 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 		this.commandFlagArray[5] = true;
 
 		calcCommandList();
+		calcWindowPosition();
 	}
 
 	/**
@@ -103,6 +103,54 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 		}
 	}
 
+	private void calcWindowPosition() {
+		// まずはcommandを表示する位置を決定する
+		// CharaCommandWindowはCursorの
+		// 左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
+		int cursorViewPosX = 1;
+		int cursorViewPosY = 1;
+		if (field.cursor.x < 10) {
+			cursorViewPosX = 1;
+		}
+		if (field.cursor.y < 10) {
+			cursorViewPosY = 1;
+		}
+		if (field.cursor.x > field.col - 10) {
+			cursorViewPosX = -1;
+		}
+		if (field.cursor.y > field.row - 10) {
+			cursorViewPosY = -1;
+		}
+		int cursorRenderX = field.cursor.pX + field.offsetX;
+		int cursorRenderY = field.cursor.pY + field.offsetY;
+		int windowX = cursorRenderX;
+		int windowY = cursorRenderY;
+		// 左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
+		// 右下(1, 1)に表示
+		if (cursorViewPosX == 1 && cursorViewPosY == 1) {
+			windowX = cursorRenderX + 40;
+			windowY = cursorRenderY;
+		}
+		// 左下(-1, 1)に表示
+		if (cursorViewPosX == -1 && cursorViewPosY == 1) {
+			windowX = cursorRenderX - 128;
+			windowY = cursorRenderY;
+		}
+		// 左上(-1, -1)に表示
+		if (cursorViewPosX == -1 && cursorViewPosY == -1) {
+			windowX = cursorRenderX - 128;
+			windowY = cursorRenderY - WINDOW_T_B_HEIGHT * (commandList.size() - 1);
+		}
+		// 右上(1, -1)に表示
+		if (cursorViewPosX == 1 && cursorViewPosY == -1) {
+			windowX = cursorRenderX + 40;
+			windowY = cursorRenderY - WINDOW_T_B_HEIGHT * (commandList.size() - 1);
+		}
+
+		this.windowX = windowX;
+		this.windowY = windowY;
+	}
+
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
 		renderCommand(g, commandList.size());
@@ -118,7 +166,7 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 
 	public void renderCommand(Graphics g, int commandNum) {
 		g.setFont(FTSimulationGame.font);
-		Color color = new Color(1, 1, 1, 0.75f);
+		Color color = new Color(1, 1, 1, 0.7f);
 		//一番上を描画
 		g.drawImage(windowImage[0],
 				windowX,

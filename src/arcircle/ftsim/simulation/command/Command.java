@@ -1,8 +1,10 @@
 package arcircle.ftsim.simulation.command;
 
+import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
-public class Command {
+public abstract class Command {
 	public static final String[] commandType = {
 		"いどう",   "こうげき", "ほじょ",
 		"とくしゅ", "どうぐ",   "たいき"
@@ -20,4 +22,6 @@ public class Command {
 		this.windowX = windowX;
 		this.windowY = windowY;
 	}
+
+	abstract public void pushed(Field field, Chara chara);
 }
