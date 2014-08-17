@@ -1,6 +1,7 @@
 package arcircle.ftsim.simulation.command;
 
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.model.CharaCommandWindow;
 import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
@@ -15,12 +16,18 @@ public abstract class Command {
 	SimGameModel sgModel;
 	int windowX;
 	int windowY;
-	public Command(String name, SimGameModel sgModel, int windowX, int windowY) {
-		super();
-		this.name = name;
-		this.sgModel = sgModel;
+
+	protected CharaCommandWindow CharaCommandWindow;
+
+	public void setWindowXY(int windowX, int windowY) {
 		this.windowX = windowX;
 		this.windowY = windowY;
+	}
+	public Command(String name, SimGameModel sgModel,
+			CharaCommandWindow charaCommandWindow) {
+		this.name = name;
+		this.sgModel = sgModel;
+		this.CharaCommandWindow = charaCommandWindow;
 	}
 
 	abstract public void pushed(Field field, Chara chara);

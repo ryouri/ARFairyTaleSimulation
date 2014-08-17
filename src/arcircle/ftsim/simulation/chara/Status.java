@@ -23,4 +23,17 @@ public class Status {
 	public int magicDefence;
 	public int move;
 	public int physique;
+
+	public void copyTo (Status status) {
+		status.hp = 			this.hp;
+		status.power = 			this.power;
+		status.magicPower = 	this.magicPower;
+		status.spead = 			this.spead;
+		status.tech = 			this.tech;
+		status.luck = 			this.luck;
+		status.defence = 		this.defence;
+		status.magicDefence = 	this.magicDefence;
+		status.move = 			this.move;
+		status.physique = 		this.physique;
+	}
 }

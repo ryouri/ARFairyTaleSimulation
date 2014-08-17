@@ -263,6 +263,7 @@ public class Characters {
 				chara.y = Integer.valueOf(charaPuts[2]);
 				//TODO; キャラクターデータのコピーが未完成
 				chara.itemList = characterData.get(chara.status.name).itemList;
+				characterData.get(chara.status.name).status.copyTo(chara.status);
 
 				characterArray.add(chara);
 			}

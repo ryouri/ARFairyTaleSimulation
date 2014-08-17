@@ -25,8 +25,12 @@ import arcircle.ftsim.state.simgame.SimGameModel;
 public class CharaCommandWindow implements KeyListner, Renderer {
 	SimGameModel sgModel;
 	Field field;
+
 	int windowX;
 	int windowY;
+
+	int cursorViewPosX;
+	int cursorViewPosY;
 
 	Image[] windowImage;
 	int commandNum;
@@ -87,17 +91,17 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 
 			if (Command.commandType[i].equals("いどう")) {
 				Command command =
-						new MoveCommand(Command.commandType[i], sgModel, windowX, windowY);
+						new MoveCommand(Command.commandType[i], sgModel, this);
 				commandList.add(command);
 			}
 			if (Command.commandType[i].equals("こうげき")) {
 				Command command =
-						new AttackCommand(Command.commandType[i], sgModel, windowX, windowY);
+						new AttackCommand(Command.commandType[i], sgModel, this);
 				commandList.add(command);
 			}
 			if (Command.commandType[i].equals("たいき")) {
 				Command command =
-						new StandCommand(Command.commandType[i], sgModel, windowX, windowY);
+						new StandCommand(Command.commandType[i], sgModel, this);
 				commandList.add(command);
 			}
 		}
@@ -107,8 +111,8 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 		// まずはcommandを表示する位置を決定する
 		// CharaCommandWindowはCursorの
 		// 左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
-		int cursorViewPosX = 1;
-		int cursorViewPosY = 1;
+		cursorViewPosX = 1;
+		cursorViewPosY = 1;
 		if (field.cursor.x < 10) {
 			cursorViewPosX = 1;
 		}
@@ -221,18 +225,25 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 		if (keyInput.isKeyDown(Input.KEY_X) || keyInput.isKeyPressed(Input.KEY_X)) {
 			sgModel.keyInputStackRemoveFirst();
 			sgModel.rendererArrayRemoveEnd();
+			return;
 		}
 		if (keyInput.isKeyDown(Input.KEY_DOWN)) {
 			cursorY++;
 			if (cursorY >= commandList.size()) {
 				cursorY = 0;
 			}
+			return;
 		}
 		if (keyInput.isKeyDown(Input.KEY_UP)) {
 			cursorY--;
 			if (cursorY < 0) {
 				cursorY = commandList.size() - 1;
 			}
+			return;
+		}
+		if (keyInput.isKeyDown(Input.KEY_Z)) {
+			commandList.get(cursorY).pushed(field, chara);
+			return;
 		}
 	}
 }
