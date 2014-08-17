@@ -2,15 +2,19 @@ package arcircle.ftsim.simulation.chara;
 
 import java.util.ArrayList;
 
-import org.newdawn.slick.tests.xml.Item;
+import arcircle.ftsim.simulation.item.Item;
 
+/**
+ * 現在，耐久値を設定できるようになっていない
+ * 設定できるようにしたら，itemListへのアイテムのコピーの実装を変更する必要がある
+ */
 public class Chara {
 	public int x;
 	public int y;
 
 	public Status status;
 
-	GrowRateStatus growRateStatus;
+	public GrowRateStatus growRateStatus;
 
 	public ArrayList<Item> itemList;
 
@@ -25,6 +29,7 @@ public class Chara {
 	public Chara(String name) {
 		this.status = new Status();
 		this.growRateStatus = new GrowRateStatus();
+		this.itemList = new ArrayList<Item>();
 		this.status.name = name;
 	}
 }

@@ -40,8 +40,8 @@ public class GameStartState extends KeyInputState {
 
 	public void nextState() {
 		stateGame.enterState(StateConst.SELECT_GENDER,
-				new FadeOutTransition(Color.black, 500),
-				new FadeInTransition(Color.black, 500));
+				new FadeOutTransition(Color.black, 100),
+				new FadeInTransition(Color.black, 100));
 	}
 
 	@Override

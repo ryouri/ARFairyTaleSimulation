@@ -31,8 +31,8 @@ public class SelectGenderState extends KeyInputState {
 
 		//asakura用
 		stateGame.enterState(StateConst.INPUT_NAME,
-				new FadeOutTransition(Color.black, 500),
-				new FadeInTransition(Color.black, 500));
+				new FadeOutTransition(Color.black, 100),
+				new FadeInTransition(Color.black, 100));
 	}
 
 	@Override
