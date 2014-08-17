@@ -55,6 +55,11 @@ public class InputNameModel implements KeyListner {
 
 	@Override
 	public void keyInput(KeyInput keyInput) {
+
+		if(keyInput.isKeyDown(Input.KEY_D)){
+			FTSimulationGame.save.getPlayer().name = "朝倉 こずえ";
+			inState.nextState();
+		}
 		if(keyInput.isKeyDown(Input.KEY_Z)) {
 			if(CursorX == 17 && CursorY == 4 ){
 				setName();											//Statusクラスのnameに名前を書き込む
@@ -134,7 +139,8 @@ public class InputNameModel implements KeyListner {
 	 * 主人公の名前をstatusクラスのnameにセットするメソッド
 	 */
 	public void setName(){
-		FTSimulationGame.save.getPlayer().name  = String.valueOf(cursorcharArrey);			//cursorcharArreyをStringに結合
+		//cursorcharArreyをStringに結合
+		FTSimulationGame.save.getPlayer().name  = String.valueOf(cursorcharArrey);
 	}
 
 	public void getName(){

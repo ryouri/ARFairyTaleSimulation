@@ -13,7 +13,6 @@ import arcircle.ftsim.save.Save;
  *
  */
 public class GameMain {
-
 	public static void main(String[] args) {
         System.out.println("Hello World");
 
@@ -32,5 +31,4 @@ public class GameMain {
             e.printStackTrace();
         }
 	}
-
 }
