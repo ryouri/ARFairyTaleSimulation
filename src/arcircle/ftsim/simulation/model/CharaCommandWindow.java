@@ -242,7 +242,13 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 			return;
 		}
 		if (keyInput.isKeyDown(Input.KEY_Z)) {
-			commandList.get(cursorY).pushed(field, chara);
+			Command command = commandList.get(cursorY);
+			if (command instanceof MoveCommand) {
+				commandList.get(cursorY).pushed(field, chara);
+				MoveCommand mCommand = (MoveCommand) command;
+				sgModel.keyInputStackPush(mCommand);
+				sgModel.rendererArrayAdd(mCommand);
+			}
 			return;
 		}
 	}

@@ -52,7 +52,13 @@ public class CalculateMoveRange {
 			search(searchNode);
 		}
 
+		setMoveRange();
+	}
 
+	private void setMoveRange() {
+		for (Node node : searchedNodeArray) {
+			moveRange[node.y][node.x] = true;
+		}
 	}
 
 	private void search(Node searchNode) {
