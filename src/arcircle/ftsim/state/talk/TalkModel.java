@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,6 +42,10 @@ public class TalkModel implements KeyListner {
     private int subStoryID;
     private String subStoryName;
     private String charaName1,charaName2;
+    
+    private String playerName = "";
+
+    HashMap<Integer,String> map = new HashMap<Integer,String>();
 
     private int curPosOfPage = 0;
     private int curPage = 0;
@@ -59,14 +64,22 @@ public class TalkModel implements KeyListner {
 
   	public int getSubStoryID() { return subStoryID; }
   	public void setSubStoryID(int subStoryID) { this.subStoryID = subStoryID; }
-
+  	
+  	public TextTag getCurTag() { return tags[curTagPointer]; }
   	public char[] getcurText() {
   		for(int i = 0 ; i < curPosOfPage ; i++){
   			curText[i] = curTagText[curPage * MAX_CHARS_PER_PAGE + i];
   		}
   		return curText;
   	}
-  	public String getCurTagSpeakerName(){ return tags[curTagPointer].getSpeakerName(); }
+
+  	public String getCurTagSpeakerName(){
+  		if(tags[curTagPointer].isLeftBright()){
+  			return tags[curTagPointer].getLeftCharaName();
+  		}else{
+  			return tags[curTagPointer].getRightCharaName();
+  		}
+  	}
 
 	public boolean isNextFlag() { return nextFlag; }
 	public void setNextFlag(boolean nextFlag) { this.nextFlag = nextFlag; }
@@ -81,12 +94,30 @@ public class TalkModel implements KeyListner {
 	public TalkModel(TalkState talkState) {
 		super();
 		this.talkState = talkState;
+		
+		String saveName = FTSimulationGame.save.getPlayer().name;
+		int count = 0;
+		for(int i = (saveName.length() - 1) ; i > -1 ; i--){
+			if(saveName.charAt(i) == '　'){
+				count++;
+			}else{
+				break;
+			}
+		}
+		for(int i = 0 ; i < (saveName.length()-count) ; i++){
+			playerName += saveName.charAt(i);
+		}
+		System.out.println(playerName);
+		
+		
+		
 		timer = new Timer();
 		loadTextData();
 		curTagPointer = 0;
 		curTagText = tags[curTagPointer].getText();
 		receiveData("little_red_ridding-hood", "おおかみ", "いづな", "ななこ");
-
+			
+		
 		task = new DrawingMessageTask();
 		task = new DrawingMessageTask();
         timer.schedule(task, 0L, 30L);
@@ -102,7 +133,7 @@ public class TalkModel implements KeyListner {
 		}
 		if(keyInput.isKeyDown(Input.KEY_Z)){
 			if(nextFlag && nextStateFlag == true){
-				//System.out.println(curTagPointer + "," + tagP);
+
 				talkState.nextState();
 			} else if(nextFlag){
 				curTagPointer++;
@@ -110,8 +141,8 @@ public class TalkModel implements KeyListner {
 				curPosOfPage = 0;
 				curPage = 0;
 				nextFlag = false;
-
-				if(curTagPointer == tagP){
+				System.out.println(curTagPointer + "," + tagP);
+				if(curTagPointer == (tagP-1)){
 					System.out.println(curTagPointer + "," + tagP);
 					nextStateFlag = true;
 				}
@@ -150,8 +181,11 @@ public class TalkModel implements KeyListner {
             char[] tagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
 
     		String tagName = "";
-    		String speakerName = "";
-    		//String boxText
+    		String leftCharaName = "";
+    		String rightCharaName = "";
+    		int leftBright = 0;
+    		int rightBright = 0;
+    		String[] choice = new String[4];	//選択肢(4つまで)
 
             while ((line = br.readLine()) != null) {
 
@@ -168,24 +202,61 @@ public class TalkModel implements KeyListner {
         		//System.out.println("tagName : " + tagName);
 
         		if(strs[0].equals("SPEAK")){
-        			tagName = strs[0];
-        			if(strs[1].equals("*")){
-        				speakerName = FTSimulationGame.save.getPlayer().name;
+        			tagName = strs[0];		//タグの名前をSPEAKにする
+        			//左に配置するキャラの名前
+        			if(strs[1].equals("*")){	//"*"は主人公の名前に変換して格納
+        				
+        				leftCharaName = playerName;
         			}else{
-        				speakerName = strs[1];
+        				leftCharaName = strs[1];
         			}
+        			leftBright = Integer.valueOf(strs[2]);	//左のキャラを明るくするかどうか
+        			//右に配置するキャラの名前
+        			if(strs[3].equals("*")){	//"*"は主人公の名前に変換して格納
+        				rightCharaName = playerName;
+        			}else{
+        				rightCharaName = strs[3];
+        			}
+        			rightBright = Integer.valueOf(strs[4]);	//右のキャラを明るくするかどうか
+
         		}else if(strs[0].equals("SPEAKEND")){
-        			tagText[p++] = '$';
-        			tags[tagP] = new TextTag(tagName, speakerName, tagText);
-        			tagP++;
+        			tagText[p++] = '$';	//テキストの終端記号
+        			//テキストタグの作成
+        			tags[tagP++] = new TextTag(tagName, leftCharaName, leftBright, rightCharaName, rightBright, tagText);
         			tagName = "";
-        			speakerName = "";
+        			leftCharaName = "";
+            		rightCharaName = "";
+            		leftBright = 0;
+            		rightBright = 0;
         			p = 0;
         			tagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
 
-        		}else if(strs[0].equals("SELECT_SWITCH")){
+        		}else if(strs[0].equals("SELECT")){
         			tagName = strs[0];
-        			speakerName = strs[1];
+        			//choiceの初期化
+        			for(int i = 0 ; i < 4 ; i++){
+        				choice[i] = "";
+        			}
+        		}else if(strs[0].equals("CHOICE1")){
+        			choice[0] = strs[1];
+        		}else if(strs[0].equals("CHOICE2")){
+        			choice[1] = strs[1];
+        		}else if(strs[0].equals("CHOICE3")){
+        			choice[2] = strs[1];
+        		}else if(strs[0].equals("CHOICE4")){
+        			choice[3] = strs[1];
+        		}else if(strs[0].equals("SELECTEND")){
+        			tagText[p++] = '$';	//テキストの終端記号
+        			//テキストタグの作成
+        			tags[tagP++] = new TextTag(tagName, tagText, choice);
+        			tagName = "";
+        			leftCharaName = "";
+            		rightCharaName = "";
+            		leftBright = 0;
+            		rightBright = 0;
+        			p = 0;
+        			tagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
+
         		}else{
         			for (int i = 0; i < line.length(); i++) {
         				char c = line.charAt(i);
@@ -197,7 +268,12 @@ public class TalkModel implements KeyListner {
         					tagText[p] = '%';
         					p += MAX_CHARS_PER_PAGE;
         					p = (p / MAX_CHARS_PER_PAGE) * MAX_CHARS_PER_PAGE;
-        				} else {
+        				} else if(c == '*'){
+        					char[] player = playerName.toCharArray();
+        					for(int j = 0 ; j < player.length ; j++){
+        						tagText[p++] = player[j];
+        					}
+        				}else{
         					tagText[p++] = c;
         				}
         			}
