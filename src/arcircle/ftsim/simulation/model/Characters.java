@@ -232,7 +232,7 @@ public class Characters {
 //		ITEM,けん
 		if (charaStrs[0].equals(ITEM)) {
 			for (int i = 1; i < charaStrs.length; i++) {
-				chara.itemList.add(itemList.get(charaStrs[i]));
+				chara.getItemList().add(itemList.get(charaStrs[i]));
 			}
 		}
 	}
@@ -262,7 +262,7 @@ public class Characters {
 				chara.x = Integer.valueOf(charaPuts[1]);
 				chara.y = Integer.valueOf(charaPuts[2]);
 				//TODO; キャラクターデータのコピーが未完成
-				chara.itemList = characterData.get(chara.status.name).itemList;
+				chara.setItemList(characterData.get(chara.status.name).getItemList());
 				characterData.get(chara.status.name).status.copyTo(chara.status);
 
 				characterArray.add(chara);

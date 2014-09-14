@@ -72,7 +72,7 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 	 *
 	 */
 	private void calcCommandList() {
-		for (Item item : chara.itemList) {
+		for (Item item : chara.getItemList()) {
 			if (item.type == Item.TYPE_WEAPON) {
 				commandFlagArray[1] = true;
 			}

@@ -1,5 +1,9 @@
 package arcircle.ftsim.simulation.chara;
 
+import java.util.ArrayList;
+
+import arcircle.ftsim.simulation.item.Item;
+
 public class Status {
 	//セーブデータで利用
 	public static final int MALE = 0;
@@ -23,6 +27,22 @@ public class Status {
 	public int magicDefence;
 	public int move;
 	public int physique;
+
+	public Status() {
+		super();
+
+		itemList = new ArrayList<Item>();
+	}
+
+	private ArrayList<Item> itemList;
+
+	public ArrayList<Item> getItemList() {
+		return itemList;
+	}
+
+	public void setItemList(ArrayList<Item> itemList) {
+		this.itemList = itemList;
+	}
 
 	public void copyTo (Status status) {
 		status.hp = 			this.hp;

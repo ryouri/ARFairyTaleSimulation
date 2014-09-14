@@ -16,8 +16,6 @@ public class Chara {
 
 	public GrowRateStatus growRateStatus;
 
-	public ArrayList<Item> itemList;
-
 	public int direction;
 	public static final int UP = 0;
 	public static final int RIGHT = 1;
@@ -26,10 +24,18 @@ public class Chara {
 
 	public boolean isSelect;
 
+	public ArrayList<Item> getItemList() {
+		return status.getItemList();
+	}
+
+	public void setItemList(ArrayList<Item> itemList) {
+		status.setItemList(itemList);
+	}
+
 	public Chara(String name) {
 		this.status = new Status();
 		this.growRateStatus = new GrowRateStatus();
-		this.itemList = new ArrayList<Item>();
+		this.status.setItemList(new ArrayList<Item>());
 		this.status.name = name;
 	}
 }
