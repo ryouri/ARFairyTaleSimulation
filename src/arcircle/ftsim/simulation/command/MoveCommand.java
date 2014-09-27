@@ -14,6 +14,7 @@ import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.simulation.algorithm.range.CalculateMoveRange;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.model.CharaCommandWindow;
+import arcircle.ftsim.simulation.model.Cursor;
 import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
@@ -24,6 +25,9 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 
 	Image moveRange;
 	Color moveColor;
+
+	private int cursorFirstX;
+	private int cursorFirstY;
 
 	public MoveCommand(String commandName, SimGameModel sgModel,
 			CharaCommandWindow charaCommandWindow) {
@@ -42,6 +46,9 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		this.field = field;
 		cmRange = new CalculateMoveRange(field, chara);
 		cmRange.calculateRange();
+
+		cursorFirstX = field.getCursor().x;
+		cursorFirstY = field.getCursor().y;
 	}
 
 	@Override
@@ -71,7 +78,40 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		if (keyInput.isKeyDown(Input.KEY_X)) {
 			sgModel.keyInputStackRemoveFirst();
 			sgModel.rendererArrayRemoveEnd();
+
+			field.getCursor().x = cursorFirstX;
+			field.getCursor().y = cursorFirstY;
+
+			field.getCursor().pX = cursorFirstX * Field.MAP_CHIP_SIZE;
+			field.getCursor().pY = cursorFirstY * Field.MAP_CHIP_SIZE;
+
 			return;
+		}
+
+		if (keyInput.isKeyDown(Input.KEY_UP)) {
+			field.getCursor().move(Cursor.UP);
+		}
+		if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
+			field.getCursor().move(Cursor.RIGHT);
+		}
+		if (keyInput.isKeyDown(Input.KEY_DOWN)) {
+			field.getCursor().move(Cursor.DOWN);
+		}
+		if (keyInput.isKeyDown(Input.KEY_LEFT)) {
+			field.getCursor().move(Cursor.LEFT);
+		}
+
+		if (keyInput.isKeyPressed(Input.KEY_UP)) {
+			field.getCursor().pressed(Cursor.UP);
+		}
+		if (keyInput.isKeyPressed(Input.KEY_RIGHT)) {
+			field.getCursor().pressed(Cursor.RIGHT);
+		}
+		if (keyInput.isKeyPressed(Input.KEY_DOWN)) {
+			field.getCursor().pressed(Cursor.DOWN);
+		}
+		if (keyInput.isKeyPressed(Input.KEY_LEFT)) {
+			field.getCursor().pressed(Cursor.LEFT);
 		}
 	}
 }

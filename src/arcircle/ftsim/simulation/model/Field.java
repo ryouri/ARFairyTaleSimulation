@@ -53,7 +53,7 @@ public class Field implements KeyListner, Renderer {
 	public int mapHeight;
 
 	// カーソル関連のデータ
-	Cursor cursor;
+	private Cursor cursor;
 	Image[] cursorImage;
 	int[] cursorDuration;
 	Animation cursorAnime;
@@ -83,7 +83,7 @@ public class Field implements KeyListner, Renderer {
 	}
 
 	private void initCursor() {
-		cursor = new Cursor(this);
+		setCursor(new Cursor(this));
 		cursorImage = new Image[2];
 		try {
 			cursorImage[0] = new Image("image/cursor/simGameStateCorsor1.png");
@@ -107,13 +107,13 @@ public class Field implements KeyListner, Renderer {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
 		// X方向のオフセットを計算
-		offsetX = MAP_VIEW_WIDTH / 2 - cursor.pX;
+		offsetX = MAP_VIEW_WIDTH / 2 - getCursor().pX;
 		// マップの端ではスクロールしないようにする
 		offsetX = Math.min(offsetX, 0);
 		offsetX = Math.max(offsetX, MAP_VIEW_WIDTH - mapWidth);
 
 		// Y方向のオフセットを計算
-		offsetY = MAP_VIEW_HEIGHT / 2 - cursor.pY;
+		offsetY = MAP_VIEW_HEIGHT / 2 - getCursor().pY;
 		// マップの端ではスクロールしないようにする
 		offsetY = Math.min(offsetY, 0);
 		offsetY = Math.max(offsetY, MAP_VIEW_HEIGHT - mapHeight);
@@ -158,16 +158,16 @@ public class Field implements KeyListner, Renderer {
 	}
 
 	private void renderCursor(Graphics g, int offsetX, int offsetY) {
-		cursorAnime.draw(cursor.pX + offsetX - 4, cursor.pY + offsetY - 4);
+		cursorAnime.draw(getCursor().pX + offsetX - 4, getCursor().pY + offsetY - 4);
 	}
 
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		cursorAnime.update(delta);
-		cursor.update();
+		getCursor().update();
 
 		for (Chara chara : characters.characterArray) {
 			chara.isSelect = false;
-			if (chara.x == cursor.x && chara.y == cursor.y) {
+			if (chara.x == getCursor().x && chara.y == getCursor().y) {
 				chara.isSelect = true;
 			}
 		}
@@ -198,29 +198,29 @@ public class Field implements KeyListner, Renderer {
 	@Override
 	public void keyInput(KeyInput keyInput) {
 		if (keyInput.isKeyDown(Input.KEY_UP)) {
-			cursor.move(Cursor.UP);
+			getCursor().move(Cursor.UP);
 		}
 		if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
-			cursor.move(Cursor.RIGHT);
+			getCursor().move(Cursor.RIGHT);
 		}
 		if (keyInput.isKeyDown(Input.KEY_DOWN)) {
-			cursor.move(Cursor.DOWN);
+			getCursor().move(Cursor.DOWN);
 		}
 		if (keyInput.isKeyDown(Input.KEY_LEFT)) {
-			cursor.move(Cursor.LEFT);
+			getCursor().move(Cursor.LEFT);
 		}
 
 		if (keyInput.isKeyPressed(Input.KEY_UP)) {
-			cursor.pressed(Cursor.UP);
+			getCursor().pressed(Cursor.UP);
 		}
 		if (keyInput.isKeyPressed(Input.KEY_RIGHT)) {
-			cursor.pressed(Cursor.RIGHT);
+			getCursor().pressed(Cursor.RIGHT);
 		}
 		if (keyInput.isKeyPressed(Input.KEY_DOWN)) {
-			cursor.pressed(Cursor.DOWN);
+			getCursor().pressed(Cursor.DOWN);
 		}
 		if (keyInput.isKeyPressed(Input.KEY_LEFT)) {
-			cursor.pressed(Cursor.LEFT);
+			getCursor().pressed(Cursor.LEFT);
 		}
 
 		// 決定キーが押されたとき
@@ -299,5 +299,13 @@ public class Field implements KeyListner, Renderer {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Cursor getCursor() {
+		return cursor;
+	}
+
+	public void setCursor(Cursor cursor) {
+		this.cursor = cursor;
 	}
 }

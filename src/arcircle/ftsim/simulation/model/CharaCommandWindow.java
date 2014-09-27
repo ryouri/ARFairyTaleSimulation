@@ -113,20 +113,20 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 		// 左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
 		cursorViewPosX = 1;
 		cursorViewPosY = 1;
-		if (field.cursor.x < 10) {
+		if (field.getCursor().x < 10) {
 			cursorViewPosX = 1;
 		}
-		if (field.cursor.y < 10) {
+		if (field.getCursor().y < 10) {
 			cursorViewPosY = 1;
 		}
-		if (field.cursor.x > field.col - 10) {
+		if (field.getCursor().x > field.col - 10) {
 			cursorViewPosX = -1;
 		}
-		if (field.cursor.y > field.row - 10) {
+		if (field.getCursor().y > field.row - 10) {
 			cursorViewPosY = -1;
 		}
-		int cursorRenderX = field.cursor.pX + field.offsetX;
-		int cursorRenderY = field.cursor.pY + field.offsetY;
+		int cursorRenderX = field.getCursor().pX + field.offsetX;
+		int cursorRenderY = field.getCursor().pY + field.offsetY;
 		int windowX = cursorRenderX;
 		int windowY = cursorRenderY;
 		// 左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
