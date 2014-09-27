@@ -261,6 +261,8 @@ public class Characters {
 				Chara chara = new Chara(charaPuts[0]);
 				chara.x = Integer.valueOf(charaPuts[1]);
 				chara.y = Integer.valueOf(charaPuts[2]);
+				chara.pX = chara.x * Field.MAP_CHIP_SIZE;
+				chara.pY = chara.y * Field.MAP_CHIP_SIZE;
 				//TODO; キャラクターデータのコピーが未完成
 				chara.setItemList(characterData.get(chara.status.name).getItemList());
 				characterData.get(chara.status.name).status.copyTo(chara.status);
@@ -293,9 +295,24 @@ public class Characters {
 				anime = attackAnimeMap.get(chara.status.name);
 			}
 
+			if (chara.isMoving) {
+				if (chara.direction == Chara.UP) {
+					anime = upWalkAnimeMap.get(chara.status.name);
+				}
+				if (chara.direction == Chara.RIGHT) {
+					anime = rightWalkAnimeMap.get(chara.status.name);
+				}
+				if (chara.direction == Chara.DOWN) {
+					anime = downWalkAnimeMap.get(chara.status.name);
+				}
+				if (chara.direction == Chara.LEFT) {
+					anime = leftWalkAnimeMap.get(chara.status.name);
+				}
+			}
+
 			anime.draw(
-					Field.tilesToPixels(chara.x) + offsetX,
-					Field.tilesToPixels(chara.y) + offsetY);
+					chara.pX + offsetX,
+					chara.pY + offsetY);
 		}
 	}
 }

@@ -49,6 +49,7 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 
 		cursorFirstX = field.getCursor().x;
 		cursorFirstY = field.getCursor().y;
+		field.getCursor().setDirection(Cursor.DOWN);
 	}
 
 	@Override
@@ -79,12 +80,19 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 			sgModel.keyInputStackRemoveFirst();
 			sgModel.rendererArrayRemoveEnd();
 
-			//カーソルをキャラまで戻す
+			//カーソルをキャラの最初の位置まで戻す
 			field.getCursor().x = cursorFirstX;
 			field.getCursor().y = cursorFirstY;
-
 			field.getCursor().pX = cursorFirstX * Field.MAP_CHIP_SIZE;
 			field.getCursor().pY = cursorFirstY * Field.MAP_CHIP_SIZE;
+
+			//キャラを最初の位置まで戻す
+			chara.isMoving = false;
+			chara.direction = Chara.DOWN;
+			chara.x = field.getCursor().x;
+			chara.y = field.getCursor().y;
+			chara.pX = field.getCursor().pX;
+			chara.pY = field.getCursor().pY;
 
 			charaCommandWindow.setVisible(true);
 
@@ -116,5 +124,13 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		if (keyInput.isKeyPressed(Input.KEY_LEFT)) {
 			field.getCursor().pressed(Cursor.LEFT);
 		}
+
+		//カーソルの座標情報と，キャラの座標情報を一致させる
+		chara.isMoving = true;
+		chara.direction = field.getCursor().getDirection();
+		chara.x = field.getCursor().x;
+		chara.y = field.getCursor().y;
+		chara.pX = field.getCursor().pX;
+		chara.pY = field.getCursor().pY;
 	}
 }

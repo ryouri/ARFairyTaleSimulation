@@ -12,6 +12,11 @@ public class Chara {
 	public int x;
 	public int y;
 
+	public int pX;
+	public int pY;
+
+	public boolean isMoving;
+
 	public Status status;
 
 	public GrowRateStatus growRateStatus;
