@@ -16,6 +16,8 @@ public class CalculateMoveRange {
 	public int startX;
 	public int startY;
 
+	private int[][] moveCost;
+
 	public CalculateMoveRange(Field field, Chara chara) {
 		super();
 		this.field = field;
@@ -23,6 +25,8 @@ public class CalculateMoveRange {
 
 		this.startX = chara.x;
 		this.startY = chara.y;
+
+		moveCost = field.createMoveCostArray(startX, startY);
 
 		moveRange =   new boolean[field.row][field.col];
 		attackRange = new boolean[field.row][field.col];
@@ -39,7 +43,11 @@ public class CalculateMoveRange {
 	 */
 	ArrayList<Node> searchingNodeArray = new ArrayList<Node>();
 
-
+	private void setMoveRange() {
+		for (Node node : searchedNodeArray) {
+			moveRange[node.y][node.x] = true;
+		}
+	}
 
 	public void calculateRange() {
 		searchingNodeArray.add(new Node(chara.x, chara.y, chara.status.move));
@@ -53,12 +61,6 @@ public class CalculateMoveRange {
 		}
 
 		setMoveRange();
-	}
-
-	private void setMoveRange() {
-		for (Node node : searchedNodeArray) {
-			moveRange[node.y][node.x] = true;
-		}
 	}
 
 	private void search(Node searchNode) {
@@ -82,8 +84,13 @@ public class CalculateMoveRange {
 			return;
 		}
 
+		//移動不可なら移動できない
+		if (moveCost[toY][toX] == -1) {
+			return;
+		}
+
 		//コストが0未満になるなら移動できない
-		int leftMove = searchNode.leftMove - field.moveCost[toY][toX];
+		int leftMove = searchNode.leftMove - moveCost[toY][toX];
 		if (leftMove < 0) {
 			return;
 		}

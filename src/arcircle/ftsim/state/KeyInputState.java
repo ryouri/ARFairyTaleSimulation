@@ -45,7 +45,7 @@ abstract public class KeyInputState extends BasicGameState {
 	/**
 	 * キー入力を受け取り，キーの状態を保持する
 	 */
-	protected KeyInput keyInput;
+	private KeyInput keyInput;
 
 	/**
 	 * キーの入力を渡すKeyListnerのスタック
@@ -92,9 +92,9 @@ abstract public class KeyInputState extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		if (keyInputStack.size() != 0) {
-			keyInputStack.getFirst().keyInput(keyInput);
+			keyInputStack.getFirst().keyInput(getKeyInput());
 		}
-		keyInput.keyUpdate();
+		getKeyInput().keyUpdate();
 	}
 
 	@Override
@@ -105,13 +105,13 @@ abstract public class KeyInputState extends BasicGameState {
 	@Override
 	public void keyPressed(int key, char c) {
 		super.keyPressed(key, c);
-		keyInput.keyPressed(key, c);
+		getKeyInput().keyPressed(key, c);
 	}
 
 	@Override
 	public void keyReleased(int key, char c) {
 		super.keyReleased(key, c);
-		keyInput.keyReleased(key, c);
+		getKeyInput().keyReleased(key, c);
 	}
 
 	@Override
@@ -146,5 +146,9 @@ abstract public class KeyInputState extends BasicGameState {
 
 	public void rendererArrayRemoveEnd() {
 		rendererArray.remove(rendererArray.size() - 1);
+	}
+
+	public KeyInput getKeyInput() {
+		return keyInput;
 	}
 }

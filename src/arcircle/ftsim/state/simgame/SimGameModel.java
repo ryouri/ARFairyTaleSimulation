@@ -31,6 +31,7 @@ public class SimGameModel{
 
 	public void keyInputStackRemoveFirst() {
 		sgState.keyInputStackRemoveFirst();
+		sgState.getKeyInput().reset();
 	}
 
 	public void rendererArrayAdd(Renderer renderer) {

@@ -42,11 +42,14 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 
 	public int cursorY;
 
+	private boolean isVisible;
+
 	public CharaCommandWindow(SimGameModel sgModel, Field field, Chara chara) {
 		this.sgModel = sgModel;
 		this.field = field;
 		this.windowX = 0;
 		this.windowY = 0;
+		this.setVisible(true);
 		this.chara = chara;
 		this.commandList = new ArrayList<Command>();
 
@@ -157,6 +160,10 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
+		if (isVisible() == false) {
+			return;
+		}
+
 		renderCommand(g, commandList.size());
 		renderRect(g);
 	}
@@ -248,8 +255,18 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 				MoveCommand mCommand = (MoveCommand) command;
 				sgModel.keyInputStackPush(mCommand);
 				sgModel.rendererArrayAdd(mCommand);
+
+				setVisible(false);
 			}
 			return;
 		}
+	}
+
+	public boolean isVisible() {
+		return isVisible;
+	}
+
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 }

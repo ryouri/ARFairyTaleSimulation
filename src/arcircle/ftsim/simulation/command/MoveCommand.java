@@ -79,11 +79,14 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 			sgModel.keyInputStackRemoveFirst();
 			sgModel.rendererArrayRemoveEnd();
 
+			//カーソルをキャラまで戻す
 			field.getCursor().x = cursorFirstX;
 			field.getCursor().y = cursorFirstY;
 
 			field.getCursor().pX = cursorFirstX * Field.MAP_CHIP_SIZE;
 			field.getCursor().pY = cursorFirstY * Field.MAP_CHIP_SIZE;
+
+			charaCommandWindow.setVisible(true);
 
 			return;
 		}

@@ -33,7 +33,7 @@ public class Field implements KeyListner, Renderer {
 	 * 移動コストが保存される
 	 * -1は移動不可能
 	 */
-	public int moveCost[][];
+	private int moveCostMap[][];
 
 	public static final int MAP_CHIP_ROW = 20;
 	public static final int MAP_CHIP_COL = 10;
@@ -272,12 +272,12 @@ public class Field implements KeyListner, Renderer {
 			mapWidth = MAP_CHIP_SIZE * col;
 			// マップを読み込む
 			map = new int[row][col];
-			moveCost = new int[row][col];
+			moveCostMap = new int[row][col];
 			for (int i = 0; i < row; i++) {
 				for (int j = 0; j < col; j++) {
 					map[i][j] = in.read();
 					//TODO:moveCostの読み込み，現在は1で初期化
-					moveCost[i][j] = 1;
+					moveCostMap[i][j] = 1;
 				}
 			}
 			in.close();
@@ -299,6 +299,29 @@ public class Field implements KeyListner, Renderer {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Fieldのコストが入った配列を返すメソッド
+	 * @return そのマップのコストが記録されたマップ
+	 */
+	public int[][] createMoveCostArray(int charaX, int charaY) {
+		int [][] moveCostArray = new int[moveCostMap.length][moveCostMap[0].length];
+
+		for (int row = 0; row < moveCostArray.length; row++) {
+			for (int col = 0 ; col < moveCostArray[0].length; col++) {
+				moveCostArray[row][col] = moveCostMap[row][col];
+			}
+		}
+
+		for (Chara chara : characters.characterArray) {
+			if (charaX == chara.x && charaY == chara.y) {
+				continue;
+			}
+			moveCostArray[chara.y][chara.x] = -1;
+		}
+
+		return moveCostArray;
 	}
 
 	public Cursor getCursor() {
