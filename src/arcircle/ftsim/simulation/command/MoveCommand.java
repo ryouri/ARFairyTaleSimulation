@@ -140,25 +140,18 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		}
 
 		//決定キーが押されたとき
-		if (keyInput.isKeyDown(Input.KEY_X)) {
-			sgModel.keyInputStackRemoveFirst();
-			sgModel.rendererArrayRemoveEnd();
-
-			//カーソルをキャラの最初の位置まで戻す
-			field.getCursor().x = cursorFirstX;
-			field.getCursor().y = cursorFirstY;
-			field.getCursor().pX = cursorFirstX * Field.MAP_CHIP_SIZE;
-			field.getCursor().pY = cursorFirstY * Field.MAP_CHIP_SIZE;
-
-			//キャラを最初の位置まで戻す
-			chara.isMoving = false;
-			chara.direction = Chara.DOWN;
-			chara.x = field.getCursor().x;
-			chara.y = field.getCursor().y;
-			chara.pX = field.getCursor().pX;
-			chara.pY = field.getCursor().pY;
-
-			charaCommandWindow.setVisible(true);
+		/*
+		 * 決定キーが押されたら，
+		 *  このクラスをスタックとリストから削除
+		 *  MovedCommandWindowクラスを生成し，スタックとリストに追加
+		 *  キャラの移動命令をfield.Charactersに出す
+		 *  キャラの移動が終了したら，MovedCommandWindowがWindowを表示する
+		 *   Window表示後にキャンセルされた時，MoveCommandをもう一度表示する．，
+		 *  その後はまたあとで考える
+		 *
+		 */
+		if (keyInput.isKeyDown(Input.KEY_Z)) {
+			//TODO;キャラクターが動いた時の処理を書く
 
 			return;
 		}
