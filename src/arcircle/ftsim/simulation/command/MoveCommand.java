@@ -126,11 +126,41 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		}
 
 		//カーソルの座標情報と，キャラの座標情報を一致させる
+		//ただし，キャラが移動できる範囲内の場合のみ
 		chara.isMoving = true;
-		chara.direction = field.getCursor().getDirection();
-		chara.x = field.getCursor().x;
-		chara.y = field.getCursor().y;
-		chara.pX = field.getCursor().pX;
-		chara.pY = field.getCursor().pY;
+		if (cmRange.moveRange[field.getCursor().y][field.getCursor().x]) {
+			chara.direction = field.getCursor().getDirection();
+			chara.x = field.getCursor().x;
+			chara.y = field.getCursor().y;
+			chara.pX = field.getCursor().pX;
+			chara.pY = field.getCursor().pY;
+		} else {
+			chara.pX = chara.x * field.MAP_CHIP_SIZE;
+			chara.pY = chara.y * field.MAP_CHIP_SIZE;
+		}
+
+		//決定キーが押されたとき
+		if (keyInput.isKeyDown(Input.KEY_X)) {
+			sgModel.keyInputStackRemoveFirst();
+			sgModel.rendererArrayRemoveEnd();
+
+			//カーソルをキャラの最初の位置まで戻す
+			field.getCursor().x = cursorFirstX;
+			field.getCursor().y = cursorFirstY;
+			field.getCursor().pX = cursorFirstX * Field.MAP_CHIP_SIZE;
+			field.getCursor().pY = cursorFirstY * Field.MAP_CHIP_SIZE;
+
+			//キャラを最初の位置まで戻す
+			chara.isMoving = false;
+			chara.direction = Chara.DOWN;
+			chara.x = field.getCursor().x;
+			chara.y = field.getCursor().y;
+			chara.pX = field.getCursor().pX;
+			chara.pY = field.getCursor().pY;
+
+			charaCommandWindow.setVisible(true);
+
+			return;
+		}
 	}
 }
