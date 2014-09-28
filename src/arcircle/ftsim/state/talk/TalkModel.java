@@ -183,8 +183,9 @@ public class TalkModel implements KeyListner {
     		String tagName = "";
     		String leftCharaName = "";
     		String rightCharaName = "";
-    		int leftBright = 0;
-    		int rightBright = 0;
+    		String bright = "";
+    		int express = -1;
+    		
     		String[] choice = new String[4];	//選択肢(4つまで)
 
             while ((line = br.readLine()) != null) {
@@ -192,7 +193,7 @@ public class TalkModel implements KeyListner {
             	// 空行を読み飛ばす
         		if (line.equals("")){
         			continue;
-        		//コメントを読み飛yばす
+        		//コメントを読み飛ばす
         		}else if (line.startsWith("#")){
         			continue;
         		}
@@ -203,31 +204,20 @@ public class TalkModel implements KeyListner {
 
         		if(strs[0].equals("SPEAK")){
         			tagName = strs[0];		//タグの名前をSPEAKにする
-        			//左に配置するキャラの名前
-        			if(strs[1].equals("*")){	//"*"は主人公の名前に変換して格納
-        				
-        				leftCharaName = playerName;
-        			}else{
-        				leftCharaName = strs[1];
-        			}
-        			leftBright = Integer.valueOf(strs[2]);	//左のキャラを明るくするかどうか
-        			//右に配置するキャラの名前
-        			if(strs[3].equals("*")){	//"*"は主人公の名前に変換して格納
-        				rightCharaName = playerName;
-        			}else{
-        				rightCharaName = strs[3];
-        			}
-        			rightBright = Integer.valueOf(strs[4]);	//右のキャラを明るくするかどうか
-
+        			leftCharaName = strs[1];	//左に配置するキャラの名前を格納("*"などもそのまま格納)
+        			rightCharaName = strs[2];	//右に配置するキャラの名前を格納("*"などもそのまま格納)
+        			bright = strs[3]; 	//左右キャラの明るさ
+        			express = Integer.valueOf(strs[4]);	//話し手の表情
+        			
         		}else if(strs[0].equals("SPEAKEND")){
-        			tagText[p++] = '$';	//テキストの終端記号
+        			tagText[++p] = '$';	//テキストの終端記号
         			//テキストタグの作成
-        			tags[tagP++] = new TextTag(tagName, leftCharaName, leftBright, rightCharaName, rightBright, tagText);
+        			tags[tagP++] = new TextTag(tagName, leftCharaName, rightCharaName, bright, express, tagText);
         			tagName = "";
         			leftCharaName = "";
             		rightCharaName = "";
-            		leftBright = 0;
-            		rightBright = 0;
+            		bright = "";
+            		express = -1;
         			p = 0;
         			tagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
 
@@ -252,8 +242,8 @@ public class TalkModel implements KeyListner {
         			tagName = "";
         			leftCharaName = "";
             		rightCharaName = "";
-            		leftBright = 0;
-            		rightBright = 0;
+            		bright = "";
+            		express = -1;
         			p = 0;
         			tagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
 
@@ -295,6 +285,7 @@ public class TalkModel implements KeyListner {
                 curPosOfPage++;  // 1文字増やす
                 // テキスト全体から見た現在位置
                 int p = curPage * MAX_CHARS_PER_PAGE + curPosOfPage;
+                System.out.println(curTagText[p]);
                 if (curTagText[p] == '/') {
                     curPosOfPage += MAX_CHARS_PER_LINE;
                     curPosOfPage = (curPosOfPage / MAX_CHARS_PER_LINE) * MAX_CHARS_PER_LINE;
@@ -303,7 +294,6 @@ public class TalkModel implements KeyListner {
                     curPosOfPage = (curPosOfPage / MAX_CHARS_PER_PAGE) * MAX_CHARS_PER_PAGE;
                 } else if (curTagText[p] == '$') {
                 	nextFlag = true;
-                    //hideFlag=true;
                 }
 
                 // 1ページの文字数に達したら▼を表示
@@ -313,67 +303,4 @@ public class TalkModel implements KeyListner {
             }
         }
     }
-
-	/*
-	//セーブデータをロードするメソッド-----------------------------------------------------------------
-	//作成途中
-    private Data[] loadSaveData(){
-
-    	int countData = 0;
-    	try {
-    		// SaveDataファイルを読み込む
-    		BufferedReader br = new BufferedReader(new InputStreamReader(
-    			getClass().getClassLoader().getResourceAsStream("./Stories/SaveData.txt"), "Shift_JIS"));  // ファイルを開く
-    		String line;
-
-    		while ((line = br.readLine()) != null) {  // 1行ずつ読み込み
-    			// 空行を読み飛ばす
-    			if (line.equals("")){
-    				continue;
-    			}
-    			// コメント行を読み飛ばす
-    			if (line.startsWith("#")){
-    				continue;
-    			}
-
-    			StringTokenizer st = new StringTokenizer(line, " ");
-    			String Type1 = st.nextToken();
-    			if(Type1 == "CREAR"){
-    				line = br.readLine();
-    				String Type2 = st.nextToken();
-    				if(Type2 == "StoryName1"){
-
-    				}
-    				dataLoadTAG = CREARTAG;
-    			}
-    			int x = Integer.parseInt(st.nextToken());
-    			int y = Integer.parseInt(st.nextToken());
-
-    			tempName[countData] = st.nextToken();
-    			tempData[countData][0] = x;
-    			tempData[countData][1] = y;
-
-    			countData++;
-    		}
-    		br.close();  // ファイルを閉じる
-    	} catch (FileNotFoundException ex) {
-        ex.printStackTrace();
-    	} catch (IOException ex) {
-        ex.printStackTrace();
-    	}
-
-    	//データ数Nをセット
-    	N = countData;
-    	Status.setN(countData);
-
-    	Data[] data = new Data[N];
-    	for (int i = 0 ; i < N ; i++){
-    		data[i] = new Data(tempData[i][0], tempData[i][1] , i);
-    		data[i].setClusterID(rand.nextInt(K));
-    		if(tempName[i] != ""){
-    			data[i].setName(tempName[i]);
-    		}
-    	}
-    	return data;
-    }*/
 }

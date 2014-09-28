@@ -57,7 +57,7 @@ public class InputNameModel implements KeyListner {
 	public void keyInput(KeyInput keyInput) {
 
 		if(keyInput.isKeyDown(Input.KEY_D)){
-			FTSimulationGame.save.getPlayer().name = "朝倉 こずえ";
+			FTSimulationGame.save.getPlayer().name = "あさくらやすゆき";
 			inState.nextState();
 		}
 		if(keyInput.isKeyDown(Input.KEY_Z)) {
