@@ -7,15 +7,15 @@ SPEAK_@_*_NL_0
 キラキラキラ...
 SPEAKEND
 
-SPEAK_01_*_WL_1
+SPEAK_001_*_WL_1
 私はこの図書館の妖精,名前はマーブルよ./よろしくね.
 SPEAKEND
 
-SPEAK_01_*_R_3
+SPEAK_001_*_R_3
 (えっなにこの人自分のこと妖精とか言ってる...)
 SPEAKEND
 
-SPEAK_01_*_L_2
+SPEAK_001_*_L_2
 あなたをこれから絵本の世界に連れていくわ./
 覚悟しなさい!!!!
 SPEAKEND

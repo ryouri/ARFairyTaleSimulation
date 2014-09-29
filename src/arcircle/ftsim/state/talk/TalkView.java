@@ -106,15 +106,17 @@ public class TalkView implements Renderer{
 			}
 
 			//全キャラを読み込む
-			//for(int i = 0 ; i < charaName.length ; i++){
-				String Num = "01";
-//				if(i > 0 && i < 10 ){
-//					Num = "0" + i;
-//				}else if (i >= 10 && i < 100){
-//					Num = ""+ i;
-//				}else{
-//					System.out.println("キャラ数が多すぎます.");
-//				}
+			for(int i = 1 ; i < 9 ; i++){
+				String Num = "";
+				if(i > 0 && i < 10 ){
+					Num = "00" + i;
+				}else if (i >= 10 && i < 100){
+					Num = "0"+ i;
+				}else if (i >= 100 && i < 1000){
+					Num = "" + i;
+				}else{
+					System.out.println("キャラ数が多すぎます.");
+				}
 				charasImg.put(Num + "Stand", new Image(characterPath + "/" + Num + "/stand.png"));
 				charasImg.put(Num + "FaceStandard", (new Image(characterPath + "/" + Num + "/faceStandard.png").getScaledCopy(1.5f)));
 				charasImg.put(Num + "FaceLaugh", (new Image(characterPath + "/" + Num + "/faceLaugh.png")).getScaledCopy(1.5f));
@@ -122,7 +124,7 @@ public class TalkView implements Renderer{
 				charasImg.put(Num + "FaceSuffer", (new Image(characterPath + "/" + Num + "/faceSuffer.png")).getScaledCopy(1.5f));
 				
 				//各キャラの名前をparamater.txtから読み込み
-				File file = new File(characterPath + "/01/parameter.txt");
+				File file = new File(characterPath + "/" + Num + "/parameter.txt");
 				BufferedReader br = new BufferedReader(new FileReader(file));
 	    		String line;
 	    		while ((line = br.readLine()) != null) {
@@ -144,7 +146,7 @@ public class TalkView implements Renderer{
 	    		}
 	    		
 	    		br.close();  // ファイルを閉じる
-
+			}
 		}catch(SlickException e){
 			e.printStackTrace();
 		}catch (FileNotFoundException ex) {
@@ -168,8 +170,8 @@ public class TalkView implements Renderer{
 		textBoxPosY = msgBoxPosY + 45;
 		//キャラクターの立ち絵を表示する位置
 		charaPosX = FTSimulationGame.WIDTH - rightCharaImg.getWidth();
-		charaLPosY = msgBoxPosY - (leftCharaImg.getHeight() / 2);	//キャラ立ち絵は体の半分がメッセージボックス上に出る
-		charaRPosY = msgBoxPosY - (rightCharaImg.getHeight() / 2);
+		charaLPosY = msgBoxPosY - (leftCharaImg.getHeight() * 3 / 4);	//キャラ立ち絵は体の半分がメッセージボックス上に出る
+		charaRPosY = msgBoxPosY - (rightCharaImg.getHeight() * 3 / 4);
 	}
 
 	@Override
@@ -185,9 +187,9 @@ public class TalkView implements Renderer{
 			if(curTag.getLeftCharaName().equals("@")){	//キャラなしの場合
 				leftCharaImg = nothingCharaImg;
 			}else if(curTag.getLeftCharaName().equals("*")){	//主人公の場合
-				leftCharaImg = playerImg;
+				leftCharaImg = playerImg.getFlippedCopy(true, false);
 			}else{
-				leftCharaImg = charasImg.get(curTag.getLeftCharaName() + "Stand");
+				leftCharaImg = charasImg.get(curTag.getLeftCharaName() + "Stand").getFlippedCopy(true, false);
 			}
 
 			//右配置のキャラを設定
@@ -199,11 +201,12 @@ public class TalkView implements Renderer{
 				rightCharaImg = charasImg.get(curTag.getRightCharaName() + "Stand");
 			}
 			
+			charaPosX = FTSimulationGame.WIDTH - rightCharaImg.getWidth();
+			charaLPosY = msgBoxPosY - (leftCharaImg.getHeight() * 3 / 4);	//キャラ立ち絵は体の半分がメッセージボックス上に出る
+			charaRPosY = msgBoxPosY - (rightCharaImg.getHeight() * 3 / 4);
+			
 			//顔のキャラを設定
 			if(curTag.isWitchSpeaker()){	//左にいるキャラが話し手
-				
-				
-				
 				if(curTag.getLeftCharaName().equals("@")){	//キャラなしの場合
 					speakerName = "";
 					faceImg = nothingCharaImg;
@@ -240,7 +243,7 @@ public class TalkView implements Renderer{
 							faceImg = charasImg.get(curTag.getLeftCharaName() + "FaceAngryW");
 							break;
 						case 3:
-							faceImg = charasImg.get(curTag.getLeftCharaName() + "FaceSurffer");
+							faceImg = charasImg.get(curTag.getLeftCharaName() + "FaceSuffer");
 							break;
 						default:
 							System.out.println("error_TalkView__curTagExpression");
@@ -288,7 +291,7 @@ public class TalkView implements Renderer{
 							faceImg = charasImg.get(curTag.getRightCharaName() + "FaceAngryW");
 							break;
 						case 3:
-							faceImg = charasImg.get(curTag.getRightCharaName() + "FaceSurffer");
+							faceImg = charasImg.get(curTag.getRightCharaName() + "FaceSuffer");
 							break;
 						default:
 							System.out.println("error_TalkView__curTagExpression");
@@ -329,7 +332,8 @@ public class TalkView implements Renderer{
 		// 現在表示しているページのcurPosまで表示
 		// curPosはDrawingTimerTaskで増えていくので流れて表示されるように見える
 		for (int i = 0; i < talkModel.getCurPosOfPage(); i++) {
-			char c = curPosText[talkModel.getCurPage() * MAX_CHARS_PER_PAGE + i];
+			//char c = curPosText[talkModel.getCurPage() * MAX_CHARS_PER_PAGE + i];
+			char c = curPosText[i];
             if (c == '/' || c == '%' || c == '\u0000'){
             	continue;  // コントロール文字は表示しない
             }
@@ -340,10 +344,9 @@ public class TalkView implements Renderer{
         }
 
         //最後のページでない場合は▼を表示する
-        if (talkModel.isNextFlag()) {
+        if (talkModel.isNextPageFlag()) {
             int dx = textBoxPosX + ((MAX_CHARS_PER_LINE - 2) * FONT_WIDTH);
             int dy = textBoxPosY + (MAX_LINES_PER_PAGE * FONT_HEIGHT);
-
             g.drawString("次へ", dx, dy);
         }
 	}
