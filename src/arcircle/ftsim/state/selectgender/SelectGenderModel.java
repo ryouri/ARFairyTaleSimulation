@@ -34,6 +34,7 @@ public class SelectGenderModel implements KeyListner {
 		} else if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
 			gender = FEMALE;
 		} else if (keyInput.isKeyDown(Input.KEY_Z)) {
+			FTSimulationGame.save.getPlayer().gender = FEMALE;
 			sgState.nextState();
 		}
 	}
