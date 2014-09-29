@@ -23,7 +23,7 @@ import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class CharaCommandWindow implements KeyListner, Renderer {
-	SimGameModel sgModel;
+	protected SimGameModel sgModel;
 	Field field;
 
 	int windowX;
@@ -63,7 +63,12 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 		}
 
 		this.commandFlagArray = new boolean[Command.commandType.length];
-		this.commandFlagArray[0] = true;
+		//動いていれば移動コマンドは利用できない
+		if (this.chara.isMoved()) {
+			this.commandFlagArray[0] = false;
+		} else {
+			this.commandFlagArray[0] = true;
+		}
 		this.commandFlagArray[5] = true;
 
 		calcCommandList();
@@ -226,12 +231,16 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 				WINDOW_MIDDLE_HEIGHT);
 	}
 
+	protected void pushXKey() {
+		sgModel.removeKeyInputStackFirst();
+		sgModel.removeRendererArrayEnd();
+	}
+
 	@Override
 	public void keyInput(KeyInput keyInput) {
 		//キャンセルキーが押されたとき
 		if (keyInput.isKeyDown(Input.KEY_X) || keyInput.isKeyPressed(Input.KEY_X)) {
-			sgModel.keyInputStackRemoveFirst();
-			sgModel.rendererArrayRemoveEnd();
+			pushXKey();
 			return;
 		}
 		if (keyInput.isKeyDown(Input.KEY_DOWN)) {
@@ -257,6 +266,8 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 				sgModel.rendererArrayAdd(mCommand);
 
 				setVisible(false);
+			} else if (command instanceof StandCommand) {
+				commandList.get(cursorY).pushed(field, chara);
 			}
 			return;
 		}

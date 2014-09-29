@@ -5,6 +5,8 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.renderer.Renderer;
+import arcircle.ftsim.simulation.model.Field;
+import arcircle.ftsim.simulation.model.SubInfoWindow;
 import arcircle.ftsim.simulation.model.World;
 import arcircle.ftsim.state.SimGameState;
 
@@ -25,12 +27,23 @@ public class SimGameModel{
 		sgState = simGameState;
 	}
 
+	public void removeKeyInputStackByField() {
+		while (!(sgState.getKeyInputStackFirst() instanceof Field)) {
+			sgState.removeKeyInputStackFirst();
+		}
+	}
+	public void removeRendererArrayBySubInfoWindow() {
+		while (!(sgState.getRendererArrayEnd() instanceof SubInfoWindow)) {
+			sgState.removeRendererArrayEnd();
+		}
+	}
+
 	public void keyInputStackPush(KeyListner keyListner) {
 		sgState.keyInputStackPush(keyListner);
 	}
 
-	public void keyInputStackRemoveFirst() {
-		sgState.keyInputStackRemoveFirst();
+	public void removeKeyInputStackFirst() {
+		sgState.removeKeyInputStackFirst();
 		sgState.getKeyInput().reset();
 	}
 
@@ -38,8 +51,8 @@ public class SimGameModel{
 		sgState.rendererArrayAdd(renderer);
 	}
 
-	public void rendererArrayRemoveEnd() {
-		sgState.rendererArrayRemoveEnd();
+	public void removeRendererArrayEnd() {
+		sgState.removeRendererArrayEnd();
 	}
 
 	public void setReadFilePath(String sectionPath, String subStoryPath,

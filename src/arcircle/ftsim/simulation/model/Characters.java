@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -111,7 +112,6 @@ public class Characters {
 			cursorAnimeMap.put(charaName, new Animation(cursorImages, duration, true));
 
 			attackAnimeMap.put(charaName, new Animation(nearAttackImages, attackDuration, true));
-
 		}
 	}
 
@@ -280,6 +280,8 @@ public class Characters {
 		}
 	}
 
+	public static final Color standColor = new Color(0.5f, 0.5f, 0.5f, 1);
+
 	public void render(Graphics g, int offsetX, int offsetY,
 			int firstTileX, int lastTileX,
 			int firstTileY, int lastTileY) {
@@ -289,30 +291,38 @@ public class Characters {
 				&& firstTileY <= chara.y && chara.y <= lastTileY)) {
 				continue;
 			}
-			Animation anime = stayAnimeMap.get(chara.status.name);
 
-			if (chara.isSelect) {
-				anime = attackAnimeMap.get(chara.status.name);
-			}
-
-			if (chara.isMoving) {
+			if (chara.isStand()) {
+				Animation anime = downWalkAnimeMap.get(chara.status.name);
+				anime.draw(
+						chara.pX + offsetX,
+						chara.pY + offsetY,
+						standColor);
+			} else if (chara.isMoving) {
+				Animation anime = null;
 				if (chara.direction == Chara.UP) {
 					anime = upWalkAnimeMap.get(chara.status.name);
-				}
-				if (chara.direction == Chara.RIGHT) {
+				} else if (chara.direction == Chara.RIGHT) {
 					anime = rightWalkAnimeMap.get(chara.status.name);
-				}
-				if (chara.direction == Chara.DOWN) {
+				} else if (chara.direction == Chara.LEFT) {
+					anime = leftWalkAnimeMap.get(chara.status.name);
+				} else {//if (chara.direction == Chara.DOWN) {
 					anime = downWalkAnimeMap.get(chara.status.name);
 				}
-				if (chara.direction == Chara.LEFT) {
-					anime = leftWalkAnimeMap.get(chara.status.name);
-				}
+				anime.draw(
+						chara.pX + offsetX,
+						chara.pY + offsetY);
+			} else if (chara.isSelect) {
+				Animation anime = attackAnimeMap.get(chara.status.name);
+				anime.draw(
+						chara.pX + offsetX,
+						chara.pY + offsetY);
+			} else {
+				Animation anime = stayAnimeMap.get(chara.status.name);
+				anime.draw(
+						chara.pX + offsetX,
+						chara.pY + offsetY);
 			}
-
-			anime.draw(
-					chara.pX + offsetX,
-					chara.pY + offsetY);
 		}
 	}
 }

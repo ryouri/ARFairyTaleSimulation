@@ -29,6 +29,8 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 	private int cursorFirstX;
 	private int cursorFirstY;
 
+	private boolean visible;
+
 	public MoveCommand(String commandName, SimGameModel sgModel,
 			CharaCommandWindow charaCommandWindow) {
 		super(commandName, sgModel, charaCommandWindow);
@@ -50,11 +52,13 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		cursorFirstX = field.getCursor().x;
 		cursorFirstY = field.getCursor().y;
 		field.getCursor().setDirection(Cursor.DOWN);
+
+		setVisible(true);
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
-		if (cmRange == null || field == null || chara == null) {
+		if (cmRange == null || field == null || chara == null || !isVisible()) {
 			return;
 		}
 
@@ -73,26 +77,30 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		}
 	}
 
+	public void setFirstPosition() {
+		//カーソルをキャラの最初の位置まで戻す
+		field.getCursor().x = cursorFirstX;
+		field.getCursor().y = cursorFirstY;
+		field.getCursor().pX = cursorFirstX * Field.MAP_CHIP_SIZE;
+		field.getCursor().pY = cursorFirstY * Field.MAP_CHIP_SIZE;
+
+		//キャラを最初の位置まで戻す
+		chara.isMoving = false;
+		chara.direction = Chara.DOWN;
+		chara.x = field.getCursor().x;
+		chara.y = field.getCursor().y;
+		chara.pX = field.getCursor().pX;
+		chara.pY = field.getCursor().pY;
+	}
+
 	@Override
 	public void keyInput(KeyInput keyInput) {
 		//キャンセルキーが押されたとき
 		if (keyInput.isKeyDown(Input.KEY_X)) {
-			sgModel.keyInputStackRemoveFirst();
-			sgModel.rendererArrayRemoveEnd();
+			sgModel.removeKeyInputStackFirst();
+			sgModel.removeRendererArrayEnd();
 
-			//カーソルをキャラの最初の位置まで戻す
-			field.getCursor().x = cursorFirstX;
-			field.getCursor().y = cursorFirstY;
-			field.getCursor().pX = cursorFirstX * Field.MAP_CHIP_SIZE;
-			field.getCursor().pY = cursorFirstY * Field.MAP_CHIP_SIZE;
-
-			//キャラを最初の位置まで戻す
-			chara.isMoving = false;
-			chara.direction = Chara.DOWN;
-			chara.x = field.getCursor().x;
-			chara.y = field.getCursor().y;
-			chara.pX = field.getCursor().pX;
-			chara.pY = field.getCursor().pY;
+			setFirstPosition();
 
 			charaCommandWindow.setVisible(true);
 
@@ -152,8 +160,23 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		 */
 		if (keyInput.isKeyDown(Input.KEY_Z)) {
 			//TODO;キャラクターが動いた時の処理を書く
+			chara.setMoved(true);
+			MovedCommandWindow mcWindow = new MovedCommandWindow(sgModel, field,
+					chara, this);
+			sgModel.keyInputStackPush(mcWindow);
+			sgModel.rendererArrayAdd(mcWindow);
+
+			this.setVisible(false);
 
 			return;
 		}
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 }

@@ -17,6 +17,26 @@ public class Chara {
 
 	public boolean isMoving;
 
+	private boolean isMoved;
+
+	private boolean isStand;
+
+	public boolean isStand() {
+		return isStand;
+	}
+
+	public void setStand(boolean isStand) {
+		this.isStand = isStand;
+	}
+
+	public boolean isMoved() {
+		return isMoved;
+	}
+
+	public void setMoved(boolean isMoved) {
+		this.isMoved = isMoved;
+	}
+
 	public Status status;
 
 	public GrowRateStatus growRateStatus;
@@ -42,5 +62,7 @@ public class Chara {
 		this.growRateStatus = new GrowRateStatus();
 		this.status.setItemList(new ArrayList<Item>());
 		this.status.name = name;
+		this.isStand = false;
+		this.isMoved = false;
 	}
 }

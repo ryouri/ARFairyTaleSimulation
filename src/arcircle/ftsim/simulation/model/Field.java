@@ -226,7 +226,7 @@ public class Field implements KeyListner, Renderer {
 		// 決定キーが押されたとき
 		if (keyInput.isKeyDown(Input.KEY_Z)) {
 			for (Chara chara : characters.characterArray) {
-				if (chara.isSelect) {
+				if (chara.isSelect && !chara.isStand()) {
 					pushZKey(chara);
 				}
 			}
