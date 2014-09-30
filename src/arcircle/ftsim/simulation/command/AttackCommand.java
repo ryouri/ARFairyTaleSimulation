@@ -15,6 +15,7 @@ import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.simulation.item.Weapon;
 import arcircle.ftsim.simulation.model.CharaCommandWindow;
+import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Cursor;
 import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.state.simgame.SimGameModel;
@@ -33,6 +34,8 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 	private boolean visible;
 	
 	private boolean[][] attackRange;
+	
+	private boolean[][] attackJudge;
 
 	public boolean isVisible() {
 		return visible;
@@ -85,8 +88,31 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 		this.attackRange = new boolean[field.row][field.col];
 		
 		calculateAttackRange();
+		calculateJudgeAttack();
 
 		setVisible(true);
+	}
+
+	private void calculateJudgeAttack() {
+		attackJudge = new boolean[attackRange.length][attackRange[0].length];
+		boolean[][] charaPut = new boolean[attackRange.length][attackRange[0].length];
+		Characters characters = field.getCharacters();
+		
+		for (Chara putChara : characters.characterArray) {
+			if (this.chara.getCamp() == Chara.CAMP_FRIEND) {
+				if (putChara.getCamp() == Chara.CAMP_ENEMY) {
+					charaPut[putChara.y][putChara.x] = true;
+				}
+			}
+		}
+		
+		for (int y = 0; y < field.row; y++) {
+			for (int x = 0; x < field.col; x++) {
+				if (charaPut[y][x] == true && attackRange[y][x] == true) {
+					attackJudge[y][x] = true;
+				}
+			}
+		}
 	}
 
 	private void calculateAttackRange() {
@@ -176,6 +202,16 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 			charaCommandWindow.setVisible(true);
 
 			return;
+		}
+		
+		if (keyInput.isKeyDown(Input.KEY_Z)) {
+			if(attackJudge[field.getCursor().y][field.getCursor().x]) {
+				field.charaAttack(chara, field.getCursor().y, field.getCursor().x);
+				
+				//他の場所に移す
+				sgModel.removeKeyInputStackByField();
+				sgModel.removeRendererArrayBySubInfoWindow();
+			}
 		}
 
 		if (keyInput.isKeyDown(Input.KEY_UP)) {

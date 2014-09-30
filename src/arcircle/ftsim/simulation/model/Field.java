@@ -62,12 +62,20 @@ public class Field implements KeyListner, Renderer {
 	Characters characters;
 
 	HashMap<String, Item> itemList;
+	
+	private int nowTurn;
+	public static final int TURN_FRIEND = 0;
+	public static final int TURN_ENEMY = 1;
+	
+	private boolean cursorVisible;
 
 	public Field(SimGameModel sgModel, HashMap<String, Item> itemList) {
 		this.sgModel = sgModel;
 		this.itemList = itemList;
 		this.characters = new Characters();
-		sSheet = null;
+		this.sSheet = null;;
+		this.setNowTurn(TURN_FRIEND);
+		this.cursorVisible = true;
 	}
 
 	public void init(String subStoryFolderPath) {
@@ -78,7 +86,7 @@ public class Field implements KeyListner, Renderer {
 	}
 
 	private void initCharacters(String subStoryFolderPath) {
-		characters.init(sgModel, row, col, itemList);
+		characters.init(sgModel, this, row, col, itemList);
 		characters.addCharacters(subStoryFolderPath + "putCharacter.txt");
 	}
 
@@ -95,6 +103,16 @@ public class Field implements KeyListner, Renderer {
 		cursorDuration[0] = 600;
 		cursorDuration[1] = 600;
 		cursorAnime = new Animation(cursorImage, cursorDuration, true);
+	}
+	
+	public void changeTurnFriend() {
+		setNowTurn(TURN_FRIEND);
+		cursorVisible = true;
+	}
+
+	public void changeTurnEnemy() {
+		setNowTurn(TURN_ENEMY);
+		cursorVisible = false;
 	}
 
 	public int offsetX;
@@ -137,8 +155,10 @@ public class Field implements KeyListner, Renderer {
 		characters.render(g, offsetX, offsetY, firstTileX, lastTileX,
 				firstTileY, lastTileY);
 
-		// カーソルを描く
-		renderCursor(g, offsetX, offsetY);
+		if (cursorVisible) {
+			// カーソルを描く
+			renderCursor(g, offsetX, offsetY);
+		}
 	}
 
 	private void renderMap(Graphics g, int offsetX, int offsetY,
@@ -164,13 +184,10 @@ public class Field implements KeyListner, Renderer {
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		cursorAnime.update(delta);
 		getCursor().update();
-
-		for (Chara chara : characters.characterArray) {
-			chara.isSelect = false;
-			if (chara.x == getCursor().x && chara.y == getCursor().y) {
-				chara.isSelect = true;
-			}
-		}
+		
+		characters.update(delta);
+		
+		
 	}
 
 	/**
@@ -330,5 +347,27 @@ public class Field implements KeyListner, Renderer {
 
 	public void setCursor(Cursor cursor) {
 		this.cursor = cursor;
+	}
+
+	public Characters getCharacters() {
+		return characters;
+	}
+
+	public void charaAttack(Chara chara, int y, int x) {
+		for (Chara damageChara : characters.characterArray) {
+			if (damageChara.y == y && damageChara.x == x) {
+				characters.setCharaAttack(chara, damageChara);
+				break;
+			}
+		}
+	}
+
+	public int getNowTurn() {
+		return nowTurn;
+	}
+
+	public int setNowTurn(int nowTurn) {
+		this.nowTurn = nowTurn;
+		return nowTurn;
 	}
 }

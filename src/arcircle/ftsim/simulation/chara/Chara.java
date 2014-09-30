@@ -22,6 +22,36 @@ public class Chara {
 	private boolean isStand;
 	
 	private int camp;
+	
+	private boolean isAttack;
+	private int attackTime;
+	private int attackRightLeftDirection;
+	public static final int MAX_ATTACK_TIME = 50;
+	
+	public boolean isAttack() {
+		return isAttack;
+	}
+
+	public void setAttack(boolean isAttack) {
+		this.isAttack = isAttack;
+	}
+
+	public int getAttackTime() {
+		return attackTime;
+	}
+
+	public void setAttackTime(int attackTime) {
+		this.attackTime = attackTime;
+	}
+	
+	public int getCamp() {
+		return camp;
+	}
+
+	public void setCamp(int camp) {
+		this.camp = camp;
+	}
+
 	//味方
 	public static final int  CAMP_FRIEND = 0;
 	//敵
@@ -35,6 +65,10 @@ public class Chara {
 
 	public void setStand(boolean isStand) {
 		this.isStand = isStand;
+		if (isStand) {
+			this.direction = Chara.DOWN;
+			this.isMoving = false;
+		}
 	}
 
 	public boolean isMoved() {
@@ -62,7 +96,7 @@ public class Chara {
 	}
 
 	public void setItemList(ArrayList<Item> itemList) {
-		status.setItemList(itemList);
+		status.setItemList(new ArrayList<Item>(itemList));
 	}
 
 	public Chara(String name) {
@@ -72,5 +106,17 @@ public class Chara {
 		this.status.name = name;
 		this.isStand = false;
 		this.isMoved = false;
+	}
+
+	public int getAttackRightLeftDirection() {
+		return attackRightLeftDirection;
+	}
+
+	public void setAttackRightLeftDirection(int attackRightLeftDirection) {
+		this.attackRightLeftDirection = attackRightLeftDirection;
+	}
+
+	public void setMoving(boolean moving) {
+		this.isMoving = moving;
 	}
 }

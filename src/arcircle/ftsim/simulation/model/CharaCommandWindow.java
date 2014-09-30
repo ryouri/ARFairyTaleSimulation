@@ -34,7 +34,7 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 
 	Image[] windowImage;
 	int commandNum;
-	Chara chara;
+	protected Chara chara;
 
 	boolean[] commandFlagArray;
 

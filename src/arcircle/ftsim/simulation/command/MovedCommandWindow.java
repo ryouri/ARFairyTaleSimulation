@@ -17,6 +17,7 @@ public class MovedCommandWindow extends CharaCommandWindow {
 
 	@Override
 	protected void pushXKey() {
+		chara.setMoved(false);
 		sgModel.removeKeyInputStackFirst();
 		sgModel.removeRendererArrayEnd();
 		moveCommand.setFirstPosition();
