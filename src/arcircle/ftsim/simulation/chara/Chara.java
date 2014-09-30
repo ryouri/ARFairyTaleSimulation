@@ -20,6 +20,14 @@ public class Chara {
 	private boolean isMoved;
 
 	private boolean isStand;
+	
+	private int camp;
+	//味方
+	public static final int  CAMP_FRIEND = 0;
+	//敵
+	public static final int  CAMP_ENEMY = 1;
+	//友軍
+	public static final int  CAMP_ALLIES = 2;
 
 	public boolean isStand() {
 		return isStand;
