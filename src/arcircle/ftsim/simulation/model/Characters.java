@@ -465,7 +465,7 @@ public class Characters {
 				if (chara.getCamp() != Chara.CAMP_ENEMY || chara.isStand()) {
 					continue;
 				}
-				chara.getAI().thinkAndDo(this);
+				chara.getAI().thinkAndDo(field, this);
 				break;
 			}
 			

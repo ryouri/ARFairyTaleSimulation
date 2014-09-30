@@ -6,11 +6,11 @@ import java.util.Collections;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.simulation.item.Weapon;
+import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Field;
 
 public class CalculateMoveAttackRange {
 	public boolean[][] moveRange;
-	public boolean[][] attackRange;
 
 	Field field;
 	Chara chara;
@@ -31,7 +31,6 @@ public class CalculateMoveAttackRange {
 		moveCost = field.createMoveCostArray(startX, startY);
 
 		moveRange =   new boolean[field.row][field.col];
-		attackRange = new boolean[field.row][field.col];
 		searchedNodeArray = new ArrayList<Node>();
 		searchingNodeArray = new ArrayList<Node>();
 	}
@@ -71,7 +70,7 @@ public class CalculateMoveAttackRange {
 		}
 	}
 
-	public void calculateRange() {
+	public boolean[][] calculateRange() {
 		searchingNodeArray.add(new Node(chara.x, chara.y, chara.status.move));
 
 		while (searchingNodeArray.size() >= 1) {
@@ -83,6 +82,7 @@ public class CalculateMoveAttackRange {
 		}
 
 		setMoveRange();
+		return moveRange;
 	}
 
 	private void search(Node searchNode) {
@@ -167,6 +167,24 @@ public class CalculateMoveAttackRange {
 		Collections.sort(searchingNodeArray);
 	}
 	
+	public static boolean[][] createJudgeAttackArray(Field field, Chara chara, boolean[][] moveRange) {
+		boolean[][] attackRange = new boolean[field.row][field.col];
+		
+		int weaponType = CalculateMoveAttackRange.judgeAttackWeaponType(chara.getItemList());
+		
+		for (int y = 0; y < field.row; y++) {
+			for (int x = 0; x < field.col; x++) {
+				if (!moveRange[y][x]) {
+					continue;
+				}
+				CalculateMoveAttackRange.calculateAttackRange(x, y, attackRange, weaponType, field);
+			}
+		}
+		
+		return attackRange;
+		//attackJudge = CalculateMoveAttackRange.calculateJudgeAttack(field, attackRange, chara);
+	}
+	
 	public static int judgeAttackWeaponType(ArrayList<Item> itemList) {
 		boolean nearAttack = false;
 		boolean farAttack = false;
@@ -223,5 +241,34 @@ public class CalculateMoveAttackRange {
 				attackRange[charaY + range[1]][charaX + range[0]] = true;
 			}
 		}
+	}
+	
+	public static boolean[][] calculateJudgeAttack(Field field, boolean[][] attackRange, Chara chara) {
+		boolean[][] attackJudge = new boolean[field.row][field.col];
+		boolean[][] charaPut = new boolean[field.row][field.col];
+		Characters characters = field.getCharacters();
+		
+		for (Chara putChara : characters.characterArray) {
+			if (chara.getCamp() == Chara.CAMP_FRIEND) {
+				if (putChara.getCamp() == Chara.CAMP_ENEMY) {
+					charaPut[putChara.y][putChara.x] = true;
+				}
+			}
+			if (chara.getCamp() == Chara.CAMP_ENEMY) {
+				if (putChara.getCamp() == Chara.CAMP_FRIEND) {
+					charaPut[putChara.y][putChara.x] = true;
+				}
+			}
+		}
+		
+		for (int y = 0; y < field.row; y++) {
+			for (int x = 0; x < field.col; x++) {
+				if (charaPut[y][x] == true && attackRange[y][x] == true) {
+					attackJudge[y][x] = true;
+				}
+			}
+		}
+		
+		return attackJudge;
 	}
 }

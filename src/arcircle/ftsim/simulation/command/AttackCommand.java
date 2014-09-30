@@ -68,7 +68,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 		
 		int weaponType = CalculateMoveAttackRange.judgeAttackWeaponType(chara.getItemList());
 		CalculateMoveAttackRange.calculateAttackRange(chara.x, chara.y, attackRange, weaponType, field);;
-		calculateJudgeAttack();
+		attackJudge = CalculateMoveAttackRange.calculateJudgeAttack(field, attackRange, chara);
 
 		setVisible(true);
 	}
