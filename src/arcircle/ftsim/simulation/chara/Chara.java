@@ -2,6 +2,7 @@ package arcircle.ftsim.simulation.chara;
 
 import java.util.ArrayList;
 
+import arcircle.ftsim.simulation.chara.ai.AI;
 import arcircle.ftsim.simulation.item.Item;
 
 /**
@@ -28,6 +29,15 @@ public class Chara {
 	private int attackRightLeftDirection;
 	public static final int MAX_ATTACK_TIME = 50;
 	
+	private AI ai;
+	
+	public AI getAI() {
+		return ai;
+	}
+	public void setAI(AI ai) {
+		this.ai = ai;
+	}
+
 	public boolean isAttack() {
 		return isAttack;
 	}
@@ -68,6 +78,10 @@ public class Chara {
 		if (isStand) {
 			this.direction = Chara.DOWN;
 			this.isMoving = false;
+			this.isAttack = false;
+			this.isMoved = false;
+			this.isSelect = false;
+			this.attackTime = 0;
 		}
 	}
 

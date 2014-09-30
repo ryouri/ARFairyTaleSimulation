@@ -11,7 +11,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.renderer.Renderer;
-import arcircle.ftsim.simulation.algorithm.range.CalculateMoveRange;
+import arcircle.ftsim.simulation.algorithm.range.CalculateMoveAttackRange;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.model.CharaCommandWindow;
 import arcircle.ftsim.simulation.model.Cursor;
@@ -19,7 +19,7 @@ import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class MoveCommand extends Command implements KeyListner, Renderer {
-	CalculateMoveRange cmRange;
+	CalculateMoveAttackRange cmRange;
 	private Chara chara;
 	private Field field;
 
@@ -46,7 +46,7 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 	public void pushed(Field field, Chara chara) {
 		this.chara = chara;
 		this.field = field;
-		cmRange = new CalculateMoveRange(field, chara);
+		cmRange = new CalculateMoveAttackRange(field, chara);
 		cmRange.calculateRange();
 
 		cursorFirstX = field.getCursor().x;

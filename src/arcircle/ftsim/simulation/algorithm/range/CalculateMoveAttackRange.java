@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.item.Item;
+import arcircle.ftsim.simulation.item.Weapon;
 import arcircle.ftsim.simulation.model.Field;
 
-public class CalculateMoveRange {
+public class CalculateMoveAttackRange {
 	public boolean[][] moveRange;
 	public boolean[][] attackRange;
 
@@ -18,7 +20,7 @@ public class CalculateMoveRange {
 
 	private int[][] moveCost;
 
-	public CalculateMoveRange(Field field, Chara chara) {
+	public CalculateMoveAttackRange(Field field, Chara chara) {
 		super();
 		this.field = field;
 		this.chara = chara;
@@ -43,6 +45,26 @@ public class CalculateMoveRange {
 	 */
 	ArrayList<Node> searchingNodeArray = new ArrayList<Node>();
 
+	//x, y
+	public static int[][] nearAttackRange = {
+		{  0, -1},
+		{  1,  0},
+		{  0,  1},
+		{ -1,  0},
+	};
+	
+	//x, y
+	public static int[][] farAttackRange = {
+		{  0, -2},
+		{  1, -1},
+		{  2,  0},
+		{  1,  1},
+		{  0,  2},
+		{ -1,  1},
+		{ -2,  0},
+		{ -1, -1},
+	};
+	
 	private void setMoveRange() {
 		for (Node node : searchedNodeArray) {
 			moveRange[node.y][node.x] = true;
@@ -143,5 +165,63 @@ public class CalculateMoveRange {
 		//探索中のノードを探索リストに追加
 		searchingNodeArray.add(nextNode);
 		Collections.sort(searchingNodeArray);
+	}
+	
+	public static int judgeAttackWeaponType(ArrayList<Item> itemList) {
+		boolean nearAttack = false;
+		boolean farAttack = false;
+		
+		for (Item item : itemList) {
+			if (!(item instanceof Weapon)) {
+				continue;
+			}
+			
+			Weapon weapon = (Weapon) item;
+			
+			if (weapon.rangeType == Weapon.RANGE_NEAR) {
+				nearAttack = true;				
+			} else if (weapon.rangeType == Weapon.RANGE_FAR) {
+				farAttack = true;
+			} else if (weapon.rangeType == Weapon.RANGE_NEAR_FAR) {
+				return Weapon.RANGE_NEAR_FAR;
+			}
+		}
+		
+		if (nearAttack == true && farAttack == true) {
+			return Weapon.RANGE_NEAR_FAR;
+		} else if (nearAttack == true) {
+			return Weapon.RANGE_NEAR;
+		} else if (farAttack == true) {
+			return Weapon.RANGE_FAR;
+		} else {
+			return Weapon.RANGE_NONE;
+		}
+	}
+	
+	public static void calculateAttackRange(int x, int y, boolean[][] attackRange, 
+			int weaponType, Field field) {		
+		int charaX = x;
+		int charaY = y;
+				
+		if (weaponType == Weapon.RANGE_NEAR || weaponType == Weapon.RANGE_NEAR_FAR) {
+			for (int[] range : nearAttackRange) {
+				if (charaX + range[0] < 0 || charaY + range[1] < 0
+						|| charaX + range[0] >= field.col
+						|| charaY + range[1] >= field.row) {
+					continue;
+				}
+				attackRange[charaY + range[1]][charaX + range[0]] = true;
+			}
+		}
+		if (weaponType == Weapon.RANGE_FAR || weaponType == Weapon.RANGE_NEAR_FAR) {
+			for (int[] range : farAttackRange) {
+				if (charaX + range[0] < 0 || charaY + range[1] < 0
+						|| charaX + range[0] >= field.col
+						|| charaY + range[1] >= field.row) {
+					continue;
+				}
+				attackRange[charaY + range[1]][charaX + range[0]] = true;
+			}
+		}
 	}
 }

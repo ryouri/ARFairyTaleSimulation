@@ -11,9 +11,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.renderer.Renderer;
+import arcircle.ftsim.simulation.algorithm.range.CalculateMoveAttackRange;
 import arcircle.ftsim.simulation.chara.Chara;
-import arcircle.ftsim.simulation.item.Item;
-import arcircle.ftsim.simulation.item.Weapon;
 import arcircle.ftsim.simulation.model.CharaCommandWindow;
 import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Cursor;
@@ -58,26 +57,6 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 		
 	}
 
-	//x, y
-	public static int[][] nearAttackRange = {
-		{  0, -1},
-		{  1,  0},
-		{  0,  1},
-		{ -1,  0},
-	};
-	
-	//x, y
-	public static int[][] farAttackRange = {
-		{  0, -2},
-		{  1, -1},
-		{  2,  0},
-		{  1,  1},
-		{  0,  2},
-		{ -1,  1},
-		{ -2,  0},
-		{ -1, -1},
-	};
-	
 	@Override
 	public void pushed(Field field, Chara chara) {
 		this.chara = chara;
@@ -87,7 +66,8 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 		
 		this.attackRange = new boolean[field.row][field.col];
 		
-		calculateAttackRange();
+		int weaponType = CalculateMoveAttackRange.judgeAttackWeaponType(chara.getItemList());
+		CalculateMoveAttackRange.calculateAttackRange(chara.x, chara.y, attackRange, weaponType, field);;
 		calculateJudgeAttack();
 
 		setVisible(true);
@@ -114,53 +94,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 			}
 		}
 	}
-
-	private void calculateAttackRange() {
-		boolean nearAttack = false;
-		boolean farAttack = false;
-		
-		int charaX = chara.x;
-		int charaY = chara.y;
-		
-		for (Item item : chara.getItemList()) {
-			if (!(item instanceof Weapon)) {
-				continue;
-			}
-			
-			Weapon weapon = (Weapon) item;
-			
-			if (weapon.rangeType == Weapon.RANGE_NEAR) {
-				nearAttack = true;				
-			} else if (weapon.rangeType == Weapon.RANGE_FAR) {
-				farAttack = true;
-			} else if (weapon.rangeType == Weapon.RANGE_NEAR_FAR) {
-				nearAttack = true;
-				farAttack = true;
-			}
-		}
-		
-		if (nearAttack) {
-			for (int[] range : nearAttackRange) {
-				if (charaX + range[0] < 0 || charaY + range[1] < 0
-						|| charaX + range[0] >= field.col
-						|| charaY + range[1] >= field.row) {
-					continue;
-				}
-				attackRange[charaY + range[1]][charaX + range[0]] = true;
-			}
-		}
-		if (farAttack) {
-			for (int[] range : farAttackRange) {
-				if (charaX + range[0] < 0 || charaY + range[1] < 0
-						|| charaX + range[0] >= field.col
-						|| charaY + range[1] >= field.row) {
-					continue;
-				}
-				attackRange[charaY + range[1]][charaX + range[0]] = true;
-			}
-		}
-	}
-
+	
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
 		if (field == null || chara == null || !isVisible()) {

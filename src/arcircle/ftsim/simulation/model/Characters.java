@@ -16,6 +16,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.chara.ai.SimpleAI;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
@@ -292,9 +293,11 @@ public class Characters {
 				chara.y = Integer.valueOf(charaPuts[3]);
 				chara.pX = chara.x * Field.MAP_CHIP_SIZE;
 				chara.pY = chara.y * Field.MAP_CHIP_SIZE;
-				//TODO; キャラクターデータのコピーが未完成
+				//TODO; キャラクターデータのコピーが未完成 AIの実装もね
 				chara.setItemList(characterData.get(chara.status.name).getItemList());
 				characterData.get(chara.status.name).status.copyTo(chara.status);
+				
+				chara.setAI(new SimpleAI(chara));
 
 				characterArray.add(chara);
 			}
@@ -434,6 +437,7 @@ public class Characters {
 					standAttackInfo.attackChara.setStand(true);
 					standAttackInfo.damageChara.setMoving(false);
 					attackInfoArray.clear();
+					field.setCursorVisible(true);
 				}
 			}
 		}
@@ -456,11 +460,37 @@ public class Characters {
 				}
 			}
 		} else if (field.getNowTurn() == Field.TURN_ENEMY) {
-			field.changeTurnFriend();
+			//TODO:敵の動作処理
+			for (Chara chara : characterArray) {
+				if (chara.getCamp() != Chara.CAMP_ENEMY || chara.isStand()) {
+					continue;
+				}
+				chara.getAI().thinkAndDo(this);
+				break;
+			}
+			
+			boolean standCharaFlag = true;
+			//ENEMYキャラが全軍待機していたら敵ターンへ
+			for (Chara chara : characterArray) {
+				if (chara.getCamp() == Chara.CAMP_ENEMY && !chara.isStand()) {
+					standCharaFlag = false;
+				}
+			}
+			
+			if (standCharaFlag == true) {
+				field.changeTurnFriend();
+				for (Chara chara : characterArray) {
+					if (chara.getCamp() == Chara.CAMP_ENEMY) {
+						chara.setStand(false);
+					}
+				}
+			}
+			//field.changeTurnFriend();
 		}
 	}
 
-	private static void charaAttack(Chara chara, Chara damageChara) {
+	private void charaAttack(Chara chara, Chara damageChara) {
+		field.setCursorVisible(false);
 		chara.setAttack(true);
 		if (damageChara.x > chara.x) {
 			chara.direction = Chara.RIGHT;

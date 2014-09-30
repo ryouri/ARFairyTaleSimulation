@@ -69,6 +69,14 @@ public class Field implements KeyListner, Renderer {
 	
 	private boolean cursorVisible;
 
+	public boolean isCursorVisible() {
+		return cursorVisible;
+	}
+
+	public void setCursorVisible(boolean cursorVisible) {
+		this.cursorVisible = cursorVisible;
+	}
+
 	public Field(SimGameModel sgModel, HashMap<String, Item> itemList) {
 		this.sgModel = sgModel;
 		this.itemList = itemList;
@@ -187,7 +195,7 @@ public class Field implements KeyListner, Renderer {
 		
 		characters.update(delta);
 		
-		
+		//TODO:ターンの変化処理はCharactersからこっちに移したい
 	}
 
 	/**
@@ -214,6 +222,10 @@ public class Field implements KeyListner, Renderer {
 
 	@Override
 	public void keyInput(KeyInput keyInput) {
+		if (cursorVisible == false) {
+			return;
+		}
+		
 		if (keyInput.isKeyDown(Input.KEY_UP)) {
 			getCursor().move(Cursor.UP);
 		}
@@ -243,7 +255,7 @@ public class Field implements KeyListner, Renderer {
 		// 決定キーが押されたとき
 		if (keyInput.isKeyDown(Input.KEY_Z)) {
 			for (Chara chara : characters.characterArray) {
-				if (chara.isSelect && !chara.isStand()) {
+				if (chara.isSelect && !chara.isStand() && chara.getCamp() == Chara.CAMP_FRIEND) {
 					pushZKey(chara);
 				}
 			}
