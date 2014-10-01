@@ -83,9 +83,9 @@ public class World {
 			if (itemStrs[2].equals(Weapon.RANGE_NEAR_STR)) {
 				weapon.rangeType = Weapon.RANGE_NEAR;
 			} else if (itemStrs[2].equals(Weapon.RANGE_FAR_STR)) {
-				weapon.rangeType = Weapon.RANGE_NEAR;
+				weapon.rangeType = Weapon.RANGE_FAR;
 			} else if (itemStrs[2].equals(Weapon.RANGE_NEAR_FAR_STR)) {
-				weapon.rangeType = Weapon.RANGE_NEAR;
+				weapon.rangeType = Weapon.RANGE_NEAR_FAR;
 			}
 			weapon.power = Integer.valueOf(itemStrs[3]);
 			weapon.weight = Integer.valueOf(itemStrs[4]);

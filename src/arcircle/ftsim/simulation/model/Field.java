@@ -33,7 +33,7 @@ public class Field implements KeyListner, Renderer {
 	 * 移動コストが保存される
 	 * -1は移動不可能
 	 */
-	public int moveCost[][];
+	private int moveCostMap[][];
 
 	public static final int MAP_CHIP_ROW = 20;
 	public static final int MAP_CHIP_COL = 10;
@@ -53,7 +53,7 @@ public class Field implements KeyListner, Renderer {
 	public int mapHeight;
 
 	// カーソル関連のデータ
-	Cursor cursor;
+	private Cursor cursor;
 	Image[] cursorImage;
 	int[] cursorDuration;
 	Animation cursorAnime;
@@ -62,12 +62,28 @@ public class Field implements KeyListner, Renderer {
 	Characters characters;
 
 	HashMap<String, Item> itemList;
+	
+	private int nowTurn;
+	public static final int TURN_FRIEND = 0;
+	public static final int TURN_ENEMY = 1;
+	
+	private boolean cursorVisible;
+
+	public boolean isCursorVisible() {
+		return cursorVisible;
+	}
+
+	public void setCursorVisible(boolean cursorVisible) {
+		this.cursorVisible = cursorVisible;
+	}
 
 	public Field(SimGameModel sgModel, HashMap<String, Item> itemList) {
 		this.sgModel = sgModel;
 		this.itemList = itemList;
 		this.characters = new Characters();
-		sSheet = null;
+		this.sSheet = null;;
+		this.setNowTurn(TURN_FRIEND);
+		this.cursorVisible = true;
 	}
 
 	public void init(String subStoryFolderPath) {
@@ -78,12 +94,12 @@ public class Field implements KeyListner, Renderer {
 	}
 
 	private void initCharacters(String subStoryFolderPath) {
-		characters.init(sgModel, row, col, itemList);
+		characters.init(sgModel, this, row, col, itemList);
 		characters.addCharacters(subStoryFolderPath + "putCharacter.txt");
 	}
 
 	private void initCursor() {
-		cursor = new Cursor(this);
+		setCursor(new Cursor(this));
 		cursorImage = new Image[2];
 		try {
 			cursorImage[0] = new Image("image/cursor/simGameStateCorsor1.png");
@@ -96,6 +112,16 @@ public class Field implements KeyListner, Renderer {
 		cursorDuration[1] = 600;
 		cursorAnime = new Animation(cursorImage, cursorDuration, true);
 	}
+	
+	public void changeTurnFriend() {
+		setNowTurn(TURN_FRIEND);
+		cursorVisible = true;
+	}
+
+	public void changeTurnEnemy() {
+		setNowTurn(TURN_ENEMY);
+		cursorVisible = false;
+	}
 
 	public int offsetX;
 	public int offsetY;
@@ -107,13 +133,13 @@ public class Field implements KeyListner, Renderer {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
 		// X方向のオフセットを計算
-		offsetX = MAP_VIEW_WIDTH / 2 - cursor.pX;
+		offsetX = MAP_VIEW_WIDTH / 2 - getCursor().pX;
 		// マップの端ではスクロールしないようにする
 		offsetX = Math.min(offsetX, 0);
 		offsetX = Math.max(offsetX, MAP_VIEW_WIDTH - mapWidth);
 
 		// Y方向のオフセットを計算
-		offsetY = MAP_VIEW_HEIGHT / 2 - cursor.pY;
+		offsetY = MAP_VIEW_HEIGHT / 2 - getCursor().pY;
 		// マップの端ではスクロールしないようにする
 		offsetY = Math.min(offsetY, 0);
 		offsetY = Math.max(offsetY, MAP_VIEW_HEIGHT - mapHeight);
@@ -137,8 +163,10 @@ public class Field implements KeyListner, Renderer {
 		characters.render(g, offsetX, offsetY, firstTileX, lastTileX,
 				firstTileY, lastTileY);
 
-		// カーソルを描く
-		renderCursor(g, offsetX, offsetY);
+		if (cursorVisible) {
+			// カーソルを描く
+			renderCursor(g, offsetX, offsetY);
+		}
 	}
 
 	private void renderMap(Graphics g, int offsetX, int offsetY,
@@ -158,19 +186,16 @@ public class Field implements KeyListner, Renderer {
 	}
 
 	private void renderCursor(Graphics g, int offsetX, int offsetY) {
-		cursorAnime.draw(cursor.pX + offsetX - 4, cursor.pY + offsetY - 4);
+		cursorAnime.draw(getCursor().pX + offsetX - 4, getCursor().pY + offsetY - 4);
 	}
 
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		cursorAnime.update(delta);
-		cursor.update();
-
-		for (Chara chara : characters.characterArray) {
-			chara.isSelect = false;
-			if (chara.x == cursor.x && chara.y == cursor.y) {
-				chara.isSelect = true;
-			}
-		}
+		getCursor().update();
+		
+		characters.update(delta);
+		
+		//TODO:ターンの変化処理はCharactersからこっちに移したい
 	}
 
 	/**
@@ -197,36 +222,40 @@ public class Field implements KeyListner, Renderer {
 
 	@Override
 	public void keyInput(KeyInput keyInput) {
+		if (cursorVisible == false) {
+			return;
+		}
+		
 		if (keyInput.isKeyDown(Input.KEY_UP)) {
-			cursor.move(Cursor.UP);
+			getCursor().move(Cursor.UP);
 		}
 		if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
-			cursor.move(Cursor.RIGHT);
+			getCursor().move(Cursor.RIGHT);
 		}
 		if (keyInput.isKeyDown(Input.KEY_DOWN)) {
-			cursor.move(Cursor.DOWN);
+			getCursor().move(Cursor.DOWN);
 		}
 		if (keyInput.isKeyDown(Input.KEY_LEFT)) {
-			cursor.move(Cursor.LEFT);
+			getCursor().move(Cursor.LEFT);
 		}
 
 		if (keyInput.isKeyPressed(Input.KEY_UP)) {
-			cursor.pressed(Cursor.UP);
+			getCursor().pressed(Cursor.UP);
 		}
 		if (keyInput.isKeyPressed(Input.KEY_RIGHT)) {
-			cursor.pressed(Cursor.RIGHT);
+			getCursor().pressed(Cursor.RIGHT);
 		}
 		if (keyInput.isKeyPressed(Input.KEY_DOWN)) {
-			cursor.pressed(Cursor.DOWN);
+			getCursor().pressed(Cursor.DOWN);
 		}
 		if (keyInput.isKeyPressed(Input.KEY_LEFT)) {
-			cursor.pressed(Cursor.LEFT);
+			getCursor().pressed(Cursor.LEFT);
 		}
 
 		// 決定キーが押されたとき
 		if (keyInput.isKeyDown(Input.KEY_Z)) {
 			for (Chara chara : characters.characterArray) {
-				if (chara.isSelect) {
+				if (chara.isSelect && !chara.isStand() && chara.getCamp() == Chara.CAMP_FRIEND) {
 					pushZKey(chara);
 				}
 			}
@@ -272,12 +301,12 @@ public class Field implements KeyListner, Renderer {
 			mapWidth = MAP_CHIP_SIZE * col;
 			// マップを読み込む
 			map = new int[row][col];
-			moveCost = new int[row][col];
+			moveCostMap = new int[row][col];
 			for (int i = 0; i < row; i++) {
 				for (int j = 0; j < col; j++) {
 					map[i][j] = in.read();
 					//TODO:moveCostの読み込み，現在は1で初期化
-					moveCost[i][j] = 1;
+					moveCostMap[i][j] = 1;
 				}
 			}
 			in.close();
@@ -299,5 +328,58 @@ public class Field implements KeyListner, Renderer {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Fieldのコストが入った配列を返すメソッド
+	 * @return そのマップのコストが記録されたマップ
+	 */
+	public int[][] createMoveCostArray(int charaX, int charaY) {
+		int [][] moveCostArray = new int[moveCostMap.length][moveCostMap[0].length];
+
+		for (int row = 0; row < moveCostArray.length; row++) {
+			for (int col = 0 ; col < moveCostArray[0].length; col++) {
+				moveCostArray[row][col] = moveCostMap[row][col];
+			}
+		}
+
+		for (Chara chara : characters.characterArray) {
+			if (charaX == chara.x && charaY == chara.y) {
+				continue;
+			}
+			moveCostArray[chara.y][chara.x] = -1;
+		}
+
+		return moveCostArray;
+	}
+
+	public Cursor getCursor() {
+		return cursor;
+	}
+
+	public void setCursor(Cursor cursor) {
+		this.cursor = cursor;
+	}
+
+	public Characters getCharacters() {
+		return characters;
+	}
+
+	public void charaAttack(Chara chara, int y, int x) {
+		for (Chara damageChara : characters.characterArray) {
+			if (damageChara.y == y && damageChara.x == x) {
+				characters.setCharaAttack(chara, damageChara);
+				break;
+			}
+		}
+	}
+
+	public int getNowTurn() {
+		return nowTurn;
+	}
+
+	public int setNowTurn(int nowTurn) {
+		this.nowTurn = nowTurn;
+		return nowTurn;
 	}
 }

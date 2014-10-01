@@ -23,7 +23,7 @@ import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class CharaCommandWindow implements KeyListner, Renderer {
-	SimGameModel sgModel;
+	protected SimGameModel sgModel;
 	Field field;
 
 	int windowX;
@@ -34,7 +34,7 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 
 	Image[] windowImage;
 	int commandNum;
-	Chara chara;
+	protected Chara chara;
 
 	boolean[] commandFlagArray;
 
@@ -42,11 +42,14 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 
 	public int cursorY;
 
+	private boolean isVisible;
+
 	public CharaCommandWindow(SimGameModel sgModel, Field field, Chara chara) {
 		this.sgModel = sgModel;
 		this.field = field;
 		this.windowX = 0;
 		this.windowY = 0;
+		this.setVisible(true);
 		this.chara = chara;
 		this.commandList = new ArrayList<Command>();
 
@@ -60,7 +63,12 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 		}
 
 		this.commandFlagArray = new boolean[Command.commandType.length];
-		this.commandFlagArray[0] = true;
+		//動いていれば移動コマンドは利用できない
+		if (this.chara.isMoved()) {
+			this.commandFlagArray[0] = false;
+		} else {
+			this.commandFlagArray[0] = true;
+		}
 		this.commandFlagArray[5] = true;
 
 		calcCommandList();
@@ -113,20 +121,20 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 		// 左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
 		cursorViewPosX = 1;
 		cursorViewPosY = 1;
-		if (field.cursor.x < 10) {
+		if (field.getCursor().x < 10) {
 			cursorViewPosX = 1;
 		}
-		if (field.cursor.y < 10) {
+		if (field.getCursor().y < 10) {
 			cursorViewPosY = 1;
 		}
-		if (field.cursor.x > field.col - 10) {
+		if (field.getCursor().x > field.col - 10) {
 			cursorViewPosX = -1;
 		}
-		if (field.cursor.y > field.row - 10) {
+		if (field.getCursor().y > field.row - 10) {
 			cursorViewPosY = -1;
 		}
-		int cursorRenderX = field.cursor.pX + field.offsetX;
-		int cursorRenderY = field.cursor.pY + field.offsetY;
+		int cursorRenderX = field.getCursor().pX + field.offsetX;
+		int cursorRenderY = field.getCursor().pY + field.offsetY;
 		int windowX = cursorRenderX;
 		int windowY = cursorRenderY;
 		// 左上(-1, -1)or右上(1, -1)or右下(1, 1)or左下(-1, 1)に表示
@@ -157,6 +165,10 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
+		if (isVisible() == false) {
+			return;
+		}
+
 		renderCommand(g, commandList.size());
 		renderRect(g);
 	}
@@ -219,12 +231,16 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 				WINDOW_MIDDLE_HEIGHT);
 	}
 
+	protected void pushXKey() {
+		sgModel.removeKeyInputStackFirst();
+		sgModel.removeRendererArrayEnd();
+	}
+
 	@Override
 	public void keyInput(KeyInput keyInput) {
 		//キャンセルキーが押されたとき
 		if (keyInput.isKeyDown(Input.KEY_X) || keyInput.isKeyPressed(Input.KEY_X)) {
-			sgModel.keyInputStackRemoveFirst();
-			sgModel.rendererArrayRemoveEnd();
+			pushXKey();
 			return;
 		}
 		if (keyInput.isKeyDown(Input.KEY_DOWN)) {
@@ -248,8 +264,27 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 				MoveCommand mCommand = (MoveCommand) command;
 				sgModel.keyInputStackPush(mCommand);
 				sgModel.rendererArrayAdd(mCommand);
-			}
+
+				setVisible(false);
+			} else if (command instanceof StandCommand) {
+				commandList.get(cursorY).pushed(field, chara);
+			} else if (command instanceof AttackCommand) {
+				commandList.get(cursorY).pushed(field, chara);
+				AttackCommand mCommand = (AttackCommand) command;
+				sgModel.keyInputStackPush(mCommand);
+				sgModel.rendererArrayAdd(mCommand);
+
+				setVisible(false);
+			} 
 			return;
 		}
+	}
+
+	public boolean isVisible() {
+		return isVisible;
+	}
+
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 }

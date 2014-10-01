@@ -17,6 +17,10 @@ public class Cursor {
 	private Field field;
 
 	private int direction;
+	public int getDirection() {
+		return direction;
+	}
+
 	private int directionPressedTime[];
 	private static int DIRECTION_PRESSED_DURATION = 30;
 
@@ -38,25 +42,25 @@ public class Cursor {
 		if (direction == UP) {
 			if (y > 0) {
 				isMoving = true;
-				this.direction = UP;
+				this.setDirection(UP);
 			}
 		}
 		if (direction == RIGHT) {
 			if (x < field.col - 1) {
 				isMoving = true;
-				this.direction = RIGHT;
+				this.setDirection(RIGHT);
 			}
 		}
 		if (direction == DOWN) {
 			if (y < field.row - 1) {
 				isMoving = true;
-				this.direction = DOWN;
+				this.setDirection(DOWN);
 			}
 		}
 		if (direction == LEFT) {
 			if (x > 0) {
 				isMoving = true;
-				this.direction = LEFT;
+				this.setDirection(LEFT);
 			}
 		}
 	}
@@ -71,25 +75,25 @@ public class Cursor {
 		if (direction == UP && directionPressedTime[UP] < 0) {
 			if (y > 0) {
 				isMoving = true;
-				this.direction = UP;
+				this.setDirection(UP);
 			}
 		}
 		if (direction == RIGHT && directionPressedTime[RIGHT] < 0) {
 			if (x < field.col - 1) {
 				isMoving = true;
-				this.direction = RIGHT;
+				this.setDirection(RIGHT);
 			}
 		}
 		if (direction == DOWN && directionPressedTime[DOWN] < 0) {
 			if (y < field.row - 1) {
 				isMoving = true;
-				this.direction = DOWN;
+				this.setDirection(DOWN);
 			}
 		}
 		if (direction == LEFT && directionPressedTime[LEFT] < 0) {
 			if (x > 0) {
 				isMoving = true;
-				this.direction = LEFT;
+				this.setDirection(LEFT);
 			}
 		}
 	}
@@ -99,7 +103,7 @@ public class Cursor {
 			return;
 		}
 
-		if (direction == UP) {
+		if (getDirection() == UP) {
 			pY -= speed;
 			if (y * Field.MAP_CHIP_SIZE - pY >= Field.MAP_CHIP_SIZE) {
 				y--;
@@ -107,7 +111,7 @@ public class Cursor {
 				isMoving = false;
 			}
 		}
-		if (direction == RIGHT) {
+		if (getDirection() == RIGHT) {
 			pX += speed;
 			if (pX - x * Field.MAP_CHIP_SIZE >= Field.MAP_CHIP_SIZE) {
 				x++;
@@ -115,7 +119,7 @@ public class Cursor {
 				isMoving = false;
 			}
 		}
-		if (direction == DOWN) {
+		if (getDirection() == DOWN) {
 			pY += speed;
 			if (pY - y * Field.MAP_CHIP_SIZE >= Field.MAP_CHIP_SIZE) {
 				y++;
@@ -123,7 +127,7 @@ public class Cursor {
 				isMoving = false;
 			}
 		}
-		if (direction == LEFT) {
+		if (getDirection() == LEFT) {
 			pX -= speed;
 			if (x * Field.MAP_CHIP_SIZE - pX >= Field.MAP_CHIP_SIZE) {
 				x--;
@@ -131,5 +135,9 @@ public class Cursor {
 				isMoving = false;
 			}
 		}
+	}
+
+	public void setDirection(int direction) {
+		this.direction = direction;
 	}
 }

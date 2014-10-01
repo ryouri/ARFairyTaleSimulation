@@ -30,6 +30,12 @@ public class KeyInput
 		keyMap.put(Input.KEY_LSHIFT, new Key(Input.KEY_LSHIFT));
 	}
 
+	public void reset() {
+		for (int keyNumber : keyMap.keySet()) {
+			keyMap.get(keyNumber).reset();
+		}
+	}
+
 	/**
 	 * キーが押されたときに呼ばれる処理。
 	 * 変数にキー状態を保存する。

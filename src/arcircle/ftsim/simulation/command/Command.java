@@ -17,7 +17,7 @@ public abstract class Command {
 	int windowX;
 	int windowY;
 
-	protected CharaCommandWindow CharaCommandWindow;
+	protected CharaCommandWindow charaCommandWindow;
 
 	public void setWindowXY(int windowX, int windowY) {
 		this.windowX = windowX;
@@ -27,7 +27,7 @@ public abstract class Command {
 			CharaCommandWindow charaCommandWindow) {
 		this.name = name;
 		this.sgModel = sgModel;
-		this.CharaCommandWindow = charaCommandWindow;
+		this.charaCommandWindow = charaCommandWindow;
 	}
 
 	abstract public void pushed(Field field, Chara chara);

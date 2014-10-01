@@ -37,9 +37,14 @@ public class Key {
 
 	public Key(int keyNumber) {
 		super();
-		this.keyState = KEY_RELEASE;
 		this.keyNumber = keyNumber;
 		this.keyDownTimeSetting = 1;
+		reset();
+	}
+
+	public void reset() {
+		this.keyDownTime = 0;
+		this.keyState = KEY_RELEASE;
 	}
 
 	public Key(int keyNumber, int keyDownTimeSetting) {
