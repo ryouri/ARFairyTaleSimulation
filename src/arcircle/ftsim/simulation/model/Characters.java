@@ -565,4 +565,15 @@ public class Characters {
 		attackInfoArray.add(new AttackInfo(damageChara, chara));
 		this.nowAttackIndex = 0;
 	}
+
+	public boolean isEnd() {
+		boolean endFlag = true;
+		for (Chara chara : characterArray) {
+			if (chara.getCamp() == Chara.CAMP_ENEMY) {
+				endFlag = false;
+			}
+		}
+
+		return endFlag;
+	}
 }

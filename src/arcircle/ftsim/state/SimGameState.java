@@ -25,9 +25,12 @@ public class SimGameState extends KeyInputState {
 	}
 
 	public void nextState() {
-		stateGame.enterState(StateConst.GAME_START,
+		TalkState talkState = (TalkState)stateGame.getState(StateConst.TALK);
+		talkState.setStageNumber(1);
+		stateGame.enterState(StateConst.TALK,
 				new FadeOutTransition(Color.black, 500),
 				new FadeInTransition(Color.black, 500));
+
 	}
 
 	@Override

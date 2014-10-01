@@ -195,6 +195,10 @@ public class Field implements KeyListner, Renderer {
 
 		characters.update(delta);
 
+		if (characters.isEnd()) {
+			sgModel.nextState();
+		}
+
 		//TODO:ターンの変化処理はCharactersからこっちに移したい
 	}
 

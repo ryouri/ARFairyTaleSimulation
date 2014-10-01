@@ -74,4 +74,8 @@ public class SimGameModel{
 	public String getStoriesFolder() {
 		return storiesFolder;
 	}
+
+	public void nextState() {
+		sgState.nextState();
+	}
 }

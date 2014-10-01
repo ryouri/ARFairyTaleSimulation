@@ -19,16 +19,19 @@ public class TalkState extends KeyInputState {
 	private TalkModel talkModel;
 	private TalkView talkView;
 	private int stageNumber = 0;
-	
-	
+
+
 	//private int chapterID;	//現在の章
 	//private int subStoryID;	//現在の話数
 
-	public int getStageNumber() { return stageNumber; }
+	public int getStageNumber() {
+		return stageNumber;
+	}
 
-	public void setStageNumber(int stageNumber) { this.stageNumber = stageNumber; }
-	
-	
+	public void setStageNumber(int stageNumber) {
+		this.stageNumber = stageNumber;
+	}
+
 	//コンストラクタ////////////////////////////////////////////////////////////////////////////////////////////////
 	//TODO:stageStateはあとでセーブデータから読み込む
 	public TalkState(int state) {
@@ -78,6 +81,6 @@ public class TalkState extends KeyInputState {
 		rendererArray.add(talkView);
 	}
 
-	
+
 
 }
