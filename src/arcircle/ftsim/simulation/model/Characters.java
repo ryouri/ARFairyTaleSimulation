@@ -405,12 +405,14 @@ public class Characters {
 						chara.pX + offsetX,
 						chara.pY + offsetY);
 			} else if (chara.isSelect) {
-				Animation anime = selectAnimeMap.get(chara.status.name);
+				//Animation anime = selectAnimeMap.get(chara.status.name);
+				Animation anime = downAttackAnimeMap.get(chara.status.name);
 				anime.draw(
 						chara.pX + offsetX,
 						chara.pY + offsetY);
 			} else {
-				Animation anime = stayAnimeMap.get(chara.status.name);
+				//Animation anime = stayAnimeMap.get(chara.status.name);
+				Animation anime = downWalkAnimeMap.get(chara.status.name);
 				anime.draw(
 						chara.pX + offsetX,
 						chara.pY + offsetY);

@@ -62,11 +62,11 @@ public class Field implements KeyListner, Renderer {
 	Characters characters;
 
 	HashMap<String, Item> itemList;
-	
+
 	private int nowTurn;
 	public static final int TURN_FRIEND = 0;
 	public static final int TURN_ENEMY = 1;
-	
+
 	private boolean cursorVisible;
 
 	public boolean isCursorVisible() {
@@ -112,7 +112,7 @@ public class Field implements KeyListner, Renderer {
 		cursorDuration[1] = 600;
 		cursorAnime = new Animation(cursorImage, cursorDuration, true);
 	}
-	
+
 	public void changeTurnFriend() {
 		setNowTurn(TURN_FRIEND);
 		cursorVisible = true;
@@ -192,9 +192,9 @@ public class Field implements KeyListner, Renderer {
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		cursorAnime.update(delta);
 		getCursor().update();
-		
+
 		characters.update(delta);
-		
+
 		//TODO:ターンの変化処理はCharactersからこっちに移したい
 	}
 
@@ -225,7 +225,7 @@ public class Field implements KeyListner, Renderer {
 		if (cursorVisible == false) {
 			return;
 		}
-		
+
 		if (keyInput.isKeyDown(Input.KEY_UP)) {
 			getCursor().move(Cursor.UP);
 		}

@@ -53,7 +53,9 @@ public class SimpleAI extends AI {
 
 		// 攻撃可能キャラがいないため，移動のみとする
 		if (attackCharaArray.size() == 0) {
-			serachMoveToOneChara(field, characters, moveRange);
+			//TODO:攻撃範囲内にキャラがいなければとりあえず待機
+			chara.setStand(true);
+			//serachMoveToOneChara(field, characters, moveRange);
 		} else {
 			Collections.shuffle(attackCharaArray);
 			AttackCharaData attackChara = attackCharaArray.get(0);
