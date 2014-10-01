@@ -43,7 +43,7 @@ public class TalkModel implements KeyListner {
     private int subStoryID;
     private String subStoryName;
     private String charaName1,charaName2;
-    
+
     private String playerName = "";
 
     HashMap<Integer,String> map = new HashMap<Integer,String>();
@@ -65,7 +65,7 @@ public class TalkModel implements KeyListner {
 
   	public int getSubStoryID() { return subStoryID; }
   	public void setSubStoryID(int subStoryID) { this.subStoryID = subStoryID; }
-  	
+
   	public TextTag getCurTag() { return tags[curTagPointer]; }
   	public char[] getcurText() {
   		for(int i = 0 ; i < curPosOfPage ; i++){
@@ -97,7 +97,7 @@ public class TalkModel implements KeyListner {
 	public TalkModel(TalkState talkState) {
 		super();
 		this.talkState = talkState;
-		
+
 		String saveName = FTSimulationGame.save.getPlayer().name;
 		int count = 0;
 		for(int i = (saveName.length() - 1) ; i > -1 ; i--){
@@ -111,16 +111,16 @@ public class TalkModel implements KeyListner {
 			playerName += saveName.charAt(i);
 		}
 		System.out.println(playerName);
-		
-		
-		
+
+
+
 		timer = new Timer();
 		loadTextData();
 		curTagPointer = 0;
 		curTagText = tags[curTagPointer].getText();
 		receiveData("little_red_ridding-hood", "おおかみ", "いづな", "ななこ");
-			
-		
+
+
 		task = new DrawingMessageTask();
 		task = new DrawingMessageTask();
         timer.schedule(task, 0L, 30L);
@@ -177,9 +177,16 @@ public class TalkModel implements KeyListner {
 	//テキストデータを一度ロードするメソッド-----------------------------------------------------------------
     private void loadTextData(){
     	try {
+    		BufferedReader br;
     		// 会話ファイルを読み込む
-    		File file = new File("Stories/01_Story/01/prologue.txt");
-			BufferedReader br = new BufferedReader(new FileReader(file));
+    		if(talkState.getStageNumber() == 0){
+    			File file = new File("Stories/01_Story/01/prologue.txt");
+    			br = new BufferedReader(new FileReader(file));
+    		}else{
+    			File file = new File("Stories/01_Story/01/epilogue.txt");
+    			br = new BufferedReader(new FileReader(file));
+    		}
+
     		String line;
 
     		nextPageFlag = false;
@@ -195,7 +202,7 @@ public class TalkModel implements KeyListner {
     		String rightCharaName = "";
     		String bright = "";
     		int express = -1;
-    		
+
     		String[] choice = new String[4];	//選択肢(4つまで)
 
             while ((line = br.readLine()) != null) {
@@ -218,7 +225,7 @@ public class TalkModel implements KeyListner {
         			rightCharaName = strs[2];	//右に配置するキャラの名前を格納("*"などもそのまま格納)
         			bright = strs[3]; 	//左右キャラの明るさ
         			express = Integer.valueOf(strs[4]);	//話し手の表情
-        			
+
         		}else if(strs[0].equals("SPEAKEND")){
         			tagText[++p] = '$';	//テキストの終端記号
         			//テキストタグの作成
