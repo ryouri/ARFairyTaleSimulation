@@ -36,7 +36,7 @@ public class Characters {
 	public HashMap<String, Animation> downWalkAnimeMap;
 	public HashMap<String, Animation> leftWalkAnimeMap;
 	public HashMap<String, Animation> rightWalkAnimeMap;
-	
+
 	public HashMap<String, Animation> upAttackAnimeMap;
 	public HashMap<String, Animation> downAttackAnimeMap;
 	public HashMap<String, Animation> leftAttackAnimeMap;
@@ -50,14 +50,16 @@ public class Characters {
 	public HashMap<String, Chara> characterData;
 
 	public ArrayList<Chara> characterArray;
-	
+
 	private ArrayList<AttackInfo> attackInfoArray;
 	private int nowAttackIndex;
 	private boolean isAttackChara;
 
 	HashMap<String, Item> itemMap;
-	
+
 	private Field field;
+
+	private Image hpBar;
 
 	public Characters() {
 		this.walkSheetMap = new HashMap<String, SpriteSheet>();
@@ -68,18 +70,18 @@ public class Characters {
 		this.downWalkAnimeMap = new HashMap<String, Animation>();
 		this.leftWalkAnimeMap = new HashMap<String, Animation>();
 		this.rightWalkAnimeMap = new HashMap<String, Animation>();
-		
+
 		this.upAttackAnimeMap = new HashMap<String, Animation>();
 		this.downAttackAnimeMap = new HashMap<String, Animation>();
 		this.leftAttackAnimeMap = new HashMap<String, Animation>();
 		this.rightAttackAnimeMap = new HashMap<String, Animation>();
-		
+
 		this.stayAnimeMap = new HashMap<String, Animation>();
 		this.cursorAnimeMap = new HashMap<String, Animation>();
 		this.selectAnimeMap = new HashMap<String, Animation>();
 
 		this.characterArray = new ArrayList<Chara>();
-		
+
 		this.attackInfoArray = new ArrayList<AttackInfo>();
 		this.nowAttackIndex = 0;
 		this.isAttackChara = false;
@@ -93,6 +95,12 @@ public class Characters {
 		this.row = row;
 		this.col = col;
 		this.itemMap = itemMap;
+
+		try {
+			this.hpBar = new Image("image/hpBar.png");
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 
 		String charaPath = sgModel.getStoriesFolder() + "/"
 				+ charactersFolderPath;
@@ -235,6 +243,7 @@ public class Characters {
 //		STATUS,20,8,5,9,6,10,5,4,6,8
 		if (charaStrs[0].equals(STATUS)) {
 			chara.status.hp = 			Integer.valueOf(charaStrs[1]);
+			chara.status.maxHp = 		Integer.valueOf(charaStrs[1]);
 			chara.status.power = 		Integer.valueOf(charaStrs[2]);
 			chara.status.magicPower = 	Integer.valueOf(charaStrs[3]);
 			chara.status.spead = 		Integer.valueOf(charaStrs[4]);
@@ -296,7 +305,7 @@ public class Characters {
 				//TODO; キャラクターデータのコピーが未完成 AIの実装もね
 				chara.setItemList(characterData.get(chara.status.name).getItemList());
 				characterData.get(chara.status.name).status.copyTo(chara.status);
-				
+
 				chara.setAI(new SimpleAI(chara));
 
 				characterArray.add(chara);
@@ -313,7 +322,7 @@ public class Characters {
 	}
 
 	public static final Color standColor = new Color(0.5f, 0.5f, 0.5f, 1);
-	
+
 	private void renderAttack(Chara chara, Graphics g, int offsetX, int offsetY) {
 		int change = chara.getAttackTime();
 		if (change <= 5 || change >= Chara.MAX_ATTACK_TIME - 5) {
@@ -323,7 +332,7 @@ public class Characters {
 		} else if (change >= Chara.MAX_ATTACK_TIME / 2) {
 			change = Chara.MAX_ATTACK_TIME - change - 5;
 		}
-		
+
 		Animation anime = null;
 		if (chara.direction == Chara.UP) {
 			anime = upAttackAnimeMap.get(chara.status.name);
@@ -334,10 +343,10 @@ public class Characters {
 		} else {//(chara.direction == Chara.DOWN) {
 			anime = downAttackAnimeMap.get(chara.status.name);
 		}
-		
+
 		int changeX = 0;
 		int changeY = 0;
-		
+
 		if (chara.direction == Chara.UP) {
 			changeY = -change;
 		} else if (chara.direction == Chara.RIGHT) {
@@ -357,7 +366,7 @@ public class Characters {
 		} else {//(chara.direction == Chara.DOWN) {
 			changeY = change;
 		}
-		
+
 		anime.draw(
 				chara.pX + offsetX + changeX,
 				chara.pY + offsetY + changeY);
@@ -406,6 +415,12 @@ public class Characters {
 						chara.pX + offsetX,
 						chara.pY + offsetY);
 			}
+
+			hpBar.getSubImage(chara.pX + offsetX,
+					chara.pY + offsetY,
+					(int)(((chara.status.hp * 1.0) / (chara.status.maxHp * 1.0)) * 32),
+					4).draw(chara.pX + offsetX,
+					chara.pY + offsetY);;
 		}
 	}
 
@@ -417,31 +432,41 @@ public class Characters {
 				chara.isSelect = true;
 			}
 		}
-		
+
 		//攻撃しているキャラの処理
 		if (isAttackChara == false && attackInfoArray.size() > 0) {
 			AttackInfo attackInfo = attackInfoArray.get(nowAttackIndex);
 			charaAttack(attackInfo.attackChara, attackInfo.damageChara);
 			isAttackChara = true;
 		} else if (isAttackChara == true && attackInfoArray.size() > 0){
-			Chara attackChara = attackInfoArray.get(nowAttackIndex).attackChara;
+			AttackInfo attackInfo = attackInfoArray.get(nowAttackIndex);
+			Chara attackChara = attackInfo.attackChara;
 			attackChara.setAttackTime(attackChara.getAttackTime() + 1);
 			//攻撃時間が一定以上になったら次のキャラへ
 			if (attackChara.getAttackTime() >= Chara.MAX_ATTACK_TIME) {
+				//攻撃を受ける側にダメージを与える
+				Chara damageChara = attackInfo.damageChara;
+				damageChara.status.hp -= attackChara.status.power - damageChara.status.defence;
+
+				//攻撃を受けた側のhpがなくなったら
+				if (damageChara.status.hp < 0) {
+					characterArray.remove(damageChara);
+				}
+
 				attackChara.setAttack(false);
 				isAttackChara = false;
 				nowAttackIndex++;
-				//最後のキャラまで行ったら
-				if (nowAttackIndex >= attackInfoArray.size()) {
+				//最後のキャラまで行ったら，もしくはダメージを受けたキャラが死んだら
+				if (nowAttackIndex >= attackInfoArray.size() || damageChara.status.hp < 0) {
 					AttackInfo standAttackInfo = attackInfoArray.get(0);
 					standAttackInfo.attackChara.setStand(true);
-					standAttackInfo.damageChara.setMoving(false);
+					standAttackInfo.damageChara.resetState();
 					attackInfoArray.clear();
 					field.setCursorVisible(true);
 				}
 			}
 		}
-		
+
 		if (field.getNowTurn() == Field.TURN_FRIEND) {
 			boolean standCharaFlag = true;
 			//FRIENDキャラが全軍待機していたら敵ターンへ
@@ -450,7 +475,7 @@ public class Characters {
 					standCharaFlag = false;
 				}
 			}
-			
+
 			if (standCharaFlag == true) {
 				field.changeTurnEnemy();
 				for (Chara chara : characterArray) {
@@ -460,6 +485,10 @@ public class Characters {
 				}
 			}
 		} else if (field.getNowTurn() == Field.TURN_ENEMY) {
+			if (attackInfoArray.size() > 0) {
+				return;
+			}
+
 			//TODO:敵の動作処理
 			for (Chara chara : characterArray) {
 				if (chara.getCamp() != Chara.CAMP_ENEMY || chara.isStand()) {
@@ -468,7 +497,7 @@ public class Characters {
 				chara.getAI().thinkAndDo(field, this);
 				break;
 			}
-			
+
 			boolean standCharaFlag = true;
 			//ENEMYキャラが全軍待機していたら敵ターンへ
 			for (Chara chara : characterArray) {
@@ -476,7 +505,7 @@ public class Characters {
 					standCharaFlag = false;
 				}
 			}
-			
+
 			if (standCharaFlag == true) {
 				field.changeTurnFriend();
 				for (Chara chara : characterArray) {
@@ -494,10 +523,10 @@ public class Characters {
 		chara.setAttack(true);
 		if (damageChara.x > chara.x) {
 			chara.direction = Chara.RIGHT;
-			
+
 			damageChara.direction = Chara.LEFT;
 			damageChara.setMoving(true);
-			
+
 			chara.setAttackRightLeftDirection(Chara.RIGHT);
 			if (damageChara.y < chara.y) {
 				chara.setAttackRightLeftDirection(Chara.UP);
@@ -509,7 +538,7 @@ public class Characters {
 
 			damageChara.direction = Chara.RIGHT;
 			damageChara.setMoving(true);
-			
+
 			chara.setAttackRightLeftDirection(Chara.LEFT);
 			if (damageChara.y < chara.y) {
 				chara.setAttackRightLeftDirection(Chara.UP);

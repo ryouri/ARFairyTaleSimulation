@@ -18,6 +18,7 @@ public class Status {
 	//セーブデータで利用
 	//パラメータ
 	public int hp;
+	public int maxHp;
 	public int power;
 	public int magicPower;
 	public int spead;
@@ -46,6 +47,7 @@ public class Status {
 
 	public void copyTo (Status status) {
 		status.hp = 			this.hp;
+		status.maxHp = 			this.maxHp;
 		status.power = 			this.power;
 		status.magicPower = 	this.magicPower;
 		status.spead = 			this.spead;

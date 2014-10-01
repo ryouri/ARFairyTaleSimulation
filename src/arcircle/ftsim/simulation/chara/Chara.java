@@ -21,16 +21,16 @@ public class Chara {
 	private boolean isMoved;
 
 	private boolean isStand;
-	
+
 	private int camp;
-	
+
 	private boolean isAttack;
 	private int attackTime;
 	private int attackRightLeftDirection;
 	public static final int MAX_ATTACK_TIME = 50;
-	
+
 	private AI ai;
-	
+
 	public AI getAI() {
 		return ai;
 	}
@@ -53,7 +53,7 @@ public class Chara {
 	public void setAttackTime(int attackTime) {
 		this.attackTime = attackTime;
 	}
-	
+
 	public int getCamp() {
 		return camp;
 	}
@@ -83,6 +83,15 @@ public class Chara {
 			this.isSelect = false;
 			this.attackTime = 0;
 		}
+	}
+
+	public void resetState() {
+		this.direction = Chara.DOWN;
+		this.isMoving = false;
+		this.isAttack = false;
+		this.isMoved = false;
+		this.isSelect = false;
+		this.attackTime = 0;
 	}
 
 	public boolean isMoved() {
