@@ -17,6 +17,7 @@ public class SelectGenderView implements Renderer {
 	private Image imageMale;
 	private Image imageFemale;
 	private Image flame;
+	private static final String characterPath = "./Stories/Characters";
 
 	public SelectGenderView(SelectGenderModel sgModel, SelectGenderState sgState) {
 		super();
@@ -25,8 +26,8 @@ public class SelectGenderView implements Renderer {
 
 		//稲井が画像ファイルをアップロードしていない？
 		try {
-			imageMale = new Image("./image/genderimage/male.png");
-			imageFemale = new Image("./image/genderimage/female.png");
+			imageMale = new Image(characterPath + "/playerMale/stand.png");
+			imageFemale = new Image(characterPath + "/playerFemale/stand.png");
 			flame = new Image("./image/genderimage/flame.png");
 		} catch (SlickException e) {
 			e.printStackTrace();
@@ -51,22 +52,22 @@ public class SelectGenderView implements Renderer {
 
 		if (sgModel.gender == SelectGenderModel.MALE) {
 			g.drawImage(imageMale, FTSimulationGame.WIDTH / 4
-					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 3 * 2
+					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 5 * 3
 					- imageGenderHeight / 2);
 			g.drawImage(imageFemale, FTSimulationGame.WIDTH / 4 * 3
-					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 3 * 2
+					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 5 * 3
 					- imageGenderHeight / 2);
 			g.drawImage(flame, FTSimulationGame.WIDTH / 4 - flameWidth / 2,
-					FTSimulationGame.HEIGHT / 3 * 2 - flameHeight / 2);
+					FTSimulationGame.HEIGHT / 5 * 3 - flameHeight / 2);
 		} else if (sgModel.gender == SelectGenderModel.FEMALE) {
 			g.drawImage(imageMale, FTSimulationGame.WIDTH / 4
-					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 3 * 2
+					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 5 * 3
 					- imageGenderHeight / 2);
 			g.drawImage(imageFemale, FTSimulationGame.WIDTH / 4 * 3
-					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 3 * 2
+					- imageGenderWidth / 2, FTSimulationGame.HEIGHT / 5 * 3
 					- imageGenderHeight / 2);
 			g.drawImage(flame, FTSimulationGame.WIDTH / 4 * 3 - flameWidth / 2,
-					FTSimulationGame.HEIGHT / 3 * 2 - flameHeight / 2);
+					FTSimulationGame.HEIGHT / 5 * 3 - flameHeight / 2);
 		}
 
 	}
