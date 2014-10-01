@@ -79,7 +79,7 @@ public class TalkView implements Renderer{
 
 		//各画像データの読み込み
 		try{
-			bgImg = new Image("./Image/blueScreen.png");	//背景画像の読み込み
+			bgImg = new Image("./Image/backGround.png");	//背景画像の読み込み
 			msgBoxImg = new Image("./Image/ver1120.png");	//メッセージボックス画像の読み込み
 			nothingCharaImg = new Image("./Image/Transparent.png");	//	キャラ非表示用に透明な画像を読み込み
 

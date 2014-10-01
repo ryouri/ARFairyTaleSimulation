@@ -15,7 +15,7 @@ public class SelectGenderModel implements KeyListner {
 
 	private SelectGenderState sgState;
 
-	public String message = "性別をえらんでください";
+	public String message = "キャラを選択してください";
 
 	public SelectGenderModel(SelectGenderState sgState) {
 		super();
