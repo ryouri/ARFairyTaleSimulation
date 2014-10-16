@@ -28,7 +28,7 @@ public class Save {
 		this.charaArray = new ArrayList<Status>();
 		this.switchArray = new ArrayList<Switch>();
 		this.clearStoryNameArray = new ArrayList<String>();
-		this.nowStage = null;
+		this.nowStage = new NowStage();
 	}
 
 	public Status getPlayer() {
