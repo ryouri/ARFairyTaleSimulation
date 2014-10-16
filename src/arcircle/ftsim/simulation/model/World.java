@@ -17,12 +17,25 @@ import arcircle.ftsim.simulation.item.Weapon;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class World {
+	/**
+	 * ゲームはFieldを大元に構成される
+	 */
 	Field field;
 
+	/**
+	 * 様々な機能にアクセスするために持っておく
+	 */
 	SimGameModel sgModel;
 
+
+	/**
+	 * 右側に表示される情報ウィンドウ
+	 */
 	SubInfoWindow subInfoWindow;
 
+	/**
+	 * ゲームに共通な，アイテムのリストを保持しておく
+	 */
 	public HashMap<String, Item> itemList;
 
 	public World(SimGameModel simGameModel) {
