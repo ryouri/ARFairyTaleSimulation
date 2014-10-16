@@ -28,9 +28,7 @@ public class TalkView implements Renderer{
 
 	private Image bgImg;	//背景画像
 	private Image leftCharaImg;	//左側(メイン)の立ち絵
-	//private Image lastLeftCharaImg;
 	private Image rightCharaImg;		//右側(サブ)の立ち絵
-	//private Image lastRightCharaImg;
 	private Image msgBoxImg;	//メッセージウィンドウの画像
 	private Image playerImg;	//主人公の画像
 	private Image[] playerFaceImg = new Image[4];
@@ -46,7 +44,6 @@ public class TalkView implements Renderer{
     private static final int MAX_CHARS_PER_LINE = 32;	// 1行の最大文字数
     private static final int MAX_LINES_PER_PAGE = 5;	// 1ページに表示できる最大行数
     private static final int MAX_CHARS_PER_PAGE = MAX_CHARS_PER_LINE * MAX_LINES_PER_PAGE;	// 1ページに表示できる最大文字数
-    //private static final int MAX_LINES = 256;	// 格納できる最大行数
 
     private static final String characterPath = "./Stories/Characters";	//Characterフォルダのパス
 

@@ -24,9 +24,8 @@ public class TalkModel implements KeyListner {
     private static final int MAX_LINES_PER_PAGE = 5;	// 1ページに表示できる最大行数
     private static final int MAX_CHARS_PER_PAGE = MAX_CHARS_PER_LINE * MAX_LINES_PER_PAGE;	// 1ページに表示できる最大文字数
     private static final int MAX_LINES = 256;	// 格納できる最大行数
-    //private static final int MAX_CHARS =
-	// メッセージを格納する配列
 
+    // メッセージを格納する配列
     private char[] curText = new char[MAX_CHARS_PER_PAGE];
     private char[] curTagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
     private TextTag[] tags = new TextTag[256];
@@ -37,20 +36,12 @@ public class TalkModel implements KeyListner {
     // ウィンドウを隠せるか？（最後まで表示したらtrueになる）
     private boolean nextStateFlag = false;
 
-    //セーブデータロード用
-    private int chapterID;
-    private String chapterName;
-    private int subStoryID;
-    private String subStoryName;
-    private String charaName1,charaName2;
-
     private String playerName = "";
 
     HashMap<Integer,String> map = new HashMap<Integer,String>();
 
     private int curPosOfPage = 0;
     private int curPage = 0;
-
 	private int curTagPointer = 0;
 
 	private int tagP = 0;
@@ -60,12 +51,6 @@ public class TalkModel implements KeyListner {
     private TimerTask task;
 
     //アクセッタ/////////////////////////////////////////////////////////////////////////////////////////////////
-  	public int getChapterID() { return chapterID; }
-  	public void setChapterID(int chapterID) { this.chapterID = chapterID; }
-
-  	public int getSubStoryID() { return subStoryID; }
-  	public void setSubStoryID(int subStoryID) { this.subStoryID = subStoryID; }
-
   	public TextTag getCurTag() { return tags[curTagPointer]; }
   	public char[] getcurText() {
   		for(int i = 0 ; i < curPosOfPage ; i++){
@@ -87,93 +72,40 @@ public class TalkModel implements KeyListner {
 	public boolean isNextTalkFlag() { return nextTalkFlag; }
 	public void setNextTalkFlag(boolean nextTalkFlag) { this.nextTalkFlag = nextTalkFlag; }
 
-	//public String getChapterName() { return chapterName; }
-	//public void setChapterName(String chapterName) { this.chapterName = chapterName; }
 	public int getCurPosOfPage() { return curPosOfPage; }
 	public int getCurPage() { return curPage; }
 
-
     //コンストラクタ//////////////////////////////////////////////////////////////////////////////////////
 	public TalkModel(TalkState talkState) {
-		super();
+		super();	//おまじない
 		this.talkState = talkState;
+		readPlayerName();//セーブデータにあるプレイヤーネームを読み込み
+		timer = new Timer();
+		loadTextData();		//
+		curTagPointer = 0;
+		curTagText = tags[curTagPointer].getText();
+		task = new DrawingMessageTask();
+        timer.schedule(task, 0L, 30L);
 
-		String saveName = FTSimulationGame.save.getPlayer().name;
+	}
+	
+	//セーブデータにあるプレイヤーネームを読み込み-----------------------------------------------------------------
+	private void readPlayerName(){
+		String savePlayerName = FTSimulationGame.save.getPlayer().name;
 		int count = 0;
-		for(int i = (saveName.length() - 1) ; i > -1 ; i--){
-			if(saveName.charAt(i) == '　'){
+		
+		for(int i = (savePlayerName.length() - 1) ; i > -1 ; i--){
+			if(savePlayerName.charAt(i) == '　'){
 				count++;
 			}else{
 				break;
 			}
 		}
-		for(int i = 0 ; i < (saveName.length()-count) ; i++){
-			playerName += saveName.charAt(i);
-		}
-		System.out.println(playerName);
-
-
-
-		timer = new Timer();
-		loadTextData();
-		curTagPointer = 0;
-		curTagText = tags[curTagPointer].getText();
-		receiveData("little_red_ridding-hood", "おおかみ", "いづな", "ななこ");
-
-
-		task = new DrawingMessageTask();
-		task = new DrawingMessageTask();
-        timer.schedule(task, 0L, 30L);
-
-	}
-
-	@Override
-	//キーインプット------------------------------------------------------------------------------------
-	public void keyInput(KeyInput keyInput) {
-		//デバッグ用キー
-		if(keyInput.isKeyDown(Input.KEY_D)){
-			talkState.nextState();
-		}
-		if(keyInput.isKeyDown(Input.KEY_Z)){
-			if(nextTalkFlag && nextStateFlag == true){
-				talkState.nextState();
-			}else if(nextPageFlag && !nextTalkFlag){
-				curPage++;
-				curPosOfPage = 0;
-				nextPageFlag = false;
-			}
-			else if(nextTalkFlag){
-				//System.out.println("nextTalkFlag = true");
-				curTagPointer++;
-				curTagText = tags[curTagPointer].getText();
-				curPosOfPage = 0;
-				curPage = 0;
-				nextTalkFlag = false;
-				//System.out.println(curTagPointer + "," + tagP);
-				//System.out.println(tags[curTagPointer].getLeftCharaName());
-				if(curTagPointer == (tagP-1)){
-					//System.out.println(curTagPointer + "," + tagP);
-					nextStateFlag = true;
-				}
-			}
+		for(int i = 0 ; i < (savePlayerName.length()-count) ; i++){
+			playerName += savePlayerName.charAt(i);
 		}
 	}
-
-
-    //セーブデータを受け取るメソッド
-    public void receiveData(String chapterName, String subStoryName, String charaName1, String charaName2 ){
-    	this.chapterName = chapterName;
-    	if(chapterName.equals("little_red_ridding-hood")){
-    		chapterID = 1;
-    	}
-    	this.subStoryName = subStoryName;
-    	if(subStoryName.equals("おおかみ")){
-    		chapterID = 3;
-    	}
-    	this.charaName1 = charaName1;
-    	this.charaName2 = charaName2;
-    }
-
+	
 	//テキストデータを一度ロードするメソッド-----------------------------------------------------------------
     private void loadTextData(){
     	try {
@@ -187,7 +119,7 @@ public class TalkModel implements KeyListner {
     			br = new BufferedReader(new FileReader(file));
     		}
 
-    		String line;
+    		String line;	//データを1行ずつ読み込んでいく
 
     		nextPageFlag = false;
     		nextTalkFlag = false;
@@ -206,7 +138,6 @@ public class TalkModel implements KeyListner {
     		String[] choice = new String[4];	//選択肢(4つまで)
 
             while ((line = br.readLine()) != null) {
-
             	// 空行を読み飛ばす
         		if (line.equals("")){
         			continue;
@@ -214,16 +145,14 @@ public class TalkModel implements KeyListner {
         		}else if (line.startsWith("#")){
         			continue;
         		}
-
-        		String[] strs = line.split("_");
-
-        		//System.out.println("tagName : " + tagName);
+        		
+        		String[] strs = line.split("_");	//読み込んだ一行を'_'で区切る
 
         		if(strs[0].equals("SPEAK")){
-        			tagName = strs[0];		//タグの名前をSPEAKにする
+        			tagName = strs[0];			//タグの名前をSPEAKにする
         			leftCharaName = strs[1];	//左に配置するキャラの名前を格納("*"などもそのまま格納)
         			rightCharaName = strs[2];	//右に配置するキャラの名前を格納("*"などもそのまま格納)
-        			bright = strs[3]; 	//左右キャラの明るさ
+        			bright = strs[3]; 			//左右キャラの明るさ
         			express = Integer.valueOf(strs[4]);	//話し手の表情
 
         		}else if(strs[0].equals("SPEAKEND")){
@@ -320,4 +249,34 @@ public class TalkModel implements KeyListner {
             }
         }
     }
+    
+
+	@Override
+	//キーインプット------------------------------------------------------------------------------------
+	public void keyInput(KeyInput keyInput) {
+		//デバッグ用キー
+		if(keyInput.isKeyDown(Input.KEY_D)){
+			talkState.nextState();
+		}
+		if(keyInput.isKeyDown(Input.KEY_Z)){
+			if(nextTalkFlag && nextStateFlag == true){
+				talkState.nextState();
+			}else if(nextPageFlag && !nextTalkFlag){
+				curPage++;
+				curPosOfPage = 0;
+				nextPageFlag = false;
+			}
+			else if(nextTalkFlag){
+				curTagPointer++;
+				curTagText = tags[curTagPointer].getText();
+				curPosOfPage = 0;
+				curPage = 0;
+				nextTalkFlag = false;
+				if(curTagPointer == (tagP-1)){
+					nextStateFlag = true;
+				}
+			}
+		}
+	}
+
 }
