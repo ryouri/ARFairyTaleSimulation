@@ -107,6 +107,10 @@ public class Characters {
 	}
 
 
+	/**
+	 * putCharacterのファイルから，キャラクターを追加する
+	 * @param putCharacterPath キャラクターの配置のテキストファイルが入っているパス
+	 */
 	public void addCharacters(String putCharacterPath) {
 		BufferedReader br = null;
 		try {
@@ -123,24 +127,7 @@ public class Characters {
 		try {
 			String charaLine;
 			while ((charaLine = br.readLine()) != null) {
-				String[] charaPuts = charaLine.split(" ");
-				if (charaPuts.length == 0) {
-					continue;
-				}
-
-				Chara chara = new Chara(charaPuts[0]);
-				chara.setCamp(Integer.valueOf(charaPuts[1]));
-				chara.x = Integer.valueOf(charaPuts[2]);
-				chara.y = Integer.valueOf(charaPuts[3]);
-				chara.pX = chara.x * Field.MAP_CHIP_SIZE;
-				chara.pY = chara.y * Field.MAP_CHIP_SIZE;
-				//TODO; キャラクターデータのコピーが未完成 AIの実装もね
-				chara.setItemList(characterData.get(chara.status.name).getItemList());
-				characterData.get(chara.status.name).status.copyTo(chara.status);
-
-				chara.setAI(new SimpleAI(chara));
-
-				characterArray.add(chara);
+				addCharacter(charaLine);
 			}
 		} catch (NumberFormatException | IOException e1) {
 			e1.printStackTrace();
@@ -151,6 +138,27 @@ public class Characters {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void addCharacter(String charaLine) {
+		String[] charaPuts = charaLine.split(" ");
+		if (charaPuts.length == 0) {
+			return;
+		}
+
+		Chara chara = new Chara(charaPuts[0]);
+		chara.setCamp(Integer.valueOf(charaPuts[1]));
+		chara.x = Integer.valueOf(charaPuts[2]);
+		chara.y = Integer.valueOf(charaPuts[3]);
+		chara.pX = chara.x * Field.MAP_CHIP_SIZE;
+		chara.pY = chara.y * Field.MAP_CHIP_SIZE;
+		//TODO; キャラクターデータのコピーが未完成 AIの実装もね
+		chara.setItemList(characterData.get(chara.status.name).getItemList());
+		characterData.get(chara.status.name).status.copyTo(chara.status);
+
+		chara.setAI(new SimpleAI(chara));
+
+		characterArray.add(chara);
 	}
 
 	public static final Color standColor = new Color(0.5f, 0.5f, 0.5f, 1);
