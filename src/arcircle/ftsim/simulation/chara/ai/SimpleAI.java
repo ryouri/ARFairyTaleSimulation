@@ -67,7 +67,9 @@ public class SimpleAI extends AI {
 
 			arcircle.ftsim.simulation.algorithm.range.Node moveNode =
 					cmRange.getNodeByXY(attackChara.attackPoint.x, attackChara.attackPoint.y);
-			field.moveChara(chara, moveNode);
+			if (moveNode.pointXArray.size() >= 1) {
+				field.moveChara(chara, moveNode);
+			}
 			field.charaAttack(chara, attackChara.damageChara.y, attackChara.damageChara.x);
 		}
 	}
