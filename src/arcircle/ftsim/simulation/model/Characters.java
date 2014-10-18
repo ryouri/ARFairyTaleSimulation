@@ -18,6 +18,7 @@ import org.newdawn.slick.SpriteSheet;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.ai.SimpleAI;
 import arcircle.ftsim.simulation.item.Item;
+import arcircle.ftsim.simulation.model.task.TaskManager;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class Characters {
@@ -60,6 +61,8 @@ public class Characters {
 	private Field field;
 
 	private Image hpBar;
+
+	private TaskManager taskManager;
 
 	public Characters() {
 		this.walkSheetMap = new HashMap<String, SpriteSheet>();
@@ -104,8 +107,9 @@ public class Characters {
 
 		LoadCharacter loadCharacter = new LoadCharacter(this);
 		loadCharacter.load();
-	}
 
+		this.taskManager = new TaskManager(field, this);
+	}
 
 	/**
 	 * putCharacterのファイルから，キャラクターを追加する
@@ -163,58 +167,10 @@ public class Characters {
 
 	public static final Color standColor = new Color(0.5f, 0.5f, 0.5f, 1);
 
-	private void renderAttack(Chara chara, Graphics g, int offsetX, int offsetY) {
-		int change = chara.getAttackTime();
-		if (change <= 5 || change >= Chara.MAX_ATTACK_TIME - 5) {
-			change = 0;
-		} else if (change < Chara.MAX_ATTACK_TIME / 2) {
-			change -= 5;
-		} else if (change >= Chara.MAX_ATTACK_TIME / 2) {
-			change = Chara.MAX_ATTACK_TIME - change - 5;
-		}
-
-		Animation anime = null;
-		if (chara.direction == Chara.UP) {
-			anime = upAttackAnimeMap.get(chara.status.name);
-		} else if (chara.direction == Chara.RIGHT) {
-			anime = rightAttackAnimeMap.get(chara.status.name);
-		} else if (chara.direction == Chara.LEFT) {
-			anime = leftAttackAnimeMap.get(chara.status.name);
-		} else {//(chara.direction == Chara.DOWN) {
-			anime = downAttackAnimeMap.get(chara.status.name);
-		}
-
-		int changeX = 0;
-		int changeY = 0;
-
-		if (chara.direction == Chara.UP) {
-			changeY = -change;
-		} else if (chara.direction == Chara.RIGHT) {
-			changeX = change;
-			if (chara.getAttackRightLeftDirection() == Chara.UP) {
-				changeY = -change;
-			} else if (chara.getAttackRightLeftDirection() == Chara.DOWN) {
-				changeY = change;
-			}
-		} else if (chara.direction == Chara.LEFT) {
-			changeX = -change;
-			if (chara.getAttackRightLeftDirection() == Chara.UP) {
-				changeY = -change;
-			} else if (chara.getAttackRightLeftDirection() == Chara.DOWN) {
-				changeY = change;
-			}
-		} else {//(chara.direction == Chara.DOWN) {
-			changeY = change;
-		}
-
-		anime.draw(
-				chara.pX + offsetX + changeX,
-				chara.pY + offsetY + changeY);
-	}
-
 	public void render(Graphics g, int offsetX, int offsetY,
 			int firstTileX, int lastTileX,
 			int firstTileY, int lastTileY) {
+
 		for (Chara chara : characterArray) {
 			//範囲内でなければ
 			if (!(firstTileX <= chara.x && chara.x <= lastTileX
@@ -223,7 +179,8 @@ public class Characters {
 			}
 
 			if (chara.isAttack()) {
-				renderAttack(chara, g, offsetX, offsetY);
+				continue;
+				//renderAttack(chara, g, offsetX, offsetY);
 			} else if (chara.isStand()) {
 				Animation anime = downWalkAnimeMap.get(chara.status.name);
 				anime.draw(
@@ -264,6 +221,11 @@ public class Characters {
 					4).draw(chara.pX + offsetX,
 					chara.pY + offsetY);;
 		}
+
+		if (taskManager.existTask()) {
+			taskManager.processRender(
+					g, offsetX, offsetY, firstTileX, lastTileX, firstTileY, lastTileY);
+		}
 	}
 
 	public void update(int delta) {
@@ -275,38 +237,8 @@ public class Characters {
 			}
 		}
 
-		//攻撃しているキャラの処理
-		if (isAttackChara == false && attackInfoArray.size() > 0) {
-			AttackInfo attackInfo = attackInfoArray.get(nowAttackIndex);
-			charaAttack(attackInfo.attackChara, attackInfo.damageChara);
-			isAttackChara = true;
-		} else if (isAttackChara == true && attackInfoArray.size() > 0){
-			AttackInfo attackInfo = attackInfoArray.get(nowAttackIndex);
-			Chara attackChara = attackInfo.attackChara;
-			attackChara.setAttackTime(attackChara.getAttackTime() + 1);
-			//攻撃時間が一定以上になったら次のキャラへ
-			if (attackChara.getAttackTime() >= Chara.MAX_ATTACK_TIME) {
-				//攻撃を受ける側にダメージを与える
-				Chara damageChara = attackInfo.damageChara;
-				damageChara.status.hp -= attackChara.status.power - damageChara.status.defence;
-
-				//攻撃を受けた側のhpがなくなったら
-				if (damageChara.status.hp < 0) {
-					characterArray.remove(damageChara);
-				}
-
-				attackChara.setAttack(false);
-				isAttackChara = false;
-				nowAttackIndex++;
-				//最後のキャラまで行ったら，もしくはダメージを受けたキャラが死んだら
-				if (nowAttackIndex >= attackInfoArray.size() || damageChara.status.hp < 0) {
-					AttackInfo standAttackInfo = attackInfoArray.get(0);
-					standAttackInfo.attackChara.setStand(true);
-					standAttackInfo.damageChara.resetState();
-					attackInfoArray.clear();
-					field.setCursorVisible(true);
-				}
-			}
+		if (taskManager.existTask()) {
+			taskManager.processUpdate(delta);
 		}
 
 		if (field.getNowTurn() == Field.TURN_FRIEND) {
@@ -341,7 +273,7 @@ public class Characters {
 			}
 
 			boolean standCharaFlag = true;
-			//ENEMYキャラが全軍待機していたら敵ターンへ
+			//ENEMYキャラが全軍待機していたら味方ターンへ
 			for (Chara chara : characterArray) {
 				if (chara.getCamp() == Chara.CAMP_ENEMY && !chara.isStand()) {
 					standCharaFlag = false;
@@ -356,54 +288,16 @@ public class Characters {
 					}
 				}
 			}
-			//field.changeTurnFriend();
 		}
 	}
 
-	private void charaAttack(Chara chara, Chara damageChara) {
-		field.setCursorVisible(false);
-		chara.setAttack(true);
-		if (damageChara.x > chara.x) {
-			chara.direction = Chara.RIGHT;
-
-			damageChara.direction = Chara.LEFT;
-			damageChara.setMoving(true);
-
-			chara.setAttackRightLeftDirection(Chara.RIGHT);
-			if (damageChara.y < chara.y) {
-				chara.setAttackRightLeftDirection(Chara.UP);
-			} else if (damageChara.y > chara.y) {
-				chara.setAttackRightLeftDirection(Chara.DOWN);
-			}
-		} else if (damageChara.x < chara.x) {
-			chara.direction = Chara.LEFT;
-
-			damageChara.direction = Chara.RIGHT;
-			damageChara.setMoving(true);
-
-			chara.setAttackRightLeftDirection(Chara.LEFT);
-			if (damageChara.y < chara.y) {
-				chara.setAttackRightLeftDirection(Chara.UP);
-			} else if (damageChara.y > chara.y) {
-				chara.setAttackRightLeftDirection(Chara.DOWN);
-			}
-		} else if (damageChara.y < chara.y) {
-			chara.direction = Chara.UP;
-
-			damageChara.direction = Chara.DOWN;
-			damageChara.setMoving(true);
-		} else if (damageChara.y > chara.y) {
-			chara.direction = Chara.DOWN;
-
-			damageChara.direction = Chara.UP;
-			damageChara.setMoving(true);
-		}
-	}
 
 	public void setCharaAttack(Chara chara, Chara damageChara) {
-		attackInfoArray.add(new AttackInfo(chara, damageChara));
-		attackInfoArray.add(new AttackInfo(damageChara, chara));
-		this.nowAttackIndex = 0;
+		taskManager.addAttackTask(chara, damageChara);
+
+//		attackInfoArray.add(new AttackInfo(chara, damageChara));
+//		attackInfoArray.add(new AttackInfo(damageChara, chara));
+//		this.nowAttackIndex = 0;
 	}
 
 	public boolean isEnd() {
@@ -423,5 +317,9 @@ public class Characters {
 
 	public void setSgModel(SimGameModel sgModel) {
 		this.sgModel = sgModel;
+	}
+
+	public void removeChara(Chara chara) {
+		characterArray.remove(chara);
 	}
 }

@@ -76,12 +76,7 @@ public class Chara {
 	public void setStand(boolean isStand) {
 		this.isStand = isStand;
 		if (isStand) {
-			this.direction = Chara.DOWN;
-			this.isMoving = false;
-			this.isAttack = false;
-			this.isMoved = false;
-			this.isSelect = false;
-			this.attackTime = 0;
+			resetState();
 		}
 	}
 
