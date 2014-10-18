@@ -51,7 +51,7 @@ public class CalculateMoveAttackRange {
 		{  0,  1},
 		{ -1,  0},
 	};
-	
+
 	//x, y
 	public static int[][] farAttackRange = {
 		{  0, -2},
@@ -63,7 +63,17 @@ public class CalculateMoveAttackRange {
 		{ -2,  0},
 		{ -1, -1},
 	};
-	
+
+	public Node getNodeByXY(int x, int y) {
+		Node node = new Node(x, y, 0);
+		int index = Collections.binarySearch(searchedNodeArray, node);
+		if (index >= 0) {
+			return searchedNodeArray.get(index);
+		} else {
+			return null;
+		}
+	}
+
 	private void setMoveRange() {
 		for (Node node : searchedNodeArray) {
 			moveRange[node.y][node.x] = true;
@@ -166,12 +176,12 @@ public class CalculateMoveAttackRange {
 		searchingNodeArray.add(nextNode);
 		Collections.sort(searchingNodeArray);
 	}
-	
+
 	public static boolean[][] createJudgeAttackArray(Field field, Chara chara, boolean[][] moveRange) {
 		boolean[][] attackRange = new boolean[field.row][field.col];
-		
+
 		int weaponType = CalculateMoveAttackRange.judgeAttackWeaponType(chara.getItemList());
-		
+
 		for (int y = 0; y < field.row; y++) {
 			for (int x = 0; x < field.col; x++) {
 				if (!moveRange[y][x]) {
@@ -180,31 +190,31 @@ public class CalculateMoveAttackRange {
 				CalculateMoveAttackRange.calculateAttackRange(x, y, attackRange, weaponType, field);
 			}
 		}
-		
+
 		return attackRange;
 		//attackJudge = CalculateMoveAttackRange.calculateJudgeAttack(field, attackRange, chara);
 	}
-	
+
 	public static int judgeAttackWeaponType(ArrayList<Item> itemList) {
 		boolean nearAttack = false;
 		boolean farAttack = false;
-		
+
 		for (Item item : itemList) {
 			if (!(item instanceof Weapon)) {
 				continue;
 			}
-			
+
 			Weapon weapon = (Weapon) item;
-			
+
 			if (weapon.rangeType == Weapon.RANGE_NEAR) {
-				nearAttack = true;				
+				nearAttack = true;
 			} else if (weapon.rangeType == Weapon.RANGE_FAR) {
 				farAttack = true;
 			} else if (weapon.rangeType == Weapon.RANGE_NEAR_FAR) {
 				return Weapon.RANGE_NEAR_FAR;
 			}
 		}
-		
+
 		if (nearAttack == true && farAttack == true) {
 			return Weapon.RANGE_NEAR_FAR;
 		} else if (nearAttack == true) {
@@ -215,12 +225,12 @@ public class CalculateMoveAttackRange {
 			return Weapon.RANGE_NONE;
 		}
 	}
-	
-	public static void calculateAttackRange(int x, int y, boolean[][] attackRange, 
-			int weaponType, Field field) {		
+
+	public static void calculateAttackRange(int x, int y, boolean[][] attackRange,
+			int weaponType, Field field) {
 		int charaX = x;
 		int charaY = y;
-				
+
 		if (weaponType == Weapon.RANGE_NEAR || weaponType == Weapon.RANGE_NEAR_FAR) {
 			for (int[] range : nearAttackRange) {
 				if (charaX + range[0] < 0 || charaY + range[1] < 0
@@ -242,12 +252,12 @@ public class CalculateMoveAttackRange {
 			}
 		}
 	}
-	
+
 	public static boolean[][] calculateJudgeAttack(Field field, boolean[][] attackRange, Chara chara) {
 		boolean[][] attackJudge = new boolean[field.row][field.col];
 		boolean[][] charaPut = new boolean[field.row][field.col];
 		Characters characters = field.getCharacters();
-		
+
 		for (Chara putChara : characters.characterArray) {
 			if (chara.getCamp() == Chara.CAMP_FRIEND) {
 				if (putChara.getCamp() == Chara.CAMP_ENEMY) {
@@ -260,7 +270,7 @@ public class CalculateMoveAttackRange {
 				}
 			}
 		}
-		
+
 		for (int y = 0; y < field.row; y++) {
 			for (int x = 0; x < field.col; x++) {
 				if (charaPut[y][x] == true && attackRange[y][x] == true) {
@@ -268,7 +278,7 @@ public class CalculateMoveAttackRange {
 				}
 			}
 		}
-		
+
 		return attackJudge;
 	}
 }

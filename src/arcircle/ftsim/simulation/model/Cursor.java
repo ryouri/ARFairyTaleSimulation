@@ -25,16 +25,18 @@ public class Cursor {
 	private static int DIRECTION_PRESSED_DURATION = 30;
 
 	private int speed;
+	public static final int SPEED = 8;
 
 	public Cursor(Field field) {
 		this.field = field;
-		speed = 8;
+		speed = SPEED;
 		directionPressedTime = new int[4];
 	}
 
-	public void move(int direction) {
+	public void startMove(int direction) {
 		directionPressedTime[direction] = DIRECTION_PRESSED_DURATION;
 
+		//すでに移動中なら呼び出さない
 		if (isMoving) {
 			return;
 		}

@@ -149,16 +149,16 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 		}
 
 		if (keyInput.isKeyDown(Input.KEY_UP)) {
-			field.getCursor().move(Cursor.UP);
+			field.getCursor().startMove(Cursor.UP);
 		}
 		if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
-			field.getCursor().move(Cursor.RIGHT);
+			field.getCursor().startMove(Cursor.RIGHT);
 		}
 		if (keyInput.isKeyDown(Input.KEY_DOWN)) {
-			field.getCursor().move(Cursor.DOWN);
+			field.getCursor().startMove(Cursor.DOWN);
 		}
 		if (keyInput.isKeyDown(Input.KEY_LEFT)) {
-			field.getCursor().move(Cursor.LEFT);
+			field.getCursor().startMove(Cursor.LEFT);
 		}
 
 		if (keyInput.isKeyPressed(Input.KEY_UP)) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.Graphics;
 
+import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Field;
@@ -20,6 +21,13 @@ public class TaskManager {
 		this.field = field;
 		this.characters = characters;
 		this.taskArrayArray = new ArrayList<ArrayList<Task>>();
+	}
+
+	public void addMoveTask(Chara chara, Node moveNode) {
+		MoveTask moveTask = new MoveTask(this, chara, moveNode);
+		ArrayList<Task> taskArray = new ArrayList<Task>();
+		taskArray.add(moveTask);
+		taskArrayArray.add(taskArray);
 	}
 
 	public void addAttackTask(Chara attackChara, Chara damageChara) {

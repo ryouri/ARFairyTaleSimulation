@@ -15,6 +15,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
+import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.ai.SimpleAI;
 import arcircle.ftsim.simulation.item.Item;
@@ -52,10 +53,6 @@ public class Characters {
 
 	public ArrayList<Chara> characterArray;
 
-	private ArrayList<AttackInfo> attackInfoArray;
-	private int nowAttackIndex;
-	private boolean isAttackChara;
-
 	HashMap<String, Item> itemMap;
 
 	private Field field;
@@ -84,10 +81,6 @@ public class Characters {
 		this.selectAnimeMap = new HashMap<String, Animation>();
 
 		this.characterArray = new ArrayList<Chara>();
-
-		this.attackInfoArray = new ArrayList<AttackInfo>();
-		this.nowAttackIndex = 0;
-		this.isAttackChara = false;
 
 		this.characterData = new HashMap<String, Chara>();
 	}
@@ -259,7 +252,7 @@ public class Characters {
 				}
 			}
 		} else if (field.getNowTurn() == Field.TURN_ENEMY) {
-			if (attackInfoArray.size() > 0) {
+			if (taskManager.existTask()) {
 				return;
 			}
 
@@ -298,6 +291,10 @@ public class Characters {
 //		attackInfoArray.add(new AttackInfo(chara, damageChara));
 //		attackInfoArray.add(new AttackInfo(damageChara, chara));
 //		this.nowAttackIndex = 0;
+	}
+
+	public void setCharaMove(Chara chara, Node moveNode) {
+		taskManager.addMoveTask(chara, moveNode);
 	}
 
 	public boolean isEnd() {

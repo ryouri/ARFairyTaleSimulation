@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import arcircle.ftsim.simulation.chara.ai.AI;
 import arcircle.ftsim.simulation.item.Item;
+import arcircle.ftsim.simulation.model.Field;
 
 /**
  * 現在，耐久値を設定できるようになっていない
@@ -30,6 +31,19 @@ public class Chara {
 	public static final int MAX_ATTACK_TIME = 50;
 
 	private AI ai;
+
+	private int speed;
+	public static final int SPEED = 8;
+
+	public Chara(String name) {
+		this.status = new Status();
+		this.growRateStatus = new GrowRateStatus();
+		this.status.setItemList(new ArrayList<Item>());
+		this.status.name = name;
+		this.isStand = false;
+		this.isMoved = false;
+		this.speed = 8;
+	}
 
 	public AI getAI() {
 		return ai;
@@ -117,15 +131,6 @@ public class Chara {
 		status.setItemList(new ArrayList<Item>(itemList));
 	}
 
-	public Chara(String name) {
-		this.status = new Status();
-		this.growRateStatus = new GrowRateStatus();
-		this.status.setItemList(new ArrayList<Item>());
-		this.status.name = name;
-		this.isStand = false;
-		this.isMoved = false;
-	}
-
 	public int getAttackRightLeftDirection() {
 		return attackRightLeftDirection;
 	}
@@ -136,5 +141,44 @@ public class Chara {
 
 	public void setMoving(boolean moving) {
 		this.isMoving = moving;
+	}
+
+	public void move() {
+		if (!isMoving) {
+			return;
+		}
+
+		if (direction == UP) {
+			pY -= speed;
+			if (y * Field.MAP_CHIP_SIZE - pY >= Field.MAP_CHIP_SIZE) {
+				y--;
+				pY = y * Field.MAP_CHIP_SIZE;
+				isMoving = false;
+			}
+		}
+		if (direction == RIGHT) {
+			pX += speed;
+			if (pX - x * Field.MAP_CHIP_SIZE >= Field.MAP_CHIP_SIZE) {
+				x++;
+				pX = x * Field.MAP_CHIP_SIZE;
+				isMoving = false;
+			}
+		}
+		if (direction == DOWN) {
+			pY += speed;
+			if (pY - y * Field.MAP_CHIP_SIZE >= Field.MAP_CHIP_SIZE) {
+				y++;
+				pY = y * Field.MAP_CHIP_SIZE;
+				isMoving = false;
+			}
+		}
+		if (direction == LEFT) {
+			pX -= speed;
+			if (x * Field.MAP_CHIP_SIZE - pX >= Field.MAP_CHIP_SIZE) {
+				x--;
+				pX = x * Field.MAP_CHIP_SIZE;
+				isMoving = false;
+			}
+		}
 	}
 }

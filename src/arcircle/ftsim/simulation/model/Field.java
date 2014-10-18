@@ -20,6 +20,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.renderer.Renderer;
+import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.state.simgame.SimGameModel;
@@ -231,16 +232,16 @@ public class Field implements KeyListner, Renderer {
 		}
 
 		if (keyInput.isKeyDown(Input.KEY_UP)) {
-			getCursor().move(Cursor.UP);
+			getCursor().startMove(Cursor.UP);
 		}
 		if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
-			getCursor().move(Cursor.RIGHT);
+			getCursor().startMove(Cursor.RIGHT);
 		}
 		if (keyInput.isKeyDown(Input.KEY_DOWN)) {
-			getCursor().move(Cursor.DOWN);
+			getCursor().startMove(Cursor.DOWN);
 		}
 		if (keyInput.isKeyDown(Input.KEY_LEFT)) {
-			getCursor().move(Cursor.LEFT);
+			getCursor().startMove(Cursor.LEFT);
 		}
 
 		if (keyInput.isKeyPressed(Input.KEY_UP)) {
@@ -376,6 +377,10 @@ public class Field implements KeyListner, Renderer {
 				break;
 			}
 		}
+	}
+
+	public void moveChara(Chara chara, Node moveNode) {
+		characters.setCharaMove(chara, moveNode);
 	}
 
 	public int getNowTurn() {

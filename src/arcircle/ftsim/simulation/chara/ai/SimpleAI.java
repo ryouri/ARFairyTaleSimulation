@@ -60,11 +60,14 @@ public class SimpleAI extends AI {
 			Collections.shuffle(attackCharaArray);
 			AttackCharaData attackChara = attackCharaArray.get(0);
 
-			chara.x = attackChara.attackPoint.x;
-			chara.y = attackChara.attackPoint.y;
-			chara.pX = chara.x * Field.MAP_CHIP_SIZE;
-			chara.pY = chara.y * Field.MAP_CHIP_SIZE;
+//			chara.x = attackChara.attackPoint.x;
+//			chara.y = attackChara.attackPoint.y;
+//			chara.pX = chara.x * Field.MAP_CHIP_SIZE;
+//			chara.pY = chara.y * Field.MAP_CHIP_SIZE;
 
+			arcircle.ftsim.simulation.algorithm.range.Node moveNode =
+					cmRange.getNodeByXY(attackChara.attackPoint.x, attackChara.attackPoint.y);
+			field.moveChara(chara, moveNode);
 			field.charaAttack(chara, attackChara.damageChara.y, attackChara.damageChara.x);
 		}
 	}
