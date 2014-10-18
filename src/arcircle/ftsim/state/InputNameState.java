@@ -32,7 +32,7 @@ public class InputNameState extends KeyInputState {
 //		stateGame.enterState(StateConst.GAME_START,
 
 		//yukineko
-		stateGame.enterState(StateConst.TALK,
+		stateGame.enterState(StateConst.SELECT_STORY,
 				new FadeOutTransition(Color.black, 100),
 				new FadeInTransition(Color.black, 100));
 	}

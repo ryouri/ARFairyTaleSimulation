@@ -1,0 +1,52 @@
+package arcircle.ftsim.state;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
+
+import arcircle.ftsim.state.selectstory.SelectStoryModel;
+import arcircle.ftsim.state.selectstory.SelectStoryView;
+
+public class SelectStoryState extends KeyInputState {
+
+	private SelectStoryModel ssModel;
+	private SelectStoryView ssView;
+
+	public SelectStoryState(int state) {
+		super(state);
+	}
+
+	public void nextState() {
+		//misawa用
+		//GameState sbGame = stateGame.getState(StateConst.SIM_GAME);
+		//SimGameState sgState = (SimGameState) sbGame;
+		//sgState.setReadFilePath("01_Story", "01", 1, 1);
+		//stateGame.enterState(StateConst.SIM_GAME,
+
+		//yukineko用
+		//stateGame.enterState(StateConst.TALK,
+
+		//asakura用
+		stateGame.enterState(StateConst.TALK,
+				new FadeOutTransition(Color.black, 100),
+				new FadeInTransition(Color.black, 100));
+	}
+
+	@Override
+	public void enter(GameContainer container, StateBasedGame game)
+			throws SlickException {
+		super.enter(container, game);
+		ssModel = new SelectStoryModel(this);
+		ssView = new SelectStoryView(ssModel, this);
+
+		System.out.println("Enter Select Story State");
+
+		keyInputStack.clear();
+		keyInputStack.push(ssModel);
+		rendererArray.clear();
+		rendererArray.add(ssView);
+	}
+}
