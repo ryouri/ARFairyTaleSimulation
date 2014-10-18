@@ -3,6 +3,7 @@ package arcircle.ftsim.state;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -25,7 +26,9 @@ public class SimGameState extends KeyInputState {
 	}
 
 	public void nextState() {
+		
 		TalkState talkState = (TalkState)stateGame.getState(StateConst.TALK);
+		talkState.setLastBGM(bgm);
 		talkState.setStageNumber(1);
 		stateGame.enterState(StateConst.TALK,
 				new FadeOutTransition(Color.black, 500),
@@ -43,6 +46,15 @@ public class SimGameState extends KeyInputState {
 		sgModel.init();
 		sgView = new SimGameView(sgModel, this);
 
+		try {
+			bgm = new Sound("./Stories/BGM/FTSim012.ogg");
+		} catch (SlickException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		lastBGM.stop();
+		bgm.loop();
+		
 		System.out.println("Enter Sim Game State");
 	}
 

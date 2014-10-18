@@ -7,6 +7,7 @@ import java.util.Deque;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -22,7 +23,10 @@ abstract public class KeyInputState extends BasicGameState {
 	 * 利用するフォントファイルを格納する
 	 */
 	protected UnicodeFont font;
-
+	
+	protected Sound lastBGM;
+	protected Sound bgm;
+	
 	public UnicodeFont getFont() {
 		return font;
 	}
@@ -122,6 +126,10 @@ abstract public class KeyInputState extends BasicGameState {
 		rendererArray.clear();
 		this.font = FTSimulationGame.font;
 		this.InputNamefont = FTSimulationGame.InputNamefont;
+	}
+	
+	public void setLastBGM(Sound lastBGM){
+		this.lastBGM = lastBGM;
 	}
 
 	@Override

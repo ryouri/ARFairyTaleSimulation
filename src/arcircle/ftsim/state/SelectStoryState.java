@@ -3,6 +3,7 @@ package arcircle.ftsim.state;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -14,22 +15,14 @@ public class SelectStoryState extends KeyInputState {
 
 	private SelectStoryModel ssModel;
 	private SelectStoryView ssView;
-
+	
 	public SelectStoryState(int state) {
 		super(state);
 	}
 
 	public void nextState() {
-		//misawa用
-		//GameState sbGame = stateGame.getState(StateConst.SIM_GAME);
-		//SimGameState sgState = (SimGameState) sbGame;
-		//sgState.setReadFilePath("01_Story", "01", 1, 1);
-		//stateGame.enterState(StateConst.SIM_GAME,
-
-		//yukineko用
-		//stateGame.enterState(StateConst.TALK,
-
-		//asakura用
+		TalkState talkState = (TalkState)stateGame.getState(StateConst.TALK);
+		talkState.setLastBGM(bgm);
 		stateGame.enterState(StateConst.TALK,
 				new FadeOutTransition(Color.black, 100),
 				new FadeInTransition(Color.black, 100));
@@ -41,12 +34,23 @@ public class SelectStoryState extends KeyInputState {
 		super.enter(container, game);
 		ssModel = new SelectStoryModel(this);
 		ssView = new SelectStoryView(ssModel, this);
-
+		try {
+			bgm = new Sound("./Stories/BGM/FTSim003.ogg");
+		} catch (SlickException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		lastBGM.stop();
+		bgm.loop();
 		System.out.println("Enter Select Story State");
 
 		keyInputStack.clear();
 		keyInputStack.push(ssModel);
 		rendererArray.clear();
 		rendererArray.add(ssView);
+	}
+	//前のステートで流していたBGMを受け取るためのメソッド
+	public void receiveBGM(Sound lastBGM){
+		this.lastBGM = lastBGM;
 	}
 }

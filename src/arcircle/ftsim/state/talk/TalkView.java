@@ -50,7 +50,7 @@ public class TalkView implements Renderer{
     private int playerGender = FTSimulationGame.save.getPlayer().gender;	//male = 0, female = 1
     private String playerName = FTSimulationGame.save.getPlayer().name;
     private String speakerName;
-
+    
     // Fontに合わせて変えること
     private static final int FONT_WIDTH = 24;
     private static final int FONT_HEIGHT = 24;
@@ -331,6 +331,7 @@ public class TalkView implements Renderer{
 		for (int i = 0; i < talkModel.getCurPosOfPage(); i++) {
 			//char c = curPosText[talkModel.getCurPage() * MAX_CHARS_PER_PAGE + i];
 			char c = curPosText[i];
+			
             if (c == '/' || c == '%' || c == '\u0000'){
             	continue;  // コントロール文字は表示しない
             }

@@ -14,9 +14,9 @@ import arcircle.ftsim.state.GameStartState;
 public class GameStartView implements Renderer{
 	GameStartModel gsModel;
 	private GameStartState gsState;
-	
+
 	private Image title;	//背景画像
-	
+
 	public GameStartView(GameStartModel gsModel, GameStartState gsState) {
 		super();
 		this.gsModel = gsModel;
@@ -26,7 +26,6 @@ public class GameStartView implements Renderer{
 		}catch (SlickException ex) {
 	        ex.printStackTrace();
 	    }
-		
 	}
 
 	@Override

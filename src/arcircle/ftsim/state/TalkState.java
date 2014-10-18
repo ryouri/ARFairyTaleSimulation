@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -58,6 +59,9 @@ public class TalkState extends KeyInputState {
 
 	//次の状態へ行くメソッド-------------------------------------------------------------------------------------------
 	public void nextState() {
+		SimGameState simGameState = (SimGameState)stateGame.getState(StateConst.SIM_GAME);
+		simGameState.setLastBGM(bgm);
+		
 		//stateGame.enterState(StateConst.SELECT_GENDER,
 		GameState sbGame = stateGame.getState(StateConst.SIM_GAME);
 		SimGameState sgState = (SimGameState) sbGame;
@@ -74,6 +78,16 @@ public class TalkState extends KeyInputState {
 		super.enter(container, game);
 		talkModel = new TalkModel(this);
 		talkView = new TalkView(talkModel, this);
+		
+		try {
+			bgm = new Sound("./Stories/BGM/FTSim004.ogg");
+		} catch (SlickException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		lastBGM.stop();
+		bgm.loop();
+		
 		System.out.println("Enter Talk State");
 		keyInputStack.clear();
 		keyInputStack.push(talkModel);
