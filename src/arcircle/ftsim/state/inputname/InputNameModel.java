@@ -12,7 +12,6 @@ public class InputNameModel implements KeyListner {
 
 
 	public String message = "S e l e c t  Y o u r N a m e ";
-	private String charactor = null;
 
 	/**
 	 * ひらがな=0,  カタカナ=1, 記号=2
@@ -130,17 +129,35 @@ public class InputNameModel implements KeyListner {
 	 */
 	public void ClearCursorcharArrey(){
 		for(int i=0; i<8; i++){
-			cursorcharArrey[i] = '　';
+			cursorcharArrey[i] =' ';
 		}
 		return;
 	}
+
+
 
 	/**
 	 * 主人公の名前をstatusクラスのnameにセットするメソッド
 	 */
 	public void setName(){
 		//cursorcharArreyをStringに結合
-		FTSimulationGame.save.getPlayer().name  = String.valueOf(cursorcharArrey);
+		String savePlayerName = "";
+		savePlayerName += String.valueOf(cursorcharArrey);
+
+		int count = 0;	//空白の個数を数える
+		for(int i = (savePlayerName.length() - 1) ; i > -1 ; i--){
+			if(savePlayerName.charAt(i) == ' '){
+				count++;
+			}else{
+				break;
+			}
+		}
+		//8-空白の数、だけstringをコピー
+		FTSimulationGame.save.getPlayer().name = "";
+		for(int j = 0 ; j < (savePlayerName.length()-count) ; j++){
+			FTSimulationGame.save.getPlayer().name += savePlayerName.charAt(j);
+
+		}
 	}
 
 	public void getName(){
