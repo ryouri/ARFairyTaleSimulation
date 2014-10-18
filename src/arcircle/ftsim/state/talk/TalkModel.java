@@ -37,6 +37,10 @@ public class TalkModel implements KeyListner {
     private boolean nextStateFlag = false;
 
     private String playerName = "";
+    private String nowStoryName = "";
+    private String nowSubStoryName = "";
+    private int nowLogue = 0;
+    		
 
     HashMap<Integer,String> map = new HashMap<Integer,String>();
 
@@ -79,14 +83,21 @@ public class TalkModel implements KeyListner {
 	public TalkModel(TalkState talkState) {
 		super();	//おまじない
 		this.talkState = talkState;
-		readPlayerName();//セーブデータにあるプレイヤーネームを読み込み
+		readSaveData();//セーブデータを読み込み
+		
 		timer = new Timer();
 		loadTextData();		//
 		curTagPointer = 0;
 		curTagText = tags[curTagPointer].getText();
 		task = new DrawingMessageTask();
         timer.schedule(task, 0L, 30L);
-
+	}
+	
+	private void readSaveData(){
+		readPlayerName();
+		nowStoryName = FTSimulationGame.save.getNowStage().storyName;
+		nowSubStoryName = FTSimulationGame.save.getNowStage().subStoryNum;
+		nowLogue = FTSimulationGame.save.getNowStage().selectLogue;
 	}
 	
 	//セーブデータにあるプレイヤーネームを読み込み-----------------------------------------------------------------
@@ -108,16 +119,19 @@ public class TalkModel implements KeyListner {
 	
 	//テキストデータを一度ロードするメソッド-----------------------------------------------------------------
     private void loadTextData(){
+    	
+    	String filePath = "Stories/" + nowStoryName + "/" + nowSubStoryName + "/";
+    	if(nowLogue == FTSimulationGame.save.getNowStage().PROLOGUE){
+    		filePath += "prologue.txt";
+    	}else if(nowLogue == FTSimulationGame.save.getNowStage().EPILOGUE){
+    		filePath += "epilogue.txt";
+    	}
+    	
     	try {
     		BufferedReader br;
     		// 会話ファイルを読み込む
-    		if(talkState.getStageNumber() == 0){
-    			File file = new File("Stories/01_Story/01/prologue.txt");
-    			br = new BufferedReader(new FileReader(file));
-    		}else{
-    			File file = new File("Stories/01_Story/01/epilogue.txt");
-    			br = new BufferedReader(new FileReader(file));
-    		}
+    		File file = new File(filePath);
+    		br = new BufferedReader(new FileReader(file));
 
     		String line;	//データを1行ずつ読み込んでいく
 

@@ -15,7 +15,7 @@ public class InputNameState extends KeyInputState {
 
 	private InputNameModel inModel;
 	private InputNameView inView;
-
+	
 	public Image [] sprite = new Image[1];
 
 	public InputNameState(int state) {
@@ -23,16 +23,9 @@ public class InputNameState extends KeyInputState {
 	}
 
 	public void nextState() {
-
-		//misawa
-//		GameState sbGame = stateGame.getState(StateConst.SIM_GAME);
-//		SimGameState sgState = (SimGameState) sbGame;
-//		sgState.setReadFilePath("01_Story", "01", 1, 1);
-//		stateGame.enterState(StateConst.SIM_GAME,
-//		stateGame.enterState(StateConst.GAME_START,
-
-		//yukineko
-		stateGame.enterState(StateConst.TALK,
+		SelectStoryState selectStoryState = (SelectStoryState)stateGame.getState(StateConst.SELECT_STORY);
+		selectStoryState.setLastBGM(lastBGM);
+		stateGame.enterState(StateConst.SELECT_STORY,
 				new FadeOutTransition(Color.black, 100),
 				new FadeInTransition(Color.black, 100));
 	}
@@ -55,4 +48,7 @@ public class InputNameState extends KeyInputState {
 		rendererArray.clear();
 		rendererArray.add(inView);
 	}
+	
+	//前のステートで流していたBGMを受け取るためのメソッド
+	
 }
