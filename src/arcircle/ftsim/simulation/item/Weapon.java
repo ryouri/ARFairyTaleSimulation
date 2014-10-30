@@ -13,5 +13,7 @@ public class Weapon extends Item {
 	public static String RANGE_NEAR_FAR_STR = "RANGE_NEAR_FAR";
 
 	public int power;
+
+	//こっちは表示しなくてOK
 	public int weight;
 }

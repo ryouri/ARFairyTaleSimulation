@@ -35,6 +35,10 @@ public class Chara {
 	private int speed;
 	public static final int SPEED = 8;
 
+	public Status status;
+
+	public GrowRateStatus growRateStatus;
+
 	public Chara(String name) {
 		this.status = new Status();
 		this.growRateStatus = new GrowRateStatus();
@@ -111,9 +115,6 @@ public class Chara {
 		this.isMoved = isMoved;
 	}
 
-	public Status status;
-
-	public GrowRateStatus growRateStatus;
 
 	public int direction;
 	public static final int UP = 0;

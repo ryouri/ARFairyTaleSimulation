@@ -11,22 +11,35 @@ public class Status {
 	public int gender;
 	public String name;
 
+	//TODO:クラス（職業）を表示したいので，そこに気をつけて描画！
+
 	//セーブデータで利用
 	public int level;
 	public int exp;
 
 	//セーブデータで利用
 	//パラメータ
+	//HO
 	public int hp;
+	//MHP
 	public int maxHp;
+	//ちから
 	public int power;
+	//まりょく
 	public int magicPower;
+	//はやさ
 	public int spead;
+	//わざ
 	public int tech;
+	//運
 	public int luck;
+	//ぼうぎょ
 	public int defence;
+	//まぼう　（まほうぼうぎょりょく）
 	public int magicDefence;
+	//いどう
 	public int move;
+	//たいかく
 	public int physique;
 
 	public Status() {

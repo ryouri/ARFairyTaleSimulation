@@ -37,6 +37,7 @@ public class SubInfoWindow implements Renderer{
 
 		//情報を描画する対象のCharaを取得
 		//TODO: 下で取得したキャラの情報を描画してくれればOK
+		//CharaからStatusとItemを取得して描画すればOK
 		Chara renderInfoChara = field.getSelectedChara();
 
 	}
