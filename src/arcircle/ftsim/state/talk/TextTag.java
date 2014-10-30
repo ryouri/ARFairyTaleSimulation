@@ -1,5 +1,10 @@
 package arcircle.ftsim.state.talk;
 
+import java.util.ArrayList;
+
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
+
 public class TextTag {
 	//フィールド//////////////////////////////////////////////////////////////////////////////////////
 	private String tagName;	//SPEAKなどのテキストタグの種類
@@ -9,6 +14,7 @@ public class TextTag {
 	private boolean rightBright;	//右のキャラを明るくするかどうか
 	private boolean witchSpeaker;	//true = 左が話し手, false = 右が話し手
 	private int expression;
+	private String bgmFilePath;
 	/*expression =	0 : 普通の表情 faceStandard
 	 * 				1 : 笑った表情 faceLaugh
 	 * 				2 : 怒った表情 faceAngry
@@ -16,6 +22,10 @@ public class TextTag {
 	 */
 	private char[] text;	//会話文本体
 	//private String[] choice;
+	
+	private ArrayList<Sound> seArray = new ArrayList<Sound>();
+	private int sePointer = 0;
+	private String sePath = "./Stories/SE/";
 
 	//アクセッタ///////////////////////////////////////////////////////////////////////////////////////
 	public String getTagName() { return tagName; }
@@ -29,13 +39,31 @@ public class TextTag {
 	public boolean isRightBright() { return rightBright; }
 	public void setRightBright(boolean rightBright) { this.rightBright = rightBright; }
 	public char[] getText() { return text; }
-	public void setText(char[] text) { this.text = text; }
+	public void setText(char[] text) { this.text = text.clone(); }
 	public boolean isWitchSpeaker() { return witchSpeaker; }
 	public void setWitchSpeaker(boolean witchSpeaker) { this.witchSpeaker = witchSpeaker; }
 	public int getExpression() { return expression; }
 	public void setExpression(int expression) { this.expression = expression; }
 	//public String getChoice(int i) { return choice[i]; }
 	//public void setChoice(int i, String choice) { this.choice[i] = choice; }
+	public Sound getSE(){ return seArray.get(sePointer);}
+	public Sound getNextSE(){
+		System.out.println("pointer" + sePointer);
+		return seArray.get(sePointer++);
+	}
+	public void setSE(String seNum){
+		try {
+			seArray.add(new Sound(sePath + seNum + ".ogg")); 
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+	public String getBgmFilePath() {
+		return bgmFilePath;
+	}
+	public void setBgmFilePath(String bgmFilePath) {
+		this.bgmFilePath = bgmFilePath;
+	}
 
 	//SPEAK用コンストラクタ/////////////////////////////////////////////////////////////////////////////////
 	public TextTag(String tagName, String leftCharaName, String rightCharaName, String bright, int express, char[] str){
@@ -45,6 +73,31 @@ public class TextTag {
 		brightEvaluation(bright);
 		this.expression = express;
 		this.text = str.clone();
+		sePointer = 0;
+	}
+	
+	//SPEAK用コンストラクタ2(テキストはあとでセットする)/////////////////////////////////////////////////////////////////////////////////
+	public TextTag(String tagName, String leftCharaName, String rightCharaName, String bright, int express){
+		this.tagName = tagName;
+		this.leftCharaName = leftCharaName;
+		this.rightCharaName = rightCharaName;
+		brightEvaluation(bright);
+		this.expression = express;
+		sePointer = 0;
+	}
+	//CHANGEBGMコンストラクタ
+	public TextTag(String tagName, String bgmFilePath){
+		this.tagName = tagName;
+		//CHANGEBGMタグでは何も表示しない
+		this.leftCharaName = "@";	
+		this.rightCharaName = "@";
+		brightEvaluation("NR");
+		this.expression = 0;
+		sePointer = 0;
+		//テキスト文の初期化して空白だけ入れとく
+		this.text = new char[1];
+		text[0] = ' ';
+		this.setBgmFilePath(bgmFilePath);
 	}
 	
 	private void brightEvaluation(String bright){
@@ -89,6 +142,7 @@ public class TextTag {
 		this.rightBright = false;
 		this.text = str.clone();
 	}
+	
 	
 	
 }

@@ -20,7 +20,9 @@ public class TalkState extends KeyInputState {
 	private TalkModel talkModel;
 	private TalkView talkView;
 	private int stageNumber = 0;
-
+	//親クラスのbgmと, このクラスのnewBGMを使ってBGMを切り替える
+	private Sound newBGM;	//BGM切り替え用格納器
+    private boolean isBGM = true;	//bgmとnewBGMのどちらを鳴らしているかの判定に使う
 
 	//private int chapterID;	//現在の章
 	//private int subStoryID;	//現在の話数
@@ -33,6 +35,8 @@ public class TalkState extends KeyInputState {
 		this.stageNumber = stageNumber;
 	}
 
+	
+	
 	//コンストラクタ////////////////////////////////////////////////////////////////////////////////////////////////
 	//TODO:stageStateはあとでセーブデータから読み込む
 	public TalkState(int state) {
@@ -76,17 +80,17 @@ public class TalkState extends KeyInputState {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enter(container, game);
-		talkModel = new TalkModel(this);
-		talkView = new TalkView(talkModel, this);
-		
+		//BGMの切り替え処理
 		try {
 			bgm = new Sound("./Stories/BGM/FTSim004.ogg");
 		} catch (SlickException e) {
-			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
 		lastBGM.stop();
 		bgm.loop();
+		
+		talkModel = new TalkModel(this);
+		talkView = new TalkView(talkModel, this);
 		
 		System.out.println("Enter Talk State");
 		keyInputStack.clear();
@@ -94,7 +98,30 @@ public class TalkState extends KeyInputState {
 		rendererArray.clear();
 		rendererArray.add(talkView);
 	}
-
-
-
+	
+	//BGMの切り替えを行うメソッド(TalkViewに呼び出される)--------------------------------------
+	public void changeBGM(String bgmFilePath) {
+		//bgmからnewBGMに切り替え
+		if(isBGM){
+			System.out.println(bgmFilePath);
+			try {
+				newBGM = new Sound(bgmFilePath);
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
+			bgm.stop();
+			newBGM.loop();
+			isBGM = false;
+		//newBGMからbgmに切り替え
+		}else{
+			try {
+				bgm = new Sound(bgmFilePath);
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
+			newBGM.stop();
+			bgm.loop();
+			isBGM = true;
+		}
+	}
 }

@@ -30,25 +30,26 @@ public class TalkModel implements KeyListner {
     private char[] curTagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
     private TextTag[] tags = new TextTag[256];
 
-    // 次のページがあるか？
-    private boolean nextPageFlag = false;
-    private boolean nextTalkFlag = false;
+    private boolean nextPageFlag = false;	//次のページに進めるか？
+    private boolean nextTalkFlag = false;	//次の会話(タグ)に進めるか？
+    
     // ウィンドウを隠せるか？（最後まで表示したらtrueになる）
     private boolean nextStateFlag = false;
 
     private String playerName = "";
-    private String nowStoryName = "";
-    private String nowSubStoryName = "";
+    private String nowStoryName = "";	//
+    private String nowSubStoryName = "";	//
     private int nowLogue = 0;
-    		
+
+    
 
     HashMap<Integer,String> map = new HashMap<Integer,String>();
 
-    private int curPosOfPage = 0;
-    private int curPage = 0;
-	private int curTagPointer = 0;
+    private int curPosOfPage = 0;	//現在のページ内での文字表示位置
+    private int curPage = 0;		//現在の表示ページ
+	private int curTagPointer = 0;	//現在の表示タグ
 
-	private int tagP = 0;
+	private int tagP = 0;	//タグ生成時に用いるポインタ
 
 	// テキストを流すTimerTask
     private Timer timer;
@@ -56,6 +57,7 @@ public class TalkModel implements KeyListner {
 
     //アクセッタ/////////////////////////////////////////////////////////////////////////////////////////////////
   	public TextTag getCurTag() { return tags[curTagPointer]; }
+  	public void incrementCurTagPointer(){ curTagPointer++; }
   	public char[] getcurText() {
   		for(int i = 0 ; i < curPosOfPage ; i++){
   			curText[i] = curTagText[curPage * MAX_CHARS_PER_PAGE + i];
@@ -63,6 +65,7 @@ public class TalkModel implements KeyListner {
   		return curText;
   	}
 
+  	//話し手の名前を右か左かを調べて返す
   	public String getCurTagSpeakerName(){
   		if(tags[curTagPointer].isLeftBright()){
   			return tags[curTagPointer].getLeftCharaName();
@@ -71,7 +74,7 @@ public class TalkModel implements KeyListner {
   		}
   	}
   	public boolean isNextPageFlag() { return nextPageFlag; }
-	public void setHideFlag(boolean nextPageFlag) { this.nextPageFlag = nextPageFlag; }
+	public void setNextPageFlag(boolean nextPageFlag) { this.nextPageFlag = nextPageFlag; }
 
 	public boolean isNextTalkFlag() { return nextTalkFlag; }
 	public void setNextTalkFlag(boolean nextTalkFlag) { this.nextTalkFlag = nextTalkFlag; }
@@ -84,27 +87,26 @@ public class TalkModel implements KeyListner {
 		super();	//おまじない
 		this.talkState = talkState;
 		readSaveData();//セーブデータを読み込み
-		
-		timer = new Timer();
-		loadTextData();		//
-		curTagPointer = 0;
-		curTagText = tags[curTagPointer].getText();
+		timer = new Timer();	//タイマーをセット(メッセージが流れるように表示させるため)
+		loadTextData();		//会話文テキストを読み込んで各タグを生成する
+		curTagPointer = 0;	//現在のタグを示すポインタ
+		curTagText = tags[curTagPointer].getText();	//
 		task = new DrawingMessageTask();
-        timer.schedule(task, 0L, 30L);
+        timer.schedule(task, 0L, 20L);	//最後の引数を変化させるとメッセージの流れるスピードが変わる
 	}
-	
+
 	private void readSaveData(){
 		readPlayerName();
 		nowStoryName = FTSimulationGame.save.getNowStage().storyName;
 		nowSubStoryName = FTSimulationGame.save.getNowStage().subStoryNum;
 		nowLogue = FTSimulationGame.save.getNowStage().selectLogue;
 	}
-	
+
 	//セーブデータにあるプレイヤーネームを読み込み-----------------------------------------------------------------
 	private void readPlayerName(){
 		String savePlayerName = FTSimulationGame.save.getPlayer().name;
 		int count = 0;
-		
+
 		for(int i = (savePlayerName.length() - 1) ; i > -1 ; i--){
 			if(savePlayerName.charAt(i) == '　'){
 				count++;
@@ -116,17 +118,17 @@ public class TalkModel implements KeyListner {
 			playerName += savePlayerName.charAt(i);
 		}
 	}
-	
+
 	//テキストデータを一度ロードするメソッド-----------------------------------------------------------------
     private void loadTextData(){
-    	
+    	//会話文のある
     	String filePath = "Stories/" + nowStoryName + "/" + nowSubStoryName + "/";
     	if(nowLogue == FTSimulationGame.save.getNowStage().PROLOGUE){
     		filePath += "prologue.txt";
     	}else if(nowLogue == FTSimulationGame.save.getNowStage().EPILOGUE){
     		filePath += "epilogue.txt";
     	}
-    	
+
     	try {
     		BufferedReader br;
     		// 会話ファイルを読み込む
@@ -159,7 +161,7 @@ public class TalkModel implements KeyListner {
         		}else if (line.startsWith("#")){
         			continue;
         		}
-        		
+
         		String[] strs = line.split("_");	//読み込んだ一行を'_'で区切る
 
         		if(strs[0].equals("SPEAK")){
@@ -168,11 +170,15 @@ public class TalkModel implements KeyListner {
         			rightCharaName = strs[2];	//右に配置するキャラの名前を格納("*"などもそのまま格納)
         			bright = strs[3]; 			//左右キャラの明るさ
         			express = Integer.valueOf(strs[4]);	//話し手の表情
+        			//テキストタグの作成
+        			tags[tagP] = new TextTag(tagName, leftCharaName, rightCharaName, bright, express);
 
         		}else if(strs[0].equals("SPEAKEND")){
         			tagText[++p] = '$';	//テキストの終端記号
-        			//テキストタグの作成
-        			tags[tagP++] = new TextTag(tagName, leftCharaName, rightCharaName, bright, express, tagText);
+
+//        			//テキストタグの作成
+        			tags[tagP++].setText(tagText);
+
         			tagName = "";
         			leftCharaName = "";
             		rightCharaName = "";
@@ -207,7 +213,12 @@ public class TalkModel implements KeyListner {
         			p = 0;
         			tagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
 
-        		}else{
+        		//BGM切り替え用タグの生成
+        		}else if(strs[0].equals("CHANGEBGM")){
+        			tags[tagP++] = new TextTag(strs[0], "./Stories/BGM/" + strs[1]);
+        			System.out.println(strs[1]);
+        		}
+        		else{
         			for (int i = 0; i < line.length(); i++) {
         				char c = line.charAt(i);
         				if (c == '/') {  // 改行
@@ -223,13 +234,22 @@ public class TalkModel implements KeyListner {
         					for(int j = 0 ; j < player.length ; j++){
         						tagText[p++] = player[j];
         					}
+        				}else if(c == '['){
+        					String seFileName = "";
+        					c = line.charAt(++i);
+        					while(c != ']'){
+        						seFileName += c;
+        						c = line.charAt(++i);
+        					}
+        					System.out.println(seFileName);
+        					tags[tagP].setSE(seFileName);
+        					tagText[p++] = '&';
         				}else{
         					tagText[p++] = c;
         				}
         			}
         		}
             }
-
     		br.close();  // ファイルを閉じる
 
     	} catch (FileNotFoundException ex) {
@@ -263,7 +283,7 @@ public class TalkModel implements KeyListner {
             }
         }
     }
-    
+
 
 	@Override
 	//キーインプット------------------------------------------------------------------------------------
@@ -273,24 +293,38 @@ public class TalkModel implements KeyListner {
 			talkState.nextState();
 		}
 		if(keyInput.isKeyDown(Input.KEY_Z)){
+			//次のステートへ
 			if(nextTalkFlag && nextStateFlag == true){
 				talkState.nextState();
+			//ページ送り処理
 			}else if(nextPageFlag && !nextTalkFlag){
-				curPage++;
-				curPosOfPage = 0;
-				nextPageFlag = false;
-			}
-			else if(nextTalkFlag){
-				curTagPointer++;
-				curTagText = tags[curTagPointer].getText();
-				curPosOfPage = 0;
-				curPage = 0;
-				nextTalkFlag = false;
-				if(curTagPointer == (tagP-1)){
-					nextStateFlag = true;
-				}
+				nextPage();
+			//次の会話へ()
+			}else if(nextTalkFlag){
+				nextTalk();
+			}else{
+				//nextPage();
 			}
 		}
 	}
-
+	
+	//ページ送りメソッド
+	private void nextPage(){
+		curPage++;
+		curPosOfPage = 0;
+		nextPageFlag = false;
+	}
+	
+	//nextPageFlag = true となって次のトークに進む
+	public void nextTalk(){
+		curTagPointer++;
+		curTagText = tags[curTagPointer].getText();
+		curPosOfPage = 0;
+		curPage = 0;
+		nextTalkFlag = false;
+		if(curTagPointer == (tagP-1)){
+			nextStateFlag = true;
+		}
+	}
+	
 }
