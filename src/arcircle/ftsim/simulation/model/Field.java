@@ -267,6 +267,20 @@ public class Field implements KeyListner, Renderer {
 		}
 	}
 
+	/**
+	 * 現在，isSelectなキャラ（カーソルが乗っかっているキャラ）を返す
+	 * 該当するキャラクターがいない場合，nullを返す
+	 * @return 選択されているCharaのインスタンス，選択されていなければnullを返す
+	 */
+	public Chara getSelectedChara() {
+		for (Chara chara : characters.characterArray) {
+			if (chara.isSelect) {
+				return chara;
+			}
+		}
+		return null;
+	}
+
 	private void pushZKey(Chara chara) {
 		CharaCommandWindow ccWindow = new CharaCommandWindow(sgModel, this,
 				chara);
