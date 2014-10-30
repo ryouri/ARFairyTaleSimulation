@@ -13,6 +13,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.StateBasedGame;
 
 import arcircle.ftsim.main.FTSimulationGame;
@@ -33,8 +34,9 @@ public class TalkView implements Renderer{
 	private Image playerImg;	//主人公の画像
 	private Image[] playerFaceImg = new Image[4];
 	private Image faceImg;	//話し手の顔画像
+	private Sound playingSE;	//
 
-	private HashMap<String, Image> charasImg;	//
+	private HashMap<String, Image> charasImg;
 	private HashMap<String, String> charasName;
 	private Image nothingCharaImg;
 	private int charaPosX, charaLPosY, charaRPosY;	//描画するキャラの位置
@@ -50,7 +52,7 @@ public class TalkView implements Renderer{
     private int playerGender = FTSimulationGame.save.getPlayer().gender;	//male = 0, female = 1
     private String playerName = FTSimulationGame.save.getPlayer().name;
     private String speakerName;
-    
+
     // Fontに合わせて変えること
     private static final int FONT_WIDTH = 24;
     private static final int FONT_HEIGHT = 24;
@@ -68,7 +70,6 @@ public class TalkView implements Renderer{
 		this.charasImg = new HashMap<String, Image>();
 		this.charasName = new HashMap<String, String>();
 
-		
 		//デバッグ用
 		for(int i = 0 ; i < charaName.length ; i++){
 			System.out.println(charaName[i]);
@@ -79,7 +80,6 @@ public class TalkView implements Renderer{
 			bgImg = new Image("./Image/backGround.png");	//背景画像の読み込み
 			msgBoxImg = new Image("./Image/ver1120.png");	//メッセージボックス画像の読み込み
 			nothingCharaImg = new Image("./Image/Transparent.png");	//	キャラ非表示用に透明な画像を読み込み
-
 			//主人公イメージの読み込み
 			if(playerGender == Status.MALE){
 				playerImg = new Image(characterPath + "/playerMale/stand.png");
@@ -102,6 +102,8 @@ public class TalkView implements Renderer{
 				playerFaceImg[3] = (new Image(characterPath + "/playerMale/faceSuffer.png")).getScaledCopy(1.5f);
 			}
 
+			playingSE = new Sound("./Stories/SE/decision3.ogg");
+
 			//全キャラを読み込む
 			for(int i = 1 ; i < 9 ; i++){
 				String Num = "";
@@ -119,7 +121,7 @@ public class TalkView implements Renderer{
 				charasImg.put(Num + "FaceLaugh", (new Image(characterPath + "/" + Num + "/faceLaugh.png")).getScaledCopy(1.5f));
 				charasImg.put(Num + "FaceAngryW", (new Image(characterPath + "/" + Num + "/faceAngry.png")).getScaledCopy(1.5f));
 				charasImg.put(Num + "FaceSuffer", (new Image(characterPath + "/" + Num + "/faceSuffer.png")).getScaledCopy(1.5f));
-				
+
 				//各キャラの名前をparamater.txtから読み込み
 				File file = new File(characterPath + "/" + Num + "/parameter.txt");
 				BufferedReader br = new BufferedReader(new FileReader(file));
@@ -132,7 +134,7 @@ public class TalkView implements Renderer{
 	        		}else if (line.startsWith("#")){
 	        			continue;
 	        		}
-	        		
+
 	        		String[] strs = line.split(",");
 	        		if(!strs[0].equals("")){
 	        			charasName.put(Num + "Name", strs[0]);
@@ -141,7 +143,7 @@ public class TalkView implements Renderer{
 	        		}
 	        		break;
 	    		}
-	    		
+
 	    		br.close();  // ファイルを閉じる
 			}
 		}catch(SlickException e){
@@ -151,11 +153,11 @@ public class TalkView implements Renderer{
 	    }catch (IOException ex) {
 	        ex.printStackTrace();
 	    }
-		
+
 		rightCharaImg = nothingCharaImg;
 		leftCharaImg = nothingCharaImg;
 		faceImg = charasImg.get("01FaceStandard");
-		
+
 		//メッセージボックスを描画する位置
 		msgBoxPosX = (FTSimulationGame.WIDTH / 2) - (msgBoxImg.getWidth() / 2);
 		msgBoxPosY = FTSimulationGame.HEIGHT - msgBoxImg.getHeight();
@@ -197,11 +199,11 @@ public class TalkView implements Renderer{
 			}else{
 				rightCharaImg = charasImg.get(curTag.getRightCharaName() + "Stand");
 			}
-			
+
 			charaPosX = FTSimulationGame.WIDTH - rightCharaImg.getWidth();
 			charaLPosY = msgBoxPosY - (leftCharaImg.getHeight() * 3 / 4);	//キャラ立ち絵は体の半分がメッセージボックス上に出る
 			charaRPosY = msgBoxPosY - (rightCharaImg.getHeight() * 3 / 4);
-			
+
 			//顔のキャラを設定
 			if(curTag.isWitchSpeaker()){	//左にいるキャラが話し手
 				if(curTag.getLeftCharaName().equals("@")){	//キャラなしの場合
@@ -236,7 +238,7 @@ public class TalkView implements Renderer{
 						case 1:
 							faceImg = charasImg.get(curTag.getLeftCharaName() + "FaceLaugh");
 							break;
-						case 2:	
+						case 2:
 							faceImg = charasImg.get(curTag.getLeftCharaName() + "FaceAngryW");
 							break;
 						case 3:
@@ -249,9 +251,6 @@ public class TalkView implements Renderer{
 					}
 				}
 			}else{	//右にいるキャラが話し手
-				
-				
-				
 				if(curTag.getRightCharaName().equals("@")){	//キャラなしの場合
 					speakerName = "";
 					faceImg = nothingCharaImg;
@@ -284,7 +283,7 @@ public class TalkView implements Renderer{
 						case 1:
 							faceImg = charasImg.get(curTag.getRightCharaName() + "FaceLaugh");
 							break;
-						case 2:	
+						case 2:
 							faceImg = charasImg.get(curTag.getRightCharaName() + "FaceAngryW");
 							break;
 						case 3:
@@ -297,44 +296,50 @@ public class TalkView implements Renderer{
 					}
 				}
 			}
-			
-		}else{	
-			
+		}else if(curTag.getTagName().equals("CHANGEBGM")){
+			talkState.changeBGM(curTag.getBgmFilePath());
+			talkModel.nextTalk();
 		}
-		
+
 		//左キャラの描画
 		if(curTag.isLeftBright()){
 			g.drawImage(leftCharaImg, 0, charaLPosY);	//左に書くキャラの描画
 		}else{
 			g.drawImage(leftCharaImg, 0, charaLPosY, filterColor);	//左に書くキャラを半透明で描画
 		}
-		
+
 		//右キャラの描画
 		if(curTag.isRightBright()){
 			g.drawImage(rightCharaImg, charaPosX, charaRPosY);	//右に書くキャラの描画
 		}else{
 			g.drawImage(rightCharaImg, charaPosX, charaRPosY, filterColor);	//右に書くキャラを半透明で描画
 		}
-		
+
 		g.drawImage(msgBoxImg, msgBoxPosX, msgBoxPosY);	//メッセージボックスの描画
 		g.drawImage(faceImg, nameTextPosX+20, nameTextPosY+40);	//顔画像の描画
 
 		g.setColor(Color.white); // メッセージボックスに描く文字の色は白
 		g.setFont(talkState.getFont()); // フォントを設定
-		
+
 		//スピーカーネームの描画
 		g.drawString(speakerName, nameTextPosX, nameTextPosY);
-				
+
 		char[] curPosText = talkModel.getcurText();
 		// 現在表示しているページのcurPosまで表示
 		// curPosはDrawingTimerTaskで増えていくので流れて表示されるように見える
 		for (int i = 0; i < talkModel.getCurPosOfPage(); i++) {
-			//char c = curPosText[talkModel.getCurPage() * MAX_CHARS_PER_PAGE + i];
 			char c = curPosText[i];
-			
-            if (c == '/' || c == '%' || c == '\u0000'){
+
+			//効果音を鳴らす
+			if(i == (talkModel.getCurPosOfPage()-1) && c == '&' && !playingSE.playing()){
+				System.out.println("ijwhf" + (talkModel.getCurPosOfPage()-1));
+				playingSE = curTag.getNextSE();
+            	playingSE.play();
+			}
+            if (c == '/' || c == '%' || c == '&' || c == '\u0000'){
             	continue;  // コントロール文字は表示しない
             }
+
             int dx = textBoxPosX + FONT_WIDTH * (i % MAX_CHARS_PER_LINE);
             int dy = textBoxPosY + FONT_HEIGHT * (i / MAX_CHARS_PER_LINE);
 

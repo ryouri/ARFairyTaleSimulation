@@ -5,6 +5,7 @@ SPEAK_@_@_NR_0
 SPEAKEND
 
 SPEAK_*_@_L_3
+[decision3]
 う～ん・・・
 SPEAKEND
 
@@ -20,17 +21,22 @@ SPEAK_*_001_R_3
 大丈夫じゃないわね。
 SPEAKEND
 
+CHANGEBGM_FTSim003.ogg
+
 SPEAK_*_002_R_1
 おやおや、それではこのきび団子をお食べ。元気が出るから。
 SPEAKEND
 
 SPEAK_*_002_L_1
+[heal02]
 ありがとう！だいぶ元気になったよ！ところで、君はそんな恰好をしてどこへ行くんだい？
 SPEAKEND
 
 SPEAK_*_002_R_0
+[decision3]
 実は最近悪い鬼が僕の村に出るようになってしまって/
 これからその鬼たちを退治しに鬼ヶ島へ行くところなんだ！
+[heal02]
 SPEAKEND
 
 SPEAK_*_002_L_1

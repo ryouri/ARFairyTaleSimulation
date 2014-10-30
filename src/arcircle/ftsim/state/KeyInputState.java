@@ -27,6 +27,14 @@ abstract public class KeyInputState extends BasicGameState {
 	protected Sound lastBGM;
 	protected Sound bgm;
 	
+	public void setBGM(Sound bgm){
+		this.bgm = bgm;
+	}
+	
+	public Sound getBGM(){
+		return bgm;
+	}
+	
 	public UnicodeFont getFont() {
 		return font;
 	}
