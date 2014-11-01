@@ -19,7 +19,9 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
+import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.renderer.Renderer;
+import arcircle.ftsim.save.NowStage;
 import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.item.Item;
@@ -197,6 +199,7 @@ public class Field implements KeyListner, Renderer {
 		characters.update(delta);
 
 		if (characters.isEnd()) {
+			FTSimulationGame.save.getNowStage().selectLogue = NowStage.EPILOGUE;
 			sgModel.nextState();
 		}
 
@@ -279,6 +282,19 @@ public class Field implements KeyListner, Renderer {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * 現在，カーソルが上に載っているマップチップのImageを返す
+	 * @return 現在選択しているマップチップのImage
+	 */
+	public Image getSelectedMapChip() {
+		int y = cursor.y;
+		int x = cursor.x;
+		int chipX = map[y][x] % MAP_CHIP_COL;
+		int chipY = map[y][x] / MAP_CHIP_COL;
+		// 各マスのタイルを描画
+		return sSheet.getSubImage(chipX, chipY);
 	}
 
 	private void pushZKey(Chara chara) {
