@@ -137,7 +137,7 @@ public class LoadCharacter {
 			chara.status.maxHp = 		Integer.valueOf(charaStrs[1]);
 			chara.status.power = 		Integer.valueOf(charaStrs[2]);
 			chara.status.magicPower = 	Integer.valueOf(charaStrs[3]);
-			chara.status.spead = 		Integer.valueOf(charaStrs[4]);
+			chara.status.speed = 		Integer.valueOf(charaStrs[4]);
 			chara.status.tech = 		Integer.valueOf(charaStrs[5]);
 			chara.status.luck = 		Integer.valueOf(charaStrs[6]);
 			chara.status.defence = 		Integer.valueOf(charaStrs[7]);
