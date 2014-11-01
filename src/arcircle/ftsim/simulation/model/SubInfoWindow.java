@@ -15,6 +15,7 @@ import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.Status;
+import arcircle.ftsim.simulation.item.Weapon;
 
 //
 
@@ -34,6 +35,8 @@ public class SubInfoWindow implements Renderer{
 
 	private Image backGround;
 	private String gender;
+	private String weaponName;
+	private String itemName;
 
 	private HashMap<String, Animation> upWalkAnimeMap;
 	private HashMap<String, Animation> downWalkAnimeMap;
@@ -175,6 +178,32 @@ public class SubInfoWindow implements Renderer{
 		//次のレベルまで
 		g.drawString("EXP : " + charaStatus.exp + "/100",
 				objectPos.get("NEXT_EXP").x, objectPos.get("NEXT_EXP").y);
+		//武器,アイテム
+		if(charaStatus.getItemList().isEmpty()){
+			weaponName = "";
+			itemName = "";
+		}else{
+			weaponName = "";
+			itemName = "";
+			for(int i = 0 ; i < charaStatus.getItemList().size() ; i++){
+				if(charaStatus.getItemList().get(i) instanceof Weapon){
+					weaponName = charaStatus.getItemList().get(i).name;
+					break;
+				}
+			}
+			for(int i = 0 ; i < charaStatus.getItemList().size() ; i++){
+				if(!(charaStatus.getItemList().get(i) instanceof Weapon)){
+					itemName = charaStatus.getItemList().get(i).name;
+					break;
+				}
+			}
+		}
+		g.drawString("武器 : " + weaponName,
+				objectPos.get("WEAPON").x, objectPos.get("WEAPON").y);
+		g.drawString("アイテム : " + itemName,
+				objectPos.get("ITEM").x, objectPos.get("ITEM").y);
+		
+		
 	}
 
 	//各オブジェクトの場所を設定
@@ -216,7 +245,7 @@ public class SubInfoWindow implements Renderer{
 			objectPos.put("MAP_ABOID", new Point(tempX, tempY));
 			//名前
 			tempX = objectPos.get("MAP_INFOIMAGE").x;
-			tempY = objectPos.get("MAP_INFOIMAGE").y + IMAGE_SIZE + CHAR_SIZE;
+			tempY = objectPos.get("MAP_INFOIMAGE").y + IMAGE_SIZE + (CHAR_SIZE/2);
 			objectPos.put("CHARA_NAME", new Point(tempX, tempY));	//ok
 			//性別
 			tempX = objectPos.get("CHARA_NAME").x;
@@ -236,11 +265,11 @@ public class SubInfoWindow implements Renderer{
 			objectPos.put("CHARA_LEVEL", new Point(tempX, tempY));	//ok
 			//次のレベルまで_運の下
 			tempX = objectPos.get("CHARA_IMAGE").x;
-			tempY = objectPos.get("CHARA_LEVEL").y + CHAR_SIZE + LINE_INTERVAL;
+			tempY = objectPos.get("CHARA_IMAGE").y + IMAGE_SIZE;
 			objectPos.put("NEXT_EXP", new Point(tempX, tempY));
 			//ちから_キャラ画像の下
 			tempX = objectPos.get("CHARA_IMAGE").x;
-			tempY = objectPos.get("NEXT_EXP").y + CHAR_SIZE + LINE_INTERVAL;
+			tempY = objectPos.get("NEXT_EXP").y + CHAR_SIZE + (LINE_INTERVAL * 2);
 			objectPos.put("CHARA_POWER", new Point(tempX, tempY));	//ok
 			//まりょく_ちからの右
 			tempX = objectPos.get("CHARA_POWER").x + (WIDTH / 2);
@@ -270,6 +299,14 @@ public class SubInfoWindow implements Renderer{
 			tempX = objectPos.get("CHARA_LUCK").x + (WIDTH / 2);
 			tempY = objectPos.get("CHARA_LUCK").y;
 			objectPos.put("CHARA_MOVE", new Point(tempX, tempY));
+			//武器_運の下
+			tempX = objectPos.get("CHARA_LUCK").x;
+			tempY = objectPos.get("CHARA_LUCK").y + CHAR_SIZE + LINE_INTERVAL;
+			objectPos.put("WEAPON", new Point(tempX, tempY));
+			//アイテム_武器の下
+			tempX = objectPos.get("WEAPON").x;
+			tempY = objectPos.get("WEAPON").y + CHAR_SIZE + LINE_INTERVAL;
+			objectPos.put("ITEM", new Point(tempX, tempY));
 			
 		}
 }
