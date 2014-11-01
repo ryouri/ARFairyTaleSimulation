@@ -24,6 +24,8 @@ import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.save.NowStage;
 import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.field.Terrain;
+import arcircle.ftsim.simulation.field.TerrainManager;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
@@ -32,6 +34,8 @@ public class Field implements KeyListner, Renderer {
 	SimGameModel sgModel;
 
 	private int map[][];
+	private Terrain terrainMap[][];
+
 	/**
 	 * 移動コストが保存される
 	 * -1は移動不可能
@@ -71,6 +75,8 @@ public class Field implements KeyListner, Renderer {
 	public static final int TURN_ENEMY = 1;
 
 	private boolean cursorVisible;
+
+	public TerrainManager terrainManager;
 
 	public boolean isCursorVisible() {
 		return cursorVisible;
@@ -297,6 +303,19 @@ public class Field implements KeyListner, Renderer {
 		return sSheet.getSubImage(chipX, chipY);
 	}
 
+	/**
+	 * 現在，カーソルが上に載っている地形を表すTerrainインスタンスを返す
+	 * @return 現在選択しているTerrainインスタンス
+	 */
+	public Terrain getSelectedTerrain() {
+		int y = cursor.y;
+		int x = cursor.x;
+		int chipX = map[y][x] % MAP_CHIP_COL;
+		int chipY = map[y][x] / MAP_CHIP_COL;
+		// 各マスのタイルを描画
+		return terrainMap[chipY][chipX];
+	}
+
 	private void pushZKey(Chara chara) {
 		CharaCommandWindow ccWindow = new CharaCommandWindow(sgModel, this,
 				chara);
@@ -310,6 +329,9 @@ public class Field implements KeyListner, Renderer {
 	 * @param mapchipPointerPath
 	 */
 	public void loadMapAndMapChip(String mapPath, String mapchipPointerPath) {
+		//地形情報の読み込み
+		terrainManager = new TerrainManager();
+
 		// マップチップ読み込み
 		String mapChipPath = null;
 		try {
@@ -336,12 +358,21 @@ public class Field implements KeyListner, Renderer {
 			mapWidth = MAP_CHIP_SIZE * col;
 			// マップを読み込む
 			map = new int[row][col];
+			// 地形マップの初期化
+			terrainMap = new Terrain[row][col];
+
 			moveCostMap = new int[row][col];
-			for (int i = 0; i < row; i++) {
-				for (int j = 0; j < col; j++) {
-					map[i][j] = in.read();
+			for (int y = 0; y < row; y++) {
+				for (int x = 0; x < col; x++) {
+					int mapChipNo = in.read();
+					map[y][x] = mapChipNo;
 					//TODO:moveCostの読み込み，現在は1で初期化
-					moveCostMap[i][j] = 1;
+					moveCostMap[y][x] = 1;
+
+					int chipX = mapChipNo % MAP_CHIP_COL;
+					int chipY = mapChipNo / MAP_CHIP_COL;
+
+					terrainMap[y][x] = terrainManager.getTerrain(chipX, chipY);
 				}
 			}
 			in.close();
