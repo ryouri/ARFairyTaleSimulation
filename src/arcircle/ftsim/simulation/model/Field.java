@@ -329,10 +329,8 @@ public class Field implements KeyListner, Renderer {
 	public Terrain getSelectedTerrain() {
 		int y = cursor.y;
 		int x = cursor.x;
-		int chipX = map[y][x] % MAP_CHIP_COL;
-		int chipY = map[y][x] / MAP_CHIP_COL;
 		// 各マスのタイルを描画
-		return terrainMap[chipY][chipX];
+		return terrainMap[y][x];
 	}
 
 	/**
