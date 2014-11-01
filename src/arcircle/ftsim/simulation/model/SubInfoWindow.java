@@ -78,11 +78,11 @@ public class SubInfoWindow implements Renderer{
 		//ステージ名の描画
 		//TODO もしかしてstoryNameの取得はコンストラクタでよい？
 		String storyName = FTSimulationGame.save.getNowStage().storyName;
-		g.drawString("ステージ:ジャックと豆の木",
+		g.drawString("ステージ:STAGENAME",
 				objectPos.get("STAGE_NAME").x, objectPos.get("STAGE_NAME").y);	//ステージ名の描画
 		//目標の描画
 		//TODO クリア目標で表示するストリングの取得
-		g.drawString("クリア目標 : CLEAR_GOAL",
+		g.drawString("勝利条件:CLEAR_GOAL",
 				objectPos.get("CLEAR_GOAL").x, objectPos.get("CLEAR_GOAL").y);	//ステージ名の描画
 		//地形情報の描画
 		//TODO 地形画像の描画
@@ -149,9 +149,9 @@ public class SubInfoWindow implements Renderer{
 		//いどう
 		g.drawString("いどう : " + charaStatus.move,
 				objectPos.get("CHARA_MOVE").x, objectPos.get("CHARA_MOVE").y);
-		//たいかく
-		g.drawString("たいかく : " + charaStatus.physique,
-				objectPos.get("CHARA_PHYSIQUE").x, objectPos.get("CHARA_PHYSIQUE").y);
+//		//たいかく
+//		g.drawString("たいかく : " + charaStatus.physique,
+//				objectPos.get("CHARA_PHYSIQUE").x, objectPos.get("CHARA_PHYSIQUE").y);
 	}
 
 	//各オブジェクトの場所を設定
@@ -223,9 +223,14 @@ public class SubInfoWindow implements Renderer{
 			tempX = objectPos.get("CHARA_MAGICDEFENCE").x;
 			tempY = objectPos.get("CHARA_MAGICDEFENCE").y + CHAR_SIZE + LINE_INTERVAL;
 			objectPos.put("CHARA_MOVE", new Point(tempX, tempY));
-			//たいかく_いどうの下
-			tempX = objectPos.get("CHARA_MOVE").x;
-			tempY = objectPos.get("CHARA_MOVE").y + CHAR_SIZE + LINE_INTERVAL;
-			objectPos.put("CHARA_PHYSIQUE", new Point(tempX, tempY));
+			//次のレベルまで
+			tempX = objectPos.get("CHARA_MAGICDEFENCE").x + (WIDTH/2);
+			tempY = objectPos.get("CHARA_MAGICDEFENCE").y;
+			objectPos.put("CHARA_MOVE", new Point(tempX, tempY));
+			//
+//			//たいかく_いどうの下
+//			tempX = objectPos.get("CHARA_MOVE").x;
+//			tempY = objectPos.get("CHARA_MOVE").y + CHAR_SIZE + LINE_INTERVAL;
+//			objectPos.put("CHARA_PHYSIQUE", new Point(tempX, tempY));
 		}
 }
