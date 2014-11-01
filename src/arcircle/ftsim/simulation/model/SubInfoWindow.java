@@ -45,6 +45,11 @@ public class SubInfoWindow implements Renderer{
 
 	private Field field;
 	private Image selectedMapChip;
+	private String partName;
+	private String terrainName;
+	private int avoidPoint;
+	private int defencePoint;
+	
 
 	public SubInfoWindow(Field field) {
 		super();
@@ -78,8 +83,8 @@ public class SubInfoWindow implements Renderer{
 		
 		//ステージ名の描画
 		//TODO もしかしてstoryNameの取得はコンストラクタでよい？
-		String storyName = FTSimulationGame.save.getNowStage().storyName;
-		g.drawString("ステージ:STAGENAME",
+		String partName = field.getPartName();
+		g.drawString("ステージ:" + partName,
 				objectPos.get("STAGE_NAME").x, objectPos.get("STAGE_NAME").y);	//ステージ名の描画
 		//勝利条件の描画
 		//TODO クリア目標で表示するストリングの取得
@@ -98,10 +103,13 @@ public class SubInfoWindow implements Renderer{
 		selectedMapChip = field.getSelectedMapChip();
 		g.drawImage(selectedMapChip.getScaledCopy(2), objectPos.get("MAP_INFOIMAGE").x, objectPos.get("MAP_INFOIMAGE").y);
 		//地形の名前
-		g.drawString("MAP_NAME",
+		terrainName = field.getSelectedTerrain().terrainName;
+		g.drawString(terrainName,
 				objectPos.get("MAP_NAME").x, objectPos.get("MAP_NAME").y);
 		//地形の回避,防御値
-		g.drawString("回避:" + 10 + "% 防御:" + 10 + "%",
+		avoidPoint = field.getSelectedTerrain().avoidPoint;
+		defencePoint = field.getSelectedTerrain().defencePoint;
+		g.drawString("回避:" + avoidPoint + "% 防御:" + defencePoint + "%",
 				objectPos.get("MAP_ABOID").x, objectPos.get("MAP_ABOID").y);
 		//情報を描画する対象のCharaを取得
 		//TODO: 下で取得したキャラの情報を描画してくれればOK
@@ -226,9 +234,13 @@ public class SubInfoWindow implements Renderer{
 			tempX = objectPos.get("CHARA_HP").x;
 			tempY = objectPos.get("CHARA_HP").y +  CHAR_SIZE + LINE_INTERVAL;
 			objectPos.put("CHARA_LEVEL", new Point(tempX, tempY));	//ok
+			//次のレベルまで_運の下
+			tempX = objectPos.get("CHARA_IMAGE").x;
+			tempY = objectPos.get("CHARA_LEVEL").y + CHAR_SIZE + LINE_INTERVAL;
+			objectPos.put("NEXT_EXP", new Point(tempX, tempY));
 			//ちから_キャラ画像の下
 			tempX = objectPos.get("CHARA_IMAGE").x;
-			tempY = objectPos.get("CHARA_IMAGE").y + IMAGE_SIZE + LINE_INTERVAL;
+			tempY = objectPos.get("NEXT_EXP").y + CHAR_SIZE + LINE_INTERVAL;
 			objectPos.put("CHARA_POWER", new Point(tempX, tempY));	//ok
 			//まりょく_ちからの右
 			tempX = objectPos.get("CHARA_POWER").x + (WIDTH / 2);
@@ -258,9 +270,6 @@ public class SubInfoWindow implements Renderer{
 			tempX = objectPos.get("CHARA_LUCK").x + (WIDTH / 2);
 			tempY = objectPos.get("CHARA_LUCK").y;
 			objectPos.put("CHARA_MOVE", new Point(tempX, tempY));
-			//次のレベルまで_運の下
-			tempX = objectPos.get("CHARA_LUCK").x;
-			tempY = objectPos.get("CHARA_LUCK").y + CHAR_SIZE + LINE_INTERVAL;
-			objectPos.put("NEXT_EXP", new Point(tempX, tempY));
+			
 		}
 }

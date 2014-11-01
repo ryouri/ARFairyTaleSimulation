@@ -142,7 +142,4 @@ public class TextTag {
 		this.rightBright = false;
 		this.text = str.clone();
 	}
-	
-	
-	
 }
