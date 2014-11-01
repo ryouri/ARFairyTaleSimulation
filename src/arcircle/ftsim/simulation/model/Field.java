@@ -36,8 +36,8 @@ public class Field implements KeyListner, Renderer {
 	 */
 	private int moveCostMap[][];
 
-	public static final int MAP_CHIP_ROW = 20;
-	public static final int MAP_CHIP_COL = 10;
+	public static final int MAP_CHIP_ROW = 32;
+	public static final int MAP_CHIP_COL = 20;
 	public static final int MAP_CHIP_SIZE = 32;
 
 	public static final int MAP_VIEW_WIDTH = 800;
