@@ -188,7 +188,7 @@ public class Characters {
 					anime = rightWalkAnimeMap.get(chara.status.name);
 				} else if (chara.direction == Chara.LEFT) {
 					anime = leftWalkAnimeMap.get(chara.status.name);
-				} else {//if (chara.direction == Chara.DOWN) {
+				} else {	//if (chara.direction == Chara.DOWN) {
 					anime = downWalkAnimeMap.get(chara.status.name);
 				}
 				anime.draw(

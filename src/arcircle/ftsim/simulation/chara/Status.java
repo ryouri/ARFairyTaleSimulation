@@ -19,7 +19,7 @@ public class Status {
 
 	//セーブデータで利用
 	//パラメータ
-	//HO
+	//HP
 	public int hp;
 	//MHP
 	public int maxHp;
@@ -28,7 +28,7 @@ public class Status {
 	//まりょく
 	public int magicPower;
 	//はやさ
-	public int spead;
+	public int speed;
 	//わざ
 	public int tech;
 	//運
@@ -63,7 +63,7 @@ public class Status {
 		status.maxHp = 			this.maxHp;
 		status.power = 			this.power;
 		status.magicPower = 	this.magicPower;
-		status.spead = 			this.spead;
+		status.speed = 			this.speed;
 		status.tech = 			this.tech;
 		status.luck = 			this.luck;
 		status.defence = 		this.defence;
