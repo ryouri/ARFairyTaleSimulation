@@ -78,6 +78,8 @@ public class Field implements KeyListner, Renderer {
 
 	public TerrainManager terrainManager;
 
+	private String partName;
+
 	public boolean isCursorVisible() {
 		return cursorVisible;
 	}
@@ -95,11 +97,28 @@ public class Field implements KeyListner, Renderer {
 		this.cursorVisible = true;
 	}
 
+	//TODO:マジックナンバー多発地帯！
 	public void init(String subStoryFolderPath) {
 		loadMapAndMapChip(subStoryFolderPath + "map.dat", subStoryFolderPath
 				+ "mapchip.txt");
 		initCursor();
 		initCharacters(subStoryFolderPath);
+		loadMapName(subStoryFolderPath + "partName.txt");
+	}
+
+	private void loadMapName(String partNameTxtString) {
+		try {
+			File file = new File(partNameTxtString);
+			BufferedReader br = new BufferedReader(new FileReader(file));
+
+			partName = br.readLine();
+
+			br.close();
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
+		} catch (IOException e) {
+			System.out.println(e);
+		}
 	}
 
 	private void initCharacters(String subStoryFolderPath) {
@@ -314,6 +333,14 @@ public class Field implements KeyListner, Renderer {
 		int chipY = map[y][x] / MAP_CHIP_COL;
 		// 各マスのタイルを描画
 		return terrainMap[chipY][chipX];
+	}
+
+	/**
+	 * 戦闘中のお話の名前，partNameを返す
+	 * @return 戦闘中のお話の名前
+	 */
+	public String getPartName() {
+		return partName;
 	}
 
 	private void pushZKey(Chara chara) {
