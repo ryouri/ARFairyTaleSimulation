@@ -20,6 +20,7 @@ import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.ai.SimpleAI;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.simulation.model.task.TaskManager;
+import arcircle.ftsim.simulation.talk.BattleTalkModel;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class Characters {
@@ -237,6 +238,10 @@ public class Characters {
 
 		if (taskManager.existTask()) {
 			taskManager.processUpdate(delta);
+		}
+
+		if (field.getSgModel().getKeyInputStackByFirst() instanceof BattleTalkModel) {
+			return;
 		}
 
 		if (field.getNowTurn() == Field.TURN_FRIEND) {

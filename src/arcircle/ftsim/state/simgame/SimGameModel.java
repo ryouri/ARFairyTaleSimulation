@@ -28,6 +28,10 @@ public class SimGameModel{
 		sgState = simGameState;
 	}
 
+	public KeyListner getKeyInputStackByFirst() {
+		return sgState.getKeyInputStackFirst();
+	}
+
 	public void removeKeyInputStackByField() {
 		while (!(sgState.getKeyInputStackFirst() instanceof Field)) {
 			sgState.removeKeyInputStackFirst();

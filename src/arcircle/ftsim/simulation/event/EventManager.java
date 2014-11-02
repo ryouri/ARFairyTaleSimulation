@@ -60,6 +60,7 @@ public class EventManager {
 	public void checkEvent(Event checkEvent) {
 		int eventType = checkEvent.eventType;
 		System.out.println("Event:" + checkEvent.eventType);
+		ArrayList<Event> removeEventArray = new ArrayList<Event>();
 
 		for (Event event : eventArray.get(eventType)) {
 			if (event instanceof EventTouchChara
@@ -78,6 +79,7 @@ public class EventManager {
 					sgModel.pushKeyInputStack(btModel);
 					sgModel.addRendererArray(btView);
 					System.out.println("Event:" + event.eventType);
+					removeEventArray.add(processEvent);
 				}
 			} else if (event instanceof EventArrival
 					&& checkEvent instanceof EventArrival ) {
@@ -119,6 +121,10 @@ public class EventManager {
 //				EventTurnProgress processEvent = (EventTurnProgress)event;
 //
 //			}
+		}
+
+		for (Event event : removeEventArray) {
+			eventArray.get(event.eventType).remove(event);
 		}
 	}
 
