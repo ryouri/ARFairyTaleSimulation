@@ -1,6 +1,8 @@
 package arcircle.ftsim.simulation.event;
 
 public class Event {
+	public String eventID;
+
 	public int eventType;
 
 	public String eventFileName;

@@ -57,6 +57,17 @@ public class EventManager {
 		}
 	}
 
+	private void processEvent(EventTouchChara processEvent
+			, ArrayList<Event> removeEventArray) {
+		SimGameModel sgModel = field.getSgModel();
+		BattleTalkModel btModel =
+				new BattleTalkModel(sgModel, processEvent.eventFileName);
+		BattleTalkView btView = new BattleTalkView(btModel, sgModel);
+		sgModel.pushKeyInputStack(btModel);
+		sgModel.addRendererArray(btView);
+		removeEventArray.add(processEvent);
+	}
+
 	public void checkEvent(Event checkEvent) {
 		int eventType = checkEvent.eventType;
 		System.out.println("Event:" + checkEvent.eventType);
@@ -70,16 +81,8 @@ public class EventManager {
 				if ((searchEvent.chara1ID.equals(processEvent.chara1ID)
 						&& searchEvent.chara2ID.equals(processEvent.chara2ID))
 						|| (searchEvent.chara1ID.equals(processEvent.chara2ID)
-								&& searchEvent.chara2ID.equals(processEvent.chara1ID))) {
-
-					SimGameModel sgModel = field.getSgModel();
-					BattleTalkModel btModel =
-							new BattleTalkModel(sgModel, processEvent.eventFileName);
-					BattleTalkView btView = new BattleTalkView(btModel, sgModel);
-					sgModel.pushKeyInputStack(btModel);
-					sgModel.addRendererArray(btView);
-					System.out.println("Event:" + event.eventType);
-					removeEventArray.add(processEvent);
+						&& searchEvent.chara2ID.equals(processEvent.chara1ID))) {
+					processEvent(processEvent, removeEventArray);
 				}
 			} else if (event instanceof EventArrival
 					&& checkEvent instanceof EventArrival ) {
@@ -158,46 +161,52 @@ public class EventManager {
 		String[] eventStrs = eventStr.split(",");
 
 //		ARRIVAL,no2,0,0,1,1,battleTalk02.txt
-		if (eventStrs[0].equals(Event.ARRIVAL)) {
-			EventArrival event = new EventArrival(eventStrs[6]);
-			event.charaID = eventStrs[1];
-			Point startP = new Point(Integer.valueOf(eventStrs[2]),
-					Integer.valueOf(eventStrs[3]));
-			Point endP = new Point(Integer.valueOf(eventStrs[4]),
-					Integer.valueOf(eventStrs[5]));
+		if (eventStrs[1].equals(Event.ARRIVAL)) {
+			EventArrival event = new EventArrival(eventStrs[7]);
+			event.eventID = eventStrs[0];
+			event.charaID = eventStrs[2];
+			Point startP = new Point(Integer.valueOf(eventStrs[3]),
+					Integer.valueOf(eventStrs[4]));
+			Point endP = new Point(Integer.valueOf(eventStrs[5]),
+					Integer.valueOf(eventStrs[6]));
 			event.upperLeft = startP;
 			event.LowerRight = endP;
 			return event;
 		}
 //		CHARA_DIE,boss,battleTalk04.txt
-		if (eventStrs[0].equals(Event.CHARA_DIE)) {
-			EventCharaDie event = new EventCharaDie(eventStrs[2]);
-			event.charaID = eventStrs[1];
+		if (eventStrs[1].equals(Event.CHARA_DIE)) {
+			EventCharaDie event = new EventCharaDie(eventStrs[3]);
+			event.eventID = eventStrs[0];
+			event.charaID = eventStrs[2];
 			return event;
 		}
 //		ENEMY_BELOW,3,battleTalk05.txt
-		if (eventStrs[0].equals(Event.ENEMY_BELOW)) {
-			EventEnemyBelow event = new EventEnemyBelow(eventStrs[2]);
-			event.enemyThreshold = Integer.valueOf(eventStrs[1]);
+		if (eventStrs[1].equals(Event.ENEMY_BELOW)) {
+			EventEnemyBelow event = new EventEnemyBelow(eventStrs[3]);
+			event.eventID = eventStrs[0];
+			event.enemyThreshold = Integer.valueOf(eventStrs[2]);
 			return event;
 		}
 //		KILL_ENEMY,4,battleTalk06.txt
-		if (eventStrs[0].equals(Event.KILL_ENEMY)) {
-			EventKillEnemy event = new EventKillEnemy(eventStrs[2]);
-			event.killEnemyNum = Integer.valueOf(eventStrs[1]);
+		if (eventStrs[1].equals(Event.KILL_ENEMY)) {
+			EventKillEnemy event = new EventKillEnemy(eventStrs[3]);
+			event.eventID = eventStrs[0];
+			event.killEnemyNum = Integer.valueOf(eventStrs[2]);
 			return event;
 		}
 //		TOUCH_CHARA,no1,boss,battleTalk01.txt
-		if (eventStrs[0].equals(Event.TOUCH_CHARA)) {
-			EventTouchChara event = new EventTouchChara(eventStrs[3]);
-			event.chara1ID = eventStrs[1];
-			event.chara2ID = eventStrs[2];
+		if (eventStrs[1].equals(Event.TOUCH_CHARA)) {
+			EventTouchChara event = new EventTouchChara(eventStrs[4]);
+			event.eventID = eventStrs[0];
+			event.chara1ID = eventStrs[2];
+			event.chara2ID = eventStrs[3];
 			return event;
 		}
 //		TURN_PROGRESS,3,battleTalk03.txt
-		if (eventStrs[0].equals(Event.TURN_PROGRESS)) {
-			EventTurnProgress event = new EventTurnProgress(eventStrs[2]);
-			event.progressTurn = Integer.valueOf(eventStrs[1]);
+		if (eventStrs[1].equals(Event.TURN_PROGRESS)) {
+			EventTurnProgress event = new EventTurnProgress(eventStrs[3]);
+			event.eventID = eventStrs[0];
+			event.progressTurn = Integer.valueOf(eventStrs[2]);
 			return event;
 		}
 
