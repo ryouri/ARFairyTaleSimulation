@@ -24,6 +24,7 @@ import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.save.NowStage;
 import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.event.EventManager;
 import arcircle.ftsim.simulation.field.Terrain;
 import arcircle.ftsim.simulation.field.TerrainManager;
 import arcircle.ftsim.simulation.item.Item;
@@ -80,6 +81,8 @@ public class Field implements KeyListner, Renderer {
 
 	private String partName;
 
+	public EventManager eventManager;
+
 	public boolean isCursorVisible() {
 		return cursorVisible;
 	}
@@ -104,6 +107,12 @@ public class Field implements KeyListner, Renderer {
 		initCursor();
 		initCharacters(subStoryFolderPath);
 		loadMapName(subStoryFolderPath + "partName.txt");
+		loadEvent(subStoryFolderPath + "event.txt");
+	}
+
+	private void loadEvent(String eventTxt) {
+		eventManager = new EventManager();
+		eventManager.loadEventTxt(eventTxt);
 	}
 
 	private void loadMapName(String partNameTxtString) {

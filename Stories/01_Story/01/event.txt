@@ -1,0 +1,6 @@
+TOUCH_CHARA,no1,boss,battleTalk01.txt
+ARRIVAL,no2,0,0,1,1,battleTalk02.txt
+TURN_PROGRESS,3,battleTalk03.txt
+CHARA_DIE,boss,battleTalk04.txt
+ENEMY_BELOW,3,battleTalk05.txt
+KILL_ENEMY,4,battleTalk06.txt
