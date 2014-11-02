@@ -11,6 +11,11 @@ import arcircle.ftsim.simulation.model.Field;
  * 設定できるようにしたら，itemListへのアイテムのコピーの実装を変更する必要がある
  */
 public class Chara {
+	/**
+	 * あるキャラを特定するためのID
+	 */
+	public String id;
+
 	public int x;
 	public int y;
 
@@ -47,6 +52,7 @@ public class Chara {
 		this.isStand = false;
 		this.isMoved = false;
 		this.speed = 8;
+		this.id = null;
 	}
 
 	public AI getAI() {

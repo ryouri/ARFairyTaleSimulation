@@ -138,15 +138,16 @@ public class Characters {
 	}
 
 	private void addCharacter(String charaLine) {
-		String[] charaPuts = charaLine.split(" ");
+		String[] charaPuts = charaLine.split(",");
 		if (charaPuts.length == 0) {
 			return;
 		}
 
-		Chara chara = new Chara(charaPuts[0]);
-		chara.setCamp(Integer.valueOf(charaPuts[1]));
-		chara.x = Integer.valueOf(charaPuts[2]);
-		chara.y = Integer.valueOf(charaPuts[3]);
+		Chara chara = new Chara(charaPuts[1]);
+		chara.id = charaPuts[0];
+		chara.setCamp(Integer.valueOf(charaPuts[2]));
+		chara.x = Integer.valueOf(charaPuts[3]);
+		chara.y = Integer.valueOf(charaPuts[4]);
 		chara.pX = chara.x * Field.MAP_CHIP_SIZE;
 		chara.pY = chara.y * Field.MAP_CHIP_SIZE;
 		//TODO; キャラクターデータのコピーが未完成 AIの実装もね
