@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import arcircle.ftsim.simulation.chara.Chara;
+
 public class EventManager {
 	ArrayList<ArrayList<Event>> eventArray;
 
@@ -16,6 +18,10 @@ public class EventManager {
 		for (int i = 0; i < Event.TYPE_NUM; i++) {
 			eventArray.add(new ArrayList<Event>());
 		}
+	}
+
+	public void checkStandEvent(Chara chara) {
+
 	}
 
 	public void checkEvent(Event event) {
