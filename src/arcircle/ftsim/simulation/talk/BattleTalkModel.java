@@ -14,11 +14,11 @@ import org.newdawn.slick.Input;
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.main.FTSimulationGame;
-import arcircle.ftsim.state.SimGameState;
+import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class BattleTalkModel implements KeyListner {
 	//フィールド////////////////////////////////////////////////////////////////////////////////////////////
-	private SimGameState sgState;
+	private SimGameModel sgModel;
 
 	private static final int MAX_CHARS_PER_LINE = 32;	// 1行の最大文字数
     private static final int MAX_LINES_PER_PAGE = 5;	// 1ページに表示できる最大行数
@@ -83,12 +83,15 @@ public class BattleTalkModel implements KeyListner {
 	public int getCurPage() { return curPage; }
 
     //コンストラクタ//////////////////////////////////////////////////////////////////////////////////////
-	public BattleTalkModel(SimGameState sgState) {
+	public BattleTalkModel(SimGameModel sgModel, String battleTalkTxtPath) {
 		super();	//おまじない
-		this.sgState = sgState;
+		this.sgModel = sgModel;
 		readSaveData();//セーブデータを読み込み
 		timer = new Timer();	//タイマーをセット(メッセージが流れるように表示させるため)
-		loadTextData();		//会話文テキストを読み込んで各タグを生成する
+		loadTextData("Stories/"
+				+ nowStoryName + "/"
+				+ nowSubStoryName
+				+ "/" + battleTalkTxtPath);		//会話文テキストを読み込んで各タグを生成する
 		curTagPointer = 0;	//現在のタグを示すポインタ
 		curTagText = tags[curTagPointer].getText();	//
 		task = new DrawingMessageTask();
@@ -120,15 +123,7 @@ public class BattleTalkModel implements KeyListner {
 	}
 
 	//テキストデータを一度ロードするメソッド-----------------------------------------------------------------
-    private void loadTextData(){
-    	//会話文のある
-    	String filePath = "Stories/" + nowStoryName + "/" + nowSubStoryName + "/";
-    	if(nowLogue == FTSimulationGame.save.getNowStage().PROLOGUE){
-    		filePath += "prologue.txt";
-    	}else if(nowLogue == FTSimulationGame.save.getNowStage().EPILOGUE){
-    		filePath += "epilogue.txt";
-    	}
-
+    private void loadTextData(String filePath){
     	try {
     		BufferedReader br;
     		// 会話ファイルを読み込む
@@ -290,12 +285,15 @@ public class BattleTalkModel implements KeyListner {
 	public void keyInput(KeyInput keyInput) {
 		//デバッグ用キー
 		if(keyInput.isKeyDown(Input.KEY_D)){
-			sgState.nextState();
+			sgModel.removeRendererArrayEnd();
+			sgModel.removeKeyInputStackFirst();
 		}
 		if(keyInput.isKeyDown(Input.KEY_Z)){
 			//次のステートへ
 			if(nextTalkFlag && nextStateFlag == true){
-				sgState.nextState();
+				sgModel.removeRendererArrayEnd();
+				sgModel.removeKeyInputStackFirst();
+				//sgState.nextState();
 			//ページ送り処理
 			}else if(nextPageFlag && !nextTalkFlag){
 				nextPage();

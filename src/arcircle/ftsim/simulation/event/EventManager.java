@@ -10,6 +10,9 @@ import java.util.ArrayList;
 
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.model.Field;
+import arcircle.ftsim.simulation.talk.BattleTalkModel;
+import arcircle.ftsim.simulation.talk.BattleTalkView;
+import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class EventManager {
 	ArrayList<ArrayList<Event>> eventArray;
@@ -67,6 +70,13 @@ public class EventManager {
 						&& searchEvent.chara2ID.equals(processEvent.chara2ID))
 						|| (searchEvent.chara1ID.equals(processEvent.chara2ID)
 								&& searchEvent.chara2ID.equals(processEvent.chara1ID))) {
+
+					SimGameModel sgModel = field.getSgModel();
+					BattleTalkModel btModel =
+							new BattleTalkModel(sgModel, processEvent.eventFileName);
+					BattleTalkView btView = new BattleTalkView(btModel, sgModel);
+					sgModel.pushKeyInputStack(btModel);
+					sgModel.addRendererArray(btView);
 					System.out.println("Event:" + event.eventType);
 				}
 			} else if (event instanceof EventArrival

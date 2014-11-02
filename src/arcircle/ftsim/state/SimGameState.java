@@ -8,8 +8,6 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import arcircle.ftsim.simulation.talk.BattleTalkModel;
-import arcircle.ftsim.simulation.talk.BattleTalkView;
 import arcircle.ftsim.state.simgame.SimGameModel;
 import arcircle.ftsim.state.simgame.SimGameView;
 
@@ -17,8 +15,8 @@ import arcircle.ftsim.state.simgame.SimGameView;
 public class SimGameState extends KeyInputState {
 	private SimGameModel sgModel;
 	private SimGameView sgView;
-	private BattleTalkModel btModel;
-	private BattleTalkView btView;
+//	private BattleTalkModel btModel;
+//	private BattleTalkView btView;
 
 	public String sectionPath;
 	public String subStoryPath;
@@ -48,20 +46,20 @@ public class SimGameState extends KeyInputState {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enter(container, game);
-//		sgModel = new SimGameModel(this);
-//		sgModel.setReadFilePath(sectionPath, subStoryPath,
-//				sectionNum, subStoryNum);
-//		sgModel.init();
-//		sgView = new SimGameView(sgModel, this);
-		
-		btModel = new BattleTalkModel(this);
-		btView = new BattleTalkView(btModel, this);
-		
-		System.out.println("Enter Talk State");
-		keyInputStack.clear();
-		keyInputStack.push(btModel);
-		rendererArray.clear();
-		rendererArray.add(btView);
+		sgModel = new SimGameModel(this);
+		sgModel.setReadFilePath(sectionPath, subStoryPath,
+				sectionNum, subStoryNum);
+		sgModel.init();
+		sgView = new SimGameView(sgModel, this);
+
+//		btModel = new BattleTalkModel(this);
+//		btView = new BattleTalkView(btModel, this);
+//
+//		System.out.println("Enter Talk State");
+//		keyInputStack.clear();
+//		keyInputStack.push(btModel);
+//		rendererArray.clear();
+//		rendererArray.add(btView);
 
 		try {
 			bgm = new Sound("./Stories/BGM/FTSim012.ogg");
@@ -81,7 +79,7 @@ public class SimGameState extends KeyInputState {
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		super.update(container, game, delta);
-//		sgModel.update(container, game, delta);
+		sgModel.update(container, game, delta);
 	}
 
 	public void setReadFilePath(String sectionPath, String subStoryPath,

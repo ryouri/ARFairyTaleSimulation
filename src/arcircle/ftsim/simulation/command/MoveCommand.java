@@ -163,8 +163,8 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 			chara.setMoved(true);
 			MovedCommandWindow mcWindow = new MovedCommandWindow(sgModel, field,
 					chara, this);
-			sgModel.keyInputStackPush(mcWindow);
-			sgModel.rendererArrayAdd(mcWindow);
+			sgModel.pushKeyInputStack(mcWindow);
+			sgModel.addRendererArray(mcWindow);
 
 			this.setVisible(false);
 

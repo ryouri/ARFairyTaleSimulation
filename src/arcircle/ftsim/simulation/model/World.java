@@ -52,9 +52,9 @@ public class World {
 
 		this.subInfoWindow = new SubInfoWindow(field);
 
-		sgModel.keyInputStackPush(field);
-		sgModel.rendererArrayAdd(field);
-		sgModel.rendererArrayAdd(subInfoWindow);
+		sgModel.pushKeyInputStack(field);
+		sgModel.addRendererArray(field);
+		sgModel.addRendererArray(subInfoWindow);
 	}
 
 	public void loadItemList() {

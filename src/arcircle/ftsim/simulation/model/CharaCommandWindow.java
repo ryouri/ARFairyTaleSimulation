@@ -262,8 +262,8 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 			if (command instanceof MoveCommand) {
 				commandList.get(cursorY).pushed(field, chara);
 				MoveCommand mCommand = (MoveCommand) command;
-				sgModel.keyInputStackPush(mCommand);
-				sgModel.rendererArrayAdd(mCommand);
+				sgModel.pushKeyInputStack(mCommand);
+				sgModel.addRendererArray(mCommand);
 
 				setVisible(false);
 			} else if (command instanceof StandCommand) {
@@ -271,11 +271,11 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 			} else if (command instanceof AttackCommand) {
 				commandList.get(cursorY).pushed(field, chara);
 				AttackCommand mCommand = (AttackCommand) command;
-				sgModel.keyInputStackPush(mCommand);
-				sgModel.rendererArrayAdd(mCommand);
+				sgModel.pushKeyInputStack(mCommand);
+				sgModel.addRendererArray(mCommand);
 
 				setVisible(false);
-			} 
+			}
 			return;
 		}
 	}

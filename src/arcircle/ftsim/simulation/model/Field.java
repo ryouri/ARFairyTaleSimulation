@@ -33,6 +33,9 @@ import arcircle.ftsim.state.simgame.SimGameModel;
 public class Field implements KeyListner, Renderer {
 
 	SimGameModel sgModel;
+	public SimGameModel getSgModel() {
+		return sgModel;
+	}
 
 	private int map[][];
 	private Terrain terrainMap[][];
@@ -353,8 +356,8 @@ public class Field implements KeyListner, Renderer {
 	private void pushZKey(Chara chara) {
 		CharaCommandWindow ccWindow = new CharaCommandWindow(sgModel, this,
 				chara);
-		sgModel.keyInputStackPush(ccWindow);
-		sgModel.rendererArrayAdd(ccWindow);
+		sgModel.pushKeyInputStack(ccWindow);
+		sgModel.addRendererArray(ccWindow);
 	}
 
 	/**

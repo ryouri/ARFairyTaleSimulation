@@ -1,5 +1,6 @@
 package arcircle.ftsim.state.simgame;
 
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -38,7 +39,7 @@ public class SimGameModel{
 		}
 	}
 
-	public void keyInputStackPush(KeyListner keyListner) {
+	public void pushKeyInputStack(KeyListner keyListner) {
 		sgState.keyInputStackPush(keyListner);
 	}
 
@@ -47,7 +48,7 @@ public class SimGameModel{
 		sgState.getKeyInput().reset();
 	}
 
-	public void rendererArrayAdd(Renderer renderer) {
+	public void addRendererArray(Renderer renderer) {
 		sgState.rendererArrayAdd(renderer);
 	}
 
@@ -77,5 +78,14 @@ public class SimGameModel{
 
 	public void nextState() {
 		sgState.nextState();
+	}
+
+	//BGMの切り替えを行うメソッド(TalkViewに呼び出される)--------------------------------------
+	public void changeBGM(String bgmFilePath) {
+		sgState.changeBGM(bgmFilePath);
+	}
+
+	public Font getFont() {
+		return sgState.getFont();
 	}
 }

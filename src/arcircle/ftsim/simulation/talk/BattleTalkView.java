@@ -19,13 +19,13 @@ import org.newdawn.slick.state.StateBasedGame;
 import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.simulation.chara.Status;
-import arcircle.ftsim.state.SimGameState;
+import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class BattleTalkView implements Renderer{
 
 	//フィールド////////////////////////////////////////////////////////////////////////////////////////
 	private BattleTalkModel btModel;
-	private SimGameState sgState;
+	private SimGameModel sgModel;
 
 	private Image bgImg;	//背景画像
 	private Image leftCharaImg;	//左側(メイン)の立ち絵
@@ -60,10 +60,10 @@ public class BattleTalkView implements Renderer{
     private Color filterColor = new Color(0.75f,0.75f,0.75f,0.5f);	//しゃべってないキャラ用の画像薄フィルタ
 
 	//コンストラクタ//////////////////////////////////////////////////////////////////////////////////////
-	public BattleTalkView(BattleTalkModel tModel, SimGameState sgState) {
+	public BattleTalkView(BattleTalkModel tModel, SimGameModel sgModel) {
 		super();
 		this.btModel = tModel;
-		this.sgState = sgState;
+		this.sgModel = sgModel;
 
 		File characterFile = new File(characterPath);
 		String[] charaName = characterFile.list();
@@ -297,7 +297,7 @@ public class BattleTalkView implements Renderer{
 				}
 			}
 		}else if(curTag.getTagName().equals("CHANGEBGM")){
-			sgState.changeBGM(curTag.getBgmFilePath());
+			sgModel.changeBGM(curTag.getBgmFilePath());
 			btModel.nextTalk();
 		}
 
@@ -319,7 +319,7 @@ public class BattleTalkView implements Renderer{
 		g.drawImage(faceImg, nameTextPosX+20, nameTextPosY+40);	//顔画像の描画
 
 		g.setColor(Color.white); // メッセージボックスに描く文字の色は白
-		g.setFont(sgState.getFont()); // フォントを設定
+		g.setFont(sgModel.getFont()); // フォントを設定
 
 		//スピーカーネームの描画
 		g.drawString(speakerName, nameTextPosX, nameTextPosY);
