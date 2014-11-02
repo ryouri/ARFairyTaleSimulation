@@ -111,7 +111,7 @@ public class Field implements KeyListner, Renderer {
 	}
 
 	private void loadEvent(String eventTxt) {
-		eventManager = new EventManager();
+		eventManager = new EventManager(this);
 		eventManager.loadEventTxt(eventTxt);
 	}
 
@@ -485,5 +485,9 @@ public class Field implements KeyListner, Renderer {
 	public int setNowTurn(int nowTurn) {
 		this.nowTurn = nowTurn;
 		return nowTurn;
+	}
+
+	public Chara getXYChara(int x, int y) {
+		return characters.getXYChara(x, y);
 	}
 }

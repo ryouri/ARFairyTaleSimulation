@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import arcircle.ftsim.simulation.chara.ai.AI;
 import arcircle.ftsim.simulation.item.Item;
+import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Field;
 
 /**
@@ -11,6 +12,9 @@ import arcircle.ftsim.simulation.model.Field;
  * 設定できるようにしたら，itemListへのアイテムのコピーの実装を変更する必要がある
  */
 public class Chara {
+	private Characters characters;
+
+
 	/**
 	 * あるキャラを特定するためのID
 	 */
@@ -44,7 +48,7 @@ public class Chara {
 
 	public GrowRateStatus growRateStatus;
 
-	public Chara(String name) {
+	public Chara(String name, Characters characters) {
 		this.status = new Status();
 		this.growRateStatus = new GrowRateStatus();
 		this.status.setItemList(new ArrayList<Item>());
@@ -53,6 +57,7 @@ public class Chara {
 		this.isMoved = false;
 		this.speed = 8;
 		this.id = null;
+		this.characters = characters;
 	}
 
 	public AI getAI() {
@@ -101,6 +106,8 @@ public class Chara {
 		this.isStand = isStand;
 		if (isStand) {
 			resetState();
+			//キャラが待機状態になるとき，イベントがあるかどうかをチェック！
+			characters.checkStandEvent(this);
 		}
 	}
 

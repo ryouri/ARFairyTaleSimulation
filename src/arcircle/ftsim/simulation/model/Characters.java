@@ -61,6 +61,10 @@ public class Characters {
 
 	private TaskManager taskManager;
 
+	public void checkStandEvent(Chara chara) {
+		field.eventManager.checkStandEvent(chara);
+	}
+
 	public Characters() {
 		this.walkSheetMap = new HashMap<String, SpriteSheet>();
 		this.readySheetMap = new HashMap<String, SpriteSheet>();
@@ -143,7 +147,7 @@ public class Characters {
 			return;
 		}
 
-		Chara chara = new Chara(charaPuts[1]);
+		Chara chara = new Chara(charaPuts[1], this);
 		chara.id = charaPuts[0];
 		chara.setCamp(Integer.valueOf(charaPuts[2]));
 		chara.x = Integer.valueOf(charaPuts[3]);
@@ -319,5 +323,14 @@ public class Characters {
 
 	public void removeChara(Chara chara) {
 		characterArray.remove(chara);
+	}
+
+	public Chara getXYChara(int x, int y) {
+		for (Chara chara : characterArray) {
+			if (chara.x == x && chara.y == y) {
+				return chara;
+			}
+		}
+		return null;
 	}
 }

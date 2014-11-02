@@ -85,7 +85,7 @@ public class LoadCharacter {
 			File file = new File(charaParaPath);
 			BufferedReader br = new BufferedReader(new FileReader(file));
 
-			Chara chara = new Chara(charaName);
+			Chara chara = new Chara(charaName, characters);
 
 			String line;
 			while ((line = br.readLine()) != null) {
