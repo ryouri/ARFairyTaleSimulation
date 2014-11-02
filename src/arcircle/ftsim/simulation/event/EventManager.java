@@ -45,6 +45,7 @@ public class EventManager {
 		loseConditionEachPhaseArray = new ArrayList<ArrayList<Event>>();
 
 		this.field = field;
+		this.phaseNow = 0;
 	}
 
 	public void checkStandEvent(Chara chara) {
@@ -100,11 +101,35 @@ public class EventManager {
 		for (Event event : removeEventArray) {
 			eventArray.get(event.eventType).remove(event);
 		}
+
+		checkEndConditionEvent(checkEvent);
+	}
+
+	public void checkEndConditionEvent(Event checkEvent) {
+		for (Event event : winConditionEachPhaseArray.get(phaseNow)) {
+			if(eventEquals(event, checkEvent)) {
+				SimGameModel sgModel = field.getSgModel();
+				BattleTalkModel btModel =
+						new BattleTalkModel(sgModel, event.eventFileName);
+				BattleTalkView btView = new BattleTalkView(btModel, sgModel);
+				sgModel.pushKeyInputStack(btModel);
+				sgModel.addRendererArray(btView);
+				phaseNow++;
+				//TODO:勝利の処理！
+				if (phaseNow >= winConditionEachPhaseArray.size()) {
+					System.out.println("勝利");
+					System.exit(0);
+				}
+			}
+		}
+		for (Event event : winConditionEachPhaseArray.get(phaseNow)) {
+			//TODO:敗北の処理！
+		}
 	}
 
 	public boolean eventEquals(Event event, Event checkEvent) {
 		if (event instanceof EventTouchChara
-				&& checkEvent instanceof EventTouchChara ) {
+				&& checkEvent instanceof EventTouchChara) {
 			EventTouchChara searchEvent = (EventTouchChara)checkEvent;
 			EventTouchChara processEvent = (EventTouchChara)event;
 			if ((searchEvent.chara1ID.equals(processEvent.chara1ID)
