@@ -1,5 +1,5 @@
-ZAKOGA,TOUCH_CHARA,no1,zako,battleTalk01.txt
-TEST02,ARRIVAL,no2,0,0,1,1,battleTalk02.txt
+ZAKOGA,TOUCH_CHARA,no2,zako,battleTalk01.txt
+TEST02,ARRIVAL,no2,0,0,1,1,battleTalk01.txt
 TEST03,TURN_PROGRESS,3,battleTalk03.txt
 TEST04,CHARA_DIE,boss,battleTalk04.txt
 TEST05,ENEMY_BELOW,3,battleTalk05.txt

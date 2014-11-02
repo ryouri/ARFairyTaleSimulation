@@ -111,6 +111,11 @@ public class Field implements KeyListner, Renderer {
 		initCharacters(subStoryFolderPath);
 		loadMapName(subStoryFolderPath + "partName.txt");
 		loadEvent(subStoryFolderPath + "event.txt");
+		loadEndCondition(subStoryFolderPath + "endCondition.txt");
+	}
+
+	private void loadEndCondition(String endConditionTxt) {
+		eventManager.loadEndConditionTxt(endConditionTxt);
 	}
 
 	private void loadEvent(String eventTxt) {

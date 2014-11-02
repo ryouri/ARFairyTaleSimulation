@@ -9,13 +9,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.end.EndCondition;
 import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.simulation.talk.BattleTalkModel;
 import arcircle.ftsim.simulation.talk.BattleTalkView;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class EventManager {
+	/**
+	 * 計算量を減らすため，各イベントごとに配列に分けられている
+	 */
 	ArrayList<ArrayList<Event>> eventArray;
+
+
+	/**
+	 * フェイズごとの勝利条件が入っている。
+	 */
+	ArrayList<ArrayList<Event>> winConditionEachPhaseArray;
+	/**
+	 * フェイズごとの敗北条件が入っている。
+	 */
+	ArrayList<ArrayList<Event>> loseConditionEachPhaseArray;
+
+	public int phaseNow;
 
 	Field field;
 
@@ -24,6 +40,9 @@ public class EventManager {
 		for (int i = 0; i < Event.TYPE_NUM; i++) {
 			eventArray.add(new ArrayList<Event>());
 		}
+
+		winConditionEachPhaseArray = new ArrayList<ArrayList<Event>>();
+		loseConditionEachPhaseArray = new ArrayList<ArrayList<Event>>();
 
 		this.field = field;
 	}
@@ -57,7 +76,7 @@ public class EventManager {
 		}
 	}
 
-	private void processEvent(EventTouchChara processEvent
+	private void processEvent(Event processEvent
 			, ArrayList<Event> removeEventArray) {
 		SimGameModel sgModel = field.getSgModel();
 		BattleTalkModel btModel =
@@ -70,64 +89,130 @@ public class EventManager {
 
 	public void checkEvent(Event checkEvent) {
 		int eventType = checkEvent.eventType;
-		System.out.println("Event:" + checkEvent.eventType);
 		ArrayList<Event> removeEventArray = new ArrayList<Event>();
 
 		for (Event event : eventArray.get(eventType)) {
-			if (event instanceof EventTouchChara
-					&& checkEvent instanceof EventTouchChara ) {
-				EventTouchChara searchEvent = (EventTouchChara)checkEvent;
-				EventTouchChara processEvent = (EventTouchChara)event;
-				if ((searchEvent.chara1ID.equals(processEvent.chara1ID)
-						&& searchEvent.chara2ID.equals(processEvent.chara2ID))
-						|| (searchEvent.chara1ID.equals(processEvent.chara2ID)
-						&& searchEvent.chara2ID.equals(processEvent.chara1ID))) {
-					processEvent(processEvent, removeEventArray);
-				}
-			} else if (event instanceof EventArrival
-					&& checkEvent instanceof EventArrival ) {
-				EventArrival searchEvent = (EventArrival)checkEvent;
-				EventArrival processEvent = (EventArrival)event;
-				if (searchEvent.charaID.equals(processEvent.charaID)
-						&& searchEvent.upperLeft.x >= processEvent.upperLeft.x
-						&& searchEvent.upperLeft.y >= processEvent.upperLeft.y
-						&& searchEvent.upperLeft.x <= processEvent.LowerRight.x
-						&& searchEvent.upperLeft.y <= processEvent.LowerRight.y) {
-					System.out.println("Event:" + event.eventType);
-				}
-			} else if (event instanceof EventCharaDie
-					&& checkEvent instanceof EventCharaDie ) {
-				EventCharaDie searchEvent = (EventCharaDie)checkEvent;
-				EventCharaDie processEvent = (EventCharaDie)event;
-				if (searchEvent.charaID.equals(processEvent.charaID)) {
-					System.out.println("Event:" + event.eventType);
-				}
-			} else if (event instanceof EventEnemyBelow
-					&& checkEvent instanceof EventEnemyBelow ) {
-				EventEnemyBelow searchEvent = (EventEnemyBelow)checkEvent;
-				EventEnemyBelow processEvent = (EventEnemyBelow)event;
-				if (searchEvent.enemyThreshold <= processEvent.enemyThreshold) {
-					System.out.println("Event:" + event.eventType);
-				}
-			} else if (event instanceof EventKillEnemy
-					&& checkEvent instanceof EventKillEnemy ) {
-				EventKillEnemy searchEvent = (EventKillEnemy)checkEvent;
-				EventKillEnemy processEvent = (EventKillEnemy)event;
-				if (searchEvent.killEnemyNum >= processEvent.killEnemyNum) {
-					System.out.println("Event:" + event.eventType);
-				}
+			if(eventEquals(event, checkEvent)) {
+				processEvent(event, removeEventArray);
 			}
-			//ターン経過は，ターンごとに処理を行う
-//			else if (event instanceof EventTurnProgress
-//					&& checkEvent instanceof EventTurnProgress ) {
-//				EventTurnProgress searchEvent = (EventTurnProgress)checkEvent;
-//				EventTurnProgress processEvent = (EventTurnProgress)event;
-//
-//			}
 		}
 
 		for (Event event : removeEventArray) {
 			eventArray.get(event.eventType).remove(event);
+		}
+	}
+
+	public boolean eventEquals(Event event, Event checkEvent) {
+		if (event instanceof EventTouchChara
+				&& checkEvent instanceof EventTouchChara ) {
+			EventTouchChara searchEvent = (EventTouchChara)checkEvent;
+			EventTouchChara processEvent = (EventTouchChara)event;
+			if ((searchEvent.chara1ID.equals(processEvent.chara1ID)
+					&& searchEvent.chara2ID.equals(processEvent.chara2ID))
+					|| (searchEvent.chara1ID.equals(processEvent.chara2ID)
+					&& searchEvent.chara2ID.equals(processEvent.chara1ID))) {
+				return true;
+			}
+		} else if (event instanceof EventArrival
+				&& checkEvent instanceof EventArrival ) {
+			EventArrival searchEvent = (EventArrival)checkEvent;
+			EventArrival processEvent = (EventArrival)event;
+			if (searchEvent.charaID.equals(processEvent.charaID)
+					&& searchEvent.upperLeft.x >= processEvent.upperLeft.x
+					&& searchEvent.upperLeft.y >= processEvent.upperLeft.y
+					&& searchEvent.upperLeft.x <= processEvent.LowerRight.x
+					&& searchEvent.upperLeft.y <= processEvent.LowerRight.y) {
+				return true;
+			}
+		} else if (event instanceof EventCharaDie
+				&& checkEvent instanceof EventCharaDie ) {
+			EventCharaDie searchEvent = (EventCharaDie)checkEvent;
+			EventCharaDie processEvent = (EventCharaDie)event;
+			if (searchEvent.charaID.equals(processEvent.charaID)) {
+				return true;
+			}
+		} else if (event instanceof EventEnemyBelow
+				&& checkEvent instanceof EventEnemyBelow ) {
+			EventEnemyBelow searchEvent = (EventEnemyBelow)checkEvent;
+			EventEnemyBelow processEvent = (EventEnemyBelow)event;
+			if (searchEvent.enemyThreshold <= processEvent.enemyThreshold) {
+				return true;
+			}
+		} else if (event instanceof EventKillEnemy
+				&& checkEvent instanceof EventKillEnemy ) {
+			EventKillEnemy searchEvent = (EventKillEnemy)checkEvent;
+			EventKillEnemy processEvent = (EventKillEnemy)event;
+			if (searchEvent.killEnemyNum >= processEvent.killEnemyNum) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	public static final int TYPE_WIN = 0;
+	public static final String WIN = "WIN";
+	public static final int TYPE_LOSE = 1;
+	public static final String LOSE = "LOSE";
+
+	public static final String PHASE = "PHASE";
+	public static final String PHASEEND = "PHASEEND";
+	public void loadEndConditionTxt(String endConditionTxtPath) {
+		try {
+			File file = new File(endConditionTxtPath);
+			BufferedReader br = new BufferedReader(new FileReader(file));
+
+			String endConditionLine;
+
+			while ((endConditionLine = br.readLine()) != null) {
+				if (endConditionLine.length() == 0) {
+					continue;
+				}
+
+				//PHASEが来たら読み出し開始
+				if (endConditionLine.equals(PHASE)) {
+					ArrayList<Event> winConditionArray = new ArrayList<Event>();
+					ArrayList<Event> loseConditionArray = new ArrayList<Event>();
+
+					endConditionLine = br.readLine();
+					if (endConditionLine == null) {
+						System.err.println("endConditoinFileError");
+						System.exit(1);
+					}
+					//PHASEENDが来るまで読み出す
+					while(!endConditionLine.equals(PHASEEND)) {
+						String[] endConditionStrs = endConditionLine.split(",");
+						String eventStr =
+								endConditionLine.replace(
+										endConditionStrs[0] + ",", "");
+						Event event = loadEvent(eventStr);
+
+						if (endConditionStrs[0].equals(EndCondition.WIN)) {
+							winConditionArray.add(event);
+						} else if (endConditionStrs[0].equals(EndCondition.LOSE)) {
+							loseConditionArray.add(event);
+						} else {
+							System.err.println("endConditoinFileError");
+							System.exit(1);
+						}
+
+						endConditionLine = br.readLine();
+						if (endConditionLine == null) {
+							System.err.println("endConditoinFileError");
+							System.exit(1);
+						}
+					}
+
+					winConditionEachPhaseArray.add(winConditionArray);
+					loseConditionEachPhaseArray.add(loseConditionArray);
+				}
+			}
+
+			br.close();
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
+		} catch (IOException e) {
+			System.out.println(e);
 		}
 	}
 
