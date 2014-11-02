@@ -20,7 +20,7 @@ public class SelectStoryModel implements KeyListner {
 
 	private SelectStoryState ssState;
 
-	public String message = "どのストーリーで遊びますか？";
+//	public String message = "どのストーリーで遊びますか？";
 
 	public SelectStoryModel(SelectStoryState ssState) {
 		super();
@@ -37,30 +37,43 @@ public class SelectStoryModel implements KeyListner {
 			ssState.nextState();
 		}
 		if (keyInput.isKeyDown(Input.KEY_LEFT)) {
-			story--;
-			if(story < 0){
-				story = 5;
-			}
+			do{
+				story--;
+				if(story < 0){
+					story = 5;
+				}
+			}while(ssState.isClearStage[story]);
+			
 		} else if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
-			story++;
-			if(story > 5){
-				story = 0;
-			}
+			do{
+				story++;
+				if(story > 5){
+					story = 0;
+				}
+			}while(ssState.isClearStage[story]);
 		} else if (keyInput.isKeyDown(Input.KEY_UP)) {
-			story -= 3;
-			if(story < 0){
-				story += 6;
-			}
+			do{
+				story -= 3;
+				if(story < 0){
+					story += 6;
+				}
+			}while(ssState.isClearStage[story]);
+			
 		} else if (keyInput.isKeyDown(Input.KEY_DOWN)) {
-			story += 3;
-			if(story > 5){
-				story -= 6;
-			}
+			do{
+				story += 3;
+				if(story > 5){
+					story -= 6;
+				}
+			}while(ssState.isClearStage[story]);
+			
 		} else if (keyInput.isKeyDown(Input.KEY_Z)) {
 			FTSimulationGame.save.getNowStage().storyName = "0" + (story + 1) + "_Story";
 			FTSimulationGame.save.getNowStage().subStoryNum = "01";
 			FTSimulationGame.save.getNowStage().selectLogue = 0;
 			ssState.nextState();
 		}
+		
+		
 	}
 }
