@@ -52,7 +52,8 @@ public class SubInfoWindow implements Renderer{
 	private String terrainName;
 	private int avoidPoint;
 	private int defencePoint;
-	
+	private int itemPoint = 0;
+	private String range = "";
 
 	public SubInfoWindow(Field field) {
 		super();
@@ -60,7 +61,7 @@ public class SubInfoWindow implements Renderer{
 
 		//キャラ画像の部分は4パターンの歩行アニメーションを表示して64×64を埋める
 		IMAGEAnime = new Animation[4];
-		
+
 		objectPos = new HashMap<String, Point>();
 
 		//キャラ画像に用いるアニメーションの読み込み
@@ -78,12 +79,12 @@ public class SubInfoWindow implements Renderer{
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
 		g.drawImage(backGround, START_WIDTH, START_HEIGHT);
 		g.setFont(font);	//フォントのセット(これをやらないと文字描画されない)
-		
+
 		//ステージ名の描画
 		//TODO もしかしてstoryNameの取得はコンストラクタでよい？
 		String partName = field.getPartName();
@@ -187,6 +188,19 @@ public class SubInfoWindow implements Renderer{
 			itemName = "";
 			for(int i = 0 ; i < charaStatus.getItemList().size() ; i++){
 				if(charaStatus.getItemList().get(i) instanceof Weapon){
+					Weapon weapon = (Weapon)charaStatus.getItemList().get(i);
+					if(weapon.rangeType == -1){
+						range = "(無)";
+					}else if(weapon.rangeType == 0){
+						range = "(近)";
+					}else if(weapon.rangeType == 1){
+						range = "(遠)";
+					}else if(weapon.rangeType == 2){
+						range = "(遠近)";
+					}else{
+						range = "";
+					}
+					itemPoint = weapon.power;
 					weaponName = charaStatus.getItemList().get(i).name;
 					break;
 				}
@@ -198,12 +212,15 @@ public class SubInfoWindow implements Renderer{
 				}
 			}
 		}
-		g.drawString("武器 : " + weaponName,
+		g.drawString("武器:" + weaponName + range,
 				objectPos.get("WEAPON").x, objectPos.get("WEAPON").y);
-		g.drawString("アイテム : " + itemName,
+		g.drawString(""
+				+ "攻撃力:" + itemPoint,
+				objectPos.get("ATTACK_POWER").x, objectPos.get("ATTACK_POWER").y);
+		g.drawString("アイテム:" + itemName,
 				objectPos.get("ITEM").x, objectPos.get("ITEM").y);
-		
-		
+
+
 	}
 
 	//各オブジェクトの場所を設定
@@ -230,7 +247,6 @@ public class SubInfoWindow implements Renderer{
 			tempX = objectPos.get("LOSE_TERM").x;
 			tempY = objectPos.get("LOSE_TERM").y + CHAR_SIZE + LINE_INTERVAL;
 			objectPos.put("LOSE_STRING", new Point(tempX, tempY));	//ok
-			
 			//地形の画像
 			tempX = objectPos.get("LOSE_STRING").x;
 			tempY = objectPos.get("LOSE_STRING").y + (CHAR_SIZE * 2);
@@ -303,10 +319,13 @@ public class SubInfoWindow implements Renderer{
 			tempX = objectPos.get("CHARA_LUCK").x;
 			tempY = objectPos.get("CHARA_LUCK").y + CHAR_SIZE + LINE_INTERVAL;
 			objectPos.put("WEAPON", new Point(tempX, tempY));
-			//アイテム_武器の下
+			//攻撃力_武器の下
 			tempX = objectPos.get("WEAPON").x;
 			tempY = objectPos.get("WEAPON").y + CHAR_SIZE + LINE_INTERVAL;
+			objectPos.put("ATTACK_POWER", new Point(tempX, tempY));
+			//アイテム_武器の下
+			tempX = objectPos.get("ATTACK_POWER").x;
+			tempY = objectPos.get("ATTACK_POWER").y + CHAR_SIZE + LINE_INTERVAL;
 			objectPos.put("ITEM", new Point(tempX, tempY));
-			
 		}
 }
