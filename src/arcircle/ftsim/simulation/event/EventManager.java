@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import arcircle.ftsim.simulation.chara.Chara;
-import arcircle.ftsim.simulation.end.EndCondition;
 import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.simulation.talk.BattleTalkModel;
 import arcircle.ftsim.simulation.talk.BattleTalkView;
@@ -212,9 +211,9 @@ public class EventManager {
 										endConditionStrs[0] + ",", "");
 						Event event = loadEvent(eventStr);
 
-						if (endConditionStrs[0].equals(EndCondition.WIN)) {
+						if (endConditionStrs[0].equals(WIN)) {
 							winConditionArray.add(event);
-						} else if (endConditionStrs[0].equals(EndCondition.LOSE)) {
+						} else if (endConditionStrs[0].equals(LOSE)) {
 							loseConditionArray.add(event);
 						} else {
 							System.err.println("endConditoinFileError");
