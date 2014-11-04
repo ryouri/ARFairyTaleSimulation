@@ -17,6 +17,7 @@ import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.state.SimGameState;
 
 public class BattleTalkModel implements KeyListner {
+	
 	//フィールド////////////////////////////////////////////////////////////////////////////////////////////
 	private SimGameState sgState;
 
@@ -218,6 +219,8 @@ public class BattleTalkModel implements KeyListner {
         			tags[tagP++] = new BattleTextTag(strs[0], "./Stories/BGM/" + strs[1]);
         			System.out.println(strs[1]);
         		}
+        		
+        		
         		else{
         			for (int i = 0; i < line.length(); i++) {
         				char c = line.charAt(i);
