@@ -1,0 +1,8 @@
+PHASE
+WIN,＊＊＊と接触,TOUCH_CHARA,no1,zako,battleTalk01.txt
+LOSE,＊＊＊がやられる,CHARA_DIE,no1,none
+PHASEEND
+PHASE
+WIN,＊＊＊と接触,TOUCH_CHARA,no1,zako,battleTalk01.txt
+LOSE,＊＊＊がやられる,CHARA_DIE,boss,none
+PHASEEND
