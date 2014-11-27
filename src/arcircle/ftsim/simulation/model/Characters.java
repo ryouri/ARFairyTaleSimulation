@@ -131,7 +131,9 @@ public class Characters {
 			while ((charaLine = br.readLine()) != null) {
 				addCharacter(charaLine);
 			}
-		} catch (NumberFormatException | IOException e1) {
+		} catch (NumberFormatException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 
