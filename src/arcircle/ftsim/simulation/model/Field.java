@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.newdawn.slick.Animation;
@@ -24,6 +25,7 @@ import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.save.NowStage;
 import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.event.Event;
 import arcircle.ftsim.simulation.event.EventManager;
 import arcircle.ftsim.simulation.field.Terrain;
 import arcircle.ftsim.simulation.field.TerrainManager;
@@ -497,5 +499,39 @@ public class Field implements KeyListner, Renderer {
 
 	public Chara getXYChara(int x, int y) {
 		return characters.getXYChara(x, y);
+	}
+
+	/**
+	 * 勝利条件を渡すメソッド
+	 * @return 勝利条件のStringが入った配列を返す， 勝利条件がない場合は，nullを返す
+	 */
+	public ArrayList<String> getWinConditionString() {
+		ArrayList<String> winStringArray = new ArrayList<String>();
+
+		if (eventManager.getWinConditionEachPhaseArray().isEmpty()) {
+			return null;
+		}
+
+		for (Event event : eventManager.getWinConditionEachPhaseArray().get(0)) {
+			winStringArray.add(event.eventID);
+		}
+		return winStringArray;
+	}
+
+	/**
+	 * 敗北条件を渡すメソッド
+	 * @return 敗北条件のStringが入った配列を返す， 敗北条件がない場合は，nullを返す
+	 */
+	public ArrayList<String> getLoseConditionString() {
+		ArrayList<String> loseStringArray = new ArrayList<String>();
+
+		if (eventManager.getLoseConditionEachPhaseArray().isEmpty()) {
+			return null;
+		}
+
+		for (Event event : eventManager.getLoseConditionEachPhaseArray().get(0)) {
+			loseStringArray.add(event.eventID);
+		}
+		return loseStringArray;
 	}
 }

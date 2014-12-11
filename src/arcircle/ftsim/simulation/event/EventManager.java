@@ -24,15 +24,23 @@ public class EventManager {
 	/**
 	 * フェイズごとの勝利条件が入っている。
 	 */
-	ArrayList<ArrayList<Event>> winConditionEachPhaseArray;
+	private ArrayList<ArrayList<Event>> winConditionEachPhaseArray;
 	/**
 	 * フェイズごとの敗北条件が入っている。
 	 */
-	ArrayList<ArrayList<Event>> loseConditionEachPhaseArray;
+	private ArrayList<ArrayList<Event>> loseConditionEachPhaseArray;
 
 	public int phaseNow;
 
 	Field field;
+
+	public ArrayList<ArrayList<Event>> getWinConditionEachPhaseArray() {
+		return winConditionEachPhaseArray;
+	}
+
+	public ArrayList<ArrayList<Event>> getLoseConditionEachPhaseArray() {
+		return loseConditionEachPhaseArray;
+	}
 
 	public EventManager(Field field) {
 		eventArray = new ArrayList<ArrayList<Event>>();
