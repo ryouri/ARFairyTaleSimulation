@@ -7,9 +7,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import arcircle.ftsim.simulation.algorithm.range.CalculateMoveAttackRange;
-import arcircle.ftsim.simulation.algorithm.root.Astar;
-import arcircle.ftsim.simulation.algorithm.root.Map;
-import arcircle.ftsim.simulation.algorithm.root.Node;
+import arcircle.ftsim.simulation.algorithm.route.Astar;
+import arcircle.ftsim.simulation.algorithm.route.Map;
+import arcircle.ftsim.simulation.algorithm.route.Node;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Field;
@@ -54,8 +54,8 @@ public class SimpleAI extends AI {
 		// 攻撃可能キャラがいないため，移動のみとする
 		if (attackCharaArray.size() == 0) {
 			//TODO:攻撃範囲内にキャラがいなければとりあえず待機
-			chara.setStand(true);
-			//serachMoveToOneChara(field, characters, moveRange);
+			//chara.setStand(true);
+			serachMoveToOneChara(field, characters, moveRange);
 		} else {
 			Collections.shuffle(attackCharaArray);
 			AttackCharaData attackChara = attackCharaArray.get(0);
@@ -91,6 +91,7 @@ public class SimpleAI extends AI {
 
 	private void moveToOneChara(Chara toChara, Field field,
 			Characters characters, boolean[][] moveRange) {
+		System.out.println("SelectChara:" + toChara.id + " x:" + toChara.x + " y:" + toChara.y);
 		Map map = new Map(field.createMoveCostArray(chara.x, chara.y));
 		Astar aStar = new Astar(map);
 

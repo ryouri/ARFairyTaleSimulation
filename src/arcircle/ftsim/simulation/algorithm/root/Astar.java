@@ -3,6 +3,8 @@ package arcircle.ftsim.simulation.algorithm.root;
 import java.awt.Point;
 import java.util.LinkedList;
 
+import arcircle.ftsim.simulation.algorithm.route.Node;
+
 /*
  * Created on 2005/04/23
  *
