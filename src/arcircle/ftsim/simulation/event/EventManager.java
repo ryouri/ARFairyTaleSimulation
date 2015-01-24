@@ -91,13 +91,21 @@ public class EventManager {
 
 	private void startEvent(Event processEvent
 			, ArrayList<Event> removeEventArray) {
+		startBattleTalk(processEvent);
+		removeEventArray.add(processEvent);
+	}
+
+	/**
+	 * TODO: ここでTaskを生成して，そこにTalkTaskを入れる
+	 * @param processEvent
+	 */
+	private void startBattleTalk(Event processEvent) {
 		SimGameModel sgModel = field.getSgModel();
 		BattleTalkModel btModel =
 				new BattleTalkModel(sgModel, processEvent.eventFileName);
 		BattleTalkView btView = new BattleTalkView(btModel, sgModel);
 		sgModel.pushKeyInputStack(btModel);
 		sgModel.addRendererArray(btView);
-		removeEventArray.add(processEvent);
 	}
 
 	public void checkEvent(Event checkEvent) {
@@ -120,22 +128,27 @@ public class EventManager {
 	public void checkEndConditionEvent(Event checkEvent) {
 		for (Event event : winConditionEachPhaseArray.get(phaseNow)) {
 			if(eventEquals(event, checkEvent)) {
-				SimGameModel sgModel = field.getSgModel();
-				BattleTalkModel btModel =
-						new BattleTalkModel(sgModel, event.eventFileName);
-				BattleTalkView btView = new BattleTalkView(btModel, sgModel);
-				sgModel.pushKeyInputStack(btModel);
-				sgModel.addRendererArray(btView);
+				startBattleTalk(event);
 				phaseNow++;
-				//TODO:勝利の処理！
+				//TODO:勝利の処理！ phaseNowが配列の閾値以上なら終了する
 				if (phaseNow >= winConditionEachPhaseArray.size()) {
 					System.out.println("勝利");
 					System.exit(0);
+					return;
 				}
 			}
 		}
-		for (Event event : winConditionEachPhaseArray.get(phaseNow)) {
-			//TODO:敗北の処理！
+		for (Event event : loseConditionEachPhaseArray.get(phaseNow)) {
+			if(eventEquals(event, checkEvent)) {
+				startBattleTalk(event);
+				phaseNow++;
+				//TODO:敗北の処理！
+				if (phaseNow >= winConditionEachPhaseArray.size()) {
+					System.out.println("勝利");
+					System.exit(0);
+					return;
+				}
+			}
 		}
 	}
 
