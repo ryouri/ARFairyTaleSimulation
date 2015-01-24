@@ -44,6 +44,7 @@ public class LoadCharacter {
 	public static String readyFile = "ready.png";
 	public static String walkFile = "walk.png";
 	public static String attackFile = "attack.png";
+	public static String faceStandardFile = "faceStandard.png";
 	/**
 	 * キャラクターのマップチップを読み込む
 	 * @param charaFolderPath キャラクターのフォルダパス
@@ -66,6 +67,10 @@ public class LoadCharacter {
 							new Image(charaFolderPath + attackFile),
 							Field.MAP_CHIP_SIZE,
 							Field.MAP_CHIP_SIZE));
+
+			//キャラの顔画像を読み込む
+			characters.characterFaceStandardImageMap.put(charaName,
+					new Image(charaFolderPath + faceStandardFile).getScaledCopy(1.25f));
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}

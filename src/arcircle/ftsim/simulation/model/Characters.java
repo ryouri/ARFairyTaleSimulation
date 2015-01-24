@@ -19,7 +19,6 @@ import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.ai.SimpleAI;
 import arcircle.ftsim.simulation.item.Item;
-import arcircle.ftsim.simulation.model.task.TaskManager;
 import arcircle.ftsim.simulation.talk.BattleTalkModel;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
@@ -52,6 +51,8 @@ public class Characters {
 
 	public HashMap<String, Chara> characterData;
 
+	public HashMap<String, Image> characterFaceStandardImageMap;
+
 	public ArrayList<Chara> characterArray;
 
 	HashMap<String, Item> itemMap;
@@ -60,7 +61,7 @@ public class Characters {
 
 	private Image hpBar;
 
-	private TaskManager taskManager;
+//	private TaskManager taskManager;
 
 	public void checkStandEvent(Chara chara) {
 		field.eventManager.checkStandEvent(chara);
@@ -85,6 +86,8 @@ public class Characters {
 		this.cursorAnimeMap = new HashMap<String, Animation>();
 		this.selectAnimeMap = new HashMap<String, Animation>();
 
+		this.characterFaceStandardImageMap = new HashMap<String, Image>();
+
 		this.characterArray = new ArrayList<Chara>();
 
 		this.characterData = new HashMap<String, Chara>();
@@ -106,7 +109,7 @@ public class Characters {
 		LoadCharacter loadCharacter = new LoadCharacter(this);
 		loadCharacter.load();
 
-		this.taskManager = new TaskManager(field, this);
+//		this.taskManager = new TaskManager(field, this);
 	}
 
 	/**
@@ -223,10 +226,10 @@ public class Characters {
 					chara.pY + offsetY);;
 		}
 
-		if (taskManager.existTask()) {
-			taskManager.processRender(
-					g, offsetX, offsetY, firstTileX, lastTileX, firstTileY, lastTileY);
-		}
+//		if (taskManager.existTask()) {
+//			taskManager.processRender(
+//					g, offsetX, offsetY, firstTileX, lastTileX, firstTileY, lastTileY);
+//		}
 	}
 
 	public void update(int delta) {
@@ -238,9 +241,9 @@ public class Characters {
 			}
 		}
 
-		if (taskManager.existTask()) {
-			taskManager.processUpdate(delta);
-		}
+//		if (taskManager.existTask()) {
+//			taskManager.processUpdate(delta);
+//		}
 
 		if (field.getSgModel().getKeyInputStackByFirst() instanceof BattleTalkModel) {
 			return;
@@ -264,7 +267,7 @@ public class Characters {
 				}
 			}
 		} else if (field.getNowTurn() == Field.TURN_ENEMY) {
-			if (taskManager.existTask()) {
+			if (field.getTaskManager().existTask()) {
 				return;
 			}
 
@@ -298,15 +301,12 @@ public class Characters {
 
 
 	public void setCharaAttack(Chara chara, Chara damageChara) {
-		taskManager.addAttackTask(chara, damageChara);
-
-//		attackInfoArray.add(new AttackInfo(chara, damageChara));
-//		attackInfoArray.add(new AttackInfo(damageChara, chara));
-//		this.nowAttackIndex = 0;
+		field.setCharaAttack(chara, damageChara);
 	}
 
+
 	public void setCharaMove(Chara chara, Node moveNode) {
-		taskManager.addMoveTask(chara, moveNode);
+		field.setCharaMove(chara, moveNode);
 	}
 
 	public boolean isEnd() {

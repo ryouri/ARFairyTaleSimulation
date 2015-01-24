@@ -23,13 +23,18 @@ public class EventManager {
 
 	/**
 	 * フェイズごとの勝利条件が入っている。
+	 * phaseNowでフェイズの進行状況を管理
 	 */
 	private ArrayList<ArrayList<Event>> winConditionEachPhaseArray;
 	/**
 	 * フェイズごとの敗北条件が入っている。
+	 * phaseNowでフェイズの進行状況を管理
 	 */
 	private ArrayList<ArrayList<Event>> loseConditionEachPhaseArray;
 
+	/**
+	 * 今のフェイズの進行状況（intで表現）
+	 */
 	public int phaseNow;
 
 	Field field;
@@ -84,7 +89,7 @@ public class EventManager {
 		}
 	}
 
-	private void processEvent(Event processEvent
+	private void startEvent(Event processEvent
 			, ArrayList<Event> removeEventArray) {
 		SimGameModel sgModel = field.getSgModel();
 		BattleTalkModel btModel =
@@ -101,7 +106,7 @@ public class EventManager {
 
 		for (Event event : eventArray.get(eventType)) {
 			if(eventEquals(event, checkEvent)) {
-				processEvent(event, removeEventArray);
+				startEvent(event, removeEventArray);
 			}
 		}
 

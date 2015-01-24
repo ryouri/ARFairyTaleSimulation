@@ -30,6 +30,7 @@ import arcircle.ftsim.simulation.event.EventManager;
 import arcircle.ftsim.simulation.field.Terrain;
 import arcircle.ftsim.simulation.field.TerrainManager;
 import arcircle.ftsim.simulation.item.Item;
+import arcircle.ftsim.simulation.model.task.TaskManager;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class Field implements KeyListner, Renderer {
@@ -88,6 +89,12 @@ public class Field implements KeyListner, Renderer {
 
 	public EventManager eventManager;
 
+	private TaskManager taskManager;
+
+	public TaskManager getTaskManager() {
+		return taskManager;
+	}
+
 	public boolean isCursorVisible() {
 		return cursorVisible;
 	}
@@ -114,6 +121,8 @@ public class Field implements KeyListner, Renderer {
 		loadMapName(subStoryFolderPath + "partName.txt");
 		loadEvent(subStoryFolderPath + "event.txt");
 		loadEndCondition(subStoryFolderPath + "endCondition.txt");
+
+		this.taskManager = new TaskManager(this, characters);
 	}
 
 	private void loadEndCondition(String endConditionTxt) {
@@ -214,6 +223,11 @@ public class Field implements KeyListner, Renderer {
 			// カーソルを描く
 			renderCursor(g, offsetX, offsetY);
 		}
+
+		if (taskManager.existTask()) {
+			taskManager.processRender(
+					g, offsetX, offsetY, firstTileX, lastTileX, firstTileY, lastTileY);
+		}
 	}
 
 	private void renderMap(Graphics g, int offsetX, int offsetY,
@@ -239,6 +253,10 @@ public class Field implements KeyListner, Renderer {
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		cursorAnime.update(delta);
 		getCursor().update();
+
+		if (taskManager.existTask()) {
+			taskManager.processUpdate(delta);
+		}
 
 		characters.update(delta);
 
@@ -533,5 +551,13 @@ public class Field implements KeyListner, Renderer {
 			loseStringArray.add(event.eventID);
 		}
 		return loseStringArray;
+	}
+
+	public void setCharaAttack(Chara chara, Chara damageChara) {
+		taskManager.addAttackTask(chara, damageChara);
+	}
+
+	public void setCharaMove(Chara chara, Node moveNode) {
+		taskManager.addMoveTask(chara, moveNode);
 	}
 }
