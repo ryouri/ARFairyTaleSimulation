@@ -25,7 +25,6 @@ public class SelectStoryModel implements KeyListner {
 	public SelectStoryModel(SelectStoryState ssState) {
 		super();
 		this.ssState = ssState;
-		
 	}
 
 	@Override
