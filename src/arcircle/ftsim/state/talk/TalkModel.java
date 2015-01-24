@@ -41,8 +41,6 @@ public class TalkModel implements KeyListner {
     private String nowSubStoryName = "";	//
     private int nowLogue = 0;
 
-    
-
     HashMap<Integer,String> map = new HashMap<Integer,String>();
 
     private int curPosOfPage = 0;	//現在のページ内での文字表示位置
@@ -217,8 +215,11 @@ public class TalkModel implements KeyListner {
         		}else if(strs[0].equals("CHANGEBGM")){
         			tags[tagP++] = new TextTag(strs[0], "./Stories/BGM/" + strs[1]);
         			System.out.println(strs[1]);
-        		}
-        		else{
+        		}else if(strs[0].equals("CHANGEBACKGROUND")){
+        			/* 背景変更用タグの生成 */
+        			tags[tagP++] = new TextTag(strs[0], "./Stories/BackGround/" + strs[1]);
+        			System.out.println(strs[1]);
+        		}else{
         			for (int i = 0; i < line.length(); i++) {
         				char c = line.charAt(i);
         				if (c == '/') {  // 改行

@@ -21,27 +21,34 @@ import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.simulation.chara.Status;
 import arcircle.ftsim.state.TalkState;
 
+
+
 public class TalkView implements Renderer{
 
 	//フィールド////////////////////////////////////////////////////////////////////////////////////////
-	private TalkModel talkModel;
-	private TalkState talkState;
+	private TalkModel talkModel;	//トークモデル
+	private TalkState talkState;	//トークステート
 
-	private Image bgImg;	//背景画像
-	private Image leftCharaImg;	//左側(メイン)の立ち絵
-	private Image rightCharaImg;		//右側(サブ)の立ち絵
-	private Image msgBoxImg;	//メッセージウィンドウの画像
-	private Image playerImg;	//主人公の画像
-	private Image[] playerFaceImg = new Image[4];
-	private Image faceImg;	//話し手の顔画像
-	private Sound playingSE;	//
+	/** 各画像の格納器_背景, メッセージボックス, L.Chara, R.Chara, face */
+	private Image[] ImgStorage = new Image[5];
+	/** オブジェクトの描画位置,背景, メッセージボックス, L.Chara, R.Chara, face, speakerName, text */
+	private int[][] position = new int[7][2];
+	private final int BG = 0;	//背景
+	private final int MSG = 1;	//メッセージボックス
+	private final int LC = 2;	//L_Chara
+	private final int RC = 3;	//R_Chara
+	private final int FACE = 4;	//face
+	private final int NAME = 5;	//speakerName
+	private final int TEXT = 6;	//text
+	private final int X = 0;
+	private final int Y = 1;
+	private String speakerName;	//話し手の名前
+	private Sound playingSE;	//現在の効果音
 
-	private HashMap<String, Image> charasImg;
+	private Image nothingCharaImg;	//透明な画像
+
+	private HashMap<String, Image> charasImg;	//キャラナンバーとキャライメージのほ
 	private HashMap<String, String> charasName;
-	private Image nothingCharaImg;
-	private int charaPosX, charaLPosY, charaRPosY;	//描画するキャラの位置
-	private int msgBoxPosX, msgBoxPosY;	//メッセージ                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              w3e4rrrrrrウィンドウの位置
-	private int nameTextPosX, nameTextPosY, textBoxPosX, textBoxPosY;
 
     private static final int MAX_CHARS_PER_LINE = 32;	// 1行の最大文字数
     private static final int MAX_LINES_PER_PAGE = 5;	// 1ページに表示できる最大行数
@@ -50,8 +57,6 @@ public class TalkView implements Renderer{
     private static final String characterPath = "./Stories/Characters";	//Characterフォルダのパス
 
     private int playerGender = FTSimulationGame.save.getPlayer().gender;	//male = 0, female = 1
-    private String playerName = FTSimulationGame.save.getPlayer().name;
-    private String speakerName;
 
     // Fontに合わせて変えること
     private static final int FONT_WIDTH = 24;
@@ -65,265 +70,130 @@ public class TalkView implements Renderer{
 		this.talkModel = tModel;
 		this.talkState = tState;
 
-		File characterFile = new File(characterPath);
+		//全キャラの画像を読み込み
+		loadChara();
+
+		ImgStorage[LC] = nothingCharaImg;
+		ImgStorage[RC] = nothingCharaImg;
+		ImgStorage[FACE] = charasImg.get("001FaceStandard");
+
+		//メッセージボックスを描画する位置
+		position[MSG][X] = (FTSimulationGame.WIDTH / 2) - (ImgStorage[MSG].getWidth() / 2);
+		position[MSG][Y] = FTSimulationGame.HEIGHT - ImgStorage[MSG].getHeight();
+		//メッセージボックス内で話し手の名前を描画する位置
+		position[NAME][X] = position[MSG][X] + 30;
+		position[NAME][Y] = position[MSG][Y] + 30;
+		//メッセージボックス内で会話文を描画する位置
+		position[TEXT][X] = position[MSG][X] + 235;
+		position[TEXT][Y] = position[MSG][Y] + 45;
+		//顔画像の描画位置
+		position[FACE][X] = position[NAME][X] + 20;
+		position[FACE][Y] = position[NAME][Y] + 40;
+		//キャラクターの立ち絵を表示する位置
+		position[RC][X] = FTSimulationGame.WIDTH - ImgStorage[RC].getWidth();
+		position[LC][Y] = position[MSG][Y] - (ImgStorage[LC].getHeight() * 3 / 4);	//キャラ立ち絵は体の半分がメッセージボックス上に出る
+		position[RC][Y] = position[MSG][Y] - (ImgStorage[RC].getHeight() * 3 / 4);
+	}
+
+	private void loadChara(){
+
+		File characterFile = new File(characterPath);	//CharacterフォルダのFile
 		String[] charaName = characterFile.list();
 		this.charasImg = new HashMap<String, Image>();
 		this.charasName = new HashMap<String, String>();
 
-		//デバッグ用
-		for(int i = 0 ; i < charaName.length ; i++){
-			System.out.println(charaName[i]);
-		}
-
 		//各画像データの読み込み
 		try{
-			bgImg = new Image("./Image/backGround.png");	//背景画像の読み込み
-			msgBoxImg = new Image("./Image/ver1120.png");	//メッセージボックス画像の読み込み
+			ImgStorage[BG] = new Image("./Image/backGround.png");	//背景画像の読み込み
+			ImgStorage[MSG] = new Image("./Image/ver1120.png");	//メッセージボックス画像の読み込み
 			nothingCharaImg = new Image("./Image/Transparent.png");	//	キャラ非表示用に透明な画像を読み込み
-			//主人公イメージの読み込み
-			if(playerGender == Status.MALE){
-				playerImg = new Image(characterPath + "/playerMale/stand.png");
-				playerFaceImg[0] = (new Image(characterPath + "/playerMale/faceStandard.png")).getScaledCopy(1.5f);
-				playerFaceImg[1] = (new Image(characterPath + "/playerMale/faceLaugh.png")).getScaledCopy(1.5f);
-				playerFaceImg[2] = (new Image(characterPath + "/playerMale/faceAngry.png")).getScaledCopy(1.5f);
-				playerFaceImg[3] = (new Image(characterPath + "/playerMale/faceSuffer.png")).getScaledCopy(1.5f);
-			}else if(playerGender == Status.FEMALE){
-				playerImg = new Image(characterPath + "/playerFemale/stand.png");
-				playerFaceImg[0] = (new Image(characterPath + "/playerFemale/faceStandard.png")).getScaledCopy(1.5f);
-				playerFaceImg[1] = (new Image(characterPath + "/playerFemale/faceLaugh.png")).getScaledCopy(1.5f);
-				playerFaceImg[2] = (new Image(characterPath + "/playerFemale/faceAngry.png")).getScaledCopy(1.5f);
-				playerFaceImg[3] = (new Image(characterPath + "/playerFemale/faceSuffer.png")).getScaledCopy(1.5f);
-			}else{
-				System.out.println("error_TalkView__playerGender_incorrect");
-				playerImg = new Image(characterPath + "/playerMale/stand.png");
-				playerFaceImg[0] = (new Image(characterPath + "/playerMale/faceStandard.png")).getScaledCopy(1.5f);
-				playerFaceImg[1] = (new Image(characterPath + "/playerMale/faceLaugh.png")).getScaledCopy(1.5f);
-				playerFaceImg[2] = (new Image(characterPath + "/playerMale/faceAngry.png")).getScaledCopy(1.5f);
-				playerFaceImg[3] = (new Image(characterPath + "/playerMale/faceSuffer.png")).getScaledCopy(1.5f);
-			}
-
 			playingSE = new Sound("./Stories/SE/decision3.ogg");
 
 			//全キャラを読み込む
-			for(int i = 1 ; i < 9 ; i++){
-				String Num = "";
-				if(i > 0 && i < 10 ){
-					Num = "00" + i;
-				}else if (i >= 10 && i < 100){
-					Num = "0"+ i;
-				}else if (i >= 100 && i < 1000){
-					Num = "" + i;
+			for(int i = 0 ; i < charaName.length ; i++){
+				if(charaName[i].length() == 3){
+					charasImg.put(charaName[i] + "Stand", new Image(characterPath + "/" + charaName[i] + "/stand.png"));
+					if(new File(characterPath + "/" + charaName[i] + "/FaceStandard.png").exists()){
+						charasImg.put(charaName[i] + "FaceStandard", (new Image(characterPath + "/" + charaName[i] + "/faceStandard.png").getScaledCopy(1.5f)));
+						charasImg.put(charaName[i] + "FaceLaugh", (new Image(characterPath + "/" + charaName[i] + "/faceLaugh.png")).getScaledCopy(1.5f));
+						charasImg.put(charaName[i] + "FaceAngry", (new Image(characterPath + "/" + charaName[i] + "/faceAngry.png")).getScaledCopy(1.5f));
+						charasImg.put(charaName[i] + "FaceSuffer", (new Image(characterPath + "/" + charaName[i] + "/faceSuffer.png")).getScaledCopy(1.5f));
+					}else{
+						charasImg.put(charaName[i] + "FaceStandard", nothingCharaImg);
+						charasImg.put(charaName[i] + "FaceLaugh", nothingCharaImg);
+						charasImg.put(charaName[i] + "FaceAngry", nothingCharaImg);
+						charasImg.put(charaName[i] + "FaceSuffer", nothingCharaImg);
+					}
+					//各キャラの名前をparamater.txtから読み込み
+					File file = new File(characterPath + "/" + charaName[i] + "/parameter.txt");
+					BufferedReader br = new BufferedReader(new FileReader(file));
+					String line;
+					while ((line = br.readLine()) != null) {
+						// 空行を読み飛ばす
+						if (line.equals("")){
+							continue;
+							//コメントを読み飛ばす
+						}else if (line.startsWith("#")){
+							continue;
+						}
+						String[] strs = line.split(",");
+						if(!strs[0].equals("")){
+							charasName.put(charaName[i] + "Name", strs[0]);
+						}else{
+							System.out.println("error_TalkView__paramater.txt読み込み");
+						}
+						break;
+					}
+					br.close();  // ファイルを閉じる
 				}else{
-					System.out.println("キャラ数が多すぎます.");
+					/* 主人公ImageとNameの読み込み */
+					if(charaName[i].equals("playerMale") && playerGender == Status.MALE){
+						charasImg.put("playerStand", new Image(characterPath + "/" + charaName[i] + "/stand.png"));
+						charasImg.put("playerFaceStandard", (new Image(characterPath + "/" + charaName[i] + "/faceStandard.png").getScaledCopy(1.5f)));
+						charasImg.put("playerFaceLaugh", (new Image(characterPath + "/" + charaName[i] + "/faceLaugh.png")).getScaledCopy(1.5f));
+						charasImg.put("playerFaceAngry", (new Image(characterPath + "/" + charaName[i] + "/faceAngry.png")).getScaledCopy(1.5f));
+						charasImg.put("playerFaceSuffer", (new Image(characterPath + "/" + charaName[i] + "/faceSuffer.png")).getScaledCopy(1.5f));
+						charasName.put("playerName", FTSimulationGame.save.getPlayer().name);
+					}else if(charaName[i].equals("playerFemale") && playerGender == Status.FEMALE){
+						charasImg.put("playerStand", new Image(characterPath + "/" + charaName[i] + "/stand.png"));
+						charasImg.put("playerFaceStandard", (new Image(characterPath + "/" + charaName[i] + "/faceStandard.png").getScaledCopy(1.5f)));
+						charasImg.put("playerFaceLaugh", (new Image(characterPath + "/" + charaName[i] + "/faceLaugh.png")).getScaledCopy(1.5f));
+						charasImg.put("playerFaceAngry", (new Image(characterPath + "/" + charaName[i] + "/faceAngry.png")).getScaledCopy(1.5f));
+						charasImg.put("playerFaceSuffer", (new Image(characterPath + "/" + charaName[i] + "/faceSuffer.png")).getScaledCopy(1.5f));
+						charasName.put("playerName", FTSimulationGame.save.getPlayer().name);
+					}
 				}
-				charasImg.put(Num + "Stand", new Image(characterPath + "/" + Num + "/stand.png"));
-				charasImg.put(Num + "FaceStandard", (new Image(characterPath + "/" + Num + "/faceStandard.png").getScaledCopy(1.5f)));
-				charasImg.put(Num + "FaceLaugh", (new Image(characterPath + "/" + Num + "/faceLaugh.png")).getScaledCopy(1.5f));
-				charasImg.put(Num + "FaceAngryW", (new Image(characterPath + "/" + Num + "/faceAngry.png")).getScaledCopy(1.5f));
-				charasImg.put(Num + "FaceSuffer", (new Image(characterPath + "/" + Num + "/faceSuffer.png")).getScaledCopy(1.5f));
-
-				//各キャラの名前をparamater.txtから読み込み
-				File file = new File(characterPath + "/" + Num + "/parameter.txt");
-				BufferedReader br = new BufferedReader(new FileReader(file));
-	    		String line;
-	    		while ((line = br.readLine()) != null) {
-	    			// 空行を読み飛ばす
-	        		if (line.equals("")){
-	        			continue;
-	        		//コメントを読み飛ばす
-	        		}else if (line.startsWith("#")){
-	        			continue;
-	        		}
-
-	        		String[] strs = line.split(",");
-	        		if(!strs[0].equals("")){
-	        			charasName.put(Num + "Name", strs[0]);
-	        		}else{
-	        			System.out.println("error_TalkView__paramater.txt読み込み");
-	        		}
-	        		break;
-	    		}
-
-	    		br.close();  // ファイルを閉じる
 			}
-		}catch(SlickException e){
+			}catch(SlickException e){
 			e.printStackTrace();
 		}catch (FileNotFoundException ex) {
-	        ex.printStackTrace();
-	    }catch (IOException ex) {
-	        ex.printStackTrace();
-	    }
-
-		rightCharaImg = nothingCharaImg;
-		leftCharaImg = nothingCharaImg;
-		faceImg = charasImg.get("01FaceStandard");
-
-		//メッセージボックスを描画する位置
-		msgBoxPosX = (FTSimulationGame.WIDTH / 2) - (msgBoxImg.getWidth() / 2);
-		msgBoxPosY = FTSimulationGame.HEIGHT - msgBoxImg.getHeight();
-		//メッセージボックス内で話し手の名前を描画する位置
-		nameTextPosX = msgBoxPosX + 30;
-		nameTextPosY = msgBoxPosY + 30;
-		//メッセージボックス内で会話文を描画する位置
-		textBoxPosX = msgBoxPosX + 235;
-		textBoxPosY = msgBoxPosY + 45;
-		//キャラクターの立ち絵を表示する位置
-		charaPosX = FTSimulationGame.WIDTH - rightCharaImg.getWidth();
-		charaLPosY = msgBoxPosY - (leftCharaImg.getHeight() * 3 / 4);	//キャラ立ち絵は体の半分がメッセージボックス上に出る
-		charaRPosY = msgBoxPosY - (rightCharaImg.getHeight() * 3 / 4);
+			ex.printStackTrace();
+		}catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
 	//レンダー---------------------------------------------------------------------------------------
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
-		g.drawImage(bgImg, 0, 0);	//背景画像の描画
+		g.drawImage(ImgStorage[BG], 0, 0);	//背景画像の描画
 
 		TextTag curTag = talkModel.getCurTag();	//現在のタグを取得
+		update(curTag);	//各キャラの配置などのデータを更新
+		draw(g, curTag);	//updateした情報で画面に描画
+	}
 
-		//キャラ替え
-		if(curTag.getTagName().equals("SPEAK")){
-			//左配置のキャラを設定
-			if(curTag.getLeftCharaName().equals("@")){	//キャラなしの場合
-				leftCharaImg = nothingCharaImg;
-			}else if(curTag.getLeftCharaName().equals("*")){	//主人公の場合
-				leftCharaImg = playerImg.getFlippedCopy(true, false);
-			}else{
-				leftCharaImg = charasImg.get(curTag.getLeftCharaName() + "Stand").getFlippedCopy(true, false);
-			}
-
-			//右配置のキャラを設定
-			if(curTag.getRightCharaName().equals("@")){	//キャラなしの場合
-				rightCharaImg = nothingCharaImg;
-			}else if(curTag.getRightCharaName().equals("*")){	//主人公の場合
-				rightCharaImg = playerImg;
-			}else{
-				rightCharaImg = charasImg.get(curTag.getRightCharaName() + "Stand");
-			}
-
-			charaPosX = FTSimulationGame.WIDTH - rightCharaImg.getWidth();
-			charaLPosY = msgBoxPosY - (leftCharaImg.getHeight() * 3 / 4);	//キャラ立ち絵は体の半分がメッセージボックス上に出る
-			charaRPosY = msgBoxPosY - (rightCharaImg.getHeight() * 3 / 4);
-
-			//顔のキャラを設定
-			if(curTag.isWitchSpeaker()){	//左にいるキャラが話し手
-				if(curTag.getLeftCharaName().equals("@")){	//キャラなしの場合
-					speakerName = "";
-					faceImg = nothingCharaImg;
-				}else if(curTag.getLeftCharaName().equals("*")){	//主人公の場合
-					speakerName = playerName;
-					switch(curTag.getExpression()){
-						case 0:
-							faceImg = playerFaceImg[0];
-							break;
-						case 1:
-							faceImg = playerFaceImg[1];
-							break;
-						case 2:
-							faceImg = playerFaceImg[2];
-							break;
-						case 3:
-							faceImg = playerFaceImg[3];
-							break;
-						default:
-							System.out.println("error_TalkView__curTagExpression");
-							faceImg = playerFaceImg[0];
-							break;
-					}
-				}else{	//その他のキャラの場合
-					speakerName = charasName.get(curTag.getLeftCharaName() + "Name");
-					switch(curTag.getExpression()){
-						case 0:
-							faceImg = charasImg.get(curTag.getLeftCharaName() + "FaceStandard");
-							break;
-						case 1:
-							faceImg = charasImg.get(curTag.getLeftCharaName() + "FaceLaugh");
-							break;
-						case 2:
-							faceImg = charasImg.get(curTag.getLeftCharaName() + "FaceAngryW");
-							break;
-						case 3:
-							faceImg = charasImg.get(curTag.getLeftCharaName() + "FaceSuffer");
-							break;
-						default:
-							System.out.println("error_TalkView__curTagExpression");
-							faceImg = charasImg.get(curTag.getLeftCharaName() + "FaceStandard");
-							break;
-					}
-				}
-			}else{	//右にいるキャラが話し手
-				if(curTag.getRightCharaName().equals("@")){	//キャラなしの場合
-					speakerName = "";
-					faceImg = nothingCharaImg;
-				}else if(curTag.getRightCharaName().equals("*")){	//主人公の場合
-					speakerName = playerName;
-					switch(curTag.getExpression()){
-						case 0:
-							faceImg = playerFaceImg[0];
-							break;
-						case 1:
-							faceImg = playerFaceImg[1];
-							break;
-						case 2:
-							faceImg = playerFaceImg[2];
-							break;
-						case 3:
-							faceImg = playerFaceImg[3];
-							break;
-						default:
-							System.out.println("error_TalkView__curTagExpression");
-							faceImg = playerFaceImg[0];
-							break;
-					}
-				}else{	//その他のキャラの場合
-					speakerName = charasName.get(curTag.getRightCharaName() + "Name");
-					switch(curTag.getExpression()){
-						case 0:
-							faceImg = charasImg.get(curTag.getRightCharaName() + "FaceStandard");
-							break;
-						case 1:
-							faceImg = charasImg.get(curTag.getRightCharaName() + "FaceLaugh");
-							break;
-						case 2:
-							faceImg = charasImg.get(curTag.getRightCharaName() + "FaceAngryW");
-							break;
-						case 3:
-							faceImg = charasImg.get(curTag.getRightCharaName() + "FaceSuffer");
-							break;
-						default:
-							System.out.println("error_TalkView__curTagExpression");
-							faceImg = charasImg.get(curTag.getRightCharaName() + "FaceStandard");
-							break;
-					}
-				}
-			}
-			
-		}else if(curTag.getTagName().equals("CHANGEBGM")){
-			talkState.changeBGM(curTag.getBgmFilePath());
-			talkModel.nextTalk();
-		}
-
-		//左キャラの描画
-		if(curTag.isLeftBright()){
-			g.drawImage(leftCharaImg, 0, charaLPosY);	//左に書くキャラの描画
-		}else{
-			g.drawImage(leftCharaImg, 0, charaLPosY, filterColor);	//左に書くキャラを半透明で描画
-		}
-
-		//右キャラの描画
-		if(curTag.isRightBright()){
-			g.drawImage(rightCharaImg, charaPosX, charaRPosY);	//右に書くキャラの描画
-		}else{
-			g.drawImage(rightCharaImg, charaPosX, charaRPosY, filterColor);	//右に書くキャラを半透明で描画
-		}
-
-		g.drawImage(msgBoxImg, msgBoxPosX, msgBoxPosY);	//メッセージボックスの描画
-		g.drawImage(faceImg, nameTextPosX+20, nameTextPosY+40);	//顔画像の描画
+	/** render内で呼ばれ, キャラやメッセージの描画を行う */
+	private void draw(Graphics g, TextTag curTag){
+		drawChara(g, curTag);	//左右のキャラの描画
+		g.drawImage(ImgStorage[MSG], position[MSG][X], position[MSG][Y]);	//メッセージボックスの描画
+		g.drawImage(ImgStorage[FACE], position[FACE][X], position[FACE][Y]);	//顔画像の描画
 
 		g.setColor(Color.white); // メッセージボックスに描く文字の色は白
 		g.setFont(talkState.getFont()); // フォントを設定
 
 		//スピーカーネームの描画
-		g.drawString(speakerName, nameTextPosX, nameTextPosY);
+		g.drawString(speakerName, position[NAME][X], position[NAME][Y]);
 
 		char[] curPosText = talkModel.getcurText();
 		// 現在表示しているページのcurPosまで表示
@@ -333,25 +203,136 @@ public class TalkView implements Renderer{
 
 			//効果音を鳴らす
 			if(i == (talkModel.getCurPosOfPage()-1) && c == '&' && !playingSE.playing()){
-//				System.out.println("ijwhf" + (talkModel.getCurPosOfPage()-1));
 				playingSE = curTag.getNextSE();
-            	playingSE.play();
+				playingSE.play();
 			}
-            if (c == '/' || c == '%' || c == '&' || c == '\u0000'){
-            	continue;  // コントロール文字は表示しない
-            }
+			if (c == '/' || c == '%' || c == '&' || c == '\u0000'){
+				continue;  // コントロール文字は表示しない
+			}
 
-            int dx = textBoxPosX + FONT_WIDTH * (i % MAX_CHARS_PER_LINE);
-            int dy = textBoxPosY + FONT_HEIGHT * (i / MAX_CHARS_PER_LINE);
+			int dx = position[TEXT][X] + FONT_WIDTH * (i % MAX_CHARS_PER_LINE);
+			int dy = position[TEXT][Y] + FONT_HEIGHT * (i / MAX_CHARS_PER_LINE);
 
-            g.drawString(c + "", dx, dy);
-        }
+			g.drawString(c + "", dx, dy);
+		}
 
-        //最後のページでない場合は▼を表示する
-        if (talkModel.isNextPageFlag()) {
-            int dx = textBoxPosX + ((MAX_CHARS_PER_LINE - 2) * FONT_WIDTH);
-            int dy = textBoxPosY + (MAX_LINES_PER_PAGE * FONT_HEIGHT);
-            g.drawString("次へ", dx, dy);
-        }
+		//最後のページでない場合は▼を表示する
+		if (talkModel.isNextPageFlag()) {
+			int dx = position[TEXT][X] + ((MAX_CHARS_PER_LINE - 2) * FONT_WIDTH);
+			int dy = position[TEXT][Y] + (MAX_LINES_PER_PAGE * FONT_HEIGHT);
+			g.drawString("次へ", dx, dy);
+		}
+	}
+
+	/**drawで呼ばれ, 左右のキャラを描画する*/
+	private void drawChara(Graphics g, TextTag curTag){
+		//左キャラの描画
+		if(curTag.isLeftBright()){
+			g.drawImage(ImgStorage[LC], 0, position[LC][Y]);	//左に書くキャラの描画
+		}else{
+			g.drawImage(ImgStorage[LC], 0, position[LC][Y], filterColor);	//左に書くキャラを半透明で描画
+		}
+
+		//右キャラの描画
+		if(curTag.isRightBright()){
+			g.drawImage(ImgStorage[RC], position[RC][X], position[RC][Y]);	//右に書くキャラの描画
+		}else{
+			g.drawImage(ImgStorage[RC], position[RC][X], position[RC][Y], filterColor);	//右に書くキャラを半透明で描画
+		}
+	}
+
+	/** render内で呼ばれ, 各配置に描くImageなどを更新する */
+	private void update(TextTag curTag){
+		//キャラ替え
+		if(curTag.getTagName().equals("SPEAK")){
+			//キャラの画像をアップデート
+			updateChara(curTag);
+			updateFace(curTag);
+			position[RC][X] = FTSimulationGame.WIDTH - ImgStorage[RC].getWidth();
+			position[LC][Y] = position[MSG][Y] - (ImgStorage[LC].getHeight() * 3 / 4);	//キャラ立ち絵は体の半分がメッセージボックス上に出る
+			position[RC][Y] = position[MSG][Y] - (ImgStorage[RC].getHeight() * 3 / 4);
+			if(ImgStorage[FACE].equals(nothingCharaImg)){
+				position[TEXT][X] = position[MSG][X] + 100;
+			}else{
+				position[TEXT][X] = position[MSG][X] + 235;
+			}
+		}else if(curTag.getTagName().equals("CHANGEBGM")){
+			talkState.changeBGM(curTag.getFilePath());
+			talkModel.nextTalk();
+		}else if(curTag.getTagName().equals("CHANGEBACKGROUND")){
+			try {
+				ImgStorage[BG] = new Image(curTag.getFilePath());
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
+			talkModel.nextTalk();
+		}
+	}
+
+	/**updateから呼ばれ, 左右に配置するキャライメージを更新*/
+	private void updateChara(TextTag curTag){
+		//左配置のキャラを設定
+		if(curTag.getLeftCharaName().equals("@")){	//キャラなしの場合
+			ImgStorage[LC] = nothingCharaImg;
+		}else if(curTag.getLeftCharaName().equals("*")){	//主人公の場合
+			ImgStorage[LC] = charasImg.get("playerStand").getFlippedCopy(true, false);
+		}else{
+			ImgStorage[LC] = charasImg.get(curTag.getLeftCharaName() + "Stand").getFlippedCopy(true, false);
+		}
+		//右配置のキャラを設定
+		if(curTag.getRightCharaName().equals("@")){	//キャラなしの場合
+			ImgStorage[RC] = nothingCharaImg;
+		}else if(curTag.getRightCharaName().equals("*")){	//主人公の場合
+			ImgStorage[RC] = charasImg.get("playerStand");
+		}else{
+			ImgStorage[RC] = charasImg.get(curTag.getRightCharaName() + "Stand");
+		}
+	}
+
+	/** updateから呼ばれ, 話し手の顔画像と名前の更新 */
+	private void updateFace(TextTag curTag){
+		//顔のキャラを設定
+		if(curTag.isWitchSpeaker()){	//左にいるキャラが話し手
+			if(curTag.getLeftCharaName().equals("@")){	//キャラなしの場合
+				speakerName = "";
+				ImgStorage[FACE] = nothingCharaImg;
+			}else if(curTag.getLeftCharaName().equals("*")){	//主人公の場合
+				updateExpression(curTag.getExpression(), "player");
+			}else{	//その他のキャラの場合
+				updateExpression(curTag.getExpression(), curTag.getLeftCharaName());
+			}
+		}else{	//右にいるキャラが話し手
+			if(curTag.getRightCharaName().equals("@")){	//キャラなしの場合
+				speakerName = "";
+				ImgStorage[FACE] = nothingCharaImg;
+			}else if(curTag.getRightCharaName().equals("*")){	//主人公の場合
+				updateExpression(curTag.getExpression(), "player");
+			}else{	//その他のキャラの場合
+				updateExpression(curTag.getExpression(), curTag.getRightCharaName());
+			}
+		}
+	}
+
+	/** updateFaceから呼ばれ, 表情による場合分けして更新 */
+	private void updateExpression(int expression, String charaName){
+		speakerName = charasName.get(charaName + "Name");
+		switch(expression){
+		case 0:
+			ImgStorage[FACE] = charasImg.get(charaName + "FaceStandard");
+			break;
+		case 1:
+			ImgStorage[FACE] = charasImg.get(charaName + "FaceLaugh");
+			break;
+		case 2:
+			ImgStorage[FACE] = charasImg.get(charaName + "FaceAngry");
+			break;
+		case 3:
+			ImgStorage[FACE] = charasImg.get(charaName + "FaceSuffer");
+			break;
+		default:
+			System.out.println("error_TalkView__curTagExpression");
+			ImgStorage[FACE] = charasImg.get(charaName + "FaceStandard");
+			break;
+		}
 	}
 }

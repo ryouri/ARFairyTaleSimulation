@@ -14,7 +14,7 @@ public class TextTag {
 	private boolean rightBright;	//右のキャラを明るくするかどうか
 	private boolean witchSpeaker;	//true = 左が話し手, false = 右が話し手
 	private int expression;
-	private String bgmFilePath;
+	private String filePath;
 	/*expression =	0 : 普通の表情 faceStandard
 	 * 				1 : 笑った表情 faceLaugh
 	 * 				2 : 怒った表情 faceAngry
@@ -22,7 +22,7 @@ public class TextTag {
 	 */
 	private char[] text;	//会話文本体
 	//private String[] choice;
-	
+
 	private ArrayList<Sound> seArray = new ArrayList<Sound>();
 	private int sePointer = 0;
 	private String sePath = "./Stories/SE/";
@@ -53,16 +53,16 @@ public class TextTag {
 	}
 	public void setSE(String seNum){
 		try {
-			seArray.add(new Sound(sePath + seNum + ".ogg")); 
+			seArray.add(new Sound(sePath + seNum + ".ogg"));
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 	}
-	public String getBgmFilePath() {
-		return bgmFilePath;
+	public String getFilePath() {
+		return filePath;
 	}
-	public void setBgmFilePath(String bgmFilePath) {
-		this.bgmFilePath = bgmFilePath;
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 
 	//SPEAK用コンストラクタ/////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ public class TextTag {
 		this.text = str.clone();
 		sePointer = 0;
 	}
-	
+
 	//SPEAK用コンストラクタ2(テキストはあとでセットする)/////////////////////////////////////////////////////////////////////////////////
 	public TextTag(String tagName, String leftCharaName, String rightCharaName, String bright, int express){
 		this.tagName = tagName;
@@ -85,21 +85,24 @@ public class TextTag {
 		this.expression = express;
 		sePointer = 0;
 	}
-	//CHANGEBGMコンストラクタ
-	public TextTag(String tagName, String bgmFilePath){
+	//CHANGE用コンストラクタ
+	//tagName_BGM:CHANGEBGM, BackGround:CHANGEBACKGROUND
+	public TextTag(String tagName, String filePath){
 		this.tagName = tagName;
 		//CHANGEBGMタグでは何も表示しない
-		this.leftCharaName = "@";	
+		this.leftCharaName = "@";
 		this.rightCharaName = "@";
 		brightEvaluation("NR");
 		this.expression = 0;
 		sePointer = 0;
 		//テキスト文の初期化して空白だけ入れとく
-		this.text = new char[1];
-		text[0] = ' ';
-		this.setBgmFilePath(bgmFilePath);
+		this.text = new char[100];
+		for(int i =0 ; i < text.length ; i++){
+			text[i] = ' ';
+		}
+		this.filePath = filePath;
 	}
-	
+
 	private void brightEvaluation(String bright){
 		if(bright.equals("L")){			//左が話し手, 左明るい, 右暗い
 			this.leftBright = true;
