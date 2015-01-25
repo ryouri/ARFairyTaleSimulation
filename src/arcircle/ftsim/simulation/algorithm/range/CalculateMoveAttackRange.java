@@ -92,7 +92,22 @@ public class CalculateMoveAttackRange {
 		}
 
 		setMoveRange();
+		alreadyCharaNotStand();
+
 		return moveRange;
+	}
+
+	/**
+	 * キャラが存在している場所は待機不可
+	 */
+	private void alreadyCharaNotStand() {
+		for (Chara targetChara : field.getCharacters().characterArray) {
+			//同じ所属のキャラなら待機不可能とする
+			if (targetChara.getCamp() == chara.getCamp()
+					&& (targetChara.x != chara.x || targetChara.y != chara.y)) {
+				moveRange[targetChara.y][targetChara.x] = false;
+			}
+		}
 	}
 
 	private void search(Node searchNode) {

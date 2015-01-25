@@ -465,14 +465,36 @@ public class Field implements KeyListner, Renderer {
 	public int[][] createMoveCostArray(int charaX, int charaY) {
 		int [][] moveCostArray = new int[moveCostMap.length][moveCostMap[0].length];
 
+		//Mapのコストを格納する
+		//TODO: 地形のコストを格納するように変更が必要
 		for (int row = 0; row < moveCostArray.length; row++) {
 			for (int col = 0 ; col < moveCostArray[0].length; col++) {
 				moveCostArray[row][col] = moveCostMap[row][col];
 			}
 		}
 
+		Chara moveChara = null;
+		//移動するキャラを取得する
 		for (Chara chara : characters.characterArray) {
 			if (charaX == chara.x && charaY == chara.y) {
+				moveChara = chara;
+				break;
+			}
+		}
+
+		if (moveChara == null) {
+			//エラー！！！
+			System.exit(1);
+		}
+
+		//今は同じ所属(Camp)のキャラなら通過できるようにする
+		//TODO: Friendは友軍のキャラを通過できるようにしたいなら，処理を変えよう
+		for (Chara chara : characters.characterArray) {
+			if (charaX == chara.x && charaY == chara.y) {
+				continue;
+			}
+			//同じ所属のキャラなら通過可能とする
+			if (moveChara.getCamp() == chara.getCamp()) {
 				continue;
 			}
 			moveCostArray[chara.y][chara.x] = -1;
