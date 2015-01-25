@@ -340,4 +340,11 @@ public class Characters {
 		}
 		return null;
 	}
+
+	public Chara getAnyChara() {
+		for (Chara chara : characterArray) {
+			return chara;
+		}
+		return null;
+	}
 }
