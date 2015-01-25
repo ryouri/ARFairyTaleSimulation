@@ -1,20 +1,9 @@
-package arcircle.ftsim.simulation.algorithm.root;
+package arcircle.ftsim.simulation.algorithm.route;
 
 import java.awt.Point;
 import java.util.LinkedList;
 
-import arcircle.ftsim.simulation.algorithm.route.Node;
 
-/*
- * Created on 2005/04/23
- *
- */
-
-/**
- * A*クラス
- * 
- * @author mori
- */
 public class Astar {
     // オープンリスト
     private PriorityList openList;
@@ -32,7 +21,7 @@ public class Astar {
 
     /**
      * A*で求めたスタートからゴールまでのパスを返す
-     * 
+     *
      * @param startPos スタート地点
      * @param goalPos ゴール地点
      * @return A*で求めたパス
@@ -42,6 +31,7 @@ public class Astar {
         // スタートノードとゴールノードを作成
         Node startNode = new Node(startPos);
         Node goalNode = new Node(goalPos);
+        System.out.println("start:"+ startPos.x + "," + startPos.y + ", goal:" + goalPos.x + "," + goalPos.y);
 
         // スタートノードを設定
         startNode.costFromStart = 0;
@@ -53,6 +43,7 @@ public class Astar {
 
         // オープンリストが空になるまでまわす
         while (!openList.isEmpty()) {
+
             // openListはコストが小さい順に並んでいるため
             // 最小コストノードは一番目にある
             // そのノードを取り出す
@@ -64,6 +55,7 @@ public class Astar {
                 // ゴールノードからパスを生成
                 // goalNodeはコストなどが設定されてないので
                 // 引数としてcurNodeを渡すところに注意
+            	System.out.println("Correct!!");
                 return constructPath(curNode);
             } else { // 一致してない場合
                 // 現在のノードをクローズドリストに移す
@@ -76,28 +68,51 @@ public class Astar {
                     // 条件検査用情報を取得
                     // オープンリストに含まれているか？
                     boolean isOpen = openList.contains(neighborNode);
+
                     // クローズドリストに含まれているか？
                     boolean isClosed = closedList.contains(neighborNode);
                     // 障害物でないか？
                     boolean isHit = map.isHit(neighborNode.pos.x,
                             neighborNode.pos.y);
 
-                    if (!isOpen && !isClosed && !isHit) {
-                        // オープンリストに移してコストを計算する
-                        // スタートからのコスト（costFromStart）は親のコスト＋地形コスト
-                        neighborNode.costFromStart = curNode.costFromStart
-                                + map.getCost(neighborNode.pos);
-                        // ヒューリスティックコスト
-                        neighborNode.heuristicCostToGoal = neighborNode
-                                .getHeuristicCost(goalNode);
-                        // 親ノード
-                        neighborNode.parentNode = curNode;
+                    if (isHit){
+                    	continue;
+                    }
+
+                    // 隣接ノードのコストの計算
+                    neighborNode.costFromStart = curNode.costFromStart + map.getCost(neighborNode.pos);
+                    neighborNode.heuristicCostToGoal = neighborNode.getHeuristicCost(goalNode);
+                    int newCost = neighborNode.costFromStart + neighborNode.heuristicCostToGoal;
+                    // 親ノード
+                    neighborNode.parentNode = curNode;
+
+                    // もし初出のノードだったら
+                    if (!isOpen && !isClosed) {
                         // オープンリストに追加
                         openList.add(neighborNode);
+                    }
+                    // オープンリストに存在したけど新しいノードのほうがコストが低ければ更新
+                    else if (isOpen){
+                    	Node oldNode = (Node)openList.get(openList.indexOf(neighborNode));
+                    	int oldCost = oldNode.costFromStart + oldNode.heuristicCostToGoal;
+                        if (newCost < oldCost){
+                        	openList.remove(neighborNode);
+                        	openList.add(neighborNode);
+                        }
+                    }
+                    //クローズリストに存在したけど新しいノードのほうがコストが低ければ更新してオープンリストに移動
+                    else if (isClosed){
+                    	Node oldNode = (Node)closedList.get(closedList.indexOf(neighborNode));
+                    	int oldCost = oldNode.costFromStart + oldNode.heuristicCostToGoal;
+                        if (newCost < oldCost){
+                        	closedList.remove(neighborNode);
+                        	openList.add(neighborNode);
+                        }
                     }
                 }
             }
         }
+
 
         // 再呼び出しがあるかもしれないので消去しておく
         openList.clear();
@@ -109,7 +124,7 @@ public class Astar {
 
     /**
      * ゴールノードまでのパスを構築する
-     * 
+     *
      * @param node ゴールノード
      * @return スタートノードからゴールノードまでのパス
      */

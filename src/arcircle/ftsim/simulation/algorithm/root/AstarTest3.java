@@ -5,6 +5,8 @@ import java.util.LinkedList;
 
 import javax.swing.JFrame;
 
+import arcircle.ftsim.simulation.algorithm.route.Node;
+
 /*
  * Created on 2005/04/23
  *
