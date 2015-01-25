@@ -298,7 +298,7 @@ public class Characters {
 		}
 	}
 
-	public boolean isEnd() {
+	public boolean isGameEnd() {
 		boolean endFlag = true;
 		for (Chara chara : characterArray) {
 			if (chara.getCamp() == Chara.CAMP_ENEMY) {

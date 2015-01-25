@@ -260,7 +260,7 @@ public class Field implements KeyListner, Renderer {
 
 		characters.update(delta);
 
-		if (characters.isEnd()) {
+		if (characters.isGameEnd()) {
 			FTSimulationGame.save.getNowStage().selectLogue = NowStage.EPILOGUE;
 			sgModel.nextState();
 		}
