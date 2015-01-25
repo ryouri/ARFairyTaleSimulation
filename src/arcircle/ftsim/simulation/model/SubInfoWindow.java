@@ -45,6 +45,7 @@ public class SubInfoWindow implements Renderer{
 	 * false -> キャラステdータス */
 	private boolean BATTLE_MODE;
 	private boolean twice = true;
+	private boolean enemyTwice = true;
 
 	private UnicodeFont font = FTSimulationGame.font;
 
@@ -260,30 +261,56 @@ public class SubInfoWindow implements Renderer{
 		//戦闘を行うキャラが取得できるはず?
 		//TODO ちゃんと戦闘を行うキャラの取得
 		Chara battleChara = field.characters.getAnyChara();
+		Chara enemyChara = field.characters.getAnyChara();
 		faceImageMap = field.characters.characterFaceStandardImageMap;
-		//キャライメージの描画
+		//味方キャライメージの描画
 		g.drawImage(faceImageMap.get(battleChara.status.name),
 				objectPos_battle.get("CHARA_IMAGE").x, objectPos_battle.get("CHARA_IMAGE").y);
-		//キャラ名の描画
+		//敵キャライメージの描画
+		Image enemyFaceImage = faceImageMap.get(enemyChara.status.name).getFlippedCopy(true, false);
+		int drawX = objectPos_battle.get("ENEMY_IMAGE").x - enemyFaceImage.getWidth();
+		int drawY = objectPos_battle.get("ENEMY_IMAGE").y - enemyFaceImage.getHeight();
+		g.drawImage(enemyFaceImage, drawX, drawY);
+		//味方キャラ名の描画
 		g.drawString(battleChara.status.name,
 				objectPos_battle.get("CHARA_NAME").x, objectPos_battle.get("CHARA_NAME").y);
-		//HPの描画
+		//敵キャラ名の描画
+		drawX = objectPos_battle.get("ENEMY_NAME").x - font.getWidth(enemyChara.status.name);
+		g.drawString(enemyChara.status.name, drawX, objectPos_battle.get("ENEMY_NAME").y);
+		//味方HPの描画
 		g.drawString("HP",
 				objectPos_battle.get("HP").x, objectPos_battle.get("HP").y);
-		//HPバーの描画
+		//敵HPの描画
+		g.drawString("HP",
+				objectPos_battle.get("ENEMY_HP").x, objectPos_battle.get("ENEMY_HP").y);
+		//味方HPバー赤の描画
 		g.setColor(Color.red);
 		g.fillRect(objectPos_battle.get("HP_BAR").x, objectPos_battle.get("HP_BAR").y, HPBAR_WIDTH, HPBAR_HEIGHT);
-		int hp_bar = HPBAR_WIDTH * battleChara.status.hp / battleChara.status.maxHp;
+		//敵HPバー赤の描画
+		g.fillRect(objectPos_battle.get("ENEMY_HP_BAR").x, objectPos_battle.get("ENEMY_HP_BAR").y, HPBAR_WIDTH, HPBAR_HEIGHT);
+		//味方HPバー緑の描画
 		g.setColor(Color.green);
+		int hp_bar = HPBAR_WIDTH * battleChara.status.hp / battleChara.status.maxHp;
 		g.fillRect(objectPos_battle.get("HP_BAR").x, objectPos_battle.get("HP_BAR").y, hp_bar, HPBAR_HEIGHT);
+		//敵HPバー緑の描画
+		hp_bar = HPBAR_WIDTH * enemyChara.status.hp / enemyChara.status.maxHp;
+		g.fillRect(objectPos_battle.get("ENEMY_HP_BAR").x, objectPos_battle.get("ENEMY_HP_BAR").y, hp_bar, HPBAR_HEIGHT);
+		
 		g.setColor(Color.white);
-		//NOWHP/MAXHPの描画
+		//味方NOWHP/MAXHPの描画
 		g.drawString(battleChara.status.hp + " / " + battleChara.status.maxHp,
 				objectPos_battle.get("HP_VALUE").x, objectPos_battle.get("HP_VALUE").y);
-		//レベルの描画
-		g.drawString("Lv." + battleChara.status.level,
+		//敵NOWHP/MAXHPの描画
+		g.drawString(enemyChara.status.hp + " / " + enemyChara.status.maxHp,
+				objectPos_battle.get("ENEMY_HP_VALUE").x, objectPos_battle.get("ENEMY_HP_VALUE").y);
+		//味方レベルの描画
+		g.drawString("Lv. " + battleChara.status.level,
 				objectPos_battle.get("LEVEL").x, objectPos_battle.get("LEVEL").y);
-		//武器名の描画
+		//敵レベルの描画
+		drawX = objectPos_battle.get("ENEMY_LEVEL").x - font.getWidth("Lv." + enemyChara.status.level);
+		g.drawString("Lv." + battleChara.status.level,
+				drawX, objectPos_battle.get("ENEMY_LEVEL").y);
+		//味方武器名の描画
 		ArrayList<Item> itemList = battleChara.status.getItemList();
 		if(itemList.isEmpty()){
 			weaponName = "";
@@ -319,25 +346,78 @@ public class SubInfoWindow implements Renderer{
 		}
 		g.drawString("武器:" + weaponName,
 				objectPos_battle.get("WEAPON_ICON").x, objectPos_battle.get("WEAPON_ICON").y);
-		//攻撃力の描画
+		//味方攻撃力の描画
 		//TODO 攻撃力の計算
 		g.drawString("威力",
 				objectPos_battle.get("ATTACK").x, objectPos_battle.get("ATTACK").y);
-		//攻撃力値の描画
+		//味方攻撃力値の描画
 		g.drawString(itemPoint + "",
 				objectPos_battle.get("ATTACK_VALUE").x, objectPos_battle.get("ATTACK_VALUE").y);
-		//×２の描画
+		//味方×２の描画
 		if(twice){
 			g.drawString("×2",
 					objectPos_battle.get("×2").x, objectPos_battle.get("×2").y);
 		}
-		//命中
+		//敵キャラ武器名の描画
+		itemList = enemyChara.status.getItemList();
+		if(itemList.isEmpty()){
+			weaponName = "";
+			itemName = "";
+		}else{
+			weaponName = "";
+			itemName = "";
+			for(int i = 0 ; i < itemList.size() ; i++){
+				if(itemList.get(i) instanceof Weapon){
+					Weapon weapon = (Weapon)itemList.get(i);
+					if(weapon.rangeType == -1){
+						range = "(無)";
+					}else if(weapon.rangeType == 0){
+						range = "(近)";
+					}else if(weapon.rangeType == 1){
+						range = "(遠)";
+					}else if(weapon.rangeType == 2){
+						range = "(遠近)";
+					}else{
+						range = "";
+					}
+					itemPoint = weapon.power;
+					weaponName = itemList.get(i).name;
+					break;
+				}
+			}
+			for(int i = 0 ; i < itemList.size() ; i++){
+				if(!(itemList.get(i) instanceof Weapon)){
+					itemName = itemList.get(i).name;
+					break;
+				}
+			}
+		}
+		drawX = objectPos_battle.get("ENEMY_WEAPON").x - font.getWidth("武器: " + weaponName);
+		g.drawString("武器: " + weaponName, drawX, objectPos_battle.get("ENEMY_WEAPON").y);
+		//敵攻撃力の描画
+		//TODO 攻撃力の計算
+		g.drawString("威力",
+				objectPos_battle.get("ENEMY_ATTACK").x, objectPos_battle.get("ENEMY_ATTACK").y);
+		//敵攻撃力値の描画
+		g.drawString(itemPoint + "",
+				objectPos_battle.get("ENEMY_ATTACK_VALUE").x, objectPos_battle.get("ENEMY_ATTACK_VALUE").y);
+		//敵×２の描画
+		if(enemyTwice){
+			g.drawString("×2",
+					objectPos_battle.get("ENEMY_×2").x, objectPos_battle.get("ENEMY_×2").y);
+		}
+		//味方命中
 		g.drawString("命中  ***",
 				objectPos_battle.get("HIT").x, objectPos_battle.get("HIT").y);
-		//必殺
+		//敵命中
+		g.drawString("命中  ***",
+				objectPos_battle.get("ENEMY_HIT").x, objectPos_battle.get("ENEMY_HIT").y);
+		//味方必殺
+				g.drawString("必殺  ***",
+						objectPos_battle.get("KILLER").x, objectPos_battle.get("KILLER").y);
+		//敵必殺
 		g.drawString("必殺  ***",
-				objectPos_battle.get("KILLER").x, objectPos_battle.get("KILLER").y);
-//		g.drawLine(START_WIDTH, (HEIGHT/2), (START_WIDTH + WIDTH), (HEIGHT/2));
+				objectPos_battle.get("ENEMY_KILLER").x, objectPos_battle.get("ENEMY_KILLER").y);
 	}
 
 
@@ -512,57 +592,50 @@ public class SubInfoWindow implements Renderer{
 		tempX = START_WIDTH + WIDTH - SIWOffsetX;
 		tempY = START_HEIGHT + HEIGHT - SIWOffsetY;
 		objectPos_battle.put("ENEMY_IMAGE", new Point(tempX, tempY));	//ok
+		//武器名
+		tempX = objectPos_battle.get("ENEMY_IMAGE").x - 120 - (LINE_INTERVAL*2);
+		tempY = objectPos_battle.get("ENEMY_IMAGE").y - CHAR_SIZE - (LINE_INTERVAL*2);
+		objectPos_battle.put("ENEMY_WEAPON", new Point(tempX, tempY));
+		//レベル
+		tempX = objectPos_battle.get("ENEMY_WEAPON").x;
+		tempY = objectPos_battle.get("ENEMY_WEAPON").y - CHAR_SIZE - LINE_INTERVAL;
+		objectPos_battle.put("ENEMY_LEVEL", new Point(tempX, tempY));
 		//キャラ名
-		//TODO 目標のStringをどこかから持ってきて代入
-		tempX = objectPos_battle.get("ENEMY_IMAGE").x - 120 - LINE_INTERVAL;
-		tempY = objectPos_battle.get("ENEMY_IMAGE").y;
+		tempX = objectPos_battle.get("ENEMY_LEVEL").x;
+		tempY = objectPos_battle.get("ENEMY_LEVEL").y - CHAR_SIZE - LINE_INTERVAL;
 		objectPos_battle.put("ENEMY_NAME", new Point(tempX, tempY));	//ok
+		//威力
+		tempX = objectPos_battle.get("KILLER").x;
+		tempY = START_HEIGHT + (HEIGHT/2) + CHAR_SIZE + LINE_INTERVAL;
+		objectPos_battle.put("ENEMY_ATTACK", new Point(tempX, tempY));	//ok
+		//威力値
+		tempX = objectPos_battle.get("ENEMY_ATTACK").x + (CHAR_SIZE*3);
+		tempY = objectPos_battle.get("ENEMY_ATTACK").y;
+		objectPos_battle.put("ENEMY_ATTACK_VALUE", new Point(tempX, tempY));	//ok
+		//×2
+		tempX = objectPos_battle.get("ENEMY_ATTACK_VALUE").x + (CHAR_SIZE*2);
+		tempY = objectPos_battle.get("ENEMY_ATTACK_VALUE").y;
+		objectPos_battle.put("ENEMY_×2", new Point(tempX, tempY));	//ok
+		//命中
+		tempX = objectPos_battle.get("ENEMY_ATTACK").x;
+		tempY = objectPos_battle.get("ENEMY_ATTACK").y + CHAR_SIZE + (LINE_INTERVAL*2);
+		objectPos_battle.put("ENEMY_HIT", new Point(tempX, tempY));	//ok
+		//必殺
+		tempX = objectPos_battle.get("ENEMY_HIT").x;
+		tempY = objectPos_battle.get("ENEMY_HIT").y +  CHAR_SIZE + (LINE_INTERVAL*2);
+		objectPos_battle.put("ENEMY_KILLER", new Point(tempX, tempY));	//ok
 		//HP
-		tempX = objectPos_battle.get("ENEMY_NAME").x;
-		tempY = objectPos_battle.get("ENEMY_NAME").y + CHAR_SIZE + LINE_INTERVAL;
+		tempX = objectPos_battle.get("HP").x;
+		tempY = objectPos_battle.get("ENEMY_KILLER").y + (CHAR_SIZE*2) + LINE_INTERVAL;
 		objectPos_battle.put("ENEMY_HP", new Point(tempX, tempY));	//ok
 		//HPバー
-		tempX = objectPos_battle.get("ENEMY_HP").x - CHAR_SIZE - (LINE_INTERVAL * 2) - 4;
+		tempX = objectPos_battle.get("ENEMY_HP").x + CHAR_SIZE + (LINE_INTERVAL * 2) + 4;
 		tempY = objectPos_battle.get("ENEMY_HP").y + 9;
 		objectPos_battle.put("ENEMY_HP_BAR", new Point(tempX, tempY));	//ok
 		//HP値
-		tempX = objectPos_battle.get("ENEMY_HP").x - 50;
-		tempY = objectPos_battle.get("ENEMY_HP").y + CHAR_SIZE + 2;
-		objectPos_battle.put("ENEMY_HP_VALUE", new Point(tempX, tempY));	//ok
-		//レベル
-		tempX = objectPos_battle.get("ENEMY_IMAGE").x;
-		tempY = objectPos_battle.get("ENEMY_IMAGE").y + 120 + LINE_INTERVAL;
-		objectPos_battle.put("ENEMY_LEVEL", new Point(tempX, tempY));
-		//武器アイコン
-		tempX = objectPos_battle.get("LEVEL").x;
-		tempY = objectPos_battle.get("LEVEL").y + CHAR_SIZE + LINE_INTERVAL;
-		objectPos_battle.put("ENEMY_WEAPON_ICON", new Point(tempX, tempY));
-		//武器名
-		tempX = objectPos_battle.get("ENEMY_WEAPON_ICON").x - (CHAR_SIZE * 3);
-		tempY = objectPos_battle.get("ENEMY_WEAPON_ICON").y;
-		objectPos_battle.put("ENEMY_WEAPON", new Point(tempX, tempY));
-		//攻撃力
-		tempX = objectPos_battle.get("ENEMY_WEAPON_ICON").x - 40;
-		tempY = objectPos_battle.get("ENEMY_WEAPON_ICON").y + CHAR_SIZE + (LINE_INTERVAL*2);
-		objectPos_battle.put("ENEMY_ATTACK", new Point(tempX, tempY));	//ok
-		//攻撃力値
-		tempX = objectPos_battle.get("ENEMY_ATTACK").x - (CHAR_SIZE+5);
-		tempY = objectPos_battle.get("ENEMY_ATTACK").y + CHAR_SIZE + (LINE_INTERVAL*2);
-		objectPos_battle.put("ENEMY_ATTACK_VALUE", new Point(tempX, tempY));	//ok
-//		//×2
-//		tempX = objectPos_battle.get("ENEMY_ATTACK").x - CHAR_SIZE;
-//		tempY = objectPos_battle.get("ENEMY_ATTACK_VALUE").y + CHAR_SIZE + (LINE_INTERVAL);
-//		objectPos_battle.put("×2", new Point(tempX, tempY));	//ok
-//		//命中
-//		tempX = START_WIDTH + (WIDTH/2);
-//		tempY = objectPos_battle.get("ATTACK").y;
-//		objectPos_battle.put("HIT", new Point(tempX, tempY));	//ok
-////		//必殺
-//		tempX = objectPos_battle.get("HIT").x;
-//		tempY = objectPos_battle.get("HIT").y +  CHAR_SIZE + LINE_INTERVAL;
-//		objectPos_battle.put("KILLER", new Point(tempX, tempY));	//ok
-
-		
+		tempX = objectPos_battle.get("ENEMY_HP_BAR").x + HPBAR_WIDTH + (LINE_INTERVAL*2);
+		tempY = objectPos_battle.get("ENEMY_HP").y;
+		objectPos_battle.put("ENEMY_HP_VALUE", new Point(tempX, tempY));	//ok		
 	}
 
 

@@ -50,6 +50,7 @@ public class JapaneseFontGenerater {
 			font.addGlyphs(0xff00, 0xff60);
 
 			font.addGlyphs("†");
+			
 
 			// おまじない
 			font.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
