@@ -28,25 +28,30 @@ public class TaskManager {
 		field.eventManager.checkCharaDieEvent(id);
 	}
 
+	public void addOneTaskAndGenerateArray (Task task) {
+		ArrayList<Task> taskArray = new ArrayList<Task>();
+		taskArray.add(task);
+		taskArrayArray.add(taskArray);
+	}
+
+	public void addStandCharaTask(Chara chara) {
+		StandCharaTask standCharaTask = new StandCharaTask(this, chara);
+		addOneTaskAndGenerateArray(standCharaTask);
+	}
+
 	public void addMoveTask(Chara chara, Node moveNode) {
 		MoveTask moveTask = new MoveTask(this, chara, moveNode);
-		ArrayList<Task> taskArray = new ArrayList<Task>();
-		taskArray.add(moveTask);
-		taskArrayArray.add(taskArray);
+		addOneTaskAndGenerateArray(moveTask);
 	}
 
 	public void addAttackTask(Chara attackChara, Chara damageChara) {
 		AttackTask attackTask = new AttackTask(this, attackChara, damageChara);
-		ArrayList<Task> taskArray = new ArrayList<Task>();
-		taskArray.add(attackTask);
-		taskArrayArray.add(taskArray);
+		addOneTaskAndGenerateArray(attackTask);
 	}
 
 	public void addTalkTask(Event processEvent) {
 		TalkTask talkTask = new TalkTask(this, processEvent, field);
-		ArrayList<Task> taskArray = new ArrayList<Task>();
-		taskArray.add(talkTask);
-		taskArrayArray.add(taskArray);
+		addOneTaskAndGenerateArray(talkTask);
 	}
 
 	public boolean existTask() {
