@@ -17,7 +17,7 @@ import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class BattleTalkModel implements KeyListner {
-	
+
 	//フィールド////////////////////////////////////////////////////////////////////////////////////////////
 	private SimGameModel sgModel;
 
@@ -42,8 +42,6 @@ public class BattleTalkModel implements KeyListner {
     private String nowSubStoryName = "";	//
     private int nowLogue = 0;
 
-
-
     HashMap<Integer,String> map = new HashMap<Integer,String>();
 
     private int curPosOfPage = 0;	//現在のページ内での文字表示位置
@@ -56,7 +54,13 @@ public class BattleTalkModel implements KeyListner {
     private Timer timer;
     private TimerTask task;
 
-    //アクセッタ/////////////////////////////////////////////////////////////////////////////////////////////////
+    private boolean isEnd;
+
+    public boolean isEnd() {
+		return isEnd;
+	}
+
+	//アクセッタ/////////////////////////////////////////////////////////////////////////////////////////////////
   	public BattleTextTag getCurTag() { return tags[curTagPointer]; }
   	public void incrementCurTagPointer(){ curTagPointer++; }
   	public char[] getcurText() {
@@ -214,8 +218,8 @@ public class BattleTalkModel implements KeyListner {
         			tags[tagP++] = new BattleTextTag(strs[0], "./Stories/BGM/" + strs[1]);
         			System.out.println(strs[1]);
         		}
-        		
-        		
+
+
         		else{
         			for (int i = 0; i < line.length(); i++) {
         				char c = line.charAt(i);
@@ -290,12 +294,14 @@ public class BattleTalkModel implements KeyListner {
 		if(keyInput.isKeyDown(Input.KEY_D)){
 			sgModel.removeRendererArrayEnd();
 			sgModel.removeKeyInputStackFirst();
+			isEnd = true;
 		}
 		if(keyInput.isKeyDown(Input.KEY_Z)){
 			//次のステートへ
 			if(nextTalkFlag && nextStateFlag == true){
 				sgModel.removeRendererArrayEnd();
 				sgModel.removeKeyInputStackFirst();
+				isEnd = true;
 				//sgState.nextState();
 			//ページ送り処理
 			}else if(nextPageFlag && !nextTalkFlag){

@@ -10,9 +10,6 @@ import java.util.ArrayList;
 
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.model.Field;
-import arcircle.ftsim.simulation.talk.BattleTalkModel;
-import arcircle.ftsim.simulation.talk.BattleTalkView;
-import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class EventManager {
 	/**
@@ -100,12 +97,7 @@ public class EventManager {
 	 * @param processEvent
 	 */
 	private void startBattleTalk(Event processEvent) {
-		SimGameModel sgModel = field.getSgModel();
-		BattleTalkModel btModel =
-				new BattleTalkModel(sgModel, processEvent.eventFileName);
-		BattleTalkView btView = new BattleTalkView(btModel, sgModel);
-		sgModel.pushKeyInputStack(btModel);
-		sgModel.addRendererArray(btView);
+		field.getTaskManager().addTalkTask(processEvent);
 	}
 
 	public void checkEvent(Event checkEvent) {

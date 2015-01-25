@@ -6,6 +6,7 @@ import org.newdawn.slick.Graphics;
 
 import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.event.Event;
 import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Field;
 
@@ -34,6 +35,13 @@ public class TaskManager {
 		AttackTask attackTask = new AttackTask(this, attackChara, damageChara);
 		ArrayList<Task> taskArray = new ArrayList<Task>();
 		taskArray.add(attackTask);
+		taskArrayArray.add(taskArray);
+	}
+
+	public void addTalkTask(Event processEvent) {
+		TalkTask talkTask = new TalkTask(this, processEvent, field);
+		ArrayList<Task> taskArray = new ArrayList<Task>();
+		taskArray.add(talkTask);
 		taskArrayArray.add(taskArray);
 	}
 
