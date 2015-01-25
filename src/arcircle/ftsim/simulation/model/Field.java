@@ -493,19 +493,6 @@ public class Field implements KeyListner, Renderer {
 		return characters;
 	}
 
-	public void charaAttack(Chara chara, int y, int x) {
-		for (Chara damageChara : characters.characterArray) {
-			if (damageChara.y == y && damageChara.x == x) {
-				characters.setCharaAttack(chara, damageChara);
-				break;
-			}
-		}
-	}
-
-	public void moveChara(Chara chara, Node moveNode) {
-		characters.setCharaMove(chara, moveNode);
-	}
-
 	public int getNowTurn() {
 		return nowTurn;
 	}
@@ -553,11 +540,20 @@ public class Field implements KeyListner, Renderer {
 		return loseStringArray;
 	}
 
-	public void setCharaAttack(Chara chara, Chara damageChara) {
-		taskManager.addAttackTask(chara, damageChara);
+	public void setCharaAttack(Chara chara, int y, int x) {
+		for (Chara damageChara : characters.characterArray) {
+			if (damageChara.y == y && damageChara.x == x) {
+				taskManager.addAttackTask(chara, damageChara);
+				break;
+			}
+		}
 	}
 
 	public void setCharaMove(Chara chara, Node moveNode) {
 		taskManager.addMoveTask(chara, moveNode);
+	}
+
+	public void setCharaStand(Chara chara) {
+		taskManager.addStandCharaTask(chara);
 	}
 }

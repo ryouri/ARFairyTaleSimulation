@@ -71,9 +71,9 @@ public class SimpleAI extends AI {
 			arcircle.ftsim.simulation.algorithm.range.Node moveNode =
 					cmRange.getNodeByXY(attackChara.attackPoint.x, attackChara.attackPoint.y);
 			if (moveNode.pointXArray.size() >= 1) {
-				field.moveChara(chara, moveNode);
+				field.setCharaMove(chara, moveNode);
 			}
-			field.charaAttack(chara, attackChara.damageChara.y, attackChara.damageChara.x);
+			field.setCharaAttack(chara, attackChara.damageChara.y, attackChara.damageChara.x);
 		}
 	}
 
@@ -139,9 +139,10 @@ public class SimpleAI extends AI {
 			if (moveRange[node.pos.y][node.pos.x]) {
 				arcircle.ftsim.simulation.algorithm.range.Node moveNode =
 						cmRange.getNodeByXY(node.pos.x, node.pos.y);
-				field.moveChara(chara, moveNode);
+
+				field.setCharaMove(chara, moveNode);
 				// TODO setStandもタスクスレッドに組み込むべきやつ
-				chara.setStand(true);
+				field.setCharaStand(chara);
 				break;
 			}
 		}

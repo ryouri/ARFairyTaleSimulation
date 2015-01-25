@@ -15,7 +15,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
-import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.ai.SimpleAI;
 import arcircle.ftsim.simulation.item.Item;
@@ -297,16 +296,6 @@ public class Characters {
 				}
 			}
 		}
-	}
-
-
-	public void setCharaAttack(Chara chara, Chara damageChara) {
-		field.setCharaAttack(chara, damageChara);
-	}
-
-
-	public void setCharaMove(Chara chara, Node moveNode) {
-		field.setCharaMove(chara, moveNode);
 	}
 
 	public boolean isEnd() {

@@ -29,11 +29,11 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 
 	private int cursorFirstX;
 	private int cursorFirstY;
-	
+
 	private boolean visible;
-	
+
 	private boolean[][] attackRange;
-	
+
 	private boolean[][] attackJudge;
 
 	public boolean isVisible() {
@@ -43,7 +43,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
-	
+
 	public AttackCommand(String commandName, SimGameModel sgModel,
 			CharaCommandWindow charaCommandWindow) {
 		super(commandName, sgModel, charaCommandWindow);
@@ -53,19 +53,19 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 			e.printStackTrace();
 		}
 		attackColor = new Color(1, 1, 1, 0.5f);
-		
-		
+
+
 	}
 
 	@Override
 	public void pushed(Field field, Chara chara) {
 		this.chara = chara;
-		this.field = field;		
+		this.field = field;
 		cursorFirstX = field.getCursor().x;
 		cursorFirstY = field.getCursor().y;
-		
+
 		this.attackRange = new boolean[field.row][field.col];
-		
+
 		int weaponType = CalculateMoveAttackRange.judgeAttackWeaponType(chara.getItemList());
 		CalculateMoveAttackRange.calculateAttackRange(chara.x, chara.y, attackRange, weaponType, field);;
 		attackJudge = CalculateMoveAttackRange.calculateJudgeAttack(field, attackRange, chara);
@@ -77,7 +77,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 		attackJudge = new boolean[attackRange.length][attackRange[0].length];
 		boolean[][] charaPut = new boolean[attackRange.length][attackRange[0].length];
 		Characters characters = field.getCharacters();
-		
+
 		for (Chara putChara : characters.characterArray) {
 			if (this.chara.getCamp() == Chara.CAMP_FRIEND) {
 				if (putChara.getCamp() == Chara.CAMP_ENEMY) {
@@ -85,7 +85,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 				}
 			}
 		}
-		
+
 		for (int y = 0; y < field.row; y++) {
 			for (int x = 0; x < field.col; x++) {
 				if (charaPut[y][x] == true && attackRange[y][x] == true) {
@@ -94,7 +94,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 			}
 		}
 	}
-	
+
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
 		if (field == null || chara == null || !isVisible()) {
@@ -115,7 +115,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 			}
 		}
 	}
-	
+
 	public void setFirstPosition() {
 		//カーソルをキャラの最初の位置まで戻す
 		field.getCursor().x = cursorFirstX;
@@ -125,7 +125,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 	}
 
 	@Override
-	public void keyInput(KeyInput keyInput) {		
+	public void keyInput(KeyInput keyInput) {
 		//キャンセルキーが押されたとき
 		if (keyInput.isKeyDown(Input.KEY_X)) {
 			sgModel.removeKeyInputStackFirst();
@@ -137,11 +137,11 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 
 			return;
 		}
-		
+
 		if (keyInput.isKeyDown(Input.KEY_Z)) {
 			if(attackJudge[field.getCursor().y][field.getCursor().x]) {
-				field.charaAttack(chara, field.getCursor().y, field.getCursor().x);
-				
+				field.setCharaAttack(chara, field.getCursor().y, field.getCursor().x);
+
 				//他の場所に移す
 				sgModel.removeKeyInputStackByField();
 				sgModel.removeRendererArrayBySubInfoWindow();
