@@ -1,8 +1,4 @@
 PHASE
-WIN,＊＊＊と接触,TOUCH_CHARA,no1,zako,battleTalk01.txt
+WIN,ボス（右下）を倒せ,CHARA_DIE,boss,battleTalk01.txt
 LOSE,＊＊＊がやられる,CHARA_DIE,no1,none
-PHASEEND
-PHASE
-WIN,＊＊＊と接触,TOUCH_CHARA,no1,zako,battleTalk01.txt
-LOSE,＊＊＊がやられる,CHARA_DIE,boss,none
 PHASEEND

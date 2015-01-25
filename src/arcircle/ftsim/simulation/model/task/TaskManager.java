@@ -24,6 +24,10 @@ public class TaskManager {
 		this.taskArrayArray = new ArrayList<ArrayList<Task>>();
 	}
 
+	public void checkCharaDieEvent(String id) {
+		field.eventManager.checkCharaDieEvent(id);
+	}
+
 	public void addMoveTask(Chara chara, Node moveNode) {
 		MoveTask moveTask = new MoveTask(this, chara, moveNode);
 		ArrayList<Task> taskArray = new ArrayList<Task>();

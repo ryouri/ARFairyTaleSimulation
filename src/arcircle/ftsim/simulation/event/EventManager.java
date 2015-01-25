@@ -86,6 +86,14 @@ public class EventManager {
 		}
 	}
 
+
+	public void checkCharaDieEvent(String id) {
+		//キャラが死んだ時のイベントの処理
+		EventCharaDie eventCharaDie = new EventCharaDie("");
+		eventCharaDie.charaID = id;
+		checkEvent(eventCharaDie);
+	}
+
 	private void startEvent(Event processEvent
 			, ArrayList<Event> removeEventArray) {
 		startBattleTalk(processEvent);

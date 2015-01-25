@@ -97,6 +97,7 @@ public class AttackTask extends Task {
 				//攻撃を受けた側のhpがなくなったら
 				if (damageChara.status.hp < 0) {
 					taskManager.characters.removeChara(damageChara);
+					taskManager.checkCharaDieEvent(damageChara.id);
 				}
 
 				attackChara.setAttack(false);
