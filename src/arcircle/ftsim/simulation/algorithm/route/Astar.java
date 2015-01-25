@@ -31,6 +31,7 @@ public class Astar {
         // スタートノードとゴールノードを作成
         Node startNode = new Node(startPos);
         Node goalNode = new Node(goalPos);
+        System.out.println("start:"+ startPos.x + "," + startPos.y + ", goal:" + goalPos.x + "," + goalPos.y);
 
         // スタートノードを設定
         startNode.costFromStart = 0;
@@ -74,45 +75,37 @@ public class Astar {
                     boolean isHit = map.isHit(neighborNode.pos.x,
                             neighborNode.pos.y);
 
+                    if (isHit){
+                    	continue;
+                    }
+
                     // 隣接ノードのコストの計算
                     neighborNode.costFromStart = curNode.costFromStart + map.getCost(neighborNode.pos);
                     neighborNode.heuristicCostToGoal = neighborNode.getHeuristicCost(goalNode);
                     int newCost = neighborNode.costFromStart + neighborNode.heuristicCostToGoal;
+                    // 親ノード
+                    neighborNode.parentNode = curNode;
 
-                    // 新しいコストを元に各リストに操作
-                    // TODO この下から
-                    if (!isOpen && !isClosed && !isHit) {
-                        // オープンリストに移してコストを計算する
-                        // スタートからのコスト（costFromStart）は親のコスト＋地形コスト
-                        neighborNode.costFromStart = curNode.costFromStart
-                                + map.getCost(neighborNode.pos);
-                        // ヒューリスティックコスト
-                        neighborNode.heuristicCostToGoal = neighborNode
-                                .getHeuristicCost(goalNode);
-                        // 親ノード
-                        neighborNode.parentNode = curNode;
+                    // もし初出のノードだったら
+                    if (!isOpen && !isClosed) {
                         // オープンリストに追加
                         openList.add(neighborNode);
                     }
                     // オープンリストに存在したけど新しいノードのほうがコストが低ければ更新
-                    else if (isOpen && !isHit){
-                    	//int newCost = curNode.costFromStart + map.getCost(neighborNode.pos) + ;
-                        if (newCost < ((Node)openList.get(openList.indexOf(neighborNode))).costFromStart){
+                    else if (isOpen){
+                    	Node oldNode = (Node)openList.get(openList.indexOf(neighborNode));
+                    	int oldCost = oldNode.costFromStart + oldNode.heuristicCostToGoal;
+                        if (newCost < oldCost){
                         	openList.remove(neighborNode);
-                        	neighborNode.costFromStart = newCost;
-                        	neighborNode.heuristicCostToGoal = neighborNode.getHeuristicCost(goalNode);
-                        	neighborNode.parentNode = curNode;
                         	openList.add(neighborNode);
                         }
                     }
                     //クローズリストに存在したけど新しいノードのほうがコストが低ければ更新してオープンリストに移動
-                    else if (isClosed && !isHit){
-                    	//int newCost = curNode.costFromStart + map.getCost(neighborNode.pos);
-                        if (newCost < ((Node)closedList.get(closedList.indexOf(neighborNode))).costFromStart){
+                    else if (isClosed){
+                    	Node oldNode = (Node)closedList.get(closedList.indexOf(neighborNode));
+                    	int oldCost = oldNode.costFromStart + oldNode.heuristicCostToGoal;
+                        if (newCost < oldCost){
                         	closedList.remove(neighborNode);
-                        	neighborNode.costFromStart = newCost;
-                        	neighborNode.heuristicCostToGoal = neighborNode.getHeuristicCost(goalNode);
-                        	neighborNode.parentNode = curNode;
                         	openList.add(neighborNode);
                         }
                     }
