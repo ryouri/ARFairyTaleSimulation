@@ -6,10 +6,12 @@ import arcircle.ftsim.simulation.chara.Chara;
 
 public class StandCharaTask extends Task {
 	Chara chara;
+	boolean standInfo;
 
-	public StandCharaTask(TaskManager taskManager, Chara chara) {
+	public StandCharaTask(TaskManager taskManager, Chara chara, boolean standInfo) {
 		super(taskManager);
 		this.chara = chara;
+		this.standInfo = standInfo;
 	}
 
 	@Override
@@ -21,7 +23,7 @@ public class StandCharaTask extends Task {
 
 	@Override
 	public void update(int delta) {
-		chara.setStand(true);
+		chara.setStand(standInfo);
 		taskManager.taskEnd();
 	}
 }

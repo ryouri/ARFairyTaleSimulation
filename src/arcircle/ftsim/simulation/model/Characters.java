@@ -252,23 +252,15 @@ public class Characters {
 		}
 
 		if (field.getNowTurn() == Field.TURN_FRIEND) {
-			boolean standCharaFlag = true;
 			//FRIENDキャラが全軍待機していたら敵ターンへ
-			for (Chara chara : characterArray) {
-				if (chara.getCamp() == Chara.CAMP_FRIEND && !chara.isStand()) {
-					standCharaFlag = false;
-				}
-			}
+			boolean standCharaFlag = checkCharaStand(Chara.CAMP_FRIEND);
 
 			if (standCharaFlag == true) {
 				field.changeTurnEnemy();
-				for (Chara chara : characterArray) {
-					if (chara.getCamp() == Chara.CAMP_FRIEND) {
-						chara.setStand(false);
-					}
-				}
+				standForAllCampChara(Chara.CAMP_FRIEND);
 			}
 		} else if (field.getNowTurn() == Field.TURN_ENEMY) {
+			//タスクがなければ，AIを一キャラ分動作させる
 			if (field.getTaskManager().existTask()) {
 				return;
 			}
@@ -282,41 +274,38 @@ public class Characters {
 				break;
 			}
 
-			boolean standCharaFlag = true;
-			//ENEMYキャラが全軍待機していたら味方ターンへ
-			for (Chara chara : characterArray) {
-				if (chara.getCamp() == Chara.CAMP_ENEMY && !chara.isStand()) {
-					standCharaFlag = false;
-				}
-			}
+			boolean standCharaFlag = checkCharaStand(Chara.CAMP_ENEMY);
 
 			if (standCharaFlag == true) {
 				field.changeTurnFriend();
-				for (Chara chara : characterArray) {
-					if (chara.getCamp() == Chara.CAMP_ENEMY) {
-						chara.setStand(false);
-					}
-				}
+				standForAllCampChara(Chara.CAMP_ENEMY);
 			}
 		}
 	}
 
+	/**
+	 * 指定された所属のキャラを全て行動可能にする
+	 */
+	private void standForAllCampChara(int charaCamp) {
+		for (Chara chara : characterArray) {
+			if (chara.getCamp() == charaCamp) {
+				chara.setStand(false);
+			}
+		}
+	}
 
 	/**
 	 * @param charaCamp すべての動作が完了しているか，チェックしたい所属
 	 * @return 待機が完了していればtrue，そうじゃなきゃfalse
 	 */
 	private boolean checkCharaStand(int charaCamp) {
-		boolean standCharaFlag = true;
 		//ENEMYキャラが全軍待機していたら味方ターンへ
 		for (Chara chara : characterArray) {
 			if (chara.getCamp() == charaCamp && !chara.isStand()) {
-				standCharaFlag = false;
-				return standCharaFlag;
+				return false;
 			}
 		}
-
-		return standCharaFlag;
+		return true;
 	}
 
 	public boolean isGameEnd() {

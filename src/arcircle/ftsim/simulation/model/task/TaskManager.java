@@ -34,8 +34,8 @@ public class TaskManager {
 		taskArrayArray.add(taskArray);
 	}
 
-	public void addStandCharaTask(Chara chara) {
-		StandCharaTask standCharaTask = new StandCharaTask(this, chara);
+	public void addStandCharaTask(Chara chara, boolean stand) {
+		StandCharaTask standCharaTask = new StandCharaTask(this, chara, stand);
 		addOneTaskAndGenerateArray(standCharaTask);
 	}
 

@@ -143,8 +143,7 @@ public class SimpleAI extends AI {
 						cmRange.getNodeByXY(node.pos.x, node.pos.y);
 
 				field.setCharaMove(chara, moveNode);
-				// TODO setStandもタスクスレッドに組み込むべきやつ
-				field.setCharaStand(chara);
+				field.setCharaStand(chara, true);
 				break;
 			}
 		}

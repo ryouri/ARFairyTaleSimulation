@@ -576,7 +576,7 @@ public class Field implements KeyListner, Renderer {
 		taskManager.addMoveTask(chara, moveNode);
 	}
 
-	public void setCharaStand(Chara chara) {
-		taskManager.addStandCharaTask(chara);
+	public void setCharaStand(Chara chara, boolean stand) {
+		taskManager.addStandCharaTask(chara, stand);
 	}
 }
