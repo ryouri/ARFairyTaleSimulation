@@ -31,7 +31,6 @@ public class Astar {
         // スタートノードとゴールノードを作成
         Node startNode = new Node(startPos);
         Node goalNode = new Node(goalPos);
-        System.out.println("start:"+ startPos.x + "," + startPos.y + ", goal:" + goalPos.x + "," + goalPos.y);
 
         // スタートノードを設定
         startNode.costFromStart = 0;
@@ -55,7 +54,6 @@ public class Astar {
                 // ゴールノードからパスを生成
                 // goalNodeはコストなどが設定されてないので
                 // 引数としてcurNodeを渡すところに注意
-            	System.out.println("Correct!!");
                 return constructPath(curNode);
             } else { // 一致してない場合
                 // 現在のノードをクローズドリストに移す

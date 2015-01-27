@@ -2,7 +2,6 @@ package arcircle.ftsim.simulation.chara.ai;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -59,9 +58,12 @@ public class SimpleAI extends AI {
 			Map map = new Map(field.createMoveCostArray(chara.x, chara.y));
 			Chara targetChara = getMostNeighborChara(characters, map);
 			moveToOneChara(targetChara, moveRange, map, cmRange);
+		// 攻撃可能キャラがいたら、その中でも防御の低いやつを狙う
 		} else {
-			Collections.shuffle(attackCharaArray);
-			AttackCharaData attackChara = attackCharaArray.get(0);
+//			Collections.shuffle(attackCharaArray);
+//			AttackCharaData attackChara = attackCharaArray.get(0);
+			SelectAttackTarget sat = new SelectLowerDefenceChara();
+			AttackCharaData attackChara = sat.getAttackTargetCharaData(attackCharaArray);
 
 //			chara.x = attackChara.attackPoint.x;
 //			chara.y = attackChara.attackPoint.y;
