@@ -6,7 +6,7 @@ public abstract class SelectAttackTarget {
 
 	// 一番いいアタックキャラデータを頼む
 	public AttackCharaData getAttackTargetCharaData(ArrayList<AttackCharaData> attackCharaArray){
-		int minCost = 9999;
+		int minCost = 99999;
 		AttackCharaData minAttackCharaData = null;
 		for (AttackCharaData acd : attackCharaArray){
 			int cost = calculateCost(acd);
@@ -15,10 +15,11 @@ public abstract class SelectAttackTarget {
 				minAttackCharaData = acd;
 			}
 		}
+		System.out.println("Selected:"+minCost);
 		return minAttackCharaData;
 	}
 
 	// ヒューリスティック関数は抽象化
-	abstract public int calculateCost(AttackCharaData attackCharaData);
+	abstract protected int calculateCost(AttackCharaData attackCharaData);
 
 }
