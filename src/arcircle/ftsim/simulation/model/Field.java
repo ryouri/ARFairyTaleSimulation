@@ -254,6 +254,7 @@ public class Field implements KeyListner, Renderer {
 		cursorAnime.update(delta);
 		getCursor().update();
 
+		//存在するタスクを処理する
 		if (taskManager.existTask()) {
 			taskManager.processUpdate(delta);
 		}

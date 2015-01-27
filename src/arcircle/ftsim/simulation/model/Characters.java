@@ -21,6 +21,10 @@ import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.simulation.talk.BattleTalkModel;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
+/**
+ * @author misawa
+ *
+ */
 public class Characters {
 	private SimGameModel sgModel;
 
@@ -232,17 +236,16 @@ public class Characters {
 	}
 
 	public void update(int delta) {
-		//選択されているキャラの処理
-		for (Chara chara : characterArray) {
-			chara.isSelect = false;
-			if (chara.x == field.getCursor().x && chara.y == field.getCursor().y) {
-				chara.isSelect = true;
+		//選択されているキャラを早く動かす
+		if (field.getNowTurn() == Field.TURN_FRIEND && !field.getTaskManager().existTask()) {
+			for (Chara chara : characterArray) {
+				chara.isSelect = false;
+				if (chara.x == field.getCursor().x
+						&& chara.y == field.getCursor().y) {
+					chara.isSelect = true;
+				}
 			}
 		}
-
-//		if (taskManager.existTask()) {
-//			taskManager.processUpdate(delta);
-//		}
 
 		if (field.getSgModel().getKeyInputStackByFirst() instanceof BattleTalkModel) {
 			return;
@@ -296,6 +299,24 @@ public class Characters {
 				}
 			}
 		}
+	}
+
+
+	/**
+	 * @param charaCamp すべての動作が完了しているか，チェックしたい所属
+	 * @return 待機が完了していればtrue，そうじゃなきゃfalse
+	 */
+	private boolean checkCharaStand(int charaCamp) {
+		boolean standCharaFlag = true;
+		//ENEMYキャラが全軍待機していたら味方ターンへ
+		for (Chara chara : characterArray) {
+			if (chara.getCamp() == charaCamp && !chara.isStand()) {
+				standCharaFlag = false;
+				return standCharaFlag;
+			}
+		}
+
+		return standCharaFlag;
 	}
 
 	public boolean isGameEnd() {
