@@ -21,6 +21,10 @@ public class LoadTalkGraphics {
 	//キャラクターフォルダにある各キャラフォルダの名前リスト
 	private String[] charaIDArray;
 
+	//アクセッタ
+	public HashMap<String, Image> getAllCharaImageMap(){ return allCharaImageMap; }
+	public HashMap<String, String> getAllCharaNameMap(){ return allCharaNameMap; }
+
 	/**コンストラクタ */
 	public LoadTalkGraphics(String folderPath){
 		this.allCharaImageMap = new HashMap<String, Image>();
