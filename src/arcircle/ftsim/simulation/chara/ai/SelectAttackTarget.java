@@ -15,7 +15,6 @@ public abstract class SelectAttackTarget {
 				minAttackCharaData = acd;
 			}
 		}
-		System.out.println("Selected:"+minCost);
 		return minAttackCharaData;
 	}
 
