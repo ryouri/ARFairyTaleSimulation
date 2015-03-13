@@ -60,9 +60,10 @@ public class SameTimeAttackAI extends AI {
 			Map map = new Map(field.createMoveCostArray(chara.x, chara.y));
 			Chara targetChara = getMostNeighborChara(characters, map);
 			moveToOneChara(targetChara, moveRange, map, cmRange);
-		// 攻撃可能キャラがいたら、その中でも防御の低いやつを狙う
+		// 攻撃可能キャラがいたら、その中でも一番ダメージが大きくなる相手に攻撃
 		} else {
-			SelectAttackTarget sat = new SelectMostGoodAttackTarget();
+			// ここでインスタンス化するクラスによって攻撃対象のAIが変わる
+			SelectAttackTarget sat = new SelectHighDamageAttackTarget();
 			AttackCharaData attackChara = sat.getAttackTargetCharaData(attackCharaArray);
 			arcircle.ftsim.simulation.algorithm.range.Node moveNode =
 					cmRange.getNodeByXY(attackChara.attackPoint.x, attackChara.attackPoint.y);
@@ -107,7 +108,6 @@ public class SameTimeAttackAI extends AI {
 						     	{ 0, -1}};//up
 
 	private void moveToOneChara(Chara toChara, boolean[][] moveRange, Map map, CalculateMoveAttackRange cmRange) {
-		System.out.println("SelectChara:" + toChara.id + " x:" + toChara.x + " y:" + toChara.y);
 		Astar aStar = new Astar(map);
 
 		int bestCost = 9999;
