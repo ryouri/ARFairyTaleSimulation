@@ -6,7 +6,7 @@ import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
 import arcircle.ftsim.simulation.chara.battle.SupportInfo;
 import arcircle.ftsim.simulation.item.Weapon;
 
-public class SelectMostDamageAttackTarget extends SelectAttackTarget {
+public class SelectHighDamageAttackTarget extends SelectAttackTarget {
 
 	//バトル予測の結果から、コストを計算、コストは低いほうがいいのでマイナスをつける
 	//コスト = -(命中率*ダメージ*攻撃回数-HP)
