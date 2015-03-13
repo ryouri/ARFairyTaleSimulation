@@ -16,7 +16,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 import arcircle.ftsim.simulation.chara.Chara;
-import arcircle.ftsim.simulation.chara.ai.SimpleAI;
+import arcircle.ftsim.simulation.chara.ai.SameTimeAttackAI;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.simulation.talk.BattleTalkModel;
 import arcircle.ftsim.state.simgame.SimGameModel;
@@ -167,7 +167,9 @@ public class Characters {
 		chara.setItemList(characterData.get(chara.status.name).getItemList());
 		characterData.get(chara.status.name).status.copyTo(chara.status);
 
-		chara.setAI(new SimpleAI(chara));
+		//TODO: 現在は，デバッグのために新しいAIを試す
+		//chara.setAI(new SimpleAI(chara));
+		chara.setAI(new SameTimeAttackAI(chara));
 
 		characterArray.add(chara);
 	}

@@ -33,12 +33,18 @@ public class Cursor {
 		directionPressedTime = new int[4];
 	}
 
-	public void startMove(int direction) {
+
+
+	/**
+	 * 移動を開始したら trueを返す
+	 * @param direction
+	 */
+	public boolean startMove(int direction) {
 		directionPressedTime[direction] = DIRECTION_PRESSED_DURATION;
 
 		//すでに移動中なら呼び出さない
 		if (isMoving) {
-			return;
+			return false;
 		}
 
 		if (direction == UP) {
@@ -65,13 +71,19 @@ public class Cursor {
 				this.setDirection(LEFT);
 			}
 		}
+
+		return isMoving;
 	}
 
-	public void pressed(int direction) {
+	/**
+	 * 移動を開始したら trueを返す
+	 * @param direction
+	 */
+	public boolean pressed(int direction) {
 		directionPressedTime[direction]--;
 
 		if (isMoving) {
-			return;
+			return false;
 		}
 
 		if (direction == UP && directionPressedTime[UP] < 0) {
@@ -98,6 +110,8 @@ public class Cursor {
 				this.setDirection(LEFT);
 			}
 		}
+
+		return isMoving;
 	}
 
 	public void update() {
