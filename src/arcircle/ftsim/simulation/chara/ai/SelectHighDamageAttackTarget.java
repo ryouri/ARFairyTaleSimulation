@@ -8,7 +8,8 @@ import arcircle.ftsim.simulation.item.Weapon;
 
 public class SelectHighDamageAttackTarget extends SelectAttackTarget {
 
-	//バトル予測の結果から、コストを計算、コストは低いほうがいいのでマイナスをつける
+	//バトル予測の結果から一番ダメージを与えられそうなのを選ぶ
+	//コストは低いほうがいいのでマイナスをつける
 	//コスト = -(命中率*ダメージ*攻撃回数-HP)
 	@Override
 	protected int calculateCost(AttackCharaData attackCharaData) {
