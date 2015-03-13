@@ -55,8 +55,6 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 			e.printStackTrace();
 		}
 		attackColor = new Color(1, 1, 1, 0.5f);
-
-
 	}
 
 	@Override
@@ -136,6 +134,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 			setFirstPosition();
 
 			charaCommandWindow.setVisible(true);
+			field.setSubInfoWindowForFieldInfo();
 
 			return;
 		}
@@ -179,7 +178,8 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 	private void attackCharaForTarget(Chara targetChara) {
 		if (targetChara == null || targetChara.equals(chara)) {
 			field.setSubInfoWindowForFieldInfo();
-		} else {
+		//敵キャラのみに攻撃可能
+		} else if (targetChara.getCamp() == chara.CAMP_ENEMY){
 			//攻撃力を計算！
 			ExpectBattleInfo expectBattleInfo =
 					new ExpectBattleInfo(chara, chara.getEquipedWeapon(), new SupportInfo(),

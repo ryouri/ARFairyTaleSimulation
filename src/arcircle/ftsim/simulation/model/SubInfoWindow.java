@@ -332,7 +332,7 @@ public class SubInfoWindow implements Renderer{
 		g.drawString(expectBattleInfo.getFirstCharaBattleInfo().getPower() + "",
 				objectPos_battle.get("ATTACK_VALUE").x, objectPos_battle.get("ATTACK_VALUE").y);
 		//×２の描画
-		if(twice){
+		if(expectBattleInfo.getFirstCharaBattleInfo().isTwiceAttack()){
 			g.drawString("×2",
 					objectPos_battle.get("×2").x, objectPos_battle.get("×2").y);
 		}
