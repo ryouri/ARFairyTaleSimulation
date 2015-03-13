@@ -169,7 +169,7 @@ public class Characters {
 
 		//TODO: 現在は，デバッグのために新しいAIを試す
 		//chara.setAI(new SimpleAI(chara));
-		chara.setAI(new SameTimeAttackAI(chara));
+		chara.setAI(new SameTimeAttackAI(chara, field, this));
 
 		characterArray.add(chara);
 	}
@@ -272,7 +272,7 @@ public class Characters {
 				if (chara.getCamp() != Chara.CAMP_ENEMY || chara.isStand()) {
 					continue;
 				}
-				chara.getAI().thinkAndDo(field, this);
+				chara.getAI().thinkAndDo();
 				break;
 			}
 

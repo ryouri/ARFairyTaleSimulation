@@ -16,9 +16,16 @@ import arcircle.ftsim.simulation.model.Field;
 public class SimpleAI extends AI {
 	Chara chara;
 	Field field;
+	Characters characters;
+	int weaponType;
+	boolean attack_flag;
 
-	public SimpleAI(Chara chara) {
+	public SimpleAI(Chara chara, Field field, Characters characters) {
 		this.chara = chara;
+		this.field = field;
+		this.characters = characters;
+		this.weaponType = CalculateMoveAttackRange.judgeAttackWeaponType(chara
+				.getItemList());
 	}
 
 	// @Override
@@ -29,8 +36,7 @@ public class SimpleAI extends AI {
 	// }
 
 	@Override
-	public void thinkAndDo(Field field, Characters characters) {
-		this.field = field;
+	public void thinkAndDo() {
 
 		CalculateMoveAttackRange cmRange = new CalculateMoveAttackRange(field,
 				chara);
@@ -39,8 +45,6 @@ public class SimpleAI extends AI {
 		// boolean[][] attackRange = new boolean[field.row][field.col];
 		// boolean[][] attackJudge = new boolean[field.row][field.col];
 		//
-		int weaponType = CalculateMoveAttackRange.judgeAttackWeaponType(chara
-				.getItemList());
 		// CalculateMoveAttackRange.calculateAttackRange(chara.x, chara.y,
 		// attackRange, weaponType, field);;
 		// attackJudge = CalculateMoveAttackRange.calculateJudgeAttack(field,
