@@ -10,6 +10,7 @@ import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
 import arcircle.ftsim.simulation.chara.battle.SupportInfo;
 import arcircle.ftsim.simulation.model.AttackInfo;
+import arcircle.ftsim.simulation.model.Field;
 
 public class AttackTask extends Task {
 	ArrayList<AttackInfo> attackInfoArray;
@@ -54,15 +55,28 @@ public class AttackTask extends Task {
 
 	private void renderAttack(Chara chara, Graphics g, int offsetX, int offsetY) {
 		int change = chara.getAttackTime();
+		Chara damageChara = attackInfoArray.get(nowAttackIndex).damageChara;
 		//時間の変化によって，キャラクタの移動量を制御
 		if (change <= 5 || change >= Chara.MAX_ATTACK_TIME - 5) {
 			change = 0;
 		} else if (change < Chara.MAX_ATTACK_TIME / 2) {
 			change -= 5;
-			attackInfoArray.get(nowAttackIndex).damageChara.setAlpha((100 - change * 3) / 100.0f);
+			//あたってない時はキャラが透ける
+			if (!attackInfoArray.get(nowAttackIndex).isHit()) {
+				damageChara.setAlpha((100 - change * 3) / 100.0f);
+			} else {
+				//あたってる時は色が暗くなる
+				damageChara.setColor((100 - change * 1) / 100.0f);
+			}
 		} else if (change >= Chara.MAX_ATTACK_TIME / 2) {
 			change = Chara.MAX_ATTACK_TIME - change - 5;
-			attackInfoArray.get(nowAttackIndex).damageChara.setAlpha(change * 3);
+			//あたってない時はキャラが透ける
+			if (!attackInfoArray.get(nowAttackIndex).isHit()) {
+				damageChara.setAlpha(change * 3);
+			} else {
+				//あたってる時は色が暗くなる
+				damageChara.setColor(change * 1);
+			}
 		}
 
 		Animation anime = null;
@@ -102,6 +116,19 @@ public class AttackTask extends Task {
 		anime.draw(
 				chara.pX + offsetX + changeX,
 				chara.pY + offsetY + changeY);
+
+		//必殺の時のみダメージを受けてるキャラクタを左右に揺らす
+		if (attackInfoArray.get(nowAttackIndex).isDead()) {
+			if (22 <= chara.getAttackTime() && chara.getAttackTime() <= 29) {
+				int mod2 = chara.getAttackTime() % 8;
+				int sign = mod2 <= 3 ? 1 : -1;
+				damageChara.pX += (sign * 2f) * Integer.signum(changeY);
+				damageChara.pY += (sign * 2f) * Integer.signum(changeX);
+			} else if (chara.getAttackTime() >= 36) {
+				damageChara.pX = damageChara.x * Field.MAP_CHIP_SIZE;
+				damageChara.pY = damageChara.y * Field.MAP_CHIP_SIZE;
+			}
+		}
 	}
 
 	@Override

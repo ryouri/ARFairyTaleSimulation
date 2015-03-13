@@ -50,6 +50,7 @@ public class Chara {
 	public GrowRateStatus growRateStatus;
 
 	private float alpha;
+	private float color;
 
 	public Chara(String name, Characters characters) {
 		this.status = new Status();
@@ -58,10 +59,11 @@ public class Chara {
 		this.status.name = name;
 		this.isStand = false;
 		this.isMoved = false;
-		this.speed = 8;
+		this.speed = SPEED;
 		this.id = null;
 		this.characters = characters;
-		this.setAlpha(1.0f);
+		this.alpha = 1.0f;
+		this.color = 1.0f;
 	}
 
 	public AI getAI() {
@@ -161,10 +163,6 @@ public class Chara {
 		this.isMoving = moving;
 	}
 
-	public void setAlpha(float alpha) {
-		this.alpha = alpha;
-	}
-
 	public void move() {
 		if (!isMoving) {
 			return;
@@ -224,5 +222,17 @@ public class Chara {
 
 	public float getAlpha() {
 		return alpha;
+	}
+
+	public float getColor() {
+		return color;
+	}
+
+	public void setAlpha(float alpha) {
+		this.alpha = alpha;
+	}
+
+	public void setColor(float color) {
+		this.color = color;
 	}
 }

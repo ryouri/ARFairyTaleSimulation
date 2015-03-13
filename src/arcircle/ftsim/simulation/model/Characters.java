@@ -209,7 +209,8 @@ public class Characters {
 				}
 				anime.draw(
 						chara.pX + offsetX,
-						chara.pY + offsetY, new Color(1.0f, 1.0f, 1.0f, chara.getAlpha()));
+						chara.pY + offsetY,
+						new Color(chara.getColor(), chara.getColor(), chara.getColor(), chara.getAlpha()));
 			} else if (chara.isSelect) {
 				//Animation anime = selectAnimeMap.get(chara.status.name);
 				Animation anime = downAttackAnimeMap.get(chara.status.name);
