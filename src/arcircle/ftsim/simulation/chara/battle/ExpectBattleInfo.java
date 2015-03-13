@@ -6,9 +6,17 @@ import arcircle.ftsim.simulation.item.Weapon;
 public class ExpectBattleInfo {
 	private CharaBattleInfo firstCharaBattleInfo;
 	private CharaBattleInfo secondCharaBattleInfo;
+	private Chara firstChara;
+	private Chara secondChara;
+	private Weapon firstWeapon;
+	private Weapon secondWeapon;
 
 	public ExpectBattleInfo(Chara firstChara, Weapon firstWeapon, SupportInfo firstSupportInfo,
 			Chara secondChara, Weapon secondWeapon, SupportInfo secondSupportInfo){
+		this.firstChara = firstChara;
+		this.secondChara = secondChara;
+		this.firstWeapon = firstWeapon;
+		this.secondWeapon = secondWeapon;
 		calcBattleInfo(firstChara, firstWeapon, firstSupportInfo, secondChara, secondWeapon, secondSupportInfo);
 	}
 
@@ -83,6 +91,18 @@ public class ExpectBattleInfo {
 		this.secondCharaBattleInfo = secondCharaBattleInfo;
 	}
 
+	public Chara getFirstChara() {
+		return firstChara;
+	}
 
+	public Chara getSecondChara() {
+		return secondChara;
+	}
 
+	public Weapon getFirstWeapon() {
+		return firstWeapon;
+	}
+	public Weapon getSecondWeapon() {
+		return secondWeapon;
+	}
 }

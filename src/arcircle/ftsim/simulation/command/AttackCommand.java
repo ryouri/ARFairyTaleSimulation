@@ -13,6 +13,8 @@ import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.simulation.algorithm.range.CalculateMoveAttackRange;
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
+import arcircle.ftsim.simulation.chara.battle.SupportInfo;
 import arcircle.ftsim.simulation.model.CharaCommandWindow;
 import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Cursor;
@@ -155,7 +157,9 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 			if (keyInput.isKeyDown(input4Dir[i])) {
 				boolean moved = field.getCursor().startMove(cursor4Dir[i]);
 				if (moved) {
-
+					Chara targetChara = getDirectionChara(
+							field.getCursor().x, field.getCursor().y, cursor4Dir[i]);
+					attackCharaForTarget(targetChara);
 				}
 			}
 		}
@@ -164,9 +168,43 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 			if (keyInput.isKeyPressed(input4Dir[i])) {
 				boolean moved = field.getCursor().pressed(cursor4Dir[i]);
 				if (moved) {
-
+					Chara targetChara = getDirectionChara(
+							field.getCursor().x, field.getCursor().y, cursor4Dir[i]);
+					attackCharaForTarget(targetChara);
 				}
 			}
 		}
+	}
+
+	private void attackCharaForTarget(Chara targetChara) {
+		if (targetChara == null || targetChara.equals(chara)) {
+			field.setSubInfoWindowForFieldInfo();
+		} else {
+			ExpectBattleInfo expectBattleInfo =
+					new ExpectBattleInfo(chara, chara.getEquipedWeapon(), new SupportInfo(),
+					targetChara, targetChara.getEquipedWeapon(), new SupportInfo());
+			field.setSubInfoWindowForAttackInfo(expectBattleInfo);
+		}
+	}
+
+	private Chara getDirectionChara(int x, int y, int dir) {
+		int xAdd = 0;
+		int yAdd = 0;
+		switch(dir) {
+		case Cursor.UP:
+			yAdd = -1;
+			break;
+		case Cursor.RIGHT:
+			xAdd = 1;
+			break;
+		case Cursor.DOWN:
+			yAdd = 1;
+			break;
+		case Cursor.LEFT:
+			xAdd = -1;
+			break;
+		}
+		return field.getXYChara(field.getCursor().x + xAdd,
+				field.getCursor().y + yAdd);
 	}
 }

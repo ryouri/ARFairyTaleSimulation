@@ -25,6 +25,7 @@ import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.save.NowStage;
 import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
 import arcircle.ftsim.simulation.event.Event;
 import arcircle.ftsim.simulation.event.EventManager;
 import arcircle.ftsim.simulation.field.Terrain;
@@ -91,6 +92,13 @@ public class Field implements KeyListner, Renderer {
 
 	private TaskManager taskManager;
 
+	private SubInfoWindow subInfoWindow;
+	public SubInfoWindow getSubInfoWindow() {
+		return subInfoWindow;
+	}
+	public void setSubInfoWindow(SubInfoWindow subInfoWindow) {
+		this.subInfoWindow = subInfoWindow;
+	}
 
 	/**
 	 * あるキャラの周囲のキャラを探索し格納して返す．
@@ -603,5 +611,13 @@ public class Field implements KeyListner, Renderer {
 
 	public void setCharaStand(Chara chara, boolean stand) {
 		taskManager.addStandCharaTask(chara, stand);
+	}
+
+	public void setSubInfoWindowForFieldInfo() {
+		subInfoWindow.setSubInfoWindowForFieldInfo();
+	}
+
+	public void setSubInfoWindowForAttackInfo(ExpectBattleInfo expectBattleInfo) {
+		subInfoWindow.setSubInfoWindowForAttackInfo(expectBattleInfo);
 	}
 }

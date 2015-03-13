@@ -17,6 +17,7 @@ import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.Status;
+import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.simulation.item.Weapon;
 
@@ -41,9 +42,12 @@ public class SubInfoWindow implements Renderer{
 	private final int HPBAR_HEIGHT = 20;
 
 
-	/**true -> 戦闘前画面
-	 * false -> キャラステdータス */
-	private boolean BATTLE_MODE;
+	//現在描画している情報
+	public static final int FIELD_TERRAIN_INFO = 0;
+	public static final int ATTACK_INFO = 1;
+	private ExpectBattleInfo expectBattleInfo;
+	/** 上の２つの定数で描画する情報を変更 */
+	private int viewMode;
 	private boolean twice = true;
 
 	private UnicodeFont font = FTSimulationGame.font;
@@ -80,7 +84,7 @@ public class SubInfoWindow implements Renderer{
 	public SubInfoWindow(Field field) {
 		super();
 		this.field = field;
-		BATTLE_MODE = true;
+		this.viewMode = FIELD_TERRAIN_INFO;
 		//キャラ画像の部分は4パターンの歩行アニメーションを表示して64×64を埋める
 		IMAGEAnime = new Animation[4];
 		//ステータス画面の各オブジェクトの描画位置
@@ -108,10 +112,10 @@ public class SubInfoWindow implements Renderer{
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
 		g.setFont(font);	//フォントのセット(これをやらないと文字描画されない)
-		if(BATTLE_MODE){
-			drawBattleWindow(g);
-		}else{
+		if(viewMode == FIELD_TERRAIN_INFO){
 			drawStatusWindow(g);
+		} else if(viewMode == ATTACK_INFO){
+			drawBattleWindow(g);
 		}
 	}
 
@@ -256,10 +260,10 @@ public class SubInfoWindow implements Renderer{
 	private void drawBattleWindow(Graphics g){
 		g.drawImage(topBackGround, START_WIDTH, START_HEIGHT);
 		g.drawImage(underBackGround, START_WIDTH, START_HEIGHT + (HEIGHT/2));
-		
+
 		//戦闘を行うキャラが取得できるはず?
 		//TODO ちゃんと戦闘を行うキャラの取得
-		Chara battleChara = field.characters.getAnyChara();
+		Chara battleChara = expectBattleInfo.getFirstChara();
 		faceImageMap = field.characters.characterFaceStandardImageMap;
 		//キャライメージの描画
 		g.drawImage(faceImageMap.get(battleChara.status.name),
@@ -324,7 +328,8 @@ public class SubInfoWindow implements Renderer{
 		g.drawString("威力",
 				objectPos_battle.get("ATTACK").x, objectPos_battle.get("ATTACK").y);
 		//攻撃力値の描画
-		g.drawString(itemPoint + "",
+		//三澤：このように，expectBattleInfoのデータを利用すれば良い
+		g.drawString(expectBattleInfo.getFirstCharaBattleInfo().getPower() + "",
 				objectPos_battle.get("ATTACK_VALUE").x, objectPos_battle.get("ATTACK_VALUE").y);
 		//×２の描画
 		if(twice){
@@ -562,7 +567,16 @@ public class SubInfoWindow implements Renderer{
 //		tempY = objectPos_battle.get("HIT").y +  CHAR_SIZE + LINE_INTERVAL;
 //		objectPos_battle.put("KILLER", new Point(tempX, tempY));	//ok
 
-		
+
+	}
+
+	public void setSubInfoWindowForFieldInfo() {
+		viewMode = FIELD_TERRAIN_INFO;
+	}
+
+	public void setSubInfoWindowForAttackInfo(ExpectBattleInfo expectBattleInfo) {
+		viewMode = ATTACK_INFO;
+		this.expectBattleInfo = expectBattleInfo;
 	}
 
 

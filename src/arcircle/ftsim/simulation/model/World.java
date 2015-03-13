@@ -51,6 +51,7 @@ public class World {
 		field.init(subStoryFolderPath);
 
 		this.subInfoWindow = new SubInfoWindow(field);
+		this.field.setSubInfoWindow(subInfoWindow);
 
 		sgModel.pushKeyInputStack(field);
 		sgModel.addRendererArray(field);
