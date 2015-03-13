@@ -180,6 +180,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 		if (targetChara == null || targetChara.equals(chara)) {
 			field.setSubInfoWindowForFieldInfo();
 		} else {
+			//攻撃力を計算！
 			ExpectBattleInfo expectBattleInfo =
 					new ExpectBattleInfo(chara, chara.getEquipedWeapon(), new SupportInfo(),
 					targetChara, targetChara.getEquipedWeapon(), new SupportInfo());
