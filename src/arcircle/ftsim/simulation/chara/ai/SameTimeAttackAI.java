@@ -62,16 +62,8 @@ public class SameTimeAttackAI extends AI {
 			moveToOneChara(targetChara, moveRange, map, cmRange);
 		// 攻撃可能キャラがいたら、その中でも防御の低いやつを狙う
 		} else {
-//			Collections.shuffle(attackCharaArray);
-//			AttackCharaData attackChara = attackCharaArray.get(0);
-			SelectAttackTarget sat = new SelectLowerDefenceChara();
+			SelectAttackTarget sat = new SelectMostGoodAttackTarget();
 			AttackCharaData attackChara = sat.getAttackTargetCharaData(attackCharaArray);
-
-//			chara.x = attackChara.attackPoint.x;
-//			chara.y = attackChara.attackPoint.y;
-//			chara.pX = chara.x * Field.MAP_CHIP_SIZE;
-//			chara.pY = chara.y * Field.MAP_CHIP_SIZE;
-
 			arcircle.ftsim.simulation.algorithm.range.Node moveNode =
 					cmRange.getNodeByXY(attackChara.attackPoint.x, attackChara.attackPoint.y);
 			if (moveNode.pointXArray.size() >= 1) {
