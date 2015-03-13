@@ -67,7 +67,7 @@ public class Characters {
 //	private TaskManager taskManager;
 
 	public void checkStandEvent(Chara chara) {
-		field.eventManager.checkStandEvent(chara);
+		getField().eventManager.checkStandEvent(chara);
 	}
 
 	public Characters() {
@@ -169,7 +169,7 @@ public class Characters {
 
 		//TODO: 現在は，デバッグのために新しいAIを試す
 		//chara.setAI(new SimpleAI(chara));
-		chara.setAI(new SameTimeAttackAI(chara, field, this));
+		chara.setAI(new SameTimeAttackAI(chara, getField(), this));
 
 		characterArray.add(chara);
 	}
@@ -239,31 +239,30 @@ public class Characters {
 
 	public void update(int delta) {
 		//選択されているキャラを早く動かす
-		if (field.getNowTurn() == Field.TURN_FRIEND && !field.getTaskManager().existTask()) {
+		if (getField().getNowTurn() == Field.TURN_FRIEND && !getField().getTaskManager().existTask()) {
 			for (Chara chara : characterArray) {
 				chara.isSelect = false;
-				if (chara.x == field.getCursor().x
-						&& chara.y == field.getCursor().y) {
+				if (chara.x == getField().getCursor().x
+						&& chara.y == getField().getCursor().y) {
 					chara.isSelect = true;
 				}
 			}
 		}
 
-		if (field.getSgModel().getKeyInputStackByFirst() instanceof BattleTalkModel) {
+		if (getField().getSgModel().getKeyInputStackByFirst() instanceof BattleTalkModel) {
 			return;
 		}
 
-		if (field.getNowTurn() == Field.TURN_FRIEND) {
+		if (getField().getNowTurn() == Field.TURN_FRIEND) {
 			//FRIENDキャラが全軍待機していたら敵ターンへ
 			boolean standCharaFlag = checkCharaStand(Chara.CAMP_FRIEND);
 
 			if (standCharaFlag == true) {
-				field.changeTurnEnemy();
-				standForAllCampChara(Chara.CAMP_FRIEND);
+				getField().getTaskManager().addTurnEndTask(this, Chara.CAMP_FRIEND);
 			}
-		} else if (field.getNowTurn() == Field.TURN_ENEMY) {
+		} else if (getField().getNowTurn() == Field.TURN_ENEMY) {
 			//タスクがなければ，AIを一キャラ分動作させる
-			if (field.getTaskManager().existTask()) {
+			if (getField().getTaskManager().existTask()) {
 				return;
 			}
 
@@ -279,8 +278,7 @@ public class Characters {
 			boolean standCharaFlag = checkCharaStand(Chara.CAMP_ENEMY);
 
 			if (standCharaFlag == true) {
-				field.changeTurnFriend();
-				standForAllCampChara(Chara.CAMP_ENEMY);
+				getField().getTaskManager().addTurnEndTask(this, Chara.CAMP_ENEMY);
 			}
 		}
 	}
@@ -288,7 +286,7 @@ public class Characters {
 	/**
 	 * 指定された所属のキャラを全て行動可能にする
 	 */
-	private void standForAllCampChara(int charaCamp) {
+	public void standForAllCampChara(int charaCamp) {
 		for (Chara chara : characterArray) {
 			if (chara.getCamp() == charaCamp) {
 				chara.setStand(false);
@@ -347,5 +345,9 @@ public class Characters {
 			return chara;
 		}
 		return null;
+	}
+
+	public Field getField() {
+		return field;
 	}
 }

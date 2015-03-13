@@ -1,11 +1,14 @@
 package arcircle.ftsim.simulation.model.task;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
+import arcircle.ftsim.simulation.chara.battle.SupportInfo;
 import arcircle.ftsim.simulation.model.AttackInfo;
 
 public class AttackTask extends Task {
@@ -15,9 +18,27 @@ public class AttackTask extends Task {
 
 	public AttackTask(TaskManager taskManager, Chara attackChara, Chara damageChara) {
 		super(taskManager);
+
+		calcAttackInfo(attackChara, damageChara);
+
+	}
+
+	private void calcAttackInfo(Chara attackChara, Chara damageChara) {
+		Random random = new Random();
+
+		ExpectBattleInfo expectBattleInfo =
+				new ExpectBattleInfo(attackChara, attackChara.getEquipedWeapon(), new SupportInfo(),
+						damageChara, damageChara.getEquipedWeapon(), new SupportInfo());
+
 		this.attackInfoArray = new ArrayList<AttackInfo>();
 		attackInfoArray.add(new AttackInfo(attackChara, damageChara));
 		attackInfoArray.add(new AttackInfo(damageChara, attackChara));
+
+		if (expectBattleInfo.getFirstCharaBattleInfo().isTwiceAttack()) {
+			attackInfoArray.add(new AttackInfo(attackChara, damageChara));
+		} else if (expectBattleInfo.getSecondCharaBattleInfo().isTwiceAttack()) {
+			attackInfoArray.add(new AttackInfo(damageChara, attackChara));
+		}
 	}
 
 	@Override
@@ -79,11 +100,12 @@ public class AttackTask extends Task {
 
 	@Override
 	public void update(int delta) {
-		//攻撃しているキャラの処理
+		//攻撃開始直前の処理
 		if (isAttackNow == false && attackInfoArray.size() > 0) {
 			AttackInfo attackInfo = attackInfoArray.get(nowAttackIndex);
 			charaAttack(attackInfo.attackChara, attackInfo.damageChara);
 			isAttackNow = true;
+		//攻撃開始後の処理
 		} else if (isAttackNow == true && attackInfoArray.size() > 0){
 			AttackInfo attackInfo = attackInfoArray.get(nowAttackIndex);
 			Chara attackChara = attackInfo.attackChara;

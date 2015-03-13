@@ -54,6 +54,11 @@ public class TaskManager {
 		addOneTaskAndGenerateArray(talkTask);
 	}
 
+	public void addTurnEndTask(Characters characters, int camp) {
+		TurnEndTask turnEndTask = new TurnEndTask(this, characters, camp);
+		addOneTaskAndGenerateArray(turnEndTask);
+	}
+
 	public boolean existTask() {
 		return !taskArrayArray.isEmpty();
 	}
