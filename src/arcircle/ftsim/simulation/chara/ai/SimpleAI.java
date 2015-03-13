@@ -66,7 +66,7 @@ public class SimpleAI extends AI {
 		} else {
 //			Collections.shuffle(attackCharaArray);
 //			AttackCharaData attackChara = attackCharaArray.get(0);
-			SelectAttackTarget sat = new SelectLowerDefenceChara();
+			SelectAttackTarget sat = new SelectLowerDefenceAttackTarget();
 			AttackCharaData attackChara = sat.getAttackTargetCharaData(attackCharaArray);
 
 //			chara.x = attackChara.attackPoint.x;
