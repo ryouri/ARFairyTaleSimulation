@@ -148,30 +148,25 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 			}
 		}
 
-		if (keyInput.isKeyDown(Input.KEY_UP)) {
-			field.getCursor().startMove(Cursor.UP);
-		}
-		if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
-			field.getCursor().startMove(Cursor.RIGHT);
-		}
-		if (keyInput.isKeyDown(Input.KEY_DOWN)) {
-			field.getCursor().startMove(Cursor.DOWN);
-		}
-		if (keyInput.isKeyDown(Input.KEY_LEFT)) {
-			field.getCursor().startMove(Cursor.LEFT);
+		int[] input4Dir = {Input.KEY_UP, Input.KEY_RIGHT, Input.KEY_DOWN, Input.KEY_LEFT};
+		int[] cursor4Dir = {Cursor.UP, Cursor.RIGHT, Cursor.DOWN, Cursor.LEFT};
+
+		for (int i = 0; i < input4Dir.length; i++) {
+			if (keyInput.isKeyDown(input4Dir[i])) {
+				boolean moved = field.getCursor().startMove(cursor4Dir[i]);
+				if (moved) {
+
+				}
+			}
 		}
 
-		if (keyInput.isKeyPressed(Input.KEY_UP)) {
-			field.getCursor().pressed(Cursor.UP);
-		}
-		if (keyInput.isKeyPressed(Input.KEY_RIGHT)) {
-			field.getCursor().pressed(Cursor.RIGHT);
-		}
-		if (keyInput.isKeyPressed(Input.KEY_DOWN)) {
-			field.getCursor().pressed(Cursor.DOWN);
-		}
-		if (keyInput.isKeyPressed(Input.KEY_LEFT)) {
-			field.getCursor().pressed(Cursor.LEFT);
+		for (int i = 0; i < input4Dir.length; i++) {
+			if (keyInput.isKeyPressed(input4Dir[i])) {
+				boolean moved = field.getCursor().pressed(cursor4Dir[i]);
+				if (moved) {
+
+				}
+			}
 		}
 	}
 }

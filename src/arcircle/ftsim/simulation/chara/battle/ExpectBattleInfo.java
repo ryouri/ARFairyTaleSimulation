@@ -23,10 +23,10 @@ public class ExpectBattleInfo {
 			Chara secondChara, Weapon secondWeapon, SupportInfo secondSupportInfo) {
 
 		//TODO ここはWeaponの方でちゃんと実装できたら消す, まだ実装できてないため適当に入れてる
-		firstWeapon.hitProbability = 10;
-		secondWeapon.hitProbability = 10;
-		firstWeapon.deadProbability = 10;
-		secondWeapon.deadProbability = 10;
+		firstWeapon.hitProbability = 100;
+		secondWeapon.hitProbability = 100;
+		firstWeapon.deadProbability = 3;
+		secondWeapon.deadProbability = 3;
 
 		// もろもろ計算
 		int firstPower = firstChara.status.power + firstWeapon.power + firstSupportInfo.getPower();

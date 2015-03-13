@@ -91,6 +91,31 @@ public class Field implements KeyListner, Renderer {
 
 	private TaskManager taskManager;
 
+
+	/**
+	 * あるキャラの周囲のキャラを探索し格納して返す．
+	 * @param chara 探索の中心のキャラ，これと同じ所属のキャラを返す
+	 * @param aroundMassNum マスいくつ分離れているキャラを探索するか
+	 * @return 探索できたキャラが入る
+	 */
+	public ArrayList<Chara> getAroundChara(Chara chara, int aroundMassNum) {
+		ArrayList<Chara> aroundCharaArray = new ArrayList<Chara>();
+
+		for (Chara targetChara : characters.characterArray) {
+			if (chara.equals(targetChara)) {
+				continue;
+			}
+			int xDiff = Math.abs(chara.x - targetChara.x);
+			int yDiff = Math.abs(chara.y - targetChara.y);
+
+			if (xDiff + yDiff <= aroundMassNum) {
+				aroundCharaArray.add(targetChara);
+			}
+		}
+
+		return aroundCharaArray;
+	}
+
 	public TaskManager getTaskManager() {
 		return taskManager;
 	}
