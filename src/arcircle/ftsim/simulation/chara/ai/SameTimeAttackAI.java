@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Queue;
 
 import arcircle.ftsim.simulation.algorithm.range.CalculateMoveAttackRange;
 import arcircle.ftsim.simulation.algorithm.route.Astar;
@@ -16,39 +17,47 @@ import arcircle.ftsim.simulation.model.Field;
 public class SameTimeAttackAI extends AI {
 	Chara chara;
 	Field field;
+	Characters characters;
+	int weaponType;
+	boolean attack_flag;
 
 
-	public SameTimeAttackAI(Chara chara) {
+	public SameTimeAttackAI(Chara chara, Field field, Characters characters) {
 		this.chara = chara;
+		this.field = field;
+		this.characters = characters;
+		this.weaponType = CalculateMoveAttackRange.judgeAttackWeaponType(chara
+				.getItemList());
 	}
 
 	@Override
-	public void thinkAndDo(Field field, Characters characters) {
-		this.field = field;
-
+	public void thinkAndDo() {
 		CalculateMoveAttackRange cmRange = new CalculateMoveAttackRange(field,
 				chara);
 		boolean[][] moveRange = cmRange.calculateRange();
 
-		// boolean[][] attackRange = new boolean[field.row][field.col];
-		// boolean[][] attackJudge = new boolean[field.row][field.col];
-		//
-		int weaponType = CalculateMoveAttackRange.judgeAttackWeaponType(chara
-				.getItemList());
-		// CalculateMoveAttackRange.calculateAttackRange(chara.x, chara.y,
-		// attackRange, weaponType, field);;
-		// attackJudge = CalculateMoveAttackRange.calculateJudgeAttack(field,
-		// attackRange, chara);
-		// TODO:最新だよー，ここでAI作れば，後は何とかなりそう
-
 		// 攻撃可能キャラの数を調べる
-		ArrayList<AttackCharaData> attackCharaArray = Algorithm
-				.generateAttackCharaArray(chara, weaponType, moveRange, field,
-						characters);
+		ArrayList<AttackCharaData> attackCharaArray = getAttackCharaArray();
 
-		// 攻撃可能キャラがいないため，最短のキャラを選択し、そこを目指して移動する
-		if (attackCharaArray.size() == 0) {
-			//chara.setStand(true);
+		// 攻撃フラグがFalseなら、周辺のエネミー(自分含む)の攻撃可能キャラを調べる
+		if (!attack_flag) {
+			ArrayList<Chara> aroundEnemies = getArroundEnemy(2);
+			for (Chara aroundChara1 : aroundEnemies){
+				if (((SameTimeAttackAI)aroundChara1.getAI()).getAttackCharaArray().size() != 0){
+					for (Chara aroundChara2 : aroundEnemies){
+						((SameTimeAttackAI)aroundChara2.getAI()).setAttack_flag(true);
+					}
+					break;
+				}
+			}
+		}
+
+		// 周辺のエネミーを調べてもフラグが立たなければ待機
+		if (!attack_flag) {
+			chara.setStand(true);
+		// 攻撃可能キャラはいないけど攻撃フラグが立ってたら、最短キャラまで移動
+		} else if (attackCharaArray.size() == 0){
+			System.out.println("攻撃できないけどオレもいくー！");
 			Map map = new Map(field.createMoveCostArray(chara.x, chara.y));
 			Chara targetChara = getMostNeighborChara(characters, map);
 			moveToOneChara(targetChara, moveRange, map, cmRange);
@@ -141,5 +150,50 @@ public class SameTimeAttackAI extends AI {
 				break;
 			}
 		}
+	}
+
+	/**
+	 * 周囲の同種AI(SameTimeAttackAI)のエネミーを返す(自分も含む)
+	 * @return エネミーのリスト
+	 */
+	private ArrayList<Chara> getArroundEnemy(int aroundMassNum){
+		ArrayList<Chara> aroundCharaArray = new ArrayList<Chara>();
+		Queue<Chara> unserchedCharaArray = new LinkedList<Chara>();
+		ArrayList<Chara> tempAroundCharaArray = new ArrayList<Chara>();
+		unserchedCharaArray.add(chara);
+		while (!unserchedCharaArray.isEmpty()){
+			Chara targetChara = unserchedCharaArray.remove();
+			for (Chara tempChara : field.getAroundChara(targetChara, aroundMassNum)){
+				if (tempChara.getAI() instanceof SameTimeAttackAI
+						&& !aroundCharaArray.contains(tempChara)
+						&& !tempChara.equals(chara)
+						&& !unserchedCharaArray.contains(tempChara)){
+					unserchedCharaArray.add(tempChara);
+				}
+				aroundCharaArray.add(targetChara);
+			}
+		}
+		return aroundCharaArray;
+	}
+
+	/**
+	 * 攻撃可能キャラを調べる
+	 * @return 攻撃キャラデータリスト
+	 */
+	public ArrayList<AttackCharaData> getAttackCharaArray(){
+		CalculateMoveAttackRange cmRange = new CalculateMoveAttackRange(field,
+				chara);
+		boolean[][] moveRange = cmRange.calculateRange();
+		return Algorithm
+				.generateAttackCharaArray(chara, weaponType, moveRange, field,
+						characters);
+	}
+
+	public boolean isAttack_flag() {
+		return attack_flag;
+	}
+
+	public void setAttack_flag(boolean attack_flag) {
+		this.attack_flag = attack_flag;
 	}
 }
