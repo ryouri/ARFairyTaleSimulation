@@ -57,7 +57,6 @@ public class SameTimeAttackAI extends AI {
 			chara.setStand(true);
 		// 攻撃可能キャラはいないけど攻撃フラグが立ってたら、最短キャラまで移動
 		} else if (attackCharaArray.size() == 0){
-			System.out.println("攻撃できないけどオレもいくー！");
 			Map map = new Map(field.createMoveCostArray(chara.x, chara.y));
 			Chara targetChara = getMostNeighborChara(characters, map);
 			moveToOneChara(targetChara, moveRange, map, cmRange);
