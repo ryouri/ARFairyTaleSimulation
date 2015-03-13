@@ -329,7 +329,7 @@ public class SubInfoWindow implements Renderer{
 				objectPos_battle.get("ATTACK").x, objectPos_battle.get("ATTACK").y);
 		//攻撃力値の描画
 		//三澤：このように，expectBattleInfoのデータを利用すれば良い
-		g.drawString(expectBattleInfo.getFirstCharaBattleInfo().getPower() + "",
+		g.drawString(expectBattleInfo.getFirstCharaBattleInfo().getDamage() + "",
 				objectPos_battle.get("ATTACK_VALUE").x, objectPos_battle.get("ATTACK_VALUE").y);
 		//×２の描画
 		if(expectBattleInfo.getFirstCharaBattleInfo().isTwiceAttack()){

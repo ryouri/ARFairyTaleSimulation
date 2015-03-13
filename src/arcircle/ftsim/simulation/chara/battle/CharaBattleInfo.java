@@ -26,11 +26,11 @@ public class CharaBattleInfo {
 		this.hp = hp;
 	}
 
-	public int getPower() {
+	public int getDamage() {
 		return damage;
 	}
 
-	public void setPower(int power) {
+	public void setDamage(int power) {
 		this.damage = power;
 	}
 

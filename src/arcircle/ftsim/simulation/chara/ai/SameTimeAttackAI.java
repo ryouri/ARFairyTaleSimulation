@@ -57,22 +57,14 @@ public class SameTimeAttackAI extends AI {
 			chara.setStand(true);
 		// 攻撃可能キャラはいないけど攻撃フラグが立ってたら、最短キャラまで移動
 		} else if (attackCharaArray.size() == 0){
-			System.out.println("攻撃できないけどオレもいくー！");
 			Map map = new Map(field.createMoveCostArray(chara.x, chara.y));
 			Chara targetChara = getMostNeighborChara(characters, map);
 			moveToOneChara(targetChara, moveRange, map, cmRange);
-		// 攻撃可能キャラがいたら、その中でも防御の低いやつを狙う
+		// 攻撃可能キャラがいたら、その中でも一番ダメージが大きくなる相手に攻撃
 		} else {
-//			Collections.shuffle(attackCharaArray);
-//			AttackCharaData attackChara = attackCharaArray.get(0);
-			SelectAttackTarget sat = new SelectLowerDefenceChara();
+			// ここでインスタンス化するクラスによって攻撃対象のAIが変わる
+			SelectAttackTarget sat = new SelectHighDamageAttackTarget();
 			AttackCharaData attackChara = sat.getAttackTargetCharaData(attackCharaArray);
-
-//			chara.x = attackChara.attackPoint.x;
-//			chara.y = attackChara.attackPoint.y;
-//			chara.pX = chara.x * Field.MAP_CHIP_SIZE;
-//			chara.pY = chara.y * Field.MAP_CHIP_SIZE;
-
 			arcircle.ftsim.simulation.algorithm.range.Node moveNode =
 					cmRange.getNodeByXY(attackChara.attackPoint.x, attackChara.attackPoint.y);
 			if (moveNode.pointXArray.size() >= 1) {
@@ -116,7 +108,6 @@ public class SameTimeAttackAI extends AI {
 						     	{ 0, -1}};//up
 
 	private void moveToOneChara(Chara toChara, boolean[][] moveRange, Map map, CalculateMoveAttackRange cmRange) {
-		System.out.println("SelectChara:" + toChara.id + " x:" + toChara.x + " y:" + toChara.y);
 		Astar aStar = new Astar(map);
 
 		int bestCost = 9999;
