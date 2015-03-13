@@ -31,13 +31,15 @@ public class AttackTask extends Task {
 						damageChara, damageChara.getEquipedWeapon(), new SupportInfo());
 
 		this.attackInfoArray = new ArrayList<AttackInfo>();
-		attackInfoArray.add(new AttackInfo(attackChara, damageChara));
-		attackInfoArray.add(new AttackInfo(damageChara, attackChara));
+		attackInfoArray.add(new AttackInfo(attackChara, damageChara, expectBattleInfo.getFirstCharaBattleInfo()));
 
+		attackInfoArray.add(new AttackInfo(damageChara, attackChara, expectBattleInfo.getSecondCharaBattleInfo()));
+
+		//2回攻撃の処理
 		if (expectBattleInfo.getFirstCharaBattleInfo().isTwiceAttack()) {
-			attackInfoArray.add(new AttackInfo(attackChara, damageChara));
+			attackInfoArray.add(new AttackInfo(attackChara, damageChara, expectBattleInfo.getFirstCharaBattleInfo()));
 		} else if (expectBattleInfo.getSecondCharaBattleInfo().isTwiceAttack()) {
-			attackInfoArray.add(new AttackInfo(damageChara, attackChara));
+			attackInfoArray.add(new AttackInfo(damageChara, attackChara, expectBattleInfo.getSecondCharaBattleInfo()));
 		}
 	}
 
@@ -49,14 +51,18 @@ public class AttackTask extends Task {
 		}
 	}
 
+
 	private void renderAttack(Chara chara, Graphics g, int offsetX, int offsetY) {
 		int change = chara.getAttackTime();
+		//時間の変化によって，キャラクタの移動量を制御
 		if (change <= 5 || change >= Chara.MAX_ATTACK_TIME - 5) {
 			change = 0;
 		} else if (change < Chara.MAX_ATTACK_TIME / 2) {
 			change -= 5;
+			attackInfoArray.get(nowAttackIndex).damageChara.setAlpha((100 - change * 3) / 100.0f);
 		} else if (change >= Chara.MAX_ATTACK_TIME / 2) {
 			change = Chara.MAX_ATTACK_TIME - change - 5;
+			attackInfoArray.get(nowAttackIndex).damageChara.setAlpha(change * 3);
 		}
 
 		Animation anime = null;
@@ -103,7 +109,7 @@ public class AttackTask extends Task {
 		//攻撃開始直前の処理
 		if (isAttackNow == false && attackInfoArray.size() > 0) {
 			AttackInfo attackInfo = attackInfoArray.get(nowAttackIndex);
-			charaAttack(attackInfo.attackChara, attackInfo.damageChara);
+			charaAttackPrepareDir(attackInfo.attackChara, attackInfo.damageChara);
 			isAttackNow = true;
 		//攻撃開始後の処理
 		} else if (isAttackNow == true && attackInfoArray.size() > 0){
@@ -115,6 +121,7 @@ public class AttackTask extends Task {
 				//攻撃を受ける側にダメージを与える
 				Chara damageChara = attackInfo.damageChara;
 				damageChara.status.hp -= attackChara.status.power - damageChara.status.defence;
+				damageChara.setAlpha(1.0f);
 
 				//攻撃を受けた側のhpがなくなったら
 				if (damageChara.status.hp < 0) {
@@ -139,7 +146,7 @@ public class AttackTask extends Task {
 	}
 
 
-	private void charaAttack(Chara chara, Chara damageChara) {
+	private void charaAttackPrepareDir(Chara chara, Chara damageChara) {
 		taskManager.field.setCursorVisible(false);
 		chara.setAttack(true);
 		if (damageChara.x > chara.x) {

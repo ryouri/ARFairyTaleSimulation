@@ -49,6 +49,8 @@ public class Chara {
 
 	public GrowRateStatus growRateStatus;
 
+	private float alpha;
+
 	public Chara(String name, Characters characters) {
 		this.status = new Status();
 		this.growRateStatus = new GrowRateStatus();
@@ -59,6 +61,7 @@ public class Chara {
 		this.speed = 8;
 		this.id = null;
 		this.characters = characters;
+		this.setAlpha(1.0f);
 	}
 
 	public AI getAI() {
@@ -158,6 +161,10 @@ public class Chara {
 		this.isMoving = moving;
 	}
 
+	public void setAlpha(float alpha) {
+		this.alpha = alpha;
+	}
+
 	public void move() {
 		if (!isMoving) {
 			return;
@@ -213,5 +220,9 @@ public class Chara {
 		} else {
 			return null;
 		}
+	}
+
+	public float getAlpha() {
+		return alpha;
 	}
 }
