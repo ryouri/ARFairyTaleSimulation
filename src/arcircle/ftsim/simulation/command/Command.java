@@ -30,5 +30,19 @@ public abstract class Command {
 		this.charaCommandWindow = charaCommandWindow;
 	}
 
-	abstract public void pushed(Field field, Chara chara);
+
+	/**
+	 * 何も処理しない，そこで終了する
+	 */
+	public static final int PUSHED_NONE = 0;
+	/**
+	 * 非表示にする
+	 */
+	public static final int PUSHED_NOT_VISIBLE = 1;
+	/**
+	 * @param field
+	 * @param chara
+	 * @return 定数を返す
+	 */
+	abstract public int pushed(Field field, Chara chara);
 }

@@ -13,11 +13,13 @@ public class StandCommand extends Command {
 	}
 
 	@Override
-	public void pushed(Field field, Chara chara) {
+	public int pushed(Field field, Chara chara) {
 		sgModel.removeKeyInputStackByField();
 		sgModel.removeRendererArrayBySubInfoWindow();
 		chara.setStand(true);
 		chara.setMoving(false);
 		chara.setMoved(false);
+
+		return Command.PUSHED_NONE;
 	}
 }

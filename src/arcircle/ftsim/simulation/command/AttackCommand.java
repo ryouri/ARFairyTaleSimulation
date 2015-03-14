@@ -59,7 +59,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 	}
 
 	@Override
-	public void pushed(Field field, Chara chara) {
+	public int pushed(Field field, Chara chara) {
 		this.chara = chara;
 		this.field = field;
 		cursorFirstX = field.getCursor().x;
@@ -72,6 +72,11 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 		attackJudge = CalculateMoveAttackRange.calculateJudgeAttack(field, attackRange, chara);
 
 		setVisible(true);
+
+		sgModel.pushKeyInputStack(this);
+		sgModel.addRendererArray(this);
+
+		return Command.PUSHED_NOT_VISIBLE;
 	}
 
 	private void calculateJudgeAttack() {
