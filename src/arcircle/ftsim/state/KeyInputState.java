@@ -23,31 +23,21 @@ abstract public class KeyInputState extends BasicGameState {
 	 * 利用するフォントファイルを格納する
 	 */
 	protected UnicodeFont font;
-	
+
 	protected Sound lastBGM;
 	protected Sound bgm;
-	
+
 	public void setBGM(Sound bgm){
 		this.bgm = bgm;
 	}
-	
+
 	public Sound getBGM(){
 		return bgm;
 	}
-	
+
 	public UnicodeFont getFont() {
 		return font;
 	}
-
-	/**
-	 * 利用するフォントファイルを格納する(名前入力用)
-	 */
-	protected UnicodeFont InputNamefont;
-
-	public UnicodeFont getInputNameFont() {
-		return InputNamefont;
-	}
-
 
 	/**
 	 * Stateを管理しているクラスを持っていたほうが何かと便利
@@ -133,9 +123,8 @@ abstract public class KeyInputState extends BasicGameState {
 		keyInputStack.clear();
 		rendererArray.clear();
 		this.font = FTSimulationGame.font;
-		this.InputNamefont = FTSimulationGame.InputNamefont;
 	}
-	
+
 	public void setLastBGM(Sound lastBGM){
 		this.lastBGM = lastBGM;
 	}

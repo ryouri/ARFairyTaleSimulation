@@ -45,6 +45,11 @@ public class InputNameModel implements KeyListner {
 			}
 	};
 
+	public char[][][] getCursorchar() {
+		return cursorchar;
+	}
+
+
 	public InputNameModel(InputNameState inputNameState) {				//コンストラクタ
 		super();
 		this.inState = inputNameState;

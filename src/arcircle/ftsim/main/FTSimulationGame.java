@@ -22,7 +22,6 @@ public class FTSimulationGame extends StateBasedGame {
 	public static final String GAMENAME = "FairyTaleSimulation";
 
 	public static UnicodeFont font;
-	public static UnicodeFont InputNamefont;
 
 	public static Save save;
 
@@ -34,7 +33,7 @@ public class FTSimulationGame extends StateBasedGame {
 		this.addState(new SimGameState(StateConst.SIM_GAME));
 		this.addState(new TalkState(StateConst.TALK));
 		this.addState(new SelectStoryState(StateConst.SELECT_STORY));
-		
+
 	}
 
 	public static String Savename;
@@ -50,6 +49,5 @@ public class FTSimulationGame extends StateBasedGame {
 		this.getState(StateConst.SELECT_STORY).init(container, this);
 		//コンストラクタで実行するとエラー発生するよー
 		font = JapaneseFontGenerater.generateFont(24, false, false, null);
-		InputNamefont = JapaneseFontGenerater.generateFont(80, false, false, null);
 	}
 }
