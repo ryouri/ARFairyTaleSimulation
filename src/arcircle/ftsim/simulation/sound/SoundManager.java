@@ -12,6 +12,8 @@ public class SoundManager {
 	public static final String battleSoundFolderPath = "sound/se/simulation/";
 
 	public static final String SOUND_CURSOR = "cursor";
+	public static final String SOUND_DECISION = "decision";
+	public static final String SOUND_CANCEL = "cancel";
 
 	public SoundManager(String folderPath) {
 		loadSounds(folderPath);

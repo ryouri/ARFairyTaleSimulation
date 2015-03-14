@@ -418,6 +418,7 @@ public class Field implements KeyListner, Renderer {
 	}
 
 	private void pushZKey(Chara chara) {
+		soundManager.playSound(SoundManager.SOUND_DECISION);
 		CharaCommandWindow ccWindow = new CharaCommandWindow(sgModel, this,
 				chara);
 		sgModel.pushKeyInputStack(ccWindow);

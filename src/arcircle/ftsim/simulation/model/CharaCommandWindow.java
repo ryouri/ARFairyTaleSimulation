@@ -20,11 +20,12 @@ import arcircle.ftsim.simulation.command.Command;
 import arcircle.ftsim.simulation.command.MoveCommand;
 import arcircle.ftsim.simulation.command.StandCommand;
 import arcircle.ftsim.simulation.item.Item;
+import arcircle.ftsim.simulation.sound.SoundManager;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class CharaCommandWindow implements KeyListner, Renderer {
 	protected SimGameModel sgModel;
-	Field field;
+	protected Field field;
 
 	int windowX;
 	int windowY;
@@ -240,6 +241,7 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 	public void keyInput(KeyInput keyInput) {
 		//キャンセルキーが押されたとき
 		if (keyInput.isKeyDown(Input.KEY_X) || keyInput.isKeyPressed(Input.KEY_X)) {
+			field.getSoundManager().playSound(SoundManager.SOUND_CANCEL);
 			pushXKey();
 			return;
 		}
@@ -258,6 +260,8 @@ public class CharaCommandWindow implements KeyListner, Renderer {
 			return;
 		}
 		if (keyInput.isKeyDown(Input.KEY_Z)) {
+			field.getSoundManager().playSound(SoundManager.SOUND_DECISION);
+
 			Command command = commandList.get(cursorY);
 			if (command instanceof MoveCommand) {
 				commandList.get(cursorY).pushed(field, chara);

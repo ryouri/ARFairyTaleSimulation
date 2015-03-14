@@ -3,6 +3,7 @@ package arcircle.ftsim.simulation.command;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.model.CharaCommandWindow;
 import arcircle.ftsim.simulation.model.Field;
+import arcircle.ftsim.simulation.sound.SoundManager;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class MovedCommandWindow extends CharaCommandWindow {
@@ -17,6 +18,7 @@ public class MovedCommandWindow extends CharaCommandWindow {
 
 	@Override
 	protected void pushXKey() {
+		field.getSoundManager().playSound(SoundManager.SOUND_CANCEL);
 		chara.setMoved(false);
 		sgModel.removeKeyInputStackFirst();
 		sgModel.removeRendererArrayEnd();

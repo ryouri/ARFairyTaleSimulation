@@ -19,6 +19,7 @@ import arcircle.ftsim.simulation.model.CharaCommandWindow;
 import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Cursor;
 import arcircle.ftsim.simulation.model.Field;
+import arcircle.ftsim.simulation.sound.SoundManager;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class AttackCommand extends Command implements KeyListner, Renderer {
@@ -128,6 +129,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 	public void keyInput(KeyInput keyInput) {
 		//キャンセルキーが押されたとき
 		if (keyInput.isKeyDown(Input.KEY_X)) {
+			field.getSoundManager().playSound(SoundManager.SOUND_CANCEL);
 			sgModel.removeKeyInputStackFirst();
 			sgModel.removeRendererArrayEnd();
 
@@ -141,6 +143,8 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 
 		if (keyInput.isKeyDown(Input.KEY_Z)) {
 			if(attackJudge[field.getCursor().y][field.getCursor().x]) {
+				field.getSoundManager().playSound(SoundManager.SOUND_DECISION);
+
 				field.setCharaAttack(chara, field.getCursor().y, field.getCursor().x);
 				field.setSubInfoWindowForFieldInfo();
 

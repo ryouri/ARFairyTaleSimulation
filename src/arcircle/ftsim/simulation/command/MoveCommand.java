@@ -16,6 +16,7 @@ import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.model.CharaCommandWindow;
 import arcircle.ftsim.simulation.model.Cursor;
 import arcircle.ftsim.simulation.model.Field;
+import arcircle.ftsim.simulation.sound.SoundManager;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class MoveCommand extends Command implements KeyListner, Renderer {
@@ -97,6 +98,7 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 	public void keyInput(KeyInput keyInput) {
 		//キャンセルキーが押されたとき
 		if (keyInput.isKeyDown(Input.KEY_X)) {
+			field.getSoundManager().playSound(SoundManager.SOUND_CANCEL);
 			sgModel.removeKeyInputStackFirst();
 			sgModel.removeRendererArrayEnd();
 
@@ -159,6 +161,8 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		 *
 		 */
 		if (keyInput.isKeyDown(Input.KEY_Z)) {
+			field.getSoundManager().playSound(SoundManager.SOUND_DECISION);
+
 			//TODO;キャラクターが動いた時の処理を書く
 			chara.setMoved(true);
 			MovedCommandWindow mcWindow = new MovedCommandWindow(sgModel, field,
