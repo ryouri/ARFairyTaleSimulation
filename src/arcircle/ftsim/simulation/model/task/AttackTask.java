@@ -11,6 +11,7 @@ import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
 import arcircle.ftsim.simulation.chara.battle.SupportInfo;
 import arcircle.ftsim.simulation.model.AttackInfo;
 import arcircle.ftsim.simulation.model.Field;
+import arcircle.ftsim.simulation.sound.SoundManager;
 
 public class AttackTask extends Task {
 	ArrayList<AttackInfo> attackInfoArray;
@@ -157,12 +158,18 @@ public class AttackTask extends Task {
 					//必殺発動ならダメージ3倍
 					if (nowAttackInfo.isDead()) {
 						damage *= 3;
+						//必殺攻撃
+						taskManager.field.getSoundManager().playSound(SoundManager.SOUND_ATTACK_DEAD);
+					} else {
+						//通常攻撃の音
+						taskManager.field.getSoundManager().playSound(SoundManager.SOUND_ATTACK);
 					}
 					//攻撃を受ける側にダメージを与える
 					int nextHp = damageChara.status.getHp() - damage;
 					damageChara.status.setHp(nextHp);
 				} else {
-					//外れた
+					//外れた音
+					taskManager.field.getSoundManager().playSound(SoundManager.SOUND_AVOID);
 				}
 				//攻撃処理完了
 				nowAttackInfo.setProcessed(true);
