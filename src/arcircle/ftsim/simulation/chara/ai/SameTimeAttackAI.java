@@ -26,7 +26,7 @@ public class SameTimeAttackAI extends AI {
 		this.chara = chara;
 		this.field = field;
 		this.characters = characters;
-		this.weaponType = CalculateMoveAttackRange.judgeAttackWeaponType(chara
+		this.weaponType = CalculateMoveAttackRange.judgeAttackRangedType(chara
 				.getItemList());
 	}
 

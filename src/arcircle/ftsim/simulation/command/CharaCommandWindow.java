@@ -44,6 +44,11 @@ public class CharaCommandWindow extends CommandWindow {
 						new AttackCommand(Command.commandType[i], sgModel, this);
 				commandList.add(command);
 			}
+			if (Command.commandType[i].equals("ほじょ")) {
+				Command command =
+						new SupportCommand(Command.commandType[i], sgModel, this);
+				commandList.add(command);
+			}
 			if (Command.commandType[i].equals("たいき")) {
 				Command command =
 						new StandCommand(Command.commandType[i], sgModel, this);
