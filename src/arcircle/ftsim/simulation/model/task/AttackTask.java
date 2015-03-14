@@ -1,7 +1,6 @@
 package arcircle.ftsim.simulation.model.task;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
@@ -26,8 +25,6 @@ public class AttackTask extends Task {
 	}
 
 	private void calcAttackInfo(Chara attackChara, Chara damageChara) {
-		Random random = new Random();
-
 		ExpectBattleInfo expectBattleInfo =
 				new ExpectBattleInfo(attackChara, attackChara.getEquipedWeapon(), new SupportInfo(),
 						damageChara, damageChara.getEquipedWeapon(), new SupportInfo());

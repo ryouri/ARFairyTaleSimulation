@@ -32,8 +32,8 @@ public class CharaDieTask extends Task {
 
 		timer++;
 
-		dieChara.setAlpha((100 - timer * 2) / 100);
-		dieChara.setColor((100 - timer * 2) / 100);
+		dieChara.setAlpha((100 - timer * 2) / 100.0f);
+		dieChara.setColor((100 - timer * 2) / 100.0f);
 
 		if (timer > CHARA_DIE_TIME) {
 			taskManager.characters.removeChara(dieChara);
