@@ -138,7 +138,7 @@ public class LoadCharacter {
 		}
 //		STATUS,20,8,5,9,6,10,5,4,6,8
 		if (charaStrs[0].equals(STATUS)) {
-			chara.status.hp = 			Integer.valueOf(charaStrs[1]);
+			chara.status.setHp(Integer.valueOf(charaStrs[1]));
 			chara.status.maxHp = 		Integer.valueOf(charaStrs[1]);
 			chara.status.power = 		Integer.valueOf(charaStrs[2]);
 			chara.status.magicPower = 	Integer.valueOf(charaStrs[3]);

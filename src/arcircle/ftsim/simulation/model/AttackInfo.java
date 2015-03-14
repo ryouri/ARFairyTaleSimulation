@@ -18,11 +18,21 @@ public class AttackInfo {
 	public boolean isDead() {
 		return isDead;
 	}
+	private boolean isProcessed;
+	public boolean isProcessed() {
+		return isProcessed;
+	}
+	public void setProcessed(boolean isProcessed) {
+		this.isProcessed = isProcessed;
+	}
 
 	public AttackInfo(Chara chara, Chara damageChara, CharaBattleInfo charaBattleInfo) {
 		this.attackChara = chara;
 		this.damageChara = damageChara;
 		this.charaBattleInfo = charaBattleInfo;
+		this.isHit = false;
+		this.isDead = false;
+		this.isProcessed = false;
 
 		calcAttackInfo();
 	}
@@ -39,4 +49,5 @@ public class AttackInfo {
 			isHit = true;
 		}
 	}
+
 }

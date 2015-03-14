@@ -227,7 +227,7 @@ public class Characters {
 
 			hpBar.getSubImage(chara.pX + offsetX,
 					chara.pY + offsetY,
-					(int)(((chara.status.hp * 1.0) / (chara.status.maxHp * 1.0)) * 32),
+					(int)(((chara.status.getHp() * 1.0) / (chara.status.maxHp * 1.0)) * 32),
 					4).draw(chara.pX + offsetX,
 					chara.pY + offsetY);;
 		}

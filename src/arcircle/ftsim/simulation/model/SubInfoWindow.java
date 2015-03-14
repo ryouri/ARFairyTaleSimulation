@@ -183,7 +183,7 @@ public class SubInfoWindow implements Renderer{
 		IMAGEAnime[3].draw(objectPos_status.get("CHARA_IMAGE").x + CHIP_SIZE , objectPos_status.get("CHARA_IMAGE").y + CHIP_SIZE);
 
 		//HP/MAXHPの表示
-		g.drawString("HP : " + charaStatus.hp + " / " +  charaStatus.maxHp,
+		g.drawString("HP : " + charaStatus.getHp() + " / " +  charaStatus.maxHp,
 				objectPos_status.get("CHARA_HP").x, objectPos_status.get("CHARA_HP").y);
 		//レベルの表示
 		g.drawString("レベル : " + charaStatus.level,
@@ -277,12 +277,12 @@ public class SubInfoWindow implements Renderer{
 		//HPバーの描画
 		g.setColor(Color.red);
 		g.fillRect(objectPos_battle.get("HP_BAR").x, objectPos_battle.get("HP_BAR").y, HPBAR_WIDTH, HPBAR_HEIGHT);
-		int hp_bar = HPBAR_WIDTH * battleChara.status.hp / battleChara.status.maxHp;
+		int hp_bar = HPBAR_WIDTH * battleChara.status.getHp() / battleChara.status.maxHp;
 		g.setColor(Color.green);
 		g.fillRect(objectPos_battle.get("HP_BAR").x, objectPos_battle.get("HP_BAR").y, hp_bar, HPBAR_HEIGHT);
 		g.setColor(Color.white);
 		//NOWHP/MAXHPの描画
-		g.drawString(battleChara.status.hp + " / " + battleChara.status.maxHp,
+		g.drawString(battleChara.status.getHp() + " / " + battleChara.status.maxHp,
 				objectPos_battle.get("HP_VALUE").x, objectPos_battle.get("HP_VALUE").y);
 		//レベルの描画
 		g.drawString("Lv." + battleChara.status.level,

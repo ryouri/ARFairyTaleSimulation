@@ -52,7 +52,7 @@ public class ExpectBattleInfo {
 
 		// 先攻のデータ作成
 		firstCharaBattleInfo = new CharaBattleInfo(
-				firstChara.status.hp,
+				firstChara.status.getHp(),
 				firstPower - secondDefence,
 				isTwiceAttack(firstChara, secondChara),
 				firstHitProb - secondAvoidProb,
@@ -60,7 +60,7 @@ public class ExpectBattleInfo {
 
 		// 後攻のデータ
 		secondCharaBattleInfo = new CharaBattleInfo(
-				secondChara.status.hp,
+				secondChara.status.getHp(),
 				secondPower - firstDefence,
 				isTwiceAttack(secondChara, firstChara),
 				secondHitProb - firstAvoidProb,

@@ -55,6 +55,7 @@ public class AttackTask extends Task {
 
 	private void renderAttack(Chara chara, Graphics g, int offsetX, int offsetY) {
 		int change = chara.getAttackTime();
+		AttackInfo nowAttackInfo = attackInfoArray.get(nowAttackIndex);
 		Chara damageChara = attackInfoArray.get(nowAttackIndex).damageChara;
 		//時間の変化によって，キャラクタの移動量を制御
 		if (change <= 5 || change >= Chara.MAX_ATTACK_TIME - 5) {
@@ -62,7 +63,7 @@ public class AttackTask extends Task {
 		} else if (change < Chara.MAX_ATTACK_TIME / 2) {
 			change -= 5;
 			//あたってない時はキャラが透ける
-			if (!attackInfoArray.get(nowAttackIndex).isHit()) {
+			if (!nowAttackInfo.isHit()) {
 				damageChara.setAlpha((100 - change * 3) / 100.0f);
 			} else {
 				//あたってる時は色が暗くなる
@@ -71,7 +72,7 @@ public class AttackTask extends Task {
 		} else if (change >= Chara.MAX_ATTACK_TIME / 2) {
 			change = Chara.MAX_ATTACK_TIME - change - 5;
 			//あたってない時はキャラが透ける
-			if (!attackInfoArray.get(nowAttackIndex).isHit()) {
+			if (!nowAttackInfo.isHit()) {
 				damageChara.setAlpha(change * 3);
 			} else {
 				//あたってる時は色が暗くなる
@@ -135,23 +136,44 @@ public class AttackTask extends Task {
 	public void update(int delta) {
 		//攻撃開始直前の処理
 		if (isAttackNow == false && attackInfoArray.size() > 0) {
-			AttackInfo attackInfo = attackInfoArray.get(nowAttackIndex);
-			charaAttackPrepareDir(attackInfo.attackChara, attackInfo.damageChara);
+			AttackInfo nowAttackInfo = attackInfoArray.get(nowAttackIndex);
+			charaAttackPrepareDir(nowAttackInfo.attackChara, nowAttackInfo.damageChara);
 			isAttackNow = true;
 		//攻撃開始後の処理
 		} else if (isAttackNow == true && attackInfoArray.size() > 0){
-			AttackInfo attackInfo = attackInfoArray.get(nowAttackIndex);
-			Chara attackChara = attackInfo.attackChara;
+			AttackInfo nowAttackInfo = attackInfoArray.get(nowAttackIndex);
+			Chara attackChara = nowAttackInfo.attackChara;
 			attackChara.setAttackTime(attackChara.getAttackTime() + 1);
+
+			Chara damageChara = nowAttackInfo.damageChara;
+
+			//攻撃時間が一定以上の時，攻撃処理
+			//攻撃の処理
+			if (!nowAttackInfo.isProcessed() && attackChara.getAttackTime() >= Chara.MAX_ATTACK_TIME / 2) {
+				//あたった時のみ処理
+				if (nowAttackInfo.isHit()) {
+					//ダメージの取得
+					int damage = nowAttackInfo.charaBattleInfo.getDamage();
+					//必殺発動ならダメージ3倍
+					if (nowAttackInfo.isDead()) {
+						damage *= 3;
+					}
+					//攻撃を受ける側にダメージを与える
+					int nextHp = damageChara.status.getHp() - damage;
+					damageChara.status.setHp(nextHp);
+				} else {
+					//外れた
+				}
+				//攻撃処理完了
+				nowAttackInfo.setProcessed(true);
+			}
+
 			//攻撃時間が一定以上になったら次のキャラへ
 			if (attackChara.getAttackTime() >= Chara.MAX_ATTACK_TIME) {
-				//攻撃を受ける側にダメージを与える
-				Chara damageChara = attackInfo.damageChara;
-				damageChara.status.hp -= attackChara.status.power - damageChara.status.defence;
 				damageChara.setAlpha(1.0f);
 
 				//攻撃を受けた側のhpがなくなったら
-				if (damageChara.status.hp < 0) {
+				if (damageChara.status.getHp() <= 0) {
 					taskManager.characters.removeChara(damageChara);
 					taskManager.checkCharaDieEvent(damageChara.id);
 				}
@@ -160,7 +182,7 @@ public class AttackTask extends Task {
 				isAttackNow = false;
 				nowAttackIndex++;
 				//最後のキャラまで行ったら，もしくはダメージを受けたキャラが死んだら
-				if (nowAttackIndex >= attackInfoArray.size() || damageChara.status.hp < 0) {
+				if (nowAttackIndex >= attackInfoArray.size() || damageChara.status.getHp() <= 0) {
 					AttackInfo standAttackInfo = attackInfoArray.get(0);
 					standAttackInfo.attackChara.setStand(true);
 					standAttackInfo.damageChara.resetState();
