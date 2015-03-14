@@ -42,7 +42,13 @@ public class Cursor {
 		this.isVisible = true;
 	}
 
-
+	public void stop() {
+		pX = x * Field.MAP_CHIP_SIZE;
+		pY = y * Field.MAP_CHIP_SIZE;
+		isMoving = false;
+		directionPressedTime = DIRECTION_PRESSED_DURATION;
+		stopTime = 0;
+	}
 
 	/**
 	 * 移動を開始したら trueを返す
@@ -54,6 +60,7 @@ public class Cursor {
 			return false;
 		}
 
+		//ある程度の時間止まったら，長押し判定時間をリセットする
 		if (stopTime > STOP_TIME_DURATION){
 			directionPressedTime = DIRECTION_PRESSED_DURATION;
 		}
@@ -95,12 +102,14 @@ public class Cursor {
 	 * @param direction
 	 */
 	public boolean pressed(int direction) {
+		//ボタンが押されている間は長押し判定時間をデクリメント
 		directionPressedTime--;
 
 		if (isMoving) {
 			return false;
 		}
 
+		//長押し判定時間を超すほどボタンが押されていれば長押し移動開始！
 		if (direction == UP && directionPressedTime < 0) {
 			if (y > 0) {
 				isMoving = true;
@@ -135,10 +144,12 @@ public class Cursor {
 
 	public void update() {
 		if (!isMoving) {
+			//動いてない時は停止時間を増やしておく
 			stopTime++;
 			return;
 		}
 
+		//動いたら提示時間はリセット
 		stopTime = 0;
 
 		if (getDirection() == UP) {

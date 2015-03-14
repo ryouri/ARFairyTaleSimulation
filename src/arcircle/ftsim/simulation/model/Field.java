@@ -295,8 +295,6 @@ public class Field implements KeyListner, Renderer {
 			FTSimulationGame.save.getNowStage().selectLogue = NowStage.EPILOGUE;
 			sgModel.nextState();
 		}
-
-		//TODO:ターンの変化処理はCharactersからこっちに移したい
 	}
 
 	/**
@@ -415,6 +413,7 @@ public class Field implements KeyListner, Renderer {
 
 	private void pushZKey(Chara chara) {
 		soundManager.playSound(SoundManager.SOUND_DECISION);
+		cursor.stop();
 		CharaCommandWindow ccWindow = new CharaCommandWindow(sgModel, this,
 				chara);
 		sgModel.pushKeyInputStack(ccWindow);
