@@ -1,11 +1,6 @@
 package arcircle.ftsim.state.talk;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.newdawn.slick.Color;
@@ -25,7 +20,7 @@ import arcircle.ftsim.state.TalkState;
 
 public class TalkView implements Renderer{
 
-	//フィールド////////////////////////////////////////////////////////////////////////////////////////
+	//フィールド////////////////////////////////////////////////////////////////////////zz////////////////
 	private TalkModel talkModel;	//トークモデル
 	private TalkState talkState;	//トークステート
 
@@ -70,7 +65,7 @@ public class TalkView implements Renderer{
 		this.talkModel = tModel;
 		this.talkState = tState;
 
-		//全キャラの画像を読み込み
+		//画像の読み込み
 		loadChara();
 
 		ImgStorage[LC] = nothingCharaImg;
@@ -96,80 +91,18 @@ public class TalkView implements Renderer{
 	}
 
 	private void loadChara(){
-
-		File characterFile = new File(characterPath);	//CharacterフォルダのFile
-		String[] charaName = characterFile.list();
-		this.charasImg = new HashMap<String, Image>();
-		this.charasName = new HashMap<String, String>();
-
+		//全キャラの画像を読み込み
+		charasImg = talkState.getTalkGraphics().getAllCharaImageMap();
+		charasName = talkState.getTalkGraphics().getAllCharaNameMap();
+		
 		//各画像データの読み込み
 		try{
 			ImgStorage[BG] = new Image("./Image/backGround.png");	//背景画像の読み込み
 			ImgStorage[MSG] = new Image("./Image/ver1120.png");	//メッセージボックス画像の読み込み
 			nothingCharaImg = new Image("./Image/Transparent.png");	//	キャラ非表示用に透明な画像を読み込み
 			playingSE = new Sound("./Stories/SE/decision3.ogg");
-
-			//全キャラを読み込む
-			for(int i = 0 ; i < charaName.length ; i++){
-				if(charaName[i].length() == 3){
-					charasImg.put(charaName[i] + "Stand", new Image(characterPath + "/" + charaName[i] + "/stand.png"));
-					if(new File(characterPath + "/" + charaName[i] + "/FaceStandard.png").exists()){
-						charasImg.put(charaName[i] + "FaceStandard", (new Image(characterPath + "/" + charaName[i] + "/faceStandard.png").getScaledCopy(1.5f)));
-						charasImg.put(charaName[i] + "FaceLaugh", (new Image(characterPath + "/" + charaName[i] + "/faceLaugh.png")).getScaledCopy(1.5f));
-						charasImg.put(charaName[i] + "FaceAngry", (new Image(characterPath + "/" + charaName[i] + "/faceAngry.png")).getScaledCopy(1.5f));
-						charasImg.put(charaName[i] + "FaceSuffer", (new Image(characterPath + "/" + charaName[i] + "/faceSuffer.png")).getScaledCopy(1.5f));
-					}else{
-						charasImg.put(charaName[i] + "FaceStandard", nothingCharaImg);
-						charasImg.put(charaName[i] + "FaceLaugh", nothingCharaImg);
-						charasImg.put(charaName[i] + "FaceAngry", nothingCharaImg);
-						charasImg.put(charaName[i] + "FaceSuffer", nothingCharaImg);
-					}
-					//各キャラの名前をparamater.txtから読み込み
-					File file = new File(characterPath + "/" + charaName[i] + "/parameter.txt");
-					BufferedReader br = new BufferedReader(new FileReader(file));
-					String line;
-					while ((line = br.readLine()) != null) {
-						// 空行を読み飛ばす
-						if (line.equals("")){
-							continue;
-							//コメントを読み飛ばす
-						}else if (line.startsWith("#")){
-							continue;
-						}
-						String[] strs = line.split(",");
-						if(!strs[0].equals("")){
-							charasName.put(charaName[i] + "Name", strs[0]);
-						}else{
-							System.out.println("error_TalkView__paramater.txt読み込み");
-						}
-						break;
-					}
-					br.close();  // ファイルを閉じる
-				}else{
-					/* 主人公ImageとNameの読み込み */
-					if(charaName[i].equals("playerMale") && playerGender == Status.MALE){
-						charasImg.put("playerStand", new Image(characterPath + "/" + charaName[i] + "/stand.png"));
-						charasImg.put("playerFaceStandard", (new Image(characterPath + "/" + charaName[i] + "/faceStandard.png").getScaledCopy(1.5f)));
-						charasImg.put("playerFaceLaugh", (new Image(characterPath + "/" + charaName[i] + "/faceLaugh.png")).getScaledCopy(1.5f));
-						charasImg.put("playerFaceAngry", (new Image(characterPath + "/" + charaName[i] + "/faceAngry.png")).getScaledCopy(1.5f));
-						charasImg.put("playerFaceSuffer", (new Image(characterPath + "/" + charaName[i] + "/faceSuffer.png")).getScaledCopy(1.5f));
-						charasName.put("playerName", FTSimulationGame.save.getPlayer().name);
-					}else if(charaName[i].equals("playerFemale") && playerGender == Status.FEMALE){
-						charasImg.put("playerStand", new Image(characterPath + "/" + charaName[i] + "/stand.png"));
-						charasImg.put("playerFaceStandard", (new Image(characterPath + "/" + charaName[i] + "/faceStandard.png").getScaledCopy(1.5f)));
-						charasImg.put("playerFaceLaugh", (new Image(characterPath + "/" + charaName[i] + "/faceLaugh.png")).getScaledCopy(1.5f));
-						charasImg.put("playerFaceAngry", (new Image(characterPath + "/" + charaName[i] + "/faceAngry.png")).getScaledCopy(1.5f));
-						charasImg.put("playerFaceSuffer", (new Image(characterPath + "/" + charaName[i] + "/faceSuffer.png")).getScaledCopy(1.5f));
-						charasName.put("playerName", FTSimulationGame.save.getPlayer().name);
-					}
-				}
-			}
-			}catch(SlickException e){
+		}catch(SlickException e){
 			e.printStackTrace();
-		}catch (FileNotFoundException ex) {
-			ex.printStackTrace();
-		}catch (IOException ex) {
-			ex.printStackTrace();
 		}
 	}
 
@@ -275,7 +208,13 @@ public class TalkView implements Renderer{
 		if(curTag.getLeftCharaName().equals("@")){	//キャラなしの場合
 			ImgStorage[LC] = nothingCharaImg;
 		}else if(curTag.getLeftCharaName().equals("*")){	//主人公の場合
-			ImgStorage[LC] = charasImg.get("playerStand").getFlippedCopy(true, false);
+			if(playerGender == Status.MALE){
+				ImgStorage[LC] = charasImg.get("playerMaleStand").getFlippedCopy(true, false);
+			}else if(playerGender == Status.FEMALE){
+				ImgStorage[LC] = charasImg.get("playerFemaleStand").getFlippedCopy(true, false);
+			}else{
+				System.out.println("ERROR_TalkView_playerGender");
+			}
 		}else{
 			ImgStorage[LC] = charasImg.get(curTag.getLeftCharaName() + "Stand").getFlippedCopy(true, false);
 		}
@@ -283,7 +222,13 @@ public class TalkView implements Renderer{
 		if(curTag.getRightCharaName().equals("@")){	//キャラなしの場合
 			ImgStorage[RC] = nothingCharaImg;
 		}else if(curTag.getRightCharaName().equals("*")){	//主人公の場合
-			ImgStorage[RC] = charasImg.get("playerStand");
+			if(playerGender == Status.MALE){
+				ImgStorage[RC] = charasImg.get("playerMaleStand").getFlippedCopy(true, false);
+			}else if(playerGender == Status.FEMALE){
+				ImgStorage[RC] = charasImg.get("playerFemaleStand").getFlippedCopy(true, false);
+			}else{
+				System.out.println("ERROR_TalkView_playerGender");
+			}
 		}else{
 			ImgStorage[RC] = charasImg.get(curTag.getRightCharaName() + "Stand");
 		}
@@ -297,7 +242,13 @@ public class TalkView implements Renderer{
 				speakerName = "";
 				ImgStorage[FACE] = nothingCharaImg;
 			}else if(curTag.getLeftCharaName().equals("*")){	//主人公の場合
-				updateExpression(curTag.getExpression(), "player");
+				if(playerGender == Status.MALE){
+					updateExpression(curTag.getExpression(), "playerMale");
+				}else if(playerGender == Status.FEMALE){
+					updateExpression(curTag.getExpression(), "playerFemale");
+				}else{
+					System.out.println("ERROR_TalkView_playerGender");
+				}
 			}else{	//その他のキャラの場合
 				updateExpression(curTag.getExpression(), curTag.getLeftCharaName());
 			}
@@ -306,7 +257,13 @@ public class TalkView implements Renderer{
 				speakerName = "";
 				ImgStorage[FACE] = nothingCharaImg;
 			}else if(curTag.getRightCharaName().equals("*")){	//主人公の場合
-				updateExpression(curTag.getExpression(), "player");
+				if(playerGender == Status.MALE){
+					updateExpression(curTag.getExpression(), "playerMale");
+				}else if(playerGender == Status.FEMALE){
+					updateExpression(curTag.getExpression(), "playerFemale");
+				}else{
+					System.out.println("ERROR_TalkView_playerGender");
+				}
 			}else{	//その他のキャラの場合
 				updateExpression(curTag.getExpression(), curTag.getRightCharaName());
 			}

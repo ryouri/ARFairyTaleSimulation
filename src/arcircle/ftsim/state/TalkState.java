@@ -11,6 +11,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import arcircle.ftsim.main.FTSimulationGame;
+import arcircle.ftsim.state.talk.LoadTalkGraphics;
 import arcircle.ftsim.state.talk.TalkModel;
 import arcircle.ftsim.state.talk.TalkView;
 
@@ -24,11 +25,15 @@ public class TalkState extends KeyInputState {
 	//親クラスのbgmと, このクラスのnewBGMを使ってBGMを切り替える
 	private Sound newBGM;	//BGM切り替え用格納器
     private boolean isBGM = true;	//bgmとnewBGMのどちらを鳴らしているかの判定に使う
+    
+    private LoadTalkGraphics talkGraphics;
+    private static final String characterPath = "./Stories/Characters";	//Characterフォルダのパス
 
 	//private int chapterID;	//現在の章
 	//private int subStoryID;	//現在の話数
 
-	public int getStageNumber() {
+    public LoadTalkGraphics getTalkGraphics(){ return talkGraphics;}
+    public int getStageNumber() {
 		return stageNumber;
 	}
 
@@ -88,8 +93,13 @@ public class TalkState extends KeyInputState {
 		lastBGM.stop();
 		bgm.loop();
 		
+		//全キャラクターのロード
+		talkGraphics = new LoadTalkGraphics(characterPath);
+		
 		talkModel = new TalkModel(this);
 		talkView = new TalkView(talkModel, this);
+		
+		
 		
 		System.out.println("Enter Talk State");
 		keyInputStack.clear();
