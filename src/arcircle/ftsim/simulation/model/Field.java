@@ -615,6 +615,15 @@ public class Field implements KeyListner, Renderer {
 		}
 	}
 
+	public void addCharaHeal(Chara chara, int y, int x) {
+		for (Chara healChara : characters.characterArray) {
+			if (healChara.y == y && healChara.x == x) {
+				taskManager.addHealTask(chara, healChara);
+				break;
+			}
+		}
+	}
+
 	public void setCharaMove(Chara chara, Node moveNode) {
 		taskManager.addMoveTask(chara, moveNode);
 	}

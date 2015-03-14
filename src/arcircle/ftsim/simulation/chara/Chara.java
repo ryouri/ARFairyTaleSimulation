@@ -2,6 +2,8 @@ package arcircle.ftsim.simulation.chara;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Color;
+
 import arcircle.ftsim.simulation.chara.ai.AI;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.simulation.item.Weapon;
@@ -50,7 +52,7 @@ public class Chara {
 	public GrowRateStatus growRateStatus;
 
 	private float alpha;
-	private float color;
+	private Color color;
 
 	public Chara(String name, Characters characters) {
 		this.status = new Status();
@@ -63,7 +65,7 @@ public class Chara {
 		this.id = null;
 		this.characters = characters;
 		this.alpha = 1.0f;
-		this.color = 1.0f;
+		this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	public AI getAI() {
@@ -224,7 +226,7 @@ public class Chara {
 		return alpha;
 	}
 
-	public float getColor() {
+	public Color getColor() {
 		return color;
 	}
 
@@ -232,7 +234,7 @@ public class Chara {
 		this.alpha = alpha;
 	}
 
-	public void setColor(float color) {
+	public void setColor(Color color) {
 		this.color = color;
 	}
 }

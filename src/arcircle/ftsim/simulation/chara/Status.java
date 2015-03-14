@@ -29,6 +29,8 @@ public class Status {
 		this.hp = hp;
 		if (this.hp < 0) {
 			this.hp = 0;
+		} else if(this.hp > this.maxHp) {
+			this.hp = this.maxHp;
 		}
 	}
 
@@ -70,7 +72,7 @@ public class Status {
 	}
 
 	public void copyTo (Status status) {
-		status.hp = 			this.hp;
+		status.hp = 			this.maxHp;
 		status.maxHp = 			this.maxHp;
 		status.power = 			this.power;
 		status.magicPower = 	this.magicPower;

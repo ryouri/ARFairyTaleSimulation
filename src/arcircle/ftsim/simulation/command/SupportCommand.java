@@ -149,9 +149,8 @@ public class SupportCommand extends Command implements KeyListner, Renderer {
 			if(supportJudge[field.getCursor().y][field.getCursor().x]) {
 				field.getSoundManager().playSound(SoundManager.SOUND_DECISION);
 
-				//field.setCharaAttack(chara, field.getCursor().y, field.getCursor().x);
-				System.out.println("回復開始！");
-				//field.setSubInfoWindowForFieldInfo();
+				field.addCharaHeal(chara, field.getCursor().y, field.getCursor().x);
+				field.setSubInfoWindowForFieldInfo();
 
 				//他の場所に移す
 				sgModel.removeKeyInputStackByField();

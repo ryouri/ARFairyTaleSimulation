@@ -1,5 +1,6 @@
 package arcircle.ftsim.simulation.model.task;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import arcircle.ftsim.simulation.chara.Chara;
@@ -33,7 +34,8 @@ public class CharaDieTask extends Task {
 		timer++;
 
 		dieChara.setAlpha((100 - timer * 2) / 100.0f);
-		dieChara.setColor((100 - timer * 2) / 100.0f);
+		float color = (100 - timer * 2) / 100.0f;
+		dieChara.setColor(new Color(color, color, color, 1.0f));
 
 		if (timer > CHARA_DIE_TIME) {
 			taskManager.characters.removeChara(dieChara);

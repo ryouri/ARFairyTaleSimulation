@@ -76,6 +76,11 @@ public class TaskManager {
 		addOneTaskAndGenerateArray(levelUpTask);
 	}
 
+	public void addHealTask(Chara chara, Chara healChara) {
+		HealTask healTask = new HealTask(this, chara, healChara);
+		addOneTaskAndGenerateArray(healTask);
+	}
+
 	public boolean existTask() {
 		return !taskArrayArray.isEmpty();
 	}
@@ -110,4 +115,4 @@ public class TaskManager {
 			taskArrayArray.remove(0);
 		}
 	}
-	}
+}

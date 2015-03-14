@@ -3,6 +3,7 @@ package arcircle.ftsim.simulation.model.task;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import arcircle.ftsim.simulation.chara.Chara;
@@ -21,7 +22,6 @@ public class AttackTask extends Task {
 		super(taskManager);
 
 		calcAttackInfo(attackChara, damageChara);
-
 	}
 
 	private void calcAttackInfo(Chara attackChara, Chara damageChara) {
@@ -65,7 +65,8 @@ public class AttackTask extends Task {
 				damageChara.setAlpha((100 - change * 3) / 100.0f);
 			} else {
 				//あたってる時は色が暗くなる
-				damageChara.setColor((100 - change * 1) / 100.0f);
+				float color = (100 - change * 1) / 100.0f;
+				damageChara.setColor(new Color(color, color, color, 1.0f));
 			}
 		} else if (change >= Chara.MAX_ATTACK_TIME / 2) {
 			change = Chara.MAX_ATTACK_TIME - change - 5;
@@ -74,7 +75,8 @@ public class AttackTask extends Task {
 				damageChara.setAlpha(change * 3);
 			} else {
 				//あたってる時は色が暗くなる
-				damageChara.setColor(change * 1);
+				float color = (change * 1) / 100.0f;
+				damageChara.setColor(new Color(color, color, color, 1.0f));
 			}
 		}
 

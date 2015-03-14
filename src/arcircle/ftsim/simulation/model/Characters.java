@@ -211,21 +211,30 @@ public class Characters {
 				anime.draw(
 						chara.pX + offsetX,
 						chara.pY + offsetY,
-						new Color(chara.getColor(), chara.getColor(), chara.getColor(), chara.getAlpha()));
+						new Color(chara.getColor().getRed(),
+								chara.getColor().getGreen(),
+								chara.getColor().getBlue(),
+								chara.getAlpha()));
 			} else if (chara.isSelect) {
 				//Animation anime = selectAnimeMap.get(chara.status.name);
 				Animation anime = downAttackAnimeMap.get(chara.status.name);
 				anime.draw(
 						chara.pX + offsetX,
 						chara.pY + offsetY,
-						new Color(chara.getColor(), chara.getColor(), chara.getColor(), chara.getAlpha()));
+						new Color(chara.getColor().getRed(),
+								chara.getColor().getGreen(),
+								chara.getColor().getBlue(),
+								chara.getAlpha()));
 			} else {
 				//Animation anime = stayAnimeMap.get(chara.status.name);
 				Animation anime = downWalkAnimeMap.get(chara.status.name);
 				anime.draw(
 						chara.pX + offsetX,
 						chara.pY + offsetY,
-						new Color(chara.getColor(), chara.getColor(), chara.getColor(), chara.getAlpha()));
+						new Color(chara.getColor().getRed(),
+								chara.getColor().getGreen(),
+								chara.getColor().getBlue(),
+								chara.getAlpha()));
 			}
 
 			hpBar.getSubImage(chara.pX + offsetX + 1,
