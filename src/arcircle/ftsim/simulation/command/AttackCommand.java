@@ -142,6 +142,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 		if (keyInput.isKeyDown(Input.KEY_Z)) {
 			if(attackJudge[field.getCursor().y][field.getCursor().x]) {
 				field.setCharaAttack(chara, field.getCursor().y, field.getCursor().x);
+				field.setSubInfoWindowForFieldInfo();
 
 				//他の場所に移す
 				sgModel.removeKeyInputStackByField();
