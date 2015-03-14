@@ -1,4 +1,4 @@
-package arcircle.ftsim.simulation.command;
+package arcircle.ftsim.state.talk;
 
 import java.io.BufferedReader;
 import java.io.File;
