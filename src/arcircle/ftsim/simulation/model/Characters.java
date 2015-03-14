@@ -216,20 +216,22 @@ public class Characters {
 				Animation anime = downAttackAnimeMap.get(chara.status.name);
 				anime.draw(
 						chara.pX + offsetX,
-						chara.pY + offsetY);
+						chara.pY + offsetY,
+						new Color(chara.getColor(), chara.getColor(), chara.getColor(), chara.getAlpha()));
 			} else {
 				//Animation anime = stayAnimeMap.get(chara.status.name);
 				Animation anime = downWalkAnimeMap.get(chara.status.name);
 				anime.draw(
 						chara.pX + offsetX,
-						chara.pY + offsetY);
+						chara.pY + offsetY,
+						new Color(chara.getColor(), chara.getColor(), chara.getColor(), chara.getAlpha()));
 			}
 
 			hpBar.getSubImage(chara.pX + offsetX + 1,
 					chara.pY + offsetY,
 					(int)(((chara.status.getHp() * 1.0) / (chara.status.maxHp * 1.0)) * 30),
 					4).draw(chara.pX + offsetX,
-					chara.pY + offsetY);;
+					chara.pY + offsetY);
 		}
 
 //		if (taskManager.existTask()) {

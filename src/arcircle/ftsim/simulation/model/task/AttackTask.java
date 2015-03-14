@@ -181,18 +181,22 @@ public class AttackTask extends Task {
 
 				//攻撃を受けた側のhpがなくなったら
 				if (damageChara.status.getHp() <= 0) {
-					taskManager.characters.removeChara(damageChara);
-					taskManager.checkCharaDieEvent(damageChara.id);
+					taskManager.addCharaDieTask(damageChara);
 				}
+
+				//経験値の追加処理を入れる
 
 				attackChara.setAttack(false);
 				isAttackNow = false;
 				nowAttackIndex++;
-				//最後のキャラまで行ったら，もしくはダメージを受けたキャラが死んだら
+				//最後のキャラまで行ったら，もしくはダメージを受けたキャラが死んだらタスクの終了処理
 				if (nowAttackIndex >= attackInfoArray.size() || damageChara.status.getHp() <= 0) {
 					AttackInfo standAttackInfo = attackInfoArray.get(0);
 					standAttackInfo.attackChara.setStand(true);
-					standAttackInfo.damageChara.resetState();
+					//生きている時のみ状態を戻す
+					if (damageChara.status.getHp() > 0) {
+						standAttackInfo.damageChara.resetState();
+					};
 					attackInfoArray.clear();
 					taskManager.taskEnd();
 					taskManager.field.getCursor().isVisible = true;

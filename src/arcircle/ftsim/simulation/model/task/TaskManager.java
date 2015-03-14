@@ -59,6 +59,11 @@ public class TaskManager {
 		addOneTaskAndGenerateArray(turnEndTask);
 	}
 
+	public void addCharaDieTask(Chara chara) {
+		CharaDieTask charaDieTask = new CharaDieTask(this, chara);
+		addOneTaskAndGenerateArray(charaDieTask);
+	}
+
 	public boolean existTask() {
 		return !taskArrayArray.isEmpty();
 	}
