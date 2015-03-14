@@ -1,7 +1,6 @@
 package arcircle.ftsim.simulation.command;
 
 import arcircle.ftsim.simulation.chara.Chara;
-import arcircle.ftsim.simulation.model.CharaCommandWindow;
 import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.simulation.sound.SoundManager;
 import arcircle.ftsim.state.simgame.SimGameModel;

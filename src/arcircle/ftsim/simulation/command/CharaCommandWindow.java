@@ -1,11 +1,8 @@
-package arcircle.ftsim.simulation.model;
+package arcircle.ftsim.simulation.command;
 
 import arcircle.ftsim.simulation.chara.Chara;
-import arcircle.ftsim.simulation.command.AttackCommand;
-import arcircle.ftsim.simulation.command.Command;
-import arcircle.ftsim.simulation.command.MoveCommand;
-import arcircle.ftsim.simulation.command.StandCommand;
 import arcircle.ftsim.simulation.item.Item;
+import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class CharaCommandWindow extends CommandWindow {

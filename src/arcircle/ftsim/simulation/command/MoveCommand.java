@@ -13,7 +13,6 @@ import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.simulation.algorithm.range.CalculateMoveAttackRange;
 import arcircle.ftsim.simulation.chara.Chara;
-import arcircle.ftsim.simulation.model.CharaCommandWindow;
 import arcircle.ftsim.simulation.model.Cursor;
 import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.simulation.sound.SoundManager;

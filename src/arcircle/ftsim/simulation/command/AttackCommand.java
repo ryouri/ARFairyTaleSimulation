@@ -15,7 +15,6 @@ import arcircle.ftsim.simulation.algorithm.range.CalculateMoveAttackRange;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
 import arcircle.ftsim.simulation.chara.battle.SupportInfo;
-import arcircle.ftsim.simulation.model.CharaCommandWindow;
 import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Cursor;
 import arcircle.ftsim.simulation.model.Field;

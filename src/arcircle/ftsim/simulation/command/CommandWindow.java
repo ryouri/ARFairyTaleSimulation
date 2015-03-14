@@ -1,4 +1,4 @@
-package arcircle.ftsim.simulation.model;
+package arcircle.ftsim.simulation.command;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.simulation.chara.Chara;
-import arcircle.ftsim.simulation.command.Command;
+import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.simulation.sound.SoundManager;
 import arcircle.ftsim.state.simgame.SimGameModel;
 

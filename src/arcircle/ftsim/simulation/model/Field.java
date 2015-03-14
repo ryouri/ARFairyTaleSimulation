@@ -26,6 +26,7 @@ import arcircle.ftsim.save.NowStage;
 import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
+import arcircle.ftsim.simulation.command.CharaCommandWindow;
 import arcircle.ftsim.simulation.command.OptionCommandWindow;
 import arcircle.ftsim.simulation.event.Event;
 import arcircle.ftsim.simulation.event.EventManager;
