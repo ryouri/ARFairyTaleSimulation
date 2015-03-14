@@ -26,6 +26,8 @@ import arcircle.ftsim.save.NowStage;
 import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
+import arcircle.ftsim.simulation.command.CharaCommandWindow;
+import arcircle.ftsim.simulation.command.OptionCommandWindow;
 import arcircle.ftsim.simulation.event.Event;
 import arcircle.ftsim.simulation.event.EventManager;
 import arcircle.ftsim.simulation.field.Terrain;
@@ -359,6 +361,10 @@ public class Field implements KeyListner, Renderer {
 				}
 			}
 		}
+
+		if (keyInput.isKeyDown(Input.KEY_C)) {
+			pushCkey(null);
+		}
 	}
 
 	/**
@@ -413,6 +419,14 @@ public class Field implements KeyListner, Renderer {
 				chara);
 		sgModel.pushKeyInputStack(ccWindow);
 		sgModel.addRendererArray(ccWindow);
+	}
+
+	private void pushCkey(Chara chara) {
+		soundManager.playSound(SoundManager.SOUND_DECISION);
+		OptionCommandWindow oCWindow = new OptionCommandWindow(sgModel, this,
+				chara);
+		sgModel.pushKeyInputStack(oCWindow);
+		sgModel.addRendererArray(oCWindow);
 	}
 
 	/**

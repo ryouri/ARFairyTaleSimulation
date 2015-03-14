@@ -13,6 +13,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import arcircle.ftsim.simulation.item.Item;
+import arcircle.ftsim.simulation.item.SupportItem;
 import arcircle.ftsim.simulation.item.Weapon;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
@@ -86,10 +87,10 @@ public class World {
 		}
 	}
 
-	//けん,TYPE_WEAPON,RANGE_NEAR,5,4,longsword.png
 	public Item loadItem(String itemStr) {
 		String[] itemStrs = itemStr.split(",");
 
+		//けん,TYPE_WEAPON,RANGE_NEAR,5,4,longsword.png
 		if (itemStrs[1].equals(Item.TYPE_WEAPON_STR)) {
 			Weapon weapon = new Weapon();
 			weapon.name = itemStrs[0];
@@ -112,7 +113,18 @@ public class World {
 
 			return weapon;
 		}
+
+		//けん,TYPE_WEAPON,RANGE_NEAR,5,4,longsword.png
 		if (itemStrs[1].equals(Item.TYPE_SUPPORT_STR)) {
+			SupportItem supportItem = new SupportItem();
+			supportItem.name = itemStrs[0];
+			supportItem.type = Item.TYPE_SUPPORT;
+			if (itemStrs[2].equals(SupportItem.RANGE_NEAR_STR)) {
+				supportItem.rangeType = SupportItem.RANGE_NEAR;
+			}
+			supportItem.power = Integer.valueOf(itemStrs[3]);
+
+			return supportItem;
 		}
 		if (itemStrs[1].equals(Item.TYPE_USE_STR)) {
 		}

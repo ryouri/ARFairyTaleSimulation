@@ -5,7 +5,7 @@ import java.util.Collections;
 
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.item.Item;
-import arcircle.ftsim.simulation.item.Weapon;
+import arcircle.ftsim.simulation.item.RangedItem;
 import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Field;
 
@@ -195,7 +195,7 @@ public class CalculateMoveAttackRange {
 	public static boolean[][] createJudgeAttackArray(Field field, Chara chara, boolean[][] moveRange) {
 		boolean[][] attackRange = new boolean[field.row][field.col];
 
-		int weaponType = CalculateMoveAttackRange.judgeAttackWeaponType(chara.getItemList());
+		int weaponType = CalculateMoveAttackRange.judgeAttackRangedType(chara.getItemList());
 
 		for (int y = 0; y < field.row; y++) {
 			for (int x = 0; x < field.col; x++) {
@@ -210,43 +210,43 @@ public class CalculateMoveAttackRange {
 		//attackJudge = CalculateMoveAttackRange.calculateJudgeAttack(field, attackRange, chara);
 	}
 
-	public static int judgeAttackWeaponType(ArrayList<Item> itemList) {
+	public static int judgeAttackRangedType(ArrayList<Item> itemList) {
 		boolean nearAttack = false;
 		boolean farAttack = false;
 
 		for (Item item : itemList) {
-			if (!(item instanceof Weapon)) {
+			if (!(item instanceof RangedItem)) {
 				continue;
 			}
 
-			Weapon weapon = (Weapon) item;
+			RangedItem rangedItem = (RangedItem) item;
 
-			if (weapon.rangeType == Weapon.RANGE_NEAR) {
+			if (rangedItem.rangeType == RangedItem.RANGE_NEAR) {
 				nearAttack = true;
-			} else if (weapon.rangeType == Weapon.RANGE_FAR) {
+			} else if (rangedItem.rangeType == RangedItem.RANGE_FAR) {
 				farAttack = true;
-			} else if (weapon.rangeType == Weapon.RANGE_NEAR_FAR) {
-				return Weapon.RANGE_NEAR_FAR;
+			} else if (rangedItem.rangeType == RangedItem.RANGE_NEAR_FAR) {
+				return RangedItem.RANGE_NEAR_FAR;
 			}
 		}
 
 		if (nearAttack == true && farAttack == true) {
-			return Weapon.RANGE_NEAR_FAR;
+			return RangedItem.RANGE_NEAR_FAR;
 		} else if (nearAttack == true) {
-			return Weapon.RANGE_NEAR;
+			return RangedItem.RANGE_NEAR;
 		} else if (farAttack == true) {
-			return Weapon.RANGE_FAR;
+			return RangedItem.RANGE_FAR;
 		} else {
-			return Weapon.RANGE_NONE;
+			return RangedItem.RANGE_NONE;
 		}
 	}
 
 	public static void calculateAttackRange(int x, int y, boolean[][] attackRange,
-			int weaponType, Field field) {
+			int rangedType, Field field) {
 		int charaX = x;
 		int charaY = y;
 
-		if (weaponType == Weapon.RANGE_NEAR || weaponType == Weapon.RANGE_NEAR_FAR) {
+		if (rangedType == RangedItem.RANGE_NEAR || rangedType == RangedItem.RANGE_NEAR_FAR) {
 			for (int[] range : nearAttackRange) {
 				if (charaX + range[0] < 0 || charaY + range[1] < 0
 						|| charaX + range[0] >= field.col
@@ -256,7 +256,7 @@ public class CalculateMoveAttackRange {
 				attackRange[charaY + range[1]][charaX + range[0]] = true;
 			}
 		}
-		if (weaponType == Weapon.RANGE_FAR || weaponType == Weapon.RANGE_NEAR_FAR) {
+		if (rangedType == RangedItem.RANGE_FAR || rangedType == RangedItem.RANGE_NEAR_FAR) {
 			for (int[] range : farAttackRange) {
 				if (charaX + range[0] < 0 || charaY + range[1] < 0
 						|| charaX + range[0] >= field.col

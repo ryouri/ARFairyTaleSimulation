@@ -4,9 +4,9 @@ import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
-public class StandCommand extends Command {
+public class EndCommand extends Command {
 
-	public StandCommand(String commandName, SimGameModel sgModel,
+	public EndCommand(String commandName, SimGameModel sgModel,
 			CharaCommandWindow charaCommandWindow) {
 		super(commandName, sgModel, charaCommandWindow);
 	}
@@ -15,10 +15,10 @@ public class StandCommand extends Command {
 	public int pushed(Field field, Chara chara) {
 		sgModel.removeKeyInputStackByField();
 		sgModel.removeRendererArrayBySubInfoWindow();
-		chara.setStand(true);
-		chara.setMoving(false);
-		chara.setMoved(false);
+
+		field.getTaskManager().addTurnEndTask(field.getCharacters(), Chara.CAMP_FRIEND);
 
 		return Command.PUSHED_NONE;
 	}
+
 }
