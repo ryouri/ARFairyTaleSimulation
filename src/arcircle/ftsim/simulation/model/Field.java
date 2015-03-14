@@ -83,8 +83,6 @@ public class Field implements KeyListner, Renderer {
 	public static final int TURN_FRIEND = 0;
 	public static final int TURN_ENEMY = 1;
 
-	private boolean cursorVisible;
-
 	public TerrainManager terrainManager;
 
 	private String partName;
@@ -131,21 +129,12 @@ public class Field implements KeyListner, Renderer {
 		return taskManager;
 	}
 
-	public boolean isCursorVisible() {
-		return cursorVisible;
-	}
-
-	public void setCursorVisible(boolean cursorVisible) {
-		this.cursorVisible = cursorVisible;
-	}
-
 	public Field(SimGameModel sgModel, HashMap<String, Item> itemList) {
 		this.sgModel = sgModel;
 		this.itemList = itemList;
 		this.characters = new Characters();
 		this.sSheet = null;;
 		this.setNowTurn(TURN_FRIEND);
-		this.cursorVisible = true;
 	}
 
 	//TODO:マジックナンバー多発地帯！
@@ -209,12 +198,12 @@ public class Field implements KeyListner, Renderer {
 
 	public void changeTurnFriend() {
 		setNowTurn(TURN_FRIEND);
-		cursorVisible = true;
+		cursor.isVisible = true;
 	}
 
 	public void changeTurnEnemy() {
 		setNowTurn(TURN_ENEMY);
-		cursorVisible = false;
+		cursor.isVisible = false;
 	}
 
 	public int offsetX;
@@ -257,7 +246,7 @@ public class Field implements KeyListner, Renderer {
 		characters.render(g, offsetX, offsetY, firstTileX, lastTileX,
 				firstTileY, lastTileY);
 
-		if (cursorVisible) {
+		if (cursor.isVisible) {
 			// カーソルを描く
 			renderCursor(g, offsetX, offsetY);
 		}
@@ -331,7 +320,7 @@ public class Field implements KeyListner, Renderer {
 
 	@Override
 	public void keyInput(KeyInput keyInput) {
-		if (cursorVisible == false) {
+		if (!cursor.isVisible) {
 			return;
 		}
 

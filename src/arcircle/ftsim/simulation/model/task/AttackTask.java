@@ -195,7 +195,7 @@ public class AttackTask extends Task {
 					standAttackInfo.damageChara.resetState();
 					attackInfoArray.clear();
 					taskManager.taskEnd();
-					taskManager.field.setCursorVisible(true);
+					taskManager.field.getCursor().isVisible = true;
 				}
 			}
 		}
@@ -203,7 +203,7 @@ public class AttackTask extends Task {
 
 
 	private void charaAttackPrepareDir(Chara chara, Chara damageChara) {
-		taskManager.field.setCursorVisible(false);
+		taskManager.field.getCursor().isVisible = false;
 		chara.setAttack(true);
 		if (damageChara.x > chara.x) {
 			chara.direction = Chara.RIGHT;

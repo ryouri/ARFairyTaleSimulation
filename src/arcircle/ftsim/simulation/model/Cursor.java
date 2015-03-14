@@ -11,6 +11,8 @@ public class Cursor {
 
 	public boolean isMoving;
 
+	public boolean isVisible;
+
 	public static final int UP = 0;
 	public static final int RIGHT = 1;
 	public static final int DOWN = 2;
@@ -37,6 +39,7 @@ public class Cursor {
 		speed = SPEED;
 		directionPressedTime = DIRECTION_PRESSED_DURATION;
 		stopTime = 0;
+		this.isVisible = true;
 	}
 
 
@@ -80,7 +83,7 @@ public class Cursor {
 			}
 		}
 
-		if (isMoving == true) {
+		if (isMoving && isVisible) {
 			field.getSoundManager().playSound(SoundManager.SOUND_CURSOR);
 		}
 
@@ -123,7 +126,7 @@ public class Cursor {
 			}
 		}
 
-		if (isMoving == true) {
+		if (isMoving && isVisible) {
 			field.getSoundManager().playSound(SoundManager.SOUND_CURSOR);
 		}
 
