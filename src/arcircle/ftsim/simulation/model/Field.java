@@ -32,6 +32,7 @@ import arcircle.ftsim.simulation.field.Terrain;
 import arcircle.ftsim.simulation.field.TerrainManager;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.simulation.model.task.TaskManager;
+import arcircle.ftsim.simulation.sound.SoundManager;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class Field implements KeyListner, Renderer {
@@ -91,6 +92,8 @@ public class Field implements KeyListner, Renderer {
 	public EventManager eventManager;
 
 	private TaskManager taskManager;
+
+	private SoundManager soundManager;
 
 	private SubInfoWindow subInfoWindow;
 	public SubInfoWindow getSubInfoWindow() {
@@ -154,6 +157,8 @@ public class Field implements KeyListner, Renderer {
 		loadMapName(subStoryFolderPath + "partName.txt");
 		loadEvent(subStoryFolderPath + "event.txt");
 		loadEndCondition(subStoryFolderPath + "endCondition.txt");
+
+		this.soundManager = new SoundManager(SoundManager.battleSoundFolderPath);
 
 		this.taskManager = new TaskManager(this, characters);
 	}
@@ -619,5 +624,8 @@ public class Field implements KeyListner, Renderer {
 
 	public void setSubInfoWindowForAttackInfo(ExpectBattleInfo expectBattleInfo) {
 		subInfoWindow.setSubInfoWindowForAttackInfo(expectBattleInfo);
+	}
+	public SoundManager getSoundManager() {
+		return soundManager;
 	}
 }

@@ -1,5 +1,7 @@
 package arcircle.ftsim.simulation.model;
 
+import arcircle.ftsim.simulation.sound.SoundManager;
+
 public class Cursor {
 	public int x;
 	public int y;
@@ -21,8 +23,11 @@ public class Cursor {
 		return direction;
 	}
 
-	private int directionPressedTime[];
+	private int directionPressedTime;
 	private static int DIRECTION_PRESSED_DURATION = 30;
+
+	private int stopTime;
+	private static int STOP_TIME_DURATION = 10;
 
 	private int speed;
 	public static final int SPEED = 8;
@@ -30,7 +35,8 @@ public class Cursor {
 	public Cursor(Field field) {
 		this.field = field;
 		speed = SPEED;
-		directionPressedTime = new int[4];
+		directionPressedTime = DIRECTION_PRESSED_DURATION;
+		stopTime = 0;
 	}
 
 
@@ -40,11 +46,13 @@ public class Cursor {
 	 * @param direction
 	 */
 	public boolean startMove(int direction) {
-		directionPressedTime[direction] = DIRECTION_PRESSED_DURATION;
-
 		//すでに移動中なら呼び出さない
 		if (isMoving) {
 			return false;
+		}
+
+		if (stopTime > STOP_TIME_DURATION){
+			directionPressedTime = DIRECTION_PRESSED_DURATION;
 		}
 
 		if (direction == UP) {
@@ -72,6 +80,10 @@ public class Cursor {
 			}
 		}
 
+		if (isMoving == true) {
+			field.getSoundManager().playSound(SoundManager.SOUND_CURSOR);
+		}
+
 		return isMoving;
 	}
 
@@ -80,35 +92,39 @@ public class Cursor {
 	 * @param direction
 	 */
 	public boolean pressed(int direction) {
-		directionPressedTime[direction]--;
+		directionPressedTime--;
 
 		if (isMoving) {
 			return false;
 		}
 
-		if (direction == UP && directionPressedTime[UP] < 0) {
+		if (direction == UP && directionPressedTime < 0) {
 			if (y > 0) {
 				isMoving = true;
 				this.setDirection(UP);
 			}
 		}
-		if (direction == RIGHT && directionPressedTime[RIGHT] < 0) {
+		if (direction == RIGHT && directionPressedTime < 0) {
 			if (x < field.col - 1) {
 				isMoving = true;
 				this.setDirection(RIGHT);
 			}
 		}
-		if (direction == DOWN && directionPressedTime[DOWN] < 0) {
+		if (direction == DOWN && directionPressedTime < 0) {
 			if (y < field.row - 1) {
 				isMoving = true;
 				this.setDirection(DOWN);
 			}
 		}
-		if (direction == LEFT && directionPressedTime[LEFT] < 0) {
+		if (direction == LEFT && directionPressedTime < 0) {
 			if (x > 0) {
 				isMoving = true;
 				this.setDirection(LEFT);
 			}
+		}
+
+		if (isMoving == true) {
+			field.getSoundManager().playSound(SoundManager.SOUND_CURSOR);
 		}
 
 		return isMoving;
@@ -116,8 +132,11 @@ public class Cursor {
 
 	public void update() {
 		if (!isMoving) {
+			stopTime++;
 			return;
 		}
+
+		stopTime = 0;
 
 		if (getDirection() == UP) {
 			pY -= speed;
@@ -150,6 +169,23 @@ public class Cursor {
 				pX = x * Field.MAP_CHIP_SIZE;
 				isMoving = false;
 			}
+		}
+
+		if (pY < 0) {
+			pY = 0;
+			isMoving = false;
+		}
+		if (pX < 0) {
+			pX = 0;
+			isMoving = false;
+		}
+		if (pY > (field.row - 1) * Field.MAP_CHIP_SIZE) {
+			pY = (field.row - 1) * Field.MAP_CHIP_SIZE;
+			isMoving = false;
+		}
+		if (pX > (field.col - 1) * Field.MAP_CHIP_SIZE) {
+			pX = (field.col - 1) * Field.MAP_CHIP_SIZE;
+			isMoving = false;
 		}
 	}
 
