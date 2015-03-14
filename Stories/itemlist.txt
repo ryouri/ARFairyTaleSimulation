@@ -1,1 +1,1 @@
-けん,TYPE_WEAPON,RANGE_NEAR,5,4,longsword.png
+けん,TYPE_WEAPON,RANGE_NEAR,1,4,longsword.png

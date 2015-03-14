@@ -174,14 +174,13 @@ public class AttackTask extends Task {
 
 			//攻撃時間が一定以上になったら次のキャラへ
 			if (attackChara.getAttackTime() >= Chara.MAX_ATTACK_TIME) {
+				attackChara.setAttackTime(0);
 				damageChara.setAlpha(1.0f);
 
 				//攻撃を受けた側のhpがなくなったら
 				if (damageChara.status.getHp() <= 0) {
 					taskManager.addCharaDieTask(damageChara);
 				}
-
-				//経験値の追加処理を入れる
 
 				attackChara.setAttack(false);
 				isAttackNow = false;
@@ -197,10 +196,30 @@ public class AttackTask extends Task {
 					attackInfoArray.clear();
 					taskManager.taskEnd();
 					taskManager.field.getCursor().isVisible = true;
+
+					//経験値の追加処理を入れる
+					//attackCharaに経験値
+					if (attackChara.getCamp() == Chara.CAMP_FRIEND && attackChara.status.getHp() > 0) {
+						if (damageChara.status.getHp() > 0) {
+							taskManager.addExpTask(attackChara, ATTACK_EXP);
+						} else {
+							taskManager.addExpTask(attackChara, KILL_EXP);
+						}
+					//damageCharaに経験値
+					} else if (damageChara.getCamp() == Chara.CAMP_FRIEND && damageChara.status.getHp() > 0) {
+						if (attackChara.status.getHp() > 0) {
+							taskManager.addExpTask(damageChara, ATTACK_EXP);
+						} else {
+							taskManager.addExpTask(damageChara, KILL_EXP);
+						}
+					}
 				}
 			}
 		}
 	}
+
+	public static final int ATTACK_EXP = 50;
+	public static final int KILL_EXP = 100;
 
 
 	private void charaAttackPrepareDir(Chara chara, Chara damageChara) {

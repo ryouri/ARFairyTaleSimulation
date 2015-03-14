@@ -166,6 +166,7 @@ public class Characters {
 		//TODO; キャラクターデータのコピーが未完成 AIの実装もね
 		chara.setItemList(characterData.get(chara.status.name).getItemList());
 		characterData.get(chara.status.name).status.copyTo(chara.status);
+		characterData.get(chara.status.name).growRateStatus.copyTo(chara.growRateStatus);
 
 		//TODO: 現在は，デバッグのために新しいAIを試す
 		//chara.setAI(new SimpleAI(chara));

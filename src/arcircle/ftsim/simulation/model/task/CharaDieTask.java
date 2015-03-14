@@ -8,7 +8,7 @@ import arcircle.ftsim.simulation.sound.SoundManager;
 public class CharaDieTask extends Task {
 	Chara dieChara;
 
-	public static final int CHARA_DIE_TIME = 50;
+	public static final int CHARA_DIE_TIME = 30;
 
 	private int timer;
 
@@ -21,7 +21,6 @@ public class CharaDieTask extends Task {
 	@Override
 	public void render(Graphics g, int offsetX, int offsetY, int firstTileX,
 			int lastTileX, int firstTileY, int lastTileY) {
-
 	}
 
 	@Override

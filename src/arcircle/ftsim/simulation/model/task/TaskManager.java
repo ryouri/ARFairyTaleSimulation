@@ -7,6 +7,7 @@ import org.newdawn.slick.Graphics;
 
 import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.chara.battle.CalcurateExp;
 import arcircle.ftsim.simulation.event.Event;
 import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Field;
@@ -63,6 +64,16 @@ public class TaskManager {
 	public void addCharaDieTask(Chara chara) {
 		CharaDieTask charaDieTask = new CharaDieTask(this, chara);
 		addOneTaskAndGenerateArray(charaDieTask);
+	}
+
+	public void addExpTask(Chara chara, int addExp) {
+		AddExpTask addExpTask = new AddExpTask(this, chara, addExp);
+		addOneTaskAndGenerateArray(addExpTask);
+	}
+
+	public void addLevelUpTask(Chara chara, CalcurateExp calcurateExp) {
+		LevelUpTask levelUpTask = new LevelUpTask(this, chara, calcurateExp);
+		addOneTaskAndGenerateArray(levelUpTask);
 	}
 
 	public boolean existTask() {

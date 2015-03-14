@@ -284,6 +284,7 @@ public class Field implements KeyListner, Renderer {
 		//存在するタスクを処理する
 		if (taskManager.existTask()) {
 			taskManager.processUpdate(delta);
+			return;
 		}
 
 		characters.update(delta);

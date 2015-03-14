@@ -155,7 +155,7 @@ public class LoadCharacter {
 			chara.growRateStatus.hp = 			Integer.valueOf(charaStrs[1]);
 			chara.growRateStatus.power = 		Integer.valueOf(charaStrs[2]);
 			chara.growRateStatus.magicPower = 	Integer.valueOf(charaStrs[3]);
-			chara.growRateStatus.spead = 		Integer.valueOf(charaStrs[4]);
+			chara.growRateStatus.speed = 		Integer.valueOf(charaStrs[4]);
 			chara.growRateStatus.tech = 		Integer.valueOf(charaStrs[5]);
 			chara.growRateStatus.luck = 		Integer.valueOf(charaStrs[6]);
 			chara.growRateStatus.defence = 		Integer.valueOf(charaStrs[7]);
