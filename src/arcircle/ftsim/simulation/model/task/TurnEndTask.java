@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.UnicodeFont;
 
 import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.simulation.chara.Chara;
@@ -24,8 +25,11 @@ public class TurnEndTask extends Task {
 		timer = new Timer();
 		task = new TETask();
 		timer_start_flag = false;
+		taskManager.field.getCursor().isVisible = false;
 	}
 
+
+	public static final String TURN_END = "TURN END";
 
 	@Override
 	/**
@@ -34,8 +38,11 @@ public class TurnEndTask extends Task {
 	public void render(Graphics g, int offsetX, int offsetY, int firstTileX,
 			int lastTileX, int firstTileY, int lastTileY) {
 		//Font font = new Font("Serif", Font.PLAIN, 10);
-		g.setFont(FTSimulationGame.font);
-		g.drawString("Tern End", offsetX, offsetY);
+		UnicodeFont font = FTSimulationGame.font;
+		g.setFont(font);
+		g.drawString(TURN_END,
+				(taskManager.field.MAP_VIEW_WIDTH / 2) - font.getWidth(TURN_END),
+				(taskManager.field.MAP_VIEW_HEIGHT / 2) - font.getHeight(TURN_END));
 	}
 
 	@Override
@@ -45,9 +52,8 @@ public class TurnEndTask extends Task {
 	public void update(int delta) {
 		//このターンエンドを画像描画後に呼び出す
 		if (!timer_start_flag){
-			timer.schedule(task, 3L);
+			timer.schedule(task, 500L);
 			timer_start_flag = true;
-			System.out.println("よばれてる！");
 		}
 	}
 
@@ -61,6 +67,7 @@ public class TurnEndTask extends Task {
 			characters.standForAllCampChara(Chara.CAMP_ENEMY);
 			taskManager.taskEnd();
 		}
+		taskManager.field.getCursor().isVisible = true;
 	}
 
 	private class TETask extends TimerTask {

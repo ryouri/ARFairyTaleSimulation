@@ -12,13 +12,15 @@ public class OptionCommandWindow extends CharaCommandWindow {
 		// TODO 自動生成されたコンストラクター・スタブ
 	}
 
+	public static final String TURN_END_COMMAND_NAME = "全たいき";
+
 	/**
 	 * TODO:攻撃範囲によるコマンドの限定，とくしゅコマンドの判定などが未実装
 	 * @return
-	 *
 	 */
 	protected void calcCommandList() {
-
+		Command command =
+				new EndCommand(TURN_END_COMMAND_NAME, sgModel, this);
+		commandList.add(command);
 	}
-
 }

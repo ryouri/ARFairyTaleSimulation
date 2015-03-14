@@ -61,7 +61,7 @@ abstract class CommandWindow implements KeyListner, Renderer {
 
 		this.commandFlagArray = new boolean[Command.commandType.length];
 		//動いていれば移動コマンドは利用できない
-		if (this.chara.isMoved()) {
+		if (this.chara != null && chara.isMoved()) {
 			this.commandFlagArray[0] = false;
 		} else {
 			this.commandFlagArray[0] = true;
