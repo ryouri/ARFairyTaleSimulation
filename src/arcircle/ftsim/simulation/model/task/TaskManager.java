@@ -110,4 +110,4 @@ public class TaskManager {
 			taskArrayArray.remove(0);
 		}
 	}
-}
+	}
