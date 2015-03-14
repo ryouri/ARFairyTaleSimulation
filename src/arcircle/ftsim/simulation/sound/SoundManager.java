@@ -19,6 +19,8 @@ public class SoundManager {
 	public static final String SOUND_AVOID = "avoid";
 	public static final String SOUND_CHARA_DIE = "charaDie";
 	public static final String SOUND_HEAL = "heal";
+	public static final String SOUND_EXP_UP = "expUp";
+	public static final String SOUND_LEVEL_UP = "levelUp";
 
 	public SoundManager(String folderPath) {
 		loadSounds(folderPath);
