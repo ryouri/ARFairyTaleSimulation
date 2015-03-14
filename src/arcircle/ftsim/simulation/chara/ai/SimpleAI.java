@@ -1,3 +1,4 @@
+
 package arcircle.ftsim.simulation.chara.ai;
 
 import java.awt.Point;
