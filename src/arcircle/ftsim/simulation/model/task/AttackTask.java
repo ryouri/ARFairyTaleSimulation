@@ -223,8 +223,8 @@ public class AttackTask extends Task {
 		}
 	}
 
-	public static final int ATTACK_EXP = 50;
-	public static final int KILL_EXP = 100;
+	public static final int ATTACK_EXP = 25;
+	public static final int KILL_EXP = 50;
 
 
 	private void charaAttackPrepareDir(Chara chara, Chara damageChara) {
