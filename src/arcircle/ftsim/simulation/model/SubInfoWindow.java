@@ -209,10 +209,10 @@ public class SubInfoWindow implements Renderer{
 		g.drawString("運 : " + charaStatus.luck,
 				objectPos_status.get("CHARA_LUCK").x, objectPos_status.get("CHARA_LUCK").y);
 		//ぼうぎょ
-		g.drawString("ぼうぎょ : " + charaStatus.defence,
+		g.drawString("ぼうぎょ : " + charaStatus.defense,
 				objectPos_status.get("CHARA_DEFENCE").x, objectPos_status.get("CHARA_DEFENCE").y);
 		//まぼう
-		g.drawString("まぼう : " + charaStatus.magicDefence,
+		g.drawString("まぼう : " + charaStatus.magicDefense,
 				objectPos_status.get("CHARA_MAGICDEFENCE").x, objectPos_status.get("CHARA_MAGICDEFENCE").y);
 		//いどう
 		g.drawString("いどう : " + charaStatus.move,

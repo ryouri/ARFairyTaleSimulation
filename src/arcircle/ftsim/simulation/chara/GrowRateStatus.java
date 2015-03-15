@@ -8,8 +8,8 @@ public class GrowRateStatus {
 	public int speed;
 	public int tech;
 	public int luck;
-	public int defence;
-	public int magicDefence;
+	public int defense;
+	public int magicDefense;
 	public int move;
 	public int physique;
 
@@ -20,8 +20,8 @@ public class GrowRateStatus {
 		status.speed = 			this.speed;
 		status.tech = 			this.tech;
 		status.luck = 			this.luck;
-		status.defence = 		this.defence;
-		status.magicDefence = 	this.magicDefence;
+		status.defense = 		this.defense;
+		status.magicDefense = 	this.magicDefense;
 		status.move = 			this.move;
 		status.physique = 		this.physique;
 	}

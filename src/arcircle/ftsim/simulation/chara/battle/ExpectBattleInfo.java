@@ -39,8 +39,8 @@ public class ExpectBattleInfo {
 		// もろもろ計算
 		int firstPower = firstChara.status.power + firstWeapon.power + firstSupportInfo.getPower();
 		int secondPower = secondChara.status.power + secondWeapon.power + secondSupportInfo.getPower();
-		int firstDefence = firstChara.status.defence + firstSupportInfo.getDefence();
-		int secondDefence = secondChara.status.defence + secondSupportInfo.getDefence();
+		int firstDefence = firstChara.status.defense + firstSupportInfo.getDefence();
+		int secondDefence = secondChara.status.defense + secondSupportInfo.getDefence();
 		int firstHitProb = firstWeapon.hitProbability + firstChara.status.tech * 2 + firstChara.status.luck / 2 + firstSupportInfo.getHitProbability();
 		int secondHitProb = secondWeapon.hitProbability + secondChara.status.tech * 2 + secondChara.status.luck / 2 + secondSupportInfo.getHitProbability();
 		int firstAvoidProb = firstChara.status.speed * 2 + firstChara.status.luck + firstSupportInfo.getAvoidProbability();

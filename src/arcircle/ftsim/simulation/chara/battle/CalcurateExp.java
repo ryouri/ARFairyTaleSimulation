@@ -62,8 +62,8 @@ public class CalcurateExp {
 			levelUpStatus.speed        += calcUpStatus(chara.growRateStatus.speed);
 			levelUpStatus.tech         += calcUpStatus(chara.growRateStatus.tech);
 			levelUpStatus.luck         += calcUpStatus(chara.growRateStatus.luck);
-			levelUpStatus.defence      += calcUpStatus(chara.growRateStatus.defence);
-			levelUpStatus.magicDefence += calcUpStatus(chara.growRateStatus.magicDefence);
+			levelUpStatus.defense      += calcUpStatus(chara.growRateStatus.defense);
+			levelUpStatus.magicDefense += calcUpStatus(chara.growRateStatus.magicDefense);
 			levelUpStatus.move         += calcUpStatus(chara.growRateStatus.move);
 			levelUpStatus.physique     += calcUpStatus(chara.growRateStatus.physique);
 		}

@@ -47,9 +47,9 @@ public class Status {
 	//運
 	public int luck;
 	//ぼうぎょ
-	public int defence;
+	public int defense;
 	//まぼう　（まほうぼうぎょりょく）
-	public int magicDefence;
+	public int magicDefense;
 	//いどう
 	public int move;
 	//たいかく
@@ -79,8 +79,8 @@ public class Status {
 		status.speed = 			this.speed;
 		status.tech = 			this.tech;
 		status.luck = 			this.luck;
-		status.defence = 		this.defence;
-		status.magicDefence = 	this.magicDefence;
+		status.defense = 		this.defense;
+		status.magicDefense = 	this.magicDefense;
 		status.move = 			this.move;
 		status.physique = 		this.physique;
 	}

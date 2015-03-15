@@ -145,8 +145,8 @@ public class LoadCharacter {
 			chara.status.speed = 		Integer.valueOf(charaStrs[4]);
 			chara.status.tech = 		Integer.valueOf(charaStrs[5]);
 			chara.status.luck = 		Integer.valueOf(charaStrs[6]);
-			chara.status.defence = 		Integer.valueOf(charaStrs[7]);
-			chara.status.magicDefence = Integer.valueOf(charaStrs[8]);
+			chara.status.defense = 		Integer.valueOf(charaStrs[7]);
+			chara.status.magicDefense = Integer.valueOf(charaStrs[8]);
 			chara.status.move = 		Integer.valueOf(charaStrs[9]);
 			chara.status.physique = 	Integer.valueOf(charaStrs[10]);
 		}
@@ -158,8 +158,8 @@ public class LoadCharacter {
 			chara.growRateStatus.speed = 		Integer.valueOf(charaStrs[4]);
 			chara.growRateStatus.tech = 		Integer.valueOf(charaStrs[5]);
 			chara.growRateStatus.luck = 		Integer.valueOf(charaStrs[6]);
-			chara.growRateStatus.defence = 		Integer.valueOf(charaStrs[7]);
-			chara.growRateStatus.magicDefence = Integer.valueOf(charaStrs[8]);
+			chara.growRateStatus.defense = 		Integer.valueOf(charaStrs[7]);
+			chara.growRateStatus.magicDefense = Integer.valueOf(charaStrs[8]);
 			chara.growRateStatus.move = 		Integer.valueOf(charaStrs[9]);
 			chara.growRateStatus.physique = 	Integer.valueOf(charaStrs[10]);
 		}
