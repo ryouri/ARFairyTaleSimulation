@@ -42,7 +42,7 @@ public class AddExpTask extends Task {
 		}
 		this.chara.status.exp = calcurateExp.getAfterUpExp();
 		//最大カウンター値
-		maxCounter = calcurateExp.getAddExp() * 2;
+		maxCounter = calcurateExp.getAddExp() * 4 / 3;
 		//描画する経験値量
 		expLength = calcurateExp.getBeforeUpExp() * 4;
 		counter = 0;
@@ -86,7 +86,7 @@ public class AddExpTask extends Task {
 	@Override
 	public void update(int delta) {
 		counter++;
-		expLength+=2;
+		expLength+=3;
 		if(expLength > 400){
 			taskManager.field.getSoundManager().playSound(SoundManager.SOUND_LEVEL_UP);
 			expLength = 0;

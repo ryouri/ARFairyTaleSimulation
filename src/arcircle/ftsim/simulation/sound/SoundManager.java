@@ -22,6 +22,8 @@ public class SoundManager {
 	public static final String SOUND_EXP_UP = "expUp";
 	public static final String SOUND_LEVEL_UP = "levelUp";
 	public static final String SOUND_STATUS_UP = "statusUp";
+	public static final String SOUND_LEVEL_UP_OPEN = "levelUpOpen";
+	
 
 	public SoundManager(String folderPath) {
 		loadSounds(folderPath);
