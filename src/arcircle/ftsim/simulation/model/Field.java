@@ -524,6 +524,9 @@ public class Field implements KeyListner, Renderer {
 		for (int row = 0; row < moveCostArray.length; row++) {
 			for (int col = 0 ; col < moveCostArray[0].length; col++) {
 				moveCostArray[row][col] = moveCostMap[row][col];
+				if (terrainManager.getTerrain(col, row).terrainName.equals("河") ) {
+					moveCostArray[row][col] += 10;
+				}
 			}
 		}
 
