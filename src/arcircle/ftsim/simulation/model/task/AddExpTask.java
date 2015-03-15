@@ -92,7 +92,9 @@ public class AddExpTask extends Task {
 			expLength = 0;
 		}
 		if(counter == maxCounter){
-			taskManager.addLevelUpTask(chara, calcurateExp);
+			if (calcurateExp.getUpLevel() > 0) {
+				taskManager.addLevelUpTask(chara, calcurateExp);
+			}
 			taskManager.taskEnd();
 			taskManager.field.getCursor().isVisible = true;
 		}else{}
