@@ -43,6 +43,7 @@ public class LevelUpTask extends Task {
 		calcPos();
 		counter = 0;
 		taskManager.field.getCursor().isVisible = false;
+		taskManager.field.getSoundManager().playSound(SoundManager.SOUND_LEVEL_UP_OPEN);
 	}
 
 	/**各オブジェクトの位置を指定*/
