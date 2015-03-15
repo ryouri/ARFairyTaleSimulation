@@ -6,7 +6,6 @@ import org.newdawn.slick.Color;
 
 import arcircle.ftsim.simulation.chara.ai.AI;
 import arcircle.ftsim.simulation.item.Item;
-import arcircle.ftsim.simulation.item.Weapon;
 import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Field;
 
@@ -208,18 +207,14 @@ public class Chara {
 	 * 装備している武器を取得する
 	 * @return 装備しているWeaponのインスタンス，装備がなければnull
 	 */
-	public Weapon getEquipedWeapon() {
+	public Item getEquipedWeapon() {
 		if (status.getItemList().isEmpty()) {
 			return null;
 		}
 
 		Item firstItem = status.getItemList().get(0);
 
-		if (firstItem instanceof Weapon) {
-			return (Weapon) firstItem;
-		} else {
-			return null;
-		}
+		return firstItem;
 	}
 
 	public float getAlpha() {

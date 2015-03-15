@@ -32,12 +32,15 @@ public class AttackTask extends Task {
 		this.attackInfoArray = new ArrayList<AttackInfo>();
 		attackInfoArray.add(new AttackInfo(attackChara, damageChara, expectBattleInfo.getFirstCharaBattleInfo()));
 
-		attackInfoArray.add(new AttackInfo(damageChara, attackChara, expectBattleInfo.getSecondCharaBattleInfo()));
+		if (expectBattleInfo.getSecondCharaBattleInfo().isAttackable()) {
+			attackInfoArray.add(new AttackInfo(damageChara, attackChara, expectBattleInfo.getSecondCharaBattleInfo()));
+		}
 
 		//2回攻撃の処理
 		if (expectBattleInfo.getFirstCharaBattleInfo().isTwiceAttack()) {
 			attackInfoArray.add(new AttackInfo(attackChara, damageChara, expectBattleInfo.getFirstCharaBattleInfo()));
-		} else if (expectBattleInfo.getSecondCharaBattleInfo().isTwiceAttack()) {
+		} else if (expectBattleInfo.getSecondCharaBattleInfo().isTwiceAttack()
+				&& expectBattleInfo.getSecondCharaBattleInfo().isAttackable()) {
 			attackInfoArray.add(new AttackInfo(damageChara, attackChara, expectBattleInfo.getSecondCharaBattleInfo()));
 		}
 	}
