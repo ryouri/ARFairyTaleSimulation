@@ -1,6 +1,8 @@
 package arcircle.ftsim.simulation.chara.battle;
 
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.item.Item;
+import arcircle.ftsim.simulation.item.SupportItem;
 import arcircle.ftsim.simulation.item.Weapon;
 
 public class ExpectBattleInfo {
@@ -29,26 +31,61 @@ public class ExpectBattleInfo {
 	 */
 	public void calcBattleInfo(Chara firstChara, Weapon firstWeapon, SupportInfo firstSupportInfo,
 			Chara secondChara, Weapon secondWeapon, SupportInfo secondSupportInfo) {
+		//攻撃側は攻撃できるはずだが，攻撃を受ける側はそうとは限らない
+		//そのため，攻撃を受ける側は，攻撃可能かどうかを判定する必要がある
+
+		boolean isSecondAttackable = true;
+		//サポートアイテムならダメ
+		if ((Item)secondWeapon instanceof SupportItem) {
+			isSecondAttackable = false;
+		} else {
+			int distance = Math.abs(firstChara.x - secondChara.x) + Math.abs(firstChara.y - secondChara.y);
+			//射程距離があっていなければダメ
+			if (distance == 1 && secondWeapon.rangeType == Weapon.RANGE_FAR) {
+				isSecondAttackable = false;
+			} else if (distance == 2 && secondWeapon.rangeType == Weapon.RANGE_NEAR) {
+				isSecondAttackable = false;
+			}
+		}
 
 		//TODO ここはWeaponの方でちゃんと実装できたら消す, まだ実装できてないため適当に入れてる
 		firstWeapon.hitProbability = 100;
-		secondWeapon.hitProbability = 100;
 		firstWeapon.deadProbability = 3;
-		secondWeapon.deadProbability = 3;
 
+		if (isSecondAttackable) {
+			secondWeapon.hitProbability = 100;
+			secondWeapon.deadProbability = 3;
+		}
 		// もろもろ計算
 		int firstPower = firstChara.status.power + firstWeapon.power + firstSupportInfo.getPower();
-		int secondPower = secondChara.status.power + secondWeapon.power + secondSupportInfo.getPower();
 		int firstDefence = firstChara.status.defence + firstSupportInfo.getDefence();
-		int secondDefence = secondChara.status.defence + secondSupportInfo.getDefence();
 		int firstHitProb = firstWeapon.hitProbability + firstChara.status.tech * 2 + firstChara.status.luck / 2 + firstSupportInfo.getHitProbability();
-		int secondHitProb = secondWeapon.hitProbability + secondChara.status.tech * 2 + secondChara.status.luck / 2 + secondSupportInfo.getHitProbability();
 		int firstAvoidProb = firstChara.status.speed * 2 + firstChara.status.luck + firstSupportInfo.getAvoidProbability();
-		int secondAvoidProb = secondChara.status.speed * 2 + secondChara.status.luck + secondSupportInfo.getAvoidProbability();
 		int firstDeadProb = firstWeapon.deadProbability + firstChara.status.tech / 2 + firstSupportInfo.getDeadProbability();
-		int secondDeadProb = secondWeapon.deadProbability + secondChara.status.tech / 2 + secondSupportInfo.getDeadProbability();
 		int firstAvoidDeadProb = firstChara.status.luck + firstSupportInfo.getAvoidDeadProbability();
-		int secondAvoidDeadProb = secondChara.status.luck + secondSupportInfo.getAvoidDeadProbability();
+
+		int secondPower;
+		int secondDefence;
+		int secondHitProb;
+		int secondAvoidProb;
+		int secondDeadProb;
+		int secondAvoidDeadProb;
+
+		if (isSecondAttackable) {
+			secondPower = secondChara.status.power + secondWeapon.power + secondSupportInfo.getPower();
+			secondDefence = secondChara.status.defence + secondSupportInfo.getDefence();
+			secondHitProb = secondWeapon.hitProbability + secondChara.status.tech * 2 + secondChara.status.luck / 2 + secondSupportInfo.getHitProbability();
+			secondAvoidProb = secondChara.status.speed * 2 + secondChara.status.luck + secondSupportInfo.getAvoidProbability();
+			secondDeadProb = secondWeapon.deadProbability + secondChara.status.tech / 2 + secondSupportInfo.getDeadProbability();
+			secondAvoidDeadProb = secondChara.status.luck + secondSupportInfo.getAvoidDeadProbability();
+		} else {
+			secondPower = 0;
+			secondDefence = secondChara.status.defence + secondSupportInfo.getDefence();
+			secondHitProb = 0;
+			secondAvoidProb = secondChara.status.speed * 2 + secondChara.status.luck + secondSupportInfo.getAvoidProbability();
+			secondDeadProb = 0;
+			secondAvoidDeadProb = secondChara.status.luck + secondSupportInfo.getAvoidDeadProbability();
+		}
 
 		// 先攻のデータ作成
 		firstCharaBattleInfo = new CharaBattleInfo(
@@ -56,16 +93,24 @@ public class ExpectBattleInfo {
 				firstPower - secondDefence,
 				isTwiceAttack(firstChara, secondChara),
 				firstHitProb - secondAvoidProb,
-				firstDeadProb - secondAvoidDeadProb);
+				firstDeadProb - secondAvoidDeadProb,
+				true);
+
+		boolean isSecondTwiceAttack;
+		if (isSecondAttackable) {
+			isSecondTwiceAttack = isTwiceAttack(secondChara, firstChara);
+		} else {
+			isSecondTwiceAttack = false;
+		}
 
 		// 後攻のデータ
 		secondCharaBattleInfo = new CharaBattleInfo(
 				secondChara.status.getHp(),
 				secondPower - firstDefence,
-				isTwiceAttack(secondChara, firstChara),
+				isSecondTwiceAttack,
 				secondHitProb - firstAvoidProb,
-				secondDeadProb - firstAvoidDeadProb);
-
+				secondDeadProb - firstAvoidDeadProb,
+				isSecondAttackable);
 	}
 
 	private boolean isTwiceAttack(Chara firstChara, Chara secondChara){

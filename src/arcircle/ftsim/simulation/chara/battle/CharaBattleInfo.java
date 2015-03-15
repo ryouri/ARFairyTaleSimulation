@@ -1,12 +1,14 @@
 package arcircle.ftsim.simulation.chara.battle;
 
 public class CharaBattleInfo {
-	public CharaBattleInfo(int hp, int damage, boolean twiceAttack, int hitProbability, int deadProbability){
+	public CharaBattleInfo(int hp, int damage, boolean twiceAttack,
+			int hitProbability, int deadProbability, boolean isAttackable){
 		this.hp = hp;
 		this.damage = damage;
 		this.twiceAttack = twiceAttack;
 		this.hitProbability = hitProbability;
 		this.deadProbability = deadProbability;
+		this.isAttackable = isAttackable;
 	}
 
 	private int hp;
@@ -17,6 +19,8 @@ public class CharaBattleInfo {
 	private int hitProbability;
 
 	private int deadProbability;
+
+	private boolean isAttackable;
 
 	public int getHp() {
 		return hp;
@@ -58,6 +62,11 @@ public class CharaBattleInfo {
 		this.deadProbability = deadProbability;
 	}
 
+	public boolean isAttackable() {
+		return isAttackable;
+	}
 
-
+	public void setAttackable(boolean isAttackable) {
+		this.isAttackable = isAttackable;
+	}
 }
