@@ -69,7 +69,7 @@ public class ExpectBattleInfo {
 		}
 		// もろもろ計算
 		int firstPower = firstChara.status.power + firstWeapon.power + firstSupportInfo.getPower();
-		int firstDefence = firstChara.status.defence + firstSupportInfo.getDefence();
+		int firstDefence = firstChara.status.defense + firstSupportInfo.getDefence();
 		int firstHitProb = firstWeapon.hitProbability + firstChara.status.tech * 2 + firstChara.status.luck / 2 + firstSupportInfo.getHitProbability();
 		int firstAvoidProb = firstChara.status.speed * 2 + firstChara.status.luck + firstSupportInfo.getAvoidProbability();
 		int firstDeadProb = firstWeapon.deadProbability + firstChara.status.tech / 2 + firstSupportInfo.getDeadProbability();
@@ -85,14 +85,14 @@ public class ExpectBattleInfo {
 		if (isSecondAttackable) {
 			Weapon secondWeapon = (Weapon)secondItem;
 			secondPower = secondChara.status.power + secondWeapon.power + secondSupportInfo.getPower();
-			secondDefence = secondChara.status.defence + secondSupportInfo.getDefence();
+			secondDefence = secondChara.status.defense + secondSupportInfo.getDefence();
 			secondHitProb = secondWeapon.hitProbability + secondChara.status.tech * 2 + secondChara.status.luck / 2 + secondSupportInfo.getHitProbability();
 			secondAvoidProb = secondChara.status.speed * 2 + secondChara.status.luck + secondSupportInfo.getAvoidProbability();
 			secondDeadProb = secondWeapon.deadProbability + secondChara.status.tech / 2 + secondSupportInfo.getDeadProbability();
 			secondAvoidDeadProb = secondChara.status.luck + secondSupportInfo.getAvoidDeadProbability();
 		} else {
 			secondPower = 0;
-			secondDefence = secondChara.status.defence + secondSupportInfo.getDefence();
+			secondDefence = secondChara.status.defense + secondSupportInfo.getDefence();
 			secondHitProb = 0;
 			secondAvoidProb = secondChara.status.speed * 2 + secondChara.status.luck + secondSupportInfo.getAvoidProbability();
 			secondDeadProb = 0;
