@@ -1,1 +1,1 @@
-image/chipset/mapchip_large.png
+image/chipset/mapchip_new.png

@@ -471,12 +471,13 @@ public class Field implements KeyListner, Renderer {
 			for (int y = 0; y < row; y++) {
 				for (int x = 0; x < col; x++) {
 					//こっちが新しいMapEditor用
-//					byte[] b = new byte[4];
-//					in.read(b, 0, 4);
-//					map[y][x] = fromBytes(b);
-
-					int mapChipNo = in.read();
+					byte[] b = new byte[4];
+					in.read(b, 0, 4);
+					int mapChipNo = fromBytes(b);
 					map[y][x] = mapChipNo;
+
+//					int mapChipNo = in.read();
+//					map[y][x] = mapChipNo;
 
 					//TODO:moveCostの読み込み，現在は1で初期化
 					moveCostMap[y][x] = 1;
