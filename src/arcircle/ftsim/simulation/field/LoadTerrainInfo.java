@@ -58,6 +58,7 @@ public class LoadTerrainInfo {
 
 		Terrain terrain = new Terrain();
 		terrain.terrainName = terrainStrs[0];
+		System.out.println(terrain.terrainName);
 		terrain.mapChipStartX = Integer.valueOf(terrainStrs[1]);
 		terrain.mapChipStartY = Integer.valueOf(terrainStrs[2]);
 		terrain.avoidPoint = Integer.valueOf(terrainStrs[3]);

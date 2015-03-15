@@ -513,6 +513,13 @@ public class Field implements KeyListner, Renderer {
 		}
 	}
 
+	public Terrain getYXTerrain(int y, int x) {
+		int chipX = map[y][x] % MAP_CHIP_COL;
+		int chipY = map[y][x] / MAP_CHIP_COL;
+
+		return terrainManager.getTerrain(chipX, chipY);
+	}
+
 	/**
 	 * Fieldのコストが入った配列を返すメソッド
 	 * @return そのマップのコストが記録されたマップ
@@ -525,7 +532,8 @@ public class Field implements KeyListner, Renderer {
 		for (int row = 0; row < moveCostArray.length; row++) {
 			for (int col = 0 ; col < moveCostArray[0].length; col++) {
 				moveCostArray[row][col] = moveCostMap[row][col];
-				if (terrainManager.getTerrain(col, row).terrainName.equals("河") ) {
+
+				if (getYXTerrain(row, col).terrainName.equals("河") ) {
 					moveCostArray[row][col] += 10;
 				}
 			}
