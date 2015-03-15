@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -469,8 +470,14 @@ public class Field implements KeyListner, Renderer {
 			moveCostMap = new int[row][col];
 			for (int y = 0; y < row; y++) {
 				for (int x = 0; x < col; x++) {
+					//こっちが新しいMapEditor用
+//					byte[] b = new byte[4];
+//					in.read(b, 0, 4);
+//					map[y][x] = fromBytes(b);
+
 					int mapChipNo = in.read();
 					map[y][x] = mapChipNo;
+
 					//TODO:moveCostの読み込み，現在は1で初期化
 					moveCostMap[y][x] = 1;
 
@@ -484,6 +491,10 @@ public class Field implements KeyListner, Renderer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static int fromBytes(byte[] b) {
+		return ByteBuffer.wrap(b).getInt();
 	}
 
 	/**
