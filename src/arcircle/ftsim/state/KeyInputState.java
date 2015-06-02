@@ -24,7 +24,9 @@ abstract public class KeyInputState extends BasicGameState {
 	 */
 	protected UnicodeFont font;
 
+	/** 前のステートで鳴っていたBGM */
 	protected Sound lastBGM;
+	/** 現ステートで鳴らすBGM */
 	protected Sound bgm;
 
 	public void setBGM(Sound bgm){

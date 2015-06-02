@@ -32,7 +32,6 @@ public class SimGameState extends KeyInputState {
 	}
 
 	public void nextState() {
-
 		TalkState talkState = (TalkState)stateGame.getState(StateConst.TALK);
 		talkState.setLastBGM(bgm);
 		talkState.setStageNumber(1);

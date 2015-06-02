@@ -7,7 +7,10 @@ import org.newdawn.slick.Sound;
 
 public class TextTag {
 	//フィールド//////////////////////////////////////////////////////////////////////////////////////
-	private String tagName;	//SPEAKなどのテキストタグの種類
+	/**SPEAKなどのテキストタグの種類
+	 * 
+	 */
+	private String tagName;			//
 	private String leftCharaName;	//左に描画するキャラの番号
 	private boolean leftBright;		//左のキャラを明るくするかどうか
 	private String rightCharaName;	//右に描画するキャラの番号

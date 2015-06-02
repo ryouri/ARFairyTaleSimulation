@@ -18,21 +18,26 @@ import arcircle.ftsim.state.TalkState;
 
 public class TalkModel implements KeyListner {
 	//フィールド////////////////////////////////////////////////////////////////////////////////////////////
+	/**トークステート(相互)*/
 	private TalkState talkState;
 
-	private static final int MAX_CHARS_PER_LINE = 32;	// 1行の最大文字数
-    private static final int MAX_LINES_PER_PAGE = 5;	// 1ページに表示できる最大行数
-    private static final int MAX_CHARS_PER_PAGE = MAX_CHARS_PER_LINE * MAX_LINES_PER_PAGE;	// 1ページに表示できる最大文字数
-    private static final int MAX_LINES = 256;	// 格納できる最大行数
+	/** 1行の最大文字数 */
+	private static final int MAX_CHARS_PER_LINE = 32;	//
+    /** メッセージウィンドウ1ページに表示できる最大行数*/
+    private static final int MAX_LINES_PER_PAGE = 5;	//
+    /** メッセージウィンドウ1ページに表示できる最大文字数*/
+    private static final int MAX_CHARS_PER_PAGE = MAX_CHARS_PER_LINE * MAX_LINES_PER_PAGE;	//
+    /** 格納できる最大行数 */
+    private static final int MAX_LINES = 256;	//
 
-    // メッセージを格納する配列
+    /** メッセージを格納する配列 */
     private char[] curText = new char[MAX_CHARS_PER_PAGE];
     private char[] curTagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
     private TextTag[] tags = new TextTag[256];
 
     private boolean nextPageFlag = false;	//次のページに進めるか？
     private boolean nextTalkFlag = false;	//次の会話(タグ)に進めるか？
-    
+
     // ウィンドウを隠せるか？（最後まで表示したらtrueになる）
     private boolean nextStateFlag = false;
 
@@ -308,14 +313,14 @@ public class TalkModel implements KeyListner {
 			}
 		}
 	}
-	
+
 	//ページ送りメソッド
 	private void nextPage(){
 		curPage++;
 		curPosOfPage = 0;
 		nextPageFlag = false;
 	}
-	
+
 	//nextPageFlag = true となって次のトークに進む
 	public void nextTalk(){
 		curTagPointer++;
@@ -327,5 +332,5 @@ public class TalkModel implements KeyListner {
 			nextStateFlag = true;
 		}
 	}
-	
+
 }

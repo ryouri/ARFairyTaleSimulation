@@ -18,14 +18,16 @@ public class LoadTalkGraphics {
 	private HashMap<String, Image> allCharaImageMap;
 	/**キャラIDとキャラネームのMap*/
 	private HashMap<String, String> allCharaNameMap;
-	//キャラクターフォルダにある各キャラフォルダの名前リスト
+	/** キャラクターフォルダにある各キャラフォルダの名前リスト */
 	private String[] charaIDArray;
 
 	//アクセッタ
 	public HashMap<String, Image> getAllCharaImageMap(){ return allCharaImageMap; }
 	public HashMap<String, String> getAllCharaNameMap(){ return allCharaNameMap; }
 
-	/**コンストラクタ */
+	/**コンストラクタ
+	 * @param folderPath:Characterフォルダパス
+	 */
 	public LoadTalkGraphics(String folderPath){
 		this.allCharaImageMap = new HashMap<String, Image>();
 		this.allCharaNameMap = new HashMap<String, String>();
@@ -35,8 +37,9 @@ public class LoadTalkGraphics {
 	/**Characterフォルダにある各キャラの画像を読み込む
 	 * @param characterPath */
 	private void loadChara(String characterPath){
-
-		File characterFolder = new File(characterPath);	//CharacterフォルダのFile
+		//CharacterフォルダのFileインスタンスを生成
+		File characterFolder = new File(characterPath);
+		//Characterフォルダ内の全フォルダの名前をcharaIDArrayに格納
 		charaIDArray = characterFolder.list();
 
 		//各画像データの読み込み
@@ -112,19 +115,25 @@ public class LoadTalkGraphics {
 	 * @param i : 読み込むキャラのcharaIDArrayインデックス
 	 * @throws IOException : エラー吐くので注意 */
 	private void loadCharaName(String characterPath, int i) throws IOException{
+		//各キャラのフォルダ内にあるparamater.txt Fileのインスタンスを生成
 		File file = new File(characterPath + "/" + charaIDArray[i] + "/parameter.txt");
+		//テキスト読み込み用のバッファリーダー
 		BufferedReader br = new BufferedReader(new FileReader(file));
+		//テキスト読み込み用バッファ
 		String line;
 		while ((line = br.readLine()) != null) {
-			// 空行を読み飛ばす
 			if (line.equals("")){
+				// 空行を読み飛ばす
 				continue;
-				//コメントを読み飛ばす
 			}else if (line.startsWith("#")){
+				//コメントを読み飛ばす
 				continue;
 			}
+			// バッファに取り込まれた1行のテキストを","で分割
 			String[] strs = line.split(",");
+
 			if(!strs[0].equals("")){
+				/* キャラの名前をallCharaNameMapに格納．キーはキャラID+Name */
 				allCharaNameMap.put(charaIDArray[i] + "Name", strs[0]);
 			}else{
 				System.out.println("error_TalkView__paramater.txt読み込み");
@@ -133,5 +142,4 @@ public class LoadTalkGraphics {
 		}
 		br.close();  // ファイルを閉じる
 	}
-
 }
