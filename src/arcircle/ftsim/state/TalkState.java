@@ -22,10 +22,9 @@ import arcircle.ftsim.state.talk.TalkView;
 
 public class TalkState extends KeyInputState {
 
-	//フィールド//////////////////////////////////////////////////////////////////////////////////////////////////////
+	//フィールド------------------------------------------------------------------------------------------------------
 	/**Characterフォルダのパス*/
     private static final String characterPath = "./Stories/Characters";
-
 	/**トークモデル：.txtの処理*/
 	private TalkModel talkModel;
 	/**トークビュー：会話文を描画する*/
@@ -43,7 +42,7 @@ public class TalkState extends KeyInputState {
 	//private int chapterID;	//現在の章		現在非対応なのでコメントアウト
 	//private int subStoryID;	//現在の話数	現在非対応なのでコメントアウト
 
-    //アクセッタ////////////////////////////////////////////////////////////////////////////////////////////////////
+    //アクセッタ------------------------------------------------------------------------------------------------------
     /**トークグラフィックスを取得するメソッド*/
     public LoadTalkGraphics getTalkGraphics(){ return talkGraphics;}
     /** ステージ番号を取得する */
@@ -51,7 +50,7 @@ public class TalkState extends KeyInputState {
 	/** ステージ番号をセットする*/
 	public void setStageNumber(int stageNumber) { this.stageNumber = stageNumber; }
 
-	//コンストラクタ////////////////////////////////////////////////////////////////////////////////////////////////
+	//コンストラクタ------------------------------------------------------------------------------------------------
 	//TODO:stageStateはあとでセーブデータから読み込む
 	public TalkState(int state) {
 		super(state);

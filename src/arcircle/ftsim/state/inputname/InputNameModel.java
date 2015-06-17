@@ -53,7 +53,7 @@ public class InputNameModel implements KeyListner {
 	public InputNameModel(InputNameState inputNameState) {				//コンストラクタ
 		super();
 		this.inState = inputNameState;
-		ClearCursorcharArrey();																				//cuｒsorcharArrey[]を初期化
+		ClearCursorcharArrey();											//cuｒsorcharArrey[]を初期化
 	}
 
 
@@ -139,8 +139,6 @@ public class InputNameModel implements KeyListner {
 		return;
 	}
 
-
-
 	/**
 	 * 主人公の名前をstatusクラスのnameにセットするメソッド
 	 */
@@ -161,7 +159,6 @@ public class InputNameModel implements KeyListner {
 		FTSimulationGame.save.getPlayer().name = "";
 		for(int j = 0 ; j < (savePlayerName.length()-count) ; j++){
 			FTSimulationGame.save.getPlayer().name += savePlayerName.charAt(j);
-
 		}
 	}
 

@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,102 +13,138 @@ import org.newdawn.slick.Input;
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.main.FTSimulationGame;
+import arcircle.ftsim.save.NowStage;
 import arcircle.ftsim.state.TalkState;
 
 public class TalkModel implements KeyListner {
-	//フィールド////////////////////////////////////////////////////////////////////////////////////////////
-	/**トークステート(相互)*/
-	private TalkState talkState;
+	//TODO CHANGEBACKGROUND, SELECT タグを使えるようにする
+	//TODO TalkViewはタグのテキストとテキスト中の位置を示すポインタで描画するように改変
 
+	//フィールド-----------------------------------------------------------------------------------------------------
 	/** 1行の最大文字数 */
-	private static final int MAX_CHARS_PER_LINE = 32;	//
-    /** メッセージウィンドウ1ページに表示できる最大行数*/
-    private static final int MAX_LINES_PER_PAGE = 5;	//
+	private final int maxCharsPerLine = T_Const.MAX_CHARS_PER_LINE;
     /** メッセージウィンドウ1ページに表示できる最大文字数*/
-    private static final int MAX_CHARS_PER_PAGE = MAX_CHARS_PER_LINE * MAX_LINES_PER_PAGE;	//
-    /** 格納できる最大行数 */
-    private static final int MAX_LINES = 256;	//
+    private final int maxCharsPerPage = T_Const.MAX_CHARS_PER_PAGE;
+    /** テキストタグのテキストに保存できる最大文字数 */
+    private final int maxChars = T_Const.MAX_CHARS;
+    /** BGM切り替え用のフォルダパス */
+    private final String BGMFolderPath = "./Stories/BGM";
+    /** 背景切り替え用のフォルダパス */
+    private final String BGFolderPath = "./Stories/BackGroun/";
 
     /** メッセージを格納する配列 */
-    private char[] curText = new char[MAX_CHARS_PER_PAGE];
-    private char[] curTagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
-    private TextTag[] tags = new TextTag[256];
+    private char[] curText = new char[maxCharsPerPage];
+    /** 現在のタグのテキスト */
+    private char[] curTagText = new char[maxChars];
 
-    private boolean nextPageFlag = false;	//次のページに進めるか？
-    private boolean nextTalkFlag = false;	//次の会話(タグ)に進めるか？
-
-    // ウィンドウを隠せるか？（最後まで表示したらtrueになる）
+    /**トークステート(相互) */
+	private TalkState talkState;
+    /** テキストタグを格納した配列 */
+    private TextTag[] talkTagArray = new TextTag[256];
+    /** 次のページに進めるか？ */
+    private boolean nextPageFlag = false;
+    /** 次の会話(タグ)に進めるか？ */
+    private boolean nextTalkFlag = false;
+    /** ウィンドウを隠せるか？（最後まで表示したらtrueになる）*/
     private boolean nextStateFlag = false;
 
+    /** プレイヤー(主人公)の名前 */
     private String playerName = "";
-    private String nowStoryName = "";	//
-    private String nowSubStoryName = "";	//
+    /** 現在のストーリーステージの名前 */
+    private String nowStoryName = "";
+    /** 現在のストーリー章の名前 */
+    private String nowSubStoryName = "";
+    /** プロローグかエピローグかの判断 */
     private int nowLogue = 0;
 
-    HashMap<Integer,String> map = new HashMap<Integer,String>();
+    /** 現在のページ内での文字表示位置 */
+    private int curPosOfPage = 0;
+    /** 現在の表示ページ */
+    private int curPage = 0;
+	/** 現在の表示タグ */
+	private int curTagPointer = 0;
 
-    private int curPosOfPage = 0;	//現在のページ内での文字表示位置
-    private int curPage = 0;		//現在の表示ページ
-	private int curTagPointer = 0;	//現在の表示タグ
-
-	private int tagP = 0;	//タグ生成時に用いるポインタ
-
-	// テキストを流すTimerTask
+	/** タグ生成時に用いるポインタ */
+	private int makingTagP = 0;
+    /** テキストを流すTimerTask */
     private Timer timer;
+    /** タイマータスク */
     private TimerTask task;
 
-    //アクセッタ/////////////////////////////////////////////////////////////////////////////////////////////////
-  	public TextTag getCurTag() { return tags[curTagPointer]; }
+    //アクセッタ------------------------------------------------------------------------------------------------------
+  	public TextTag getCurTag() { return talkTagArray[curTagPointer]; }
   	public void incrementCurTagPointer(){ curTagPointer++; }
   	public char[] getcurText() {
   		for(int i = 0 ; i < curPosOfPage ; i++){
-  			curText[i] = curTagText[curPage * MAX_CHARS_PER_PAGE + i];
+  			curText[i] = curTagText[curPage * maxCharsPerPage + i];
   		}
   		return curText;
   	}
-
   	//話し手の名前を右か左かを調べて返す
   	public String getCurTagSpeakerName(){
-  		if(tags[curTagPointer].isLeftBright()){
-  			return tags[curTagPointer].getLeftCharaName();
+  		if(talkTagArray[curTagPointer].isLeftBright()){
+  			return talkTagArray[curTagPointer].getLeftCharaName();
   		}else{
-  			return tags[curTagPointer].getRightCharaName();
+  			return talkTagArray[curTagPointer].getRightCharaName();
   		}
   	}
   	public boolean isNextPageFlag() { return nextPageFlag; }
 	public void setNextPageFlag(boolean nextPageFlag) { this.nextPageFlag = nextPageFlag; }
-
 	public boolean isNextTalkFlag() { return nextTalkFlag; }
 	public void setNextTalkFlag(boolean nextTalkFlag) { this.nextTalkFlag = nextTalkFlag; }
-
 	public int getCurPosOfPage() { return curPosOfPage; }
 	public int getCurPage() { return curPage; }
 
-    //コンストラクタ//////////////////////////////////////////////////////////////////////////////////////
+    //-------------------------------------------------------------------------------------------------------------
+	/**コンストラクタ
+	 * @param talkState トークステート(相互) */
 	public TalkModel(TalkState talkState) {
 		super();	//おまじない
 		this.talkState = talkState;
-		readSaveData();//セーブデータを読み込み
-		timer = new Timer();	//タイマーをセット(メッセージが流れるように表示させるため)
-		loadTextData();		//会話文テキストを読み込んで各タグを生成する
-		curTagPointer = 0;	//現在のタグを示すポインタ
-		curTagText = tags[curTagPointer].getText();	//
+		//セーブデータを読み込み
+		readSaveData();
+		// 各フラッグの初期化
+		nextPageFlag = false;
+		nextTalkFlag = false;
+		nextStateFlag = false;
+		//会話文テキスト(plorogue/epilogue)を読み込んで各タグを生成する
+		loadTextData();
+		//現在のタグ番号
+		curTagPointer = 0;
+		//現在のタグの会話文を取得する
+		curTagText = talkTagArray[curTagPointer].getText();
+		//タイマーをセット(指定した時間毎にActionEventを発行する)
+		timer = new Timer();
+		//timerで指定した時間毎に行うタスク(具体的にはDrawingMessageTaskに記述)
 		task = new DrawingMessageTask();
-        timer.schedule(task, 0L, 20L);	//最後の引数を変化させるとメッセージの流れるスピードが変わる
+		//最後の引数を変化させるとメッセージの流れるスピードが変わる
+        timer.schedule(task, 0L, 20L);
 	}
 
+	//-------------------------------------------------------------------------------------------------------------
+	/** セーブデータにある内容を取得する，[playerName, storyName, subStoryName, selectLogue] */
 	private void readSaveData(){
+		//セーブデータからプレーヤー(主人公)の名前を取得
 		readPlayerName();
+		//セーブデータから今のストーリーステージの名前を取得
 		nowStoryName = FTSimulationGame.save.getNowStage().storyName;
+		//セーブデータから今のストーリー章の名前を取得
 		nowSubStoryName = FTSimulationGame.save.getNowStage().subStoryNum;
+		//セーブデータから
 		nowLogue = FTSimulationGame.save.getNowStage().selectLogue;
 	}
 
-	//セーブデータにあるプレイヤーネームを読み込み-----------------------------------------------------------------
+	//--------------------------------------------------------------------------------------------------------------
+	/**セーブデータにあるプレーヤーネームから後ろの全角スペースを抜いて
+	 * フィールド変数playerNameに保存 */
 	private void readPlayerName(){
+		//セーブデータからプレーヤーの名前を取得
 		String savePlayerName = FTSimulationGame.save.getPlayer().name;
-		int count = 0;
 
+		//プレーヤーの名前は8文字で固定されていて，余っているところには全角スペースが挿入されている
+		//このままだと流れるようにメッセージを出力する場合に意味のない空白が出力されてしまう．
+		//したがって，あらかじめプレーヤーネームから無意味な全角スペースを排除する
+		int count = 0;		//後ろから全角スペースいくつがあるのかカウント
 		for(int i = (savePlayerName.length() - 1) ; i > -1 ; i--){
 			if(savePlayerName.charAt(i) == '　'){
 				count++;
@@ -117,147 +152,165 @@ public class TalkModel implements KeyListner {
 				break;
 			}
 		}
+		//プレーヤーネームを後ろの全角スペースの数を抜いた分だけplayerNameにコピー
 		for(int i = 0 ; i < (savePlayerName.length()-count) ; i++){
 			playerName += savePlayerName.charAt(i);
 		}
 	}
 
-	//テキストデータを一度ロードするメソッド-----------------------------------------------------------------
+	//------------------------------------------------------------------------------------------------------------
+    /** 会話用テキストデータをロードして，テキストタグを生成していくメソッド */
     private void loadTextData(){
-    	//会話文のある
-    	String filePath = "Stories/" + nowStoryName + "/" + nowSubStoryName + "/";
-    	if(nowLogue == FTSimulationGame.save.getNowStage().PROLOGUE){
-    		filePath += "prologue.txt";
-    	}else if(nowLogue == FTSimulationGame.save.getNowStage().EPILOGUE){
-    		filePath += "epilogue.txt";
+    	//会話文のあるストーリー章のフォルダパス
+    	String logueFilePath = "";
+		//プロローグかエピローグかの判定
+    	if(nowLogue == NowStage.PROLOGUE){
+    		/* プロローグの場合 */
+    		logueFilePath = "Stories/" + nowStoryName + "/" + nowSubStoryName + "/prologue.txt";
+    	}else if(nowLogue == NowStage.EPILOGUE){
+    		/* エピローグの場合 */
+    		logueFilePath = "Stories/" + nowStoryName + "/" + nowSubStoryName + "/epilogue.txt";
+    	}else{
+    		System.out.println("ERROR_TalkModel_Logue");
     	}
+//    	logueFilePath = "Stories/" + nowStoryName + "/" + nowSubStoryName + "/kaiwa.txt";
 
     	try {
+    		// バッファリーダーの作成
     		BufferedReader br;
     		// 会話ファイルを読み込む
-    		File file = new File(filePath);
+    		File file = new File(logueFilePath);
     		br = new BufferedReader(new FileReader(file));
+    		//データを1行ずつ読み込んでいくための格納器
+    		String line;
 
-    		String line;	//データを1行ずつ読み込んでいく
+            // 処理中のタグテキスト文字位置
+            int charPointer = 0;
+            // テキストタグに入れるテキスト
+            char[] tagText = new char[maxChars];
 
-    		nextPageFlag = false;
-    		nextTalkFlag = false;
-            nextStateFlag = false;
-
-            int p = 0;  // 処理中の文字位置
-
-            char[] tagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
-
-    		String tagName = "";
-    		String leftCharaName = "";
-    		String rightCharaName = "";
-    		String bright = "";
-    		int express = -1;
-
-    		String[] choice = new String[4];	//選択肢(4つまで)
+//    		String tagName = "";
+//    		String leftCharaName = "";
+//    		String rightCharaName = "";
+//    		String bright = "";
+//    		int express = -1;
+//    		String[] choice = new String[4];	//選択肢(4つまで)
 
             while ((line = br.readLine()) != null) {
             	// 空行を読み飛ばす
-        		if (line.equals("")){
-        			continue;
+        		if (line.equals("")){ continue; }
         		//コメントを読み飛ばす
-        		}else if (line.startsWith("#")){
-        			continue;
-        		}
+        		if (line.startsWith("#")){ continue; }
 
-        		String[] strs = line.split("_");	//読み込んだ一行を'_'で区切る
+        		//読み込んだ一行を'_'で区切る
+        		String[] strs = line.split("_");
 
-        		if(strs[0].equals("SPEAK")){
-        			tagName = strs[0];			//タグの名前をSPEAKにする
-        			leftCharaName = strs[1];	//左に配置するキャラの名前を格納("*"などもそのまま格納)
-        			rightCharaName = strs[2];	//右に配置するキャラの名前を格納("*"などもそのまま格納)
-        			bright = strs[3]; 			//左右キャラの明るさ
-        			express = Integer.valueOf(strs[4]);	//話し手の表情
-        			//テキストタグの作成
-        			tags[tagP] = new TextTag(tagName, leftCharaName, rightCharaName, bright, express);
-
+        		if(strs[0].equals(T_Const.SPEAK)){
+        			/* SPEAKタグの生成条件を検知 */
+        			// テキストタグを作成
+        			talkTagArray[makingTagP] = new TextTag(T_Const.SPEAK);
+        			// 左キャラの名前を作成したタグに設定
+        			talkTagArray[makingTagP].setLeftCharaName(strs[1]);
+        			// 右キャラの名前を作成したタグに設定
+        			talkTagArray[makingTagP].setRightCharaName(strs[2]);
+        			// 左右のキャラの明るさを作成したタグに設定
+        			talkTagArray[makingTagP].setBright(strs[3]);
+        			// 話し手の表情を作成したタグに設定
+        			talkTagArray[makingTagP].setExpression(Integer.valueOf(strs[4]));
         		}else if(strs[0].equals("SPEAKEND")){
-        			tagText[++p] = '$';	//テキストの終端記号
+        			/* SPEAKタグの終了条件を検知 */
+        			// タグに収める前にテキストの終端に終端記号を付与する
+        			tagText[++charPointer] = '$';
+        			// 処理し終わったテキストをテキストタグにセットする
+        			// (一つのテキストタグを作り終えたのでmaingTagPを1増やす)
+        			talkTagArray[makingTagP++].setText(tagText);
+        			// 処理中の文字位置を初期化
+        			charPointer = 0;
+        			// タグテキストを初期化
+        			tagText = new char[maxChars];
 
+        		}else if(strs[0].equals(T_Const.CHANGE_BGM)){
+        			/* BGM切り替え用タグ生成条件を検知 */
+        			//生成
+        			talkTagArray[makingTagP++] = new TextTag(strs[0], BGMFolderPath + "/" + strs[1]);
+        			System.out.println(strs[1]);
+        		}
+//        		else if(strs[0].equals("CHANGEBACKGROUND")){
+//        			/* 背景変更用タグの生成 */
+//        			talkTagArray[makingTagP++] = new TextTag(strs[0], BGFolderPath + "/" + strs[1]);
+//        			System.out.println(strs[1]);
+//        		}else if(strs[0].equals("SELECT")){
+//        			tagName = strs[0];
+//        			//choiceの初期化
+//        			for(int i = 0 ; i < 4 ; i++){
+//        				choice[i] = "";
+//        			}
+//        		}else if(strs[0].equals("CHOICE1")){
+//        			choice[0] = strs[1];
+//        		}else if(strs[0].equals("CHOICE2")){
+//        			choice[1] = strs[1];
+//        		}else if(strs[0].equals("CHOICE3")){
+//        			choice[2] = strs[1];
+//        		}else if(strs[0].equals("CHOICE4")){
+//        			choice[3] = strs[1];
+//        		}else if(strs[0].equals("SELECTEND")){
+//        			tagText[charPointer++] = '$';	//テキストの終端記号
 //        			//テキストタグの作成
-        			tags[tagP++].setText(tagText);
-
-        			tagName = "";
-        			leftCharaName = "";
-            		rightCharaName = "";
-            		bright = "";
-            		express = -1;
-        			p = 0;
-        			tagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
-
-        		}else if(strs[0].equals("SELECT")){
-        			tagName = strs[0];
-        			//choiceの初期化
-        			for(int i = 0 ; i < 4 ; i++){
-        				choice[i] = "";
-        			}
-        		}else if(strs[0].equals("CHOICE1")){
-        			choice[0] = strs[1];
-        		}else if(strs[0].equals("CHOICE2")){
-        			choice[1] = strs[1];
-        		}else if(strs[0].equals("CHOICE3")){
-        			choice[2] = strs[1];
-        		}else if(strs[0].equals("CHOICE4")){
-        			choice[3] = strs[1];
-        		}else if(strs[0].equals("SELECTEND")){
-        			tagText[p++] = '$';	//テキストの終端記号
-        			//テキストタグの作成
-        			tags[tagP++] = new TextTag(tagName, tagText, choice);
-        			tagName = "";
-        			leftCharaName = "";
-            		rightCharaName = "";
-            		bright = "";
-            		express = -1;
-        			p = 0;
-        			tagText = new char[MAX_LINES * MAX_CHARS_PER_LINE];
-
-        		//BGM切り替え用タグの生成
-        		}else if(strs[0].equals("CHANGEBGM")){
-        			tags[tagP++] = new TextTag(strs[0], "./Stories/BGM/" + strs[1]);
-        			System.out.println(strs[1]);
-        		}else if(strs[0].equals("CHANGEBACKGROUND")){
-        			/* 背景変更用タグの生成 */
-        			tags[tagP++] = new TextTag(strs[0], "./Stories/BackGround/" + strs[1]);
-        			System.out.println(strs[1]);
-        		}else{
+//        			talkTagArray[makingTagP++] = new TextTag(tagName, tagText, choice);
+//        			tagName = "";
+//        			leftCharaName = "";
+//            		rightCharaName = "";
+//            		bright = "";
+//            		express = -1;
+//        			charPointer = 0;
+//        			tagText = new char[maxChars];
+//        		}
+        		else{
+        			/* タグテキストの予備処理 */
+        			//lineを一文字づつchar型に変換して処理する
         			for (int i = 0; i < line.length(); i++) {
         				char c = line.charAt(i);
         				if (c == '/') {  // 改行
-        					tagText[p] = '/';
-        					p += MAX_CHARS_PER_LINE;
-        					p = (p / MAX_CHARS_PER_LINE) * MAX_CHARS_PER_LINE;
-        				} else if (c == '%') {  // 改ページ
-        					tagText[p] = '%';
-        					p += MAX_CHARS_PER_PAGE;
-        					p = (p / MAX_CHARS_PER_PAGE) * MAX_CHARS_PER_PAGE;
+        					/* 改行文字'/'を検知した場合 */
+        					// DrawingMessageTaskで文字表示時間処理に用いるため'/'は残す[時間的な処理用]
+        					tagText[charPointer] = '/';
+        					// 表示位置を調節するため，次からの文字は改行したところに入れる[グラフィック的な処理用]
+        					charPointer = (charPointer / maxCharsPerLine + 1) * maxCharsPerLine;
+        				} else if (c == '%') {
+        					/* 改ページ文字'%'を検知した場合 */
+        					// DrawingMessageTaskで文字表示時間処理に用いるため'%'は残す[時間的な処理用]
+        					tagText[charPointer] = '%';
+        					// 表示位置を調節するため，次からの文字は改行したところに入れる[グラフィック的な処理用]
+        					charPointer = (charPointer / maxCharsPerPage + 1) * maxCharsPerPage;
         				} else if(c == '*'){
+        					/* 主人公の名前を示す文字'*'を検知した場合 */
+        					//playerNameをchar型に変換してタグテキストに入れる
         					char[] player = playerName.toCharArray();
         					for(int j = 0 ; j < player.length ; j++){
-        						tagText[p++] = player[j];
+        						tagText[charPointer++] = player[j];
         					}
         				}else if(c == '['){
+        					/* 効果音再生条件'['を検知した場合 */
+        					// 効果音は会話文内に"[効果音ファイル名]"と書くことで再生指定したファイルの音楽が再生される
+        					// 効果音ファイル名をString型としてseFileNameに格納する
         					String seFileName = "";
         					c = line.charAt(++i);
         					while(c != ']'){
         						seFileName += c;
         						c = line.charAt(++i);
         					}
-        					System.out.println(seFileName);
-        					tags[tagP].setSE(seFileName);
-        					tagText[p++] = '&';
+        					// 効果音ファイル名をテキストタグにセット
+        					talkTagArray[makingTagP].setSE(seFileName);
+        					// 効果音を鳴らすタイミングを知らせるための効果音文字'&'を挿入する
+        					tagText[charPointer++] = '&';
         				}else{
-        					tagText[p++] = c;
+        					/* cが処理の必要な特殊文字でない場合 */
+        					tagText[charPointer++] = c;
         				}
         			}
         		}
             }
     		br.close();  // ファイルを閉じる
-
     	} catch (FileNotFoundException ex) {
         ex.printStackTrace();
     	} catch (IOException ex) {
@@ -265,31 +318,31 @@ public class TalkModel implements KeyListner {
     	}
     }
 
+    //-------------------------------------------------------------------------------------------------------------
+    /** timerで設定した時間毎に行われるタスク */
     private class DrawingMessageTask extends TimerTask {
         public void run() {
             if (!nextPageFlag && !nextTalkFlag) {
                 curPosOfPage++;  // 1文字増やす
                 // テキスト全体から見た現在位置
-                int p = curPage * MAX_CHARS_PER_PAGE + curPosOfPage;
-                //System.out.println(curTagText[p]);
+                int p = curPage * maxCharsPerPage + curPosOfPage;
                 if (curTagText[p] == '/') {
-                    curPosOfPage += MAX_CHARS_PER_LINE;
-                    curPosOfPage = (curPosOfPage / MAX_CHARS_PER_LINE) * MAX_CHARS_PER_LINE;
+                    curPosOfPage += maxCharsPerLine;
+                    curPosOfPage = (curPosOfPage / maxCharsPerLine) * maxCharsPerLine;
                 } else if (curTagText[p] == '%') {
-                    curPosOfPage += MAX_CHARS_PER_PAGE;
-                    curPosOfPage = (curPosOfPage / MAX_CHARS_PER_PAGE) * MAX_CHARS_PER_PAGE;
+                    curPosOfPage += maxCharsPerPage;
+                    curPosOfPage = (curPosOfPage / maxCharsPerPage) * maxCharsPerPage;
                 } else if (curTagText[p] == '$') {
                 	nextTalkFlag = true;
                 }
 
                 // 1ページの文字数に達したら▼を表示
-                if (curPosOfPage % MAX_CHARS_PER_PAGE == 0) {
+                if (curPosOfPage % maxCharsPerPage == 0) {
                     nextPageFlag = true;
                 }
             }
         }
     }
-
 
 	@Override
 	//キーインプット------------------------------------------------------------------------------------
@@ -314,23 +367,24 @@ public class TalkModel implements KeyListner {
 		}
 	}
 
-	//ページ送りメソッド
+	// ----------------------------------------------------------------------------------------------------------
+	/** ページ送りメソッド */
 	private void nextPage(){
 		curPage++;
 		curPosOfPage = 0;
 		nextPageFlag = false;
 	}
 
-	//nextPageFlag = true となって次のトークに進む
+	// -----------------------------------------------------------------------------------------------------------
+	/** nextPageFlag = true となって次のトークに進む */
 	public void nextTalk(){
 		curTagPointer++;
-		curTagText = tags[curTagPointer].getText();
+		curTagText = talkTagArray[curTagPointer].getText();
 		curPosOfPage = 0;
 		curPage = 0;
 		nextTalkFlag = false;
-		if(curTagPointer == (tagP-1)){
+		if(curTagPointer == (makingTagP-1)){
 			nextStateFlag = true;
 		}
 	}
-
 }
