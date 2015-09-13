@@ -1,6 +1,7 @@
 package arcircle.ftsim.state.talk;
 
 
+import java.awt.Point;
 import java.util.HashMap;
 
 import org.newdawn.slick.Color;
@@ -18,116 +19,158 @@ import arcircle.ftsim.state.TalkState;
 
 
 
+/**トークビュー 会話ステートの描画を担当する
+ * @author ゆきねこ */
 public class TalkView implements Renderer{
-
-	//フィールド////////////////////////////////////////////////////////////////////////zz////////////////
-	private TalkModel talkModel;	//トークモデル
-	private TalkState talkState;	//トークステート
-
-	/** 各画像の格納器_背景, メッセージボックス, L.Chara, R.Chara, face */
-	private Image[] ImgStorage = new Image[5];
-	/** オブジェクトの描画位置,背景, メッセージボックス, L.Chara, R.Chara, face, speakerName, text */
-	private int[][] position = new int[7][2];
-	private final int BG = 0;	//背景
-	private final int MSG = 1;	//メッセージボックス
-	private final int LC = 2;	//L_Chara
-	private final int RC = 3;	//R_Chara
-	private final int FACE = 4;	//face
-	private final int NAME = 5;	//speakerName
-	private final int TEXT = 6;	//text
-	private final int X = 0;
-	private final int Y = 1;
-	private String speakerName;	//話し手の名前
-	private Sound playingSE;	//現在の効果音
-
-	private Image nothingCharaImg;	//透明な画像
-
-	private HashMap<String, Image> charasImg;	//キャラナンバーとキャライメージのほ
-	private HashMap<String, String> charasName;
-
-    private static final int MAX_CHARS_PER_LINE = 32;	// 1行の最大文字数
-    private static final int MAX_LINES_PER_PAGE = 5;	// 1ページに表示できる最大行数
-    private static final int MAX_CHARS_PER_PAGE = MAX_CHARS_PER_LINE * MAX_LINES_PER_PAGE;	// 1ページに表示できる最大文字数
-
-    private static final String characterPath = "./Stories/Characters";	//Characterフォルダのパス
-
-    private int playerGender = FTSimulationGame.save.getPlayer().gender;	//male = 0, female = 1
-
-    // Fontに合わせて変えること
+	//フィールド-----------------------------------------------------------------------------------------------------
+	/** 1行の最大文字数 */
+	private final int maxCharsPerLine = T_Const.MAX_CHARS_PER_LINE;
+    /** 1ページに表示できる最大行数 */
+    private final int maxLinesPerPage = T_Const.MAX_LINES_PER_PAGE;
+    /** 1文字のフォント幅(目安) */
     private static final int FONT_WIDTH = 24;
+    /** 1文字のフォント高さ(目安) */
     private static final int FONT_HEIGHT = 24;
+    // 各オブジェクトを示す名前(ハッシュのキー)
+    /** "BackGround" 背景 */
+    private final String BG = "BackGround";
+    /** "MessageBox" メッセージボックス */
+    private final String MB = "MessageBox";
+    /** "LeftChara" 左に配置されるキャラ */
+    private final String LC = "LeftChara";
+    /** "RightChara" 右に配置されるキャラ */
+    private final String RC = "RightChara";
+    /** "SpeakerFace" 話し手の顔画像 */
+    private final String SF = "SpeakerFace";
+    /** "SpeakerName" 話し手の名前 */
+    private final String SN = "SpeakerName";
+    /** "TextBox" テキスト */
+    private final String TB = "TextBox";
 
-    private Color filterColor = new Color(0.75f,0.75f,0.75f,0.5f);	//しゃべってないキャラ用の画像薄フィルタ
+    /** プレイヤーの性別 male = 0, female = 1 */
+    private final int playerGender = FTSimulationGame.save.getPlayer().gender;
 
-	//コンストラクタ//////////////////////////////////////////////////////////////////////////////////////
+	/**トークモデル */
+	private TalkModel talkModel;
+	/** トークステート*/
+	private TalkState talkState;
+	/** 各オブジェクトの画像 - BG, MSB, LC, RC, SF */
+	private HashMap<String, Image> objectImg = new HashMap<String, Image>();
+	/** 各オブジェクトの描画位置 - BG, MSB, LC, RC, SN, SF, TB */
+	private HashMap<String, Point> objectPos = new HashMap<String, Point>();
+
+	/** 話し手の名前 */
+	private String speakerName;
+
+    /** しゃべってないキャラを透過させるための画像フィルタ */
+    private Color filterColor = new Color(0.75f,0.75f,0.75f,0.5f);
+	/** 現在の効果音 */
+	private Sound playingSE;
+
+	/** 全キャライメージ, key:キャラフォルダネーム, from TalkState */
+	private HashMap<String, Image> allCharasImg;
+	/** 全キャラネーム，key:キャラフォルダネーム from TalkState*/
+	private HashMap<String, String> allCharasName;
+
+	//コンストラクタ--------------------------------------------------------------------------------------------------
 	public TalkView(TalkModel tModel, TalkState tState) {
 		super();
 		this.talkModel = tModel;
 		this.talkState = tState;
-
-		//画像の読み込み
-		loadChara();
-
-		ImgStorage[LC] = nothingCharaImg;
-		ImgStorage[RC] = nothingCharaImg;
-		ImgStorage[FACE] = charasImg.get("001FaceStandard");
-
-		//メッセージボックスを描画する位置
-		position[MSG][X] = (FTSimulationGame.WIDTH / 2) - (ImgStorage[MSG].getWidth() / 2);
-		position[MSG][Y] = FTSimulationGame.HEIGHT - ImgStorage[MSG].getHeight();
-		//メッセージボックス内で話し手の名前を描画する位置
-		position[NAME][X] = position[MSG][X] + 30;
-		position[NAME][Y] = position[MSG][Y] + 30;
-		//メッセージボックス内で会話文を描画する位置
-		position[TEXT][X] = position[MSG][X] + 235;
-		position[TEXT][Y] = position[MSG][Y] + 45;
-		//顔画像の描画位置
-		position[FACE][X] = position[NAME][X] + 20;
-		position[FACE][Y] = position[NAME][Y] + 40;
-		//キャラクターの立ち絵を表示する位置
-		position[RC][X] = FTSimulationGame.WIDTH - ImgStorage[RC].getWidth();
-		position[LC][Y] = position[MSG][Y] - (ImgStorage[LC].getHeight() * 3 / 4);	//キャラ立ち絵は体の半分がメッセージボックス上に出る
-		position[RC][Y] = position[MSG][Y] - (ImgStorage[RC].getHeight() * 3 / 4);
+		//各画像の準備
+		setImage();
+		//各オブジェクトの描画位置を設定する
+		setObjectPos();
 	}
 
-	private void loadChara(){
-		//全キャラの画像を読み込み
-		charasImg = talkState.getTalkGraphics().getAllCharaImageMap();
-		charasName = talkState.getTalkGraphics().getAllCharaNameMap();
-		
+	//----------------------------------------------------------------------------------------------------------------
+	/**トークステートにおける各オブジェクトの描画位置を設定する */
+	private void setObjectPos(){
+		int tempPosX;
+		int tempPosY;
+		//メッセージボックスを描画する位置
+		tempPosX = (FTSimulationGame.WIDTH / 2) - (objectImg.get(MB).getWidth() / 2);
+		tempPosY = FTSimulationGame.HEIGHT - objectImg.get(MB).getHeight();
+		objectPos.put(MB, new Point(tempPosX, tempPosY));
+		//メッセージボックス内で話し手の名前を描画する位置
+		tempPosX = objectPos.get(MB).x + 30;
+		tempPosY = objectPos.get(MB).y + 30;
+		objectPos.put(SN, new Point(tempPosX, tempPosY));
+		//メッセージボックス内で会話文を描画する位置
+		tempPosX = objectPos.get(MB).x + 235;
+		tempPosY = objectPos.get(MB).y + 45;
+		objectPos.put(TB, new Point(tempPosX, tempPosY));
+		//顔画像の描画位置
+		tempPosX = objectPos.get(SN).x + 20;
+		tempPosY = objectPos.get(SN).y + 40;
+		objectPos.put(SF, new Point(tempPosX, tempPosY));
+		//左に配置するキャラクターの立ち絵を表示する位置
+		tempPosX = 0;
+		tempPosY = objectPos.get(MB).y - (objectImg.get(LC).getHeight() * 3 / 4);
+		objectPos.put(LC, new Point(tempPosX, tempPosY));
+		//右に配置するキャラクターの立ち絵を表示する位置
+		tempPosX = FTSimulationGame.WIDTH - objectImg.get(RC).getWidth();
+		tempPosY = objectPos.get(MB).y - (objectImg.get(RC).getHeight() * 3 / 4);
+		objectPos.put(RC, new Point(tempPosX, tempPosY));
+	}
+
+	//----------------------------------------------------------------------------------------------------------------
+	/** 画像の読み込み，効果音の読み込み，各オブジェクトへのセット */
+	private void setImage(){
+		//全キャラの画像参照を取得
+		allCharasImg = talkState.getTalkGraphics().getAllCharaImageMap();
+		allCharasName = talkState.getTalkGraphics().getAllCharaNameMap();
 		//各画像データの読み込み
 		try{
-			ImgStorage[BG] = new Image("./Image/backGround.png");	//背景画像の読み込み
-			ImgStorage[MSG] = new Image("./Image/ver1120.png");	//メッセージボックス画像の読み込み
-			nothingCharaImg = new Image("./Image/Transparent.png");	//	キャラ非表示用に透明な画像を読み込み
+			// 背景画像の読み込み
+			objectImg.put(BG, new Image("./Image/backGround.png"));
+			// メッセージボックス画像の読み込み
+			objectImg.put(MB, new Image("./Image/ver1120.png"));
+			//効果音の読み込み
 			playingSE = new Sound("./Stories/SE/decision3.ogg");
 		}catch(SlickException e){
 			e.printStackTrace();
 		}
+		// 左キャラの初期画像:透明
+		objectImg.put(LC, allCharasImg.get(T_Const.NO_STAND));
+		// 右キャラの初期画像:透明
+		objectImg.put(RC, allCharasImg.get(T_Const.NO_STAND));
+		// 話し手の初期顔画像設置
+		objectImg.put(SF, allCharasImg.get(T_Const.NO_FACE));
 	}
 
 	@Override
 	//レンダー---------------------------------------------------------------------------------------
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
-		g.drawImage(ImgStorage[BG], 0, 0);	//背景画像の描画
-
-		TextTag curTag = talkModel.getCurTag();	//現在のタグを取得
-		update(curTag);	//各キャラの配置などのデータを更新
-		draw(g, curTag);	//updateした情報で画面に描画
+		//背景画像の描画
+		g.drawImage(objectImg.get(BG), 0, 0);
+		//現在のタグを取得,(update/drawで用いるため，先に取得)
+		TextTag curTag = talkModel.getCurTag();
+		//各キャラの配置などのデータを更新
+		update(curTag);
+		//updateした情報で画面に描画
+		draw(g, curTag);
 	}
 
+	//----------------------------------------------------------------------------------------------------------------
 	/** render内で呼ばれ, キャラやメッセージの描画を行う */
 	private void draw(Graphics g, TextTag curTag){
-		drawChara(g, curTag);	//左右のキャラの描画
-		g.drawImage(ImgStorage[MSG], position[MSG][X], position[MSG][Y]);	//メッセージボックスの描画
-		g.drawImage(ImgStorage[FACE], position[FACE][X], position[FACE][Y]);	//顔画像の描画
+		// 左右のキャラの描画
+		drawChara(g, curTag);
+		// メッセージボックスの描画
+		g.drawImage(objectImg.get(MB), objectPos.get(MB).x, objectPos.get(MB).y);
+		// 顔画像の描画
+		g.drawImage(objectImg.get(SF), objectPos.get(SF).x, objectPos.get(SF).y);
 
-		g.setColor(Color.white); // メッセージボックスに描く文字の色は白
-		g.setFont(talkState.getFont()); // フォントを設定
+		// メッセージボックスに描く文字の色は白
+		g.setColor(Color.white);
+		// フォントを設定
+		g.setFont(talkState.getFont());
 
 		//スピーカーネームの描画
-		g.drawString(speakerName, position[NAME][X], position[NAME][Y]);
+		g.drawString(speakerName, objectPos.get(SN).x, objectPos.get(SN).y);
 
+		////////////////////////////////////////////////////////////////////////////ここからは未リファクタリング
 		char[] curPosText = talkModel.getcurText();
 		// 現在表示しているページのcurPosまで表示
 		// curPosはDrawingTimerTaskで増えていくので流れて表示されるように見える
@@ -143,152 +186,228 @@ public class TalkView implements Renderer{
 				continue;  // コントロール文字は表示しない
 			}
 
-			int dx = position[TEXT][X] + FONT_WIDTH * (i % MAX_CHARS_PER_LINE);
-			int dy = position[TEXT][Y] + FONT_HEIGHT * (i / MAX_CHARS_PER_LINE);
+			int dx = objectPos.get(TB).x + FONT_WIDTH * (i % maxCharsPerLine);
+			int dy = objectPos.get(TB).y + FONT_HEIGHT * (i / maxCharsPerLine);
 
 			g.drawString(c + "", dx, dy);
 		}
 
 		//最後のページでない場合は▼を表示する
 		if (talkModel.isNextPageFlag()) {
-			int dx = position[TEXT][X] + ((MAX_CHARS_PER_LINE - 2) * FONT_WIDTH);
-			int dy = position[TEXT][Y] + (MAX_LINES_PER_PAGE * FONT_HEIGHT);
+			int dx = objectPos.get(TB).x + ((maxCharsPerLine - 2) * FONT_WIDTH);
+			int dy = objectPos.get(TB).y + (maxLinesPerPage * FONT_HEIGHT);
 			g.drawString("次へ", dx, dy);
 		}
 	}
 
+	//----------------------------------------------------------------------------------------------------------------
 	/**drawで呼ばれ, 左右のキャラを描画する*/
 	private void drawChara(Graphics g, TextTag curTag){
 		//左キャラの描画
 		if(curTag.isLeftBright()){
-			g.drawImage(ImgStorage[LC], 0, position[LC][Y]);	//左に書くキャラの描画
+			//左に書くキャラを普通に描画
+			g.drawImage(objectImg.get(LC), objectPos.get(LC).x, objectPos.get(LC).y);
 		}else{
-			g.drawImage(ImgStorage[LC], 0, position[LC][Y], filterColor);	//左に書くキャラを半透明で描画
+			//左に書くキャラを半透明で描画
+			g.drawImage(objectImg.get(LC), objectPos.get(LC).x, objectPos.get(LC).y, filterColor);
 		}
 
 		//右キャラの描画
 		if(curTag.isRightBright()){
-			g.drawImage(ImgStorage[RC], position[RC][X], position[RC][Y]);	//右に書くキャラの描画
+			//右に書くキャラを普通に描画
+			g.drawImage(objectImg.get(RC), objectPos.get(RC).x, objectPos.get(RC).y);
 		}else{
-			g.drawImage(ImgStorage[RC], position[RC][X], position[RC][Y], filterColor);	//右に書くキャラを半透明で描画
+			//右に書くキャラを半透明で描画
+			g.drawImage(objectImg.get(RC), objectPos.get(RC).x, objectPos.get(RC).y, filterColor);
 		}
 	}
 
+	//--------------------------------------------------------------------------------------------------------------
 	/** render内で呼ばれ, 各配置に描くImageなどを更新する */
 	private void update(TextTag curTag){
 		//キャラ替え
-		if(curTag.getTagName().equals("SPEAK")){
-			//キャラの画像をアップデート
+		if(curTag.getTagName().equals(T_Const.SPEAK)){
+			//現在のタグの種類が"SPEAK"の場合
+			//キャラの立ち絵画像をアップデート
 			updateChara(curTag);
+			//キャラの顔画像をアップデート
 			updateFace(curTag);
-			position[RC][X] = FTSimulationGame.WIDTH - ImgStorage[RC].getWidth();
-			position[LC][Y] = position[MSG][Y] - (ImgStorage[LC].getHeight() * 3 / 4);	//キャラ立ち絵は体の半分がメッセージボックス上に出る
-			position[RC][Y] = position[MSG][Y] - (ImgStorage[RC].getHeight() * 3 / 4);
-			if(ImgStorage[FACE].equals(nothingCharaImg)){
-				position[TEXT][X] = position[MSG][X] + 100;
-			}else{
-				position[TEXT][X] = position[MSG][X] + 235;
-			}
-		}else if(curTag.getTagName().equals("CHANGEBGM")){
+			//立ち絵の位置を調整
+			updateObjectPos();
+
+		}else if(curTag.getTagName().equals(T_Const.CHANGE_BGM)){
+			/* 現在のタグの種類が"CHANGEBGM"の場合 */
+			//トークステートで管理しているBGMをタグに格納されているファイルパスの音楽に変更する
 			talkState.changeBGM(curTag.getFilePath());
+			// タグを次に進める
 			talkModel.nextTalk();
-		}else if(curTag.getTagName().equals("CHANGEBACKGROUND")){
-			try {
-				ImgStorage[BG] = new Image(curTag.getFilePath());
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}
-			talkModel.nextTalk();
+		}
+//		else if(curTag.getTagName().equals("CHANGEBACKGROUND")){
+//			/* 現在のタグの種類が"CHANGEBACKGROUND"の場合 */
+//			//背景をタグに格納されているファイルパスの画像に変更する
+//			try {
+//				objectImg.put(BG, new Image(curTag.getFilePath()));
+//			} catch (SlickException e) {
+//				e.printStackTrace();
+//			}
+//			// タグを次に進める
+//			talkModel.nextTalk();
+//		}
+	}
+	//---------------------------------------------------------------------------------------------------------------
+	/**updateから呼ばれ，各オブジェクト(変更される可能性のあるものだけ)の位置を更新する*/
+	private void updateObjectPos(){
+		//左配置の立ち絵の位置調整
+		objectPos.get(LC).x = 0;
+		objectPos.get(LC).y = objectPos.get(MB).y - (objectImg.get(LC).getHeight() * 3 / 4);
+		//右配置の立ち絵の位置調整
+		objectPos.get(RC).x = FTSimulationGame.WIDTH - objectImg.get(RC).getWidth();
+		objectPos.get(RC).y = objectPos.get(MB).y - (objectImg.get(RC).getHeight() * 3 / 4);
+		//テキストボックスの位置調整
+		if(objectImg.get(SF).equals(allCharasImg.get(T_Const.NO_STAND))){
+			/* 顔画像をあえて表示しない場合(顔画像がない場合はその時用の画像あり) */
+			//メッセージボックス全体を使ってテキストを表示
+			objectPos.get(TB).x = objectPos.get(MB).x + 100;
+		}else{
+			/* 顔画像を表示する場合 */
+			//顔画像の分をあけてテキストを表示
+			objectPos.get(TB).x = objectPos.get(MB).x + 235;
 		}
 	}
 
+
+	//---------------------------------------------------------------------------------------------------------------
 	/**updateから呼ばれ, 左右に配置するキャライメージを更新*/
 	private void updateChara(TextTag curTag){
 		//左配置のキャラを設定
-		if(curTag.getLeftCharaName().equals("@")){	//キャラなしの場合
-			ImgStorage[LC] = nothingCharaImg;
-		}else if(curTag.getLeftCharaName().equals("*")){	//主人公の場合
+		if(curTag.getLeftCharaName().equals("@")){
+			/* 左キャラがキャラなしの場合 */
+			//左配置のオブジェクトを透明画像にする
+			objectImg.put(LC, allCharasImg.get(T_Const.NO_STAND));
+		}else if(curTag.getLeftCharaName().equals("*")){
+			/* 左キャラが主人公の場合 */
 			if(playerGender == Status.MALE){
-				ImgStorage[LC] = charasImg.get("playerMaleStand").getFlippedCopy(true, false);
+				/* 主人公が男の場合*/
+				// 左配置のキャラを男主人公画像にする(左配置の立ち絵は反転させる)
+				objectImg.put(LC, allCharasImg.get(T_Const.PLAYER_M + T_Const.STAND).getFlippedCopy(true, false));
 			}else if(playerGender == Status.FEMALE){
-				ImgStorage[LC] = charasImg.get("playerFemaleStand").getFlippedCopy(true, false);
+				/* 主人公が女の場合*/
+				// 左配置のキャラを女主人公画像にする(左配置の立ち絵は反転させる)
+				objectImg.put(LC, allCharasImg.get(T_Const.PLAYER_F + T_Const.STAND).getFlippedCopy(true, false));
 			}else{
+				//エラー
 				System.out.println("ERROR_TalkView_playerGender");
 			}
 		}else{
-			ImgStorage[LC] = charasImg.get(curTag.getLeftCharaName() + "Stand").getFlippedCopy(true, false);
+			/* 左キャラがIDで管理されるキャラの場合 */
+			// 左配置のキャラを指定された立ち絵画像にする(左配置の立ち絵は反転させる)
+			objectImg.put(LC, allCharasImg.get(curTag.getLeftCharaName() + T_Const.STAND).getFlippedCopy(true, false));
 		}
+
 		//右配置のキャラを設定
-		if(curTag.getRightCharaName().equals("@")){	//キャラなしの場合
-			ImgStorage[RC] = nothingCharaImg;
-		}else if(curTag.getRightCharaName().equals("*")){	//主人公の場合
+		if(curTag.getRightCharaName().equals("@")){
+			/* 右キャラがキャラなしの場合 */
+			// 右配置のオブジェクトを透明画像にする
+			objectImg.put(RC, allCharasImg.get(T_Const.NO_STAND));
+		}else if(curTag.getRightCharaName().equals("*")){
+			/* 右キャラが主人公の場合 */
 			if(playerGender == Status.MALE){
-				ImgStorage[RC] = charasImg.get("playerMaleStand").getFlippedCopy(true, false);
+				/* 主人公が男の場合*/
+				// 右配置のキャラを男主人公画像にする
+				objectImg.put(RC, allCharasImg.get(T_Const.PLAYER_M + T_Const.STAND));
 			}else if(playerGender == Status.FEMALE){
-				ImgStorage[RC] = charasImg.get("playerFemaleStand").getFlippedCopy(true, false);
+				/* 主人公が女の場合*/
+				objectImg.put(RC, allCharasImg.get(T_Const.PLAYER_F + T_Const.STAND));
 			}else{
+				//エラー
 				System.out.println("ERROR_TalkView_playerGender");
 			}
 		}else{
-			ImgStorage[RC] = charasImg.get(curTag.getRightCharaName() + "Stand");
+			/* 右キャラがIDで管理されるキャラの場合 */
+			// 右配置のキャラを指定された立ち絵画像にする
+			objectImg.put(RC, allCharasImg.get(curTag.getRightCharaName() + T_Const.STAND));
 		}
 	}
 
+	//---------------------------------------------------------------------------------------------------------------
 	/** updateから呼ばれ, 話し手の顔画像と名前の更新 */
 	private void updateFace(TextTag curTag){
 		//顔のキャラを設定
-		if(curTag.isWitchSpeaker()){	//左にいるキャラが話し手
-			if(curTag.getLeftCharaName().equals("@")){	//キャラなしの場合
+		if(curTag.isWitchSpeaker()){
+			/* 左にいるキャラが話し手 */
+			if(curTag.getLeftCharaName().equals("@")){
+				/* 左キャラがキャラなしの場合 */
+				//spealerNameの初期化
 				speakerName = "";
-				ImgStorage[FACE] = nothingCharaImg;
-			}else if(curTag.getLeftCharaName().equals("*")){	//主人公の場合
+				objectImg.put(SF, allCharasImg.get(T_Const.NO_STAND));
+			}else if(curTag.getLeftCharaName().equals("*")){
+				/* 左キャラが主人公の場合 */
 				if(playerGender == Status.MALE){
-					updateExpression(curTag.getExpression(), "playerMale");
+					/* 主人公が男の場合 */
+					updateExpression(curTag.getExpression(), T_Const.PLAYER_M);
 				}else if(playerGender == Status.FEMALE){
-					updateExpression(curTag.getExpression(), "playerFemale");
+					/* 主人公が女の場合 */
+					updateExpression(curTag.getExpression(), T_Const.PLAYER_F);
 				}else{
+					// エラー
 					System.out.println("ERROR_TalkView_playerGender");
 				}
-			}else{	//その他のキャラの場合
+			}else{
+				/* 左キャラがIDで管理されるキャラの場合 */
 				updateExpression(curTag.getExpression(), curTag.getLeftCharaName());
 			}
-		}else{	//右にいるキャラが話し手
-			if(curTag.getRightCharaName().equals("@")){	//キャラなしの場合
+		}else{
+			/* 右にいるキャラが話し手 */
+			if(curTag.getRightCharaName().equals("@")){
+				/* 右キャラがキャラなしの場合 */
+				//spealerNameの初期化
 				speakerName = "";
-				ImgStorage[FACE] = nothingCharaImg;
-			}else if(curTag.getRightCharaName().equals("*")){	//主人公の場合
+				objectImg.put(SF, allCharasImg.get(T_Const.NO_STAND));
+			}else if(curTag.getRightCharaName().equals("*")){
+				/* 右キャラが主人公の場合 */
 				if(playerGender == Status.MALE){
-					updateExpression(curTag.getExpression(), "playerMale");
+					/* 主人公が男の場合 */
+					updateExpression(curTag.getExpression(), T_Const.PLAYER_M);
 				}else if(playerGender == Status.FEMALE){
-					updateExpression(curTag.getExpression(), "playerFemale");
+					/* 主人公が女の場合 */
+					updateExpression(curTag.getExpression(), T_Const.PLAYER_F);
 				}else{
+					/* エラー */
 					System.out.println("ERROR_TalkView_playerGender");
 				}
-			}else{	//その他のキャラの場合
+			}else{
+				/* 右キャラがIDで管理されるキャラの場合 */
 				updateExpression(curTag.getExpression(), curTag.getRightCharaName());
 			}
 		}
 	}
 
+	//---------------------------------------------------------------------------------------------------------------
 	/** updateFaceから呼ばれ, 表情による場合分けして更新 */
 	private void updateExpression(int expression, String charaName){
-		speakerName = charasName.get(charaName + "Name");
+		// 話し手の名前をアップデート
+		speakerName = allCharasName.get(charaName + "Name");
+		//話し手の顔画像をアップデート
 		switch(expression){
 		case 0:
-			ImgStorage[FACE] = charasImg.get(charaName + "FaceStandard");
+			/* 普通の顔の場合 */
+			objectImg.put(SF, allCharasImg.get(charaName + T_Const.FACE_ST));
 			break;
 		case 1:
-			ImgStorage[FACE] = charasImg.get(charaName + "FaceLaugh");
+			/* 笑った顔の場合 */
+			objectImg.put(SF, allCharasImg.get(charaName + T_Const.FACE_LA));
 			break;
 		case 2:
-			ImgStorage[FACE] = charasImg.get(charaName + "FaceAngry");
+			/* 怒った顔の場合 */
+			objectImg.put(SF, allCharasImg.get(charaName + T_Const.FACE_AN));
 			break;
 		case 3:
-			ImgStorage[FACE] = charasImg.get(charaName + "FaceSuffer");
+			/* 苦しんだ顔の場合 */
+			objectImg.put(SF, allCharasImg.get(charaName + T_Const.FACE_SU));
 			break;
 		default:
 			System.out.println("error_TalkView__curTagExpression");
-			ImgStorage[FACE] = charasImg.get(charaName + "FaceStandard");
+			objectImg.put(SF, allCharasImg.get(charaName + T_Const.FACE_ST));
 			break;
 		}
 	}

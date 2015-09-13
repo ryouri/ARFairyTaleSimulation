@@ -5,67 +5,94 @@ import java.util.ArrayList;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
+/** トークステートで使用される
+ *  各会話ごとにタグ付けして保存する
+ * @author ゆきねこ */
 public class TextTag {
-	//フィールド//////////////////////////////////////////////////////////////////////////////////////
-	private String tagName;	//SPEAKなどのテキストタグの種類
-	private String leftCharaName;	//左に描画するキャラの番号
-	private boolean leftBright;		//左のキャラを明るくするかどうか
-	private String rightCharaName;	//右に描画するキャラの番号
-	private boolean rightBright;	//右のキャラを明るくするかどうか
-	private boolean witchSpeaker;	//true = 左が話し手, false = 右が話し手
+	//フィールド---------------------------------------------------------------------------------------------------
+	/**効果音があるフォルダのパス */
+	private final String seFolderPath = "./Stories/SE/";
+	/**効果音のファイルパス*/
+	private String seFilePath;
+	/**SPEAKなどのテキストタグの種類*/
+	private String tagName;			//
+	/** 左に描画するキャラの番号(フォルダの名前) */
+	private String leftCharaName;
+	/** 左のキャラを明るくするかどうか True(1):画像のまま, False(0):透過させる*/
+	private boolean leftBright;
+	/** 右に描画するキャラの番号(フォルダの名前) */
+	private String rightCharaName;	//
+	/** 右のキャラを明るくするかどうかTrue(1):画像のまま, False(0):透過させる */
+	private boolean rightBright;	//
+	/** true = 左が話し手, false = 右が話し手 */
+	private boolean witchSpeaker;
+	/**キャラの表情
+	 * 0 : 普通の表情 faceStandard，
+	 * 1 : 笑った表情 faceLaugh，
+	 * 2 : 怒った表情 faceAngry，
+	 * 3 : 苦しむ表情 faceSuffer*/
 	private int expression;
-	private String filePath;
-	/*expression =	0 : 普通の表情 faceStandard
-	 * 				1 : 笑った表情 faceLaugh
-	 * 				2 : 怒った表情 faceAngry
-	 * 				1 : 苦しむ表情 faceSuffer
-	 */
-	private char[] text;	//会話文本体
+	/** 会話文本体 */
+	private char[] text;
 	//private String[] choice;
-
-	private ArrayList<Sound> seArray = new ArrayList<Sound>();
+	/** 効果音を順に格納しておくためのリスト */
+	private ArrayList<Sound> seList = new ArrayList<Sound>();
+	/** 次に出す効果音がseListのどの位置かを指すポインタ */
 	private int sePointer = 0;
-	private String sePath = "./Stories/SE/";
 
-	//アクセッタ///////////////////////////////////////////////////////////////////////////////////////
+	//アクセッタ------------------------------------------------------------------------------------------------------
 	public String getTagName() { return tagName; }
-	public void setTagName(String tagName) { this.tagName = tagName; }
 	public String getLeftCharaName() { return leftCharaName; }
 	public void setLeftCharaName(String leftCharaName) { this.leftCharaName = leftCharaName; }
 	public boolean isLeftBright() { return leftBright; }
-	public void setLeftBright(boolean leftBright) { this.leftBright = leftBright; }
 	public String getRightCharaName() { return rightCharaName; }
 	public void setRightCharaName(String rightCharaName) { this.rightCharaName = rightCharaName; }
 	public boolean isRightBright() { return rightBright; }
-	public void setRightBright(boolean rightBright) { this.rightBright = rightBright; }
 	public char[] getText() { return text; }
 	public void setText(char[] text) { this.text = text.clone(); }
 	public boolean isWitchSpeaker() { return witchSpeaker; }
-	public void setWitchSpeaker(boolean witchSpeaker) { this.witchSpeaker = witchSpeaker; }
 	public int getExpression() { return expression; }
 	public void setExpression(int expression) { this.expression = expression; }
+	public void setBright(String bright) { brightEvaluation(bright); }
+	
 	//public String getChoice(int i) { return choice[i]; }
 	//public void setChoice(int i, String choice) { this.choice[i] = choice; }
-	public Sound getSE(){ return seArray.get(sePointer);}
+	public Sound getSE(){ return seList.get(sePointer);}
 	public Sound getNextSE(){
 		System.out.println("pointer" + sePointer);
-		return seArray.get(sePointer++);
+		return seList.get(sePointer++);
 	}
 	public void setSE(String seNum){
 		try {
-			seArray.add(new Sound(sePath + seNum + ".ogg"));
+			seList.add(new Sound(seFolderPath + seNum + ".ogg"));
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 	}
-	public String getFilePath() {
-		return filePath;
-	}
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
+	public String getFilePath() { return seFilePath; }
+	public void setFilePath(String filePath) { this.seFilePath = filePath; }
 
-	//SPEAK用コンストラクタ/////////////////////////////////////////////////////////////////////////////////
+	//---------------------------------------------------------------------------------------------------------------
+	/** テキストタグ作成のみに用いるコンストラクタ
+	 * @param tagName SPEAKなどのテキストタグの種類 */
+	public TextTag(String tagName){
+		this.tagName = tagName;
+		this.leftCharaName = "未設定";
+		this.leftBright = false;
+		this.rightCharaName = "未設定";
+		this.rightBright = false;
+		this.expression = 0;
+		sePointer = 0;
+	}
+	
+	//---------------------------------------------------------------------------------------------------------------
+	/**SPEAK用(普通の会話文)コンストラクタ
+	 * @param tagName SPEAKなどのテキストタグの種類
+	 * @param leftCharaName 左に描画するキャラの番号(フォルダの名前)
+	 * @param rightCharaName 右に描画するキャラの番号(フォルダの名前)
+	 * @param bright
+	 * @param express
+	 * @param str */
 	public TextTag(String tagName, String leftCharaName, String rightCharaName, String bright, int express, char[] str){
 		this.tagName = tagName;
 		this.leftCharaName = leftCharaName;
@@ -76,7 +103,13 @@ public class TextTag {
 		sePointer = 0;
 	}
 
-	//SPEAK用コンストラクタ2(テキストはあとでセットする)/////////////////////////////////////////////////////////////////////////////////
+	//---------------------------------------------------------------------------------------------------------------
+	/** SPEAK用(普通の会話文)コンストラクタ2(テキストはあとでセットする)
+	 * @param tagName SPEAKなどのテキストタグの種類
+	 * @param leftCharaName 左に描画するキャラの番号(フォルダの名前)
+	 * @param rightCharaName 右に描画するキャラの番号(フォルダの名前)
+	 * @param bright
+	 * @param express */
 	public TextTag(String tagName, String leftCharaName, String rightCharaName, String bright, int express){
 		this.tagName = tagName;
 		this.leftCharaName = leftCharaName;
@@ -85,8 +118,11 @@ public class TextTag {
 		this.expression = express;
 		sePointer = 0;
 	}
-	//CHANGE用コンストラクタ
-	//tagName_BGM:CHANGEBGM, BackGround:CHANGEBACKGROUND
+
+	//---------------------------------------------------------------------------------------------------------------
+	/**CHANGE用コンストラクタ, tagName_BGM:CHANGEBGM, BackGround:CHANGEBACKGROUND
+	 * @param tagName SPEAKなどのテキストタグの種類
+	 * @param filePath */
 	public TextTag(String tagName, String filePath){
 		this.tagName = tagName;
 		//CHANGEBGMタグでは何も表示しない
@@ -100,9 +136,25 @@ public class TextTag {
 		for(int i =0 ; i < text.length ; i++){
 			text[i] = ' ';
 		}
-		this.filePath = filePath;
+		this.seFilePath = filePath;
 	}
 
+	//--------------------------------------------------------------------------------------------------------------
+	/**SELECTSWITCH(選択肢)用コンストラクタ
+	 * @param tagName SPEAKなどのテキストタグの種類
+	 * @param str
+	 * @param choice */
+	public TextTag(String tagName, char[] str, String[] choice){
+		this.tagName = tagName;
+		this.leftCharaName = "temp";
+		this.leftBright = false;
+		this.rightCharaName = "temp";
+		this.rightBright = false;
+		this.text = str.clone();
+	}
+
+	//---------------------------------------------------------------------------------------------------------------
+	/** キャラの明暗の評価メソッド */
 	private void brightEvaluation(String bright){
 		if(bright.equals("L")){			//左が話し手, 左明るい, 右暗い
 			this.leftBright = true;
@@ -134,15 +186,5 @@ public class TextTag {
 			this.rightBright = true;
 			this.witchSpeaker = true;
 		}
-	}
-
-	//SELECTSWITCH用コンストラクタ///////////////////////////////////////////////////////////////////////////////////
-	public TextTag(String tagName, char[] str, String[] choice){
-		this.tagName = tagName;
-		this.leftCharaName = "temp";
-		this.leftBright = false;
-		this.rightCharaName = "temp";
-		this.rightBright = false;
-		this.text = str.clone();
 	}
 }

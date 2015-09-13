@@ -15,47 +15,54 @@ import arcircle.ftsim.state.talk.LoadTalkGraphics;
 import arcircle.ftsim.state.talk.TalkModel;
 import arcircle.ftsim.state.talk.TalkView;
 
-
+/**会話するシーンを処理するステート
+ * @author ゆきねこ*/
+// [リファクタリング] コメントつけ終わったよ
+// とりあえずステートはこのままでいいや
 
 public class TalkState extends KeyInputState {
-	//フィールド//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//フィールド------------------------------------------------------------------------------------------------------
+	/**Characterフォルダのパス*/
+    private static final String characterPath = "./Stories/Characters";
+	/**トークモデル：.txtの処理*/
 	private TalkModel talkModel;
+	/**トークビュー：会話文を描画する*/
 	private TalkView talkView;
+	/**ステージ番号，
+	 * 桃太郎=0, かぐや姫=1, 赤ずきん=2, ジャックと豆の木=3, シンデレラ=4, ３匹の仔豚=5*/
 	private int stageNumber = 0;
-	//親クラスのbgmと, このクラスのnewBGMを使ってBGMを切り替える
-	private Sound newBGM;	//BGM切り替え用格納器
-    private boolean isBGM = true;	//bgmとnewBGMのどちらを鳴らしているかの判定に使う
-    
+	/**BGM切り替え用格納器*/
+	private Sound newBGM;	//親クラスのbgmと, このクラスのnewBGMを使ってBGMを切り替える
+    /**bgmとnewBGMのどちらを鳴らしているかの判定に使う,
+     * true:bgm再生中, false:newBGM再生中*/
+    private boolean isBGM = true;	//
+    /**キャラクターの立ち絵と顔絵をロードして格納しておく*/
     private LoadTalkGraphics talkGraphics;
-    private static final String characterPath = "./Stories/Characters";	//Characterフォルダのパス
+	//private int chapterID;	//現在の章		現在非対応なのでコメントアウト
+	//private int subStoryID;	//現在の話数	現在非対応なのでコメントアウト
 
-	//private int chapterID;	//現在の章
-	//private int subStoryID;	//現在の話数
-
+    //アクセッタ------------------------------------------------------------------------------------------------------
+    /**トークグラフィックスを取得するメソッド*/
     public LoadTalkGraphics getTalkGraphics(){ return talkGraphics;}
-    public int getStageNumber() {
-		return stageNumber;
-	}
+    /** ステージ番号を取得する */
+    public int getStageNumber() { return stageNumber; }
+	/** ステージ番号をセットする*/
+	public void setStageNumber(int stageNumber) { this.stageNumber = stageNumber; }
 
-	public void setStageNumber(int stageNumber) {
-		this.stageNumber = stageNumber;
-	}
-	
-	//コンストラクタ////////////////////////////////////////////////////////////////////////////////////////////////
+	//コンストラクタ------------------------------------------------------------------------------------------------
 	//TODO:stageStateはあとでセーブデータから読み込む
 	public TalkState(int state) {
 		super(state);
 	}
 
 	@Override
-	public void init(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void init(GameContainer container, StateBasedGame game) throws SlickException {
 		super.init(container, game);
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
+	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		super.render(container, game, g);
 	}
 
@@ -68,8 +75,9 @@ public class TalkState extends KeyInputState {
 	//次の状態へ行くメソッド-------------------------------------------------------------------------------------------
 	public void nextState() {
 		SimGameState simGameState = (SimGameState)stateGame.getState(StateConst.SIM_GAME);
+		//
 		simGameState.setLastBGM(bgm);
-		
+
 		//stateGame.enterState(StateConst.SELECT_GENDER,
 		GameState sbGame = stateGame.getState(StateConst.SIM_GAME);
 		SimGameState sgState = (SimGameState) sbGame;
@@ -81,55 +89,70 @@ public class TalkState extends KeyInputState {
 
 	@Override
 	//TalkStateに入るときに呼び出されるメソッド-----------------------------------------------------------------------
-	public void enter(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+		//KeyInputStateのenter処理
 		super.enter(container, game);
 		//BGMの切り替え処理
 		try {
+			//現ステートで流すBGMをロード
 			bgm = new Sound("./Stories/BGM/FTSim004.ogg");
 		} catch (SlickException e) {
+			//SoundLoad エラー処理
 			e.printStackTrace();
 		}
+		//前のステートから鳴っていたBGMを止める
 		lastBGM.stop();
+		//現ステートで鳴らすBGMをスタート
 		bgm.loop();
-		
+
 		//全キャラクターのロード
 		talkGraphics = new LoadTalkGraphics(characterPath);
-		
+		//トークモデルインスタンスを作成
 		talkModel = new TalkModel(this);
+		//トークビューインスタンスを作成
 		talkView = new TalkView(talkModel, this);
-		
-		
-		
-		System.out.println("Enter Talk State");
+
+		System.out.println("Enter Talk State");		//トークステートに入ったことをコンソールに表示
+
+		//おまじない的ななにか(misawa担当)
 		keyInputStack.clear();
 		keyInputStack.push(talkModel);
 		rendererArray.clear();
 		rendererArray.add(talkView);
 	}
-	
+
 	//BGMの切り替えを行うメソッド(TalkViewに呼び出される)--------------------------------------
 	public void changeBGM(String bgmFilePath) {
 		//bgmからnewBGMに切り替え
 		if(isBGM){
-			System.out.println(bgmFilePath);
+			/* bgmに格納されているBGMを再生中の場合 */
+			System.out.println(bgmFilePath);	//
 			try {
+				//今使ってないnewBGMに次に流すBGMをロード
 				newBGM = new Sound(bgmFilePath);
 			} catch (SlickException e) {
 				e.printStackTrace();
 			}
+			//今鳴らしているBGMを止める
 			bgm.stop();
+			//次に鳴らすBGMをスタート
 			newBGM.loop();
+			//今鳴らしているBGMがnewBGMであることを示すためにisBGMをfalseに
 			isBGM = false;
 		//newBGMからbgmに切り替え
 		}else{
+			/* newBGMに格納されているBGMを再生中の場合 */
 			try {
+				//今使ってないbgmに次に流すBGMをロード
 				bgm = new Sound(bgmFilePath);
 			} catch (SlickException e) {
 				e.printStackTrace();
 			}
+			//今鳴らしているBGMを止める
 			newBGM.stop();
+			//次に鳴らすBGMをスタート
 			bgm.loop();
+			//今鳴らしているBGMがbgmであることを示すためにisBGMをtrueに
 			isBGM = true;
 		}
 	}
