@@ -6,7 +6,7 @@ public class AutoTileUtil {
 
 	/**
 	 * 3 * 3のタイルの配置情報を，2 * 2のポイントのオートタイル描画情報を返す
-	 * @param aroundTileArray 3 * 3のタイルの配置情報が格納されている配列
+	 * @param aroundTileArray 3 * 3のタイルの配置情報が格納されている配列, 塞ぐマップチップにするかどうか
 	 * @return 2 * 2 のPointの配列，オートタイルの描画情報が格納されている
 	 */
 	public static Point[][] aroudTileArrayToDrawTileArray(boolean[][] aroundTileArray) {
@@ -63,29 +63,6 @@ public class AutoTileUtil {
 		}
 		else {
 			return 4;
-		}
-	}
-
-	public static void main(String[] args) {
-		// 塞ぐマップチップにするかどうかの3*3のbooleanの入力
-		// 真ん中(自分の位置)はなんでもいい
-
-		/*
-		 *  +-----+
-		 *  |0 0 0|
-		 *  |0 0 0|
-		 *  |0 0 0|
-		 *  +-----+
-		 */
-		boolean[][] test1 = {{false, false, false},
-							 {false, false, false},
-							 {false, false, false}};
-
-		Point autoTileInfo[][] = aroudTileArrayToDrawTileArray(test1);
-		for (Point p[] : autoTileInfo){
-			for (Point pp : p){
-				System.out.println(pp);
-			}
 		}
 	}
 }
