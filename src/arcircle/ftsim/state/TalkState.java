@@ -11,6 +11,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import arcircle.ftsim.main.FTSimulationGame;
+import arcircle.ftsim.save.NowStage;
 import arcircle.ftsim.state.talk.LoadTalkGraphics;
 import arcircle.ftsim.state.talk.TalkModel;
 import arcircle.ftsim.state.talk.TalkView;
@@ -74,17 +75,35 @@ public class TalkState extends KeyInputState {
 
 	//次の状態へ行くメソッド-------------------------------------------------------------------------------------------
 	public void nextState() {
-		SimGameState simGameState = (SimGameState)stateGame.getState(StateConst.SIM_GAME);
-		//
-		simGameState.setLastBGM(bgm);
+		// NowStageクラスを取得
+		NowStage nowStage = FTSimulationGame.save.getNowStage();
+		// enterをする前に，次に入るステートのパスを指定する．
+		if(nowStage.selectLogue == 0){
+			/* 流したローグはプロローグ */
+			// SimGameStateへ
+			// SimGameStateを取得
+			GameState sbGame = stateGame.getState(StateConst.SIM_GAME);
+			SimGameState sgState = (SimGameState) sbGame;
+			// 現Stateで鳴らしているBGMをSimGameStateのlastBGMとして一時保存
+			sgState.setLastBGM(bgm);
+			sgState.setReadFilePath(FTSimulationGame.save.getNowStage().storyName,
+					FTSimulationGame.save.getNowStage().subStoryNum, 1, 1);
+			stateGame.enterState(StateConst.SIM_GAME,
+					new FadeOutTransition(Color.black, 100),
+					new FadeInTransition(Color.black, 100));
+		}else if(nowStage.selectLogue == 1){
+			/* 流したローグはエピローグ */
+			// SelectStoryStateへ
+			// SelectStoryStateを取得
+			SelectStoryState selectStoryState = (SelectStoryState)stateGame.getState(StateConst.SELECT_STORY);
+			// 現Stateで鳴らしているBGMをSelectStoryStateのlastBGMとして保存
+			selectStoryState.setLastBGM(bgm);
+			// SelectStoryStateへ
+			stateGame.enterState(StateConst.SELECT_STORY,
+					new FadeOutTransition(Color.black, 100),
+					new FadeInTransition(Color.black, 100));
+		}
 
-		//stateGame.enterState(StateConst.SELECT_GENDER,
-		GameState sbGame = stateGame.getState(StateConst.SIM_GAME);
-		SimGameState sgState = (SimGameState) sbGame;
-		sgState.setReadFilePath(FTSimulationGame.save.getNowStage().storyName, FTSimulationGame.save.getNowStage().subStoryNum, 1, 1);
-		stateGame.enterState(StateConst.SIM_GAME,
-				new FadeOutTransition(Color.black, 100),
-				new FadeInTransition(Color.black, 100));
 	}
 
 	@Override
