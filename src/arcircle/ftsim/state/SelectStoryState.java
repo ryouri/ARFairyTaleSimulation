@@ -42,20 +42,20 @@ public class SelectStoryState extends KeyInputState {
 		ssView = new SelectStoryView(ssModel, this);
 		
 		isClearStage = new boolean[storyNum];	//初期値は多分false
-		ArrayList<String> crearStage = FTSimulationGame.save.getClearStoryNameArray();
-		if(!crearStage.isEmpty()){
-			for(int i = 0 ; i < crearStage.size() ; i++){
-				if(crearStage.get(i).equals("01_Story")){
+		ArrayList<String> clearStage = FTSimulationGame.save.getClearStoryNameArray();
+		if(!clearStage.isEmpty()){
+			for(int i = 0 ; i < clearStage.size() ; i++){
+				if(clearStage.get(i).equals("01_Story")){
 					isClearStage[0] = true;
-				}else if(crearStage.get(i).equals("02_Story")){
+				}else if(clearStage.get(i).equals("02_Story")){
 					isClearStage[1] = true;
-				}else if(crearStage.get(i).equals("03_Story")){
+				}else if(clearStage.get(i).equals("03_Story")){
 					isClearStage[2] = true;
-				}else if(crearStage.get(i).equals("04_Story")){
+				}else if(clearStage.get(i).equals("04_Story")){
 					isClearStage[3] = true;
-				}else if(crearStage.get(i).equals("05_Story")){
+				}else if(clearStage.get(i).equals("05_Story")){
 					isClearStage[4] = true;
-				}else if(crearStage.get(i).equals("06_Story")){
+				}else if(clearStage.get(i).equals("06_Story")){
 					isClearStage[5] = true;
 				}else{
 					System.out.println("error_SelectStoryView_clearStage");
