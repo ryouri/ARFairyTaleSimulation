@@ -37,6 +37,9 @@ public class SimGameState extends KeyInputState {
 		FTSimulationGame.save.getNowStage().selectLogue = NowStage.EPILOGUE;
 
 		TalkState talkState = (TalkState)stateGame.getState(StateConst.TALK);
+
+		talkState.setLastBGM(bgm);
+
 		stateGame.enterState(StateConst.TALK,
 				new FadeOutTransition(Color.black, 500),
 				new FadeInTransition(Color.black, 500));

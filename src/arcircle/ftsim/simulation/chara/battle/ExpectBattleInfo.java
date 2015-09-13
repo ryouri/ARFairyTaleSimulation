@@ -72,8 +72,8 @@ public class ExpectBattleInfo {
 				isSecondAttackable = false;
 			}
 
-			System.out.println("distance:" + distance +
-					" aX," + attackPoint.x + " aY," + attackPoint.y + " dX," + secondChara.x + " dY," + secondChara.y);
+//			System.out.println("distance:" + distance +
+//					" aX," + attackPoint.x + " aY," + attackPoint.y + " dX," + secondChara.x + " dY," + secondChara.y);
 		}
 
 		if (isSecondAttackable) {

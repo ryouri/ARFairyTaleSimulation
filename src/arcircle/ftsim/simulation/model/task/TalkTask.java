@@ -15,6 +15,8 @@ public class TalkTask extends Task {
 	Event processEvent;
 	Field field;
 
+	private boolean isStarted;
+
 	public TalkTask(TaskManager taskManager,
 			Event processEvent,
 			Field field) {
@@ -24,13 +26,7 @@ public class TalkTask extends Task {
 		this.processEvent = processEvent;
 		this.field = field;
 
-		SimGameModel sgModel = field.getSgModel();
-
-		this.btModel = new BattleTalkModel(sgModel, processEvent.eventFileName);
-		this.btView = new BattleTalkView(btModel, sgModel);
-
-		sgModel.pushKeyInputStack(btModel);
-		sgModel.addRendererArray(btView);
+		isStarted = false;
 	}
 
 	@Override
@@ -41,8 +37,24 @@ public class TalkTask extends Task {
 
 	@Override
 	public void update(int delta) {
-		if (btModel.isEnd()) {
+		if (!isStarted) {
+			start();
+		}
+
+		if (btModel.isEnd() && isStarted) {
 			taskManager.taskEnd();
 		}
+	}
+
+	private void start() {
+		SimGameModel sgModel = field.getSgModel();
+
+		this.btModel = new BattleTalkModel(sgModel, processEvent.eventFileName);
+		this.btView = new BattleTalkView(btModel, sgModel);
+
+		sgModel.pushKeyInputStack(btModel);
+		sgModel.addRendererArray(btView);
+
+		isStarted = true;
 	}
 }
