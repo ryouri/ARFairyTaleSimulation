@@ -8,6 +8,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import arcircle.ftsim.main.FTSimulationGame;
+import arcircle.ftsim.save.NowStage;
 import arcircle.ftsim.state.simgame.SimGameModel;
 import arcircle.ftsim.state.simgame.SimGameView;
 
@@ -32,13 +34,12 @@ public class SimGameState extends KeyInputState {
 	}
 
 	public void nextState() {
+		FTSimulationGame.save.getNowStage().selectLogue = NowStage.EPILOGUE;
+
 		TalkState talkState = (TalkState)stateGame.getState(StateConst.TALK);
-		talkState.setLastBGM(bgm);
-		talkState.setStageNumber(1);
 		stateGame.enterState(StateConst.TALK,
 				new FadeOutTransition(Color.black, 500),
 				new FadeInTransition(Color.black, 500));
-
 	}
 
 	@Override

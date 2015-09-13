@@ -31,6 +31,11 @@ public class TaskManager {
 		field.eventManager.checkCharaDieEvent(id);
 	}
 
+	public void addWinTask () {
+		WinTask winTask = new WinTask(this, field);
+		addOneTaskAndGenerateArray(winTask);
+	}
+
 	public void addOneTaskAndGenerateArray (Task task) {
 		ArrayList<Task> taskArray = new ArrayList<Task>();
 		taskArray.add(task);

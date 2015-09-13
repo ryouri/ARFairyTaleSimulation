@@ -132,8 +132,7 @@ public class EventManager {
 				phaseNow++;
 				//TODO:勝利の処理！ phaseNowが配列の閾値以上なら終了する
 				if (phaseNow >= winConditionEachPhaseArray.size()) {
-					//System.out.println("勝利");
-					//System.exit(0);
+					field.getTaskManager().addWinTask();
 					return;
 				}
 			}
