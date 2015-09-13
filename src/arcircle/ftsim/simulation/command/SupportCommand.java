@@ -1,5 +1,7 @@
 package arcircle.ftsim.simulation.command;
 
+import java.awt.Point;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -193,7 +195,7 @@ public class SupportCommand extends Command implements KeyListner, Renderer {
 			//攻撃力を計算！
 			ExpectBattleInfo expectBattleInfo =
 					new ExpectBattleInfo(chara, chara.getEquipedWeapon(), new SupportInfo(),
-					targetChara, targetChara.getEquipedWeapon(), new SupportInfo());
+					targetChara, targetChara.getEquipedWeapon(), new SupportInfo(), new Point(chara.x, chara.y));
 			field.setSubInfoWindowForAttackInfo(expectBattleInfo);
 		}
 	}

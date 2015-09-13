@@ -64,13 +64,15 @@ public class SameTimeAttackAI extends AI {
 		} else {
 			// ここでインスタンス化するクラスによって攻撃対象のAIが変わる
 			SelectAttackTarget sat = new SelectHighDamageAttackTarget();
-			AttackCharaData attackChara = sat.getAttackTargetCharaData(attackCharaArray);
+			AttackCharaData attackCharaData = sat.getAttackTargetCharaData(attackCharaArray);
 			arcircle.ftsim.simulation.algorithm.range.Node moveNode =
-					cmRange.getNodeByXY(attackChara.attackPoint.x, attackChara.attackPoint.y);
+					cmRange.getNodeByXY(attackCharaData.attackPoint.x, attackCharaData.attackPoint.y);
 			if (moveNode.pointXArray.size() >= 1) {
 				field.setCharaMove(chara, moveNode);
 			}
-			field.setCharaAttack(chara, attackChara.damageChara.y, attackChara.damageChara.x);
+			field.setCharaAttack(chara,
+					new Point(chara.x, chara.y),
+					new Point(attackCharaData.damageChara.x, attackCharaData.damageChara.y));
 		}
 	}
 

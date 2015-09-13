@@ -1,5 +1,7 @@
 package arcircle.ftsim.simulation.chara.ai;
 
+import java.awt.Point;
+
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.battle.CharaBattleInfo;
 import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
@@ -19,7 +21,10 @@ public class SelectLowDamagedAttackTarget extends SelectAttackTarget {
 		Item secondWeapon = secondChara.getEquipedWeapon();
 		SupportInfo secondInfo = new SupportInfo();
 
-		ExpectBattleInfo expectInfo = new ExpectBattleInfo(firstChara, firstWeapon, firstInfo, secondChara, secondWeapon, secondInfo);
+		Point attackPoint = attackCharaData.attackPoint;
+
+		ExpectBattleInfo expectInfo =
+				new ExpectBattleInfo(firstChara, firstWeapon, firstInfo, secondChara, secondWeapon, secondInfo, attackPoint);
 		CharaBattleInfo firstCharaInfo = expectInfo.getFirstCharaBattleInfo();
 		CharaBattleInfo secondCharaInfo = expectInfo.getSecondCharaBattleInfo();
 

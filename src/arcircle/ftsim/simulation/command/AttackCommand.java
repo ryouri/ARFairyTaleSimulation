@@ -1,5 +1,7 @@
 package arcircle.ftsim.simulation.command;
 
+import java.awt.Point;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -149,7 +151,9 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 			if(attackJudge[field.getCursor().y][field.getCursor().x]) {
 				field.getSoundManager().playSound(SoundManager.SOUND_DECISION);
 
-				field.setCharaAttack(chara, field.getCursor().y, field.getCursor().x);
+				field.setCharaAttack(chara,
+						new Point(chara.x, chara.y),
+						new Point(field.getCursor().x, field.getCursor().y));
 				field.setSubInfoWindowForFieldInfo();
 
 				//他の場所に移す
@@ -192,7 +196,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 			//攻撃力を計算！
 			ExpectBattleInfo expectBattleInfo =
 					new ExpectBattleInfo(chara, chara.getEquipedWeapon(), new SupportInfo(),
-					targetChara, targetChara.getEquipedWeapon(), new SupportInfo());
+					targetChara, targetChara.getEquipedWeapon(), new SupportInfo(), new Point(chara.x, chara.y));
 			field.setSubInfoWindowForAttackInfo(expectBattleInfo);
 		}
 	}

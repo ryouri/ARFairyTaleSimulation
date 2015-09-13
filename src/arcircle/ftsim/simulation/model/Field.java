@@ -628,10 +628,10 @@ public class Field implements KeyListner, Renderer {
 		return loseStringArray;
 	}
 
-	public void setCharaAttack(Chara chara, int y, int x) {
+	public void setCharaAttack(Chara chara, java.awt.Point attackPoint, java.awt.Point damagePoint) {
 		for (Chara damageChara : characters.characterArray) {
-			if (damageChara.y == y && damageChara.x == x) {
-				taskManager.addAttackTask(chara, damageChara);
+			if (damageChara.y == damagePoint.y && damageChara.x == damagePoint.x) {
+				taskManager.addAttackTask(chara, damageChara, attackPoint);
 				break;
 			}
 		}

@@ -68,7 +68,7 @@ public class SimpleAI extends AI {
 //			Collections.shuffle(attackCharaArray);
 //			AttackCharaData attackChara = attackCharaArray.get(0);
 			SelectAttackTarget sat = new SelectLowerDefenceAttackTarget();
-			AttackCharaData attackChara = sat.getAttackTargetCharaData(attackCharaArray);
+			AttackCharaData attackCharaData = sat.getAttackTargetCharaData(attackCharaArray);
 
 //			chara.x = attackChara.attackPoint.x;
 //			chara.y = attackChara.attackPoint.y;
@@ -76,11 +76,13 @@ public class SimpleAI extends AI {
 //			chara.pY = chara.y * Field.MAP_CHIP_SIZE;
 
 			arcircle.ftsim.simulation.algorithm.range.Node moveNode =
-					cmRange.getNodeByXY(attackChara.attackPoint.x, attackChara.attackPoint.y);
+					cmRange.getNodeByXY(attackCharaData.attackPoint.x, attackCharaData.attackPoint.y);
 			if (moveNode.pointXArray.size() >= 1) {
 				field.setCharaMove(chara, moveNode);
 			}
-			field.setCharaAttack(chara, attackChara.damageChara.y, attackChara.damageChara.x);
+			field.setCharaAttack(chara,
+					new Point(chara.x, chara.y),
+					new Point(attackCharaData.damageChara.x, attackCharaData.damageChara.y));
 		}
 	}
 

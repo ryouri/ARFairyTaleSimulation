@@ -1,5 +1,6 @@
 package arcircle.ftsim.simulation.model.task;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Animation;
@@ -18,16 +19,16 @@ public class AttackTask extends Task {
 	int nowAttackIndex;
 	boolean isAttackNow;
 
-	public AttackTask(TaskManager taskManager, Chara attackChara, Chara damageChara) {
+	public AttackTask(TaskManager taskManager, Chara attackChara, Chara damageChara, Point attackPoint) {
 		super(taskManager);
 
-		calcAttackInfo(attackChara, damageChara);
+		calcAttackInfo(attackChara, damageChara, attackPoint);
 	}
 
-	private void calcAttackInfo(Chara attackChara, Chara damageChara) {
+	private void calcAttackInfo(Chara attackChara, Chara damageChara, Point attackPoint) {
 		ExpectBattleInfo expectBattleInfo =
 				new ExpectBattleInfo(attackChara, attackChara.getEquipedWeapon(), new SupportInfo(),
-						damageChara, damageChara.getEquipedWeapon(), new SupportInfo());
+						damageChara, damageChara.getEquipedWeapon(), new SupportInfo(), attackPoint);
 
 		this.attackInfoArray = new ArrayList<AttackInfo>();
 		attackInfoArray.add(new AttackInfo(attackChara, damageChara, expectBattleInfo.getFirstCharaBattleInfo()));

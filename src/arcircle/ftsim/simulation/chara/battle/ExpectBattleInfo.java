@@ -1,5 +1,7 @@
 package arcircle.ftsim.simulation.chara.battle;
 
+import java.awt.Point;
+
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.simulation.item.SupportItem;
@@ -12,13 +14,27 @@ public class ExpectBattleInfo {
 	private Chara secondChara;
 	private Item firstWeapon;
 	private Item secondWeapon;
+	private Point attackPoint;
+
+	/**
+	 * [攻撃側のrange][被攻撃側のrange]で，trueなら攻撃可能
+	 * NEAR:0, FAR:1, NEARFAR:2
+	 */
+	private boolean[][] rangeAttackable =
+		{
+			{true,  false, true}, //[NEAR][?]
+			{false, true,  true}, //[FAR][?]
+			{}
+		};
+
 
 	public ExpectBattleInfo(Chara firstChara, Item firstWeapon, SupportInfo firstSupportInfo,
-			Chara secondChara, Item secondWeapon, SupportInfo secondSupportInfo){
+			Chara secondChara, Item secondWeapon, SupportInfo secondSupportInfo, Point attackPoint){
 		this.firstChara = firstChara;
 		this.secondChara = secondChara;
 		this.firstWeapon = firstWeapon;
 		this.secondWeapon = secondWeapon;
+		this.attackPoint = attackPoint;
 		calcBattleInfo(firstChara, firstWeapon, firstSupportInfo, secondChara, secondWeapon, secondSupportInfo);
 	}
 
@@ -47,6 +63,13 @@ public class ExpectBattleInfo {
 		if (secondItem instanceof SupportItem) {
 			isSecondAttackable = false;
 		} else if (secondItem instanceof Weapon) {
+
+//			Weapon secondWeapon = (Weapon)secondItem;
+//
+//			if (firstWeapon.rangeType == Weapon.RANGE_NEAR) {
+//
+//			}
+
 			Weapon secondWeapon = (Weapon)secondItem;
 			int distance = Math.abs(firstChara.x - secondChara.x) + Math.abs(firstChara.y - secondChara.y);
 			//射程距離があっていなければダメ
@@ -55,6 +78,8 @@ public class ExpectBattleInfo {
 			} else if (distance == 2 && secondWeapon.rangeType == Weapon.RANGE_NEAR) {
 				isSecondAttackable = false;
 			}
+
+
 		}
 
 		if (isSecondAttackable) {

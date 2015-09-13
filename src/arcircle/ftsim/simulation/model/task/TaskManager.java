@@ -1,6 +1,7 @@
 
 package arcircle.ftsim.simulation.model.task;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Graphics;
@@ -46,8 +47,8 @@ public class TaskManager {
 		addOneTaskAndGenerateArray(moveTask);
 	}
 
-	public void addAttackTask(Chara attackChara, Chara damageChara) {
-		AttackTask attackTask = new AttackTask(this, attackChara, damageChara);
+	public void addAttackTask(Chara attackChara, Chara damageChara,Point attackPoint) {
+		AttackTask attackTask = new AttackTask(this, attackChara, damageChara, attackPoint);
 		addOneTaskAndGenerateArray(attackTask);
 	}
 
