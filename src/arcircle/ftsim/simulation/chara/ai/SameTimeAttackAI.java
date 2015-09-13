@@ -136,7 +136,10 @@ public class SameTimeAttackAI extends AI {
 				arcircle.ftsim.simulation.algorithm.range.Node moveNode =
 						cmRange.getNodeByXY(node.pos.x, node.pos.y);
 
-				field.setCharaMove(chara, moveNode);
+				if (moveNode.pointXArray.size() >= 1) {
+					field.setCharaMove(chara, moveNode);
+				}
+
 				field.setCharaStand(chara, true);
 				break;
 			}
