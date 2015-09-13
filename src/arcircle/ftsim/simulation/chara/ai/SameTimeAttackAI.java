@@ -71,7 +71,7 @@ public class SameTimeAttackAI extends AI {
 				field.setCharaMove(chara, moveNode);
 			}
 			field.setCharaAttack(chara,
-					new Point(chara.x, chara.y),
+					attackCharaData.attackPoint,
 					new Point(attackCharaData.damageChara.x, attackCharaData.damageChara.y));
 		}
 	}

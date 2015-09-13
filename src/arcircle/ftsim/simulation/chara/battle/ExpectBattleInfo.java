@@ -63,15 +63,8 @@ public class ExpectBattleInfo {
 		if (secondItem instanceof SupportItem) {
 			isSecondAttackable = false;
 		} else if (secondItem instanceof Weapon) {
-
-//			Weapon secondWeapon = (Weapon)secondItem;
-//
-//			if (firstWeapon.rangeType == Weapon.RANGE_NEAR) {
-//
-//			}
-
 			Weapon secondWeapon = (Weapon)secondItem;
-			int distance = Math.abs(firstChara.x - secondChara.x) + Math.abs(firstChara.y - secondChara.y);
+			int distance = Math.abs(attackPoint.x - secondChara.x) + Math.abs(attackPoint.y - secondChara.y);
 			//射程距離があっていなければダメ
 			if (distance == 1 && secondWeapon.rangeType == Weapon.RANGE_FAR) {
 				isSecondAttackable = false;
@@ -79,7 +72,8 @@ public class ExpectBattleInfo {
 				isSecondAttackable = false;
 			}
 
-
+			System.out.println("distance:" + distance +
+					" aX," + attackPoint.x + " aY," + attackPoint.y + " dX," + secondChara.x + " dY," + secondChara.y);
 		}
 
 		if (isSecondAttackable) {
