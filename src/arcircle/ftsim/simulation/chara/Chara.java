@@ -50,12 +50,13 @@ public class Chara {
 
 	private float alpha;
 	private Color color;
+	private String folderName;
 
-	public Chara(String name, Characters characters) {
+	public Chara(String folderName, Characters characters) {
 		this.status = new Status();
 		this.status.growRate = new GrowRate();
 		this.status.setItemList(new ArrayList<Item>());
-		this.status.name = name;
+		this.setFolderName(folderName);
 		this.isStand = false;
 		this.isMoved = false;
 		this.speed = SPEED;
@@ -229,5 +230,13 @@ public class Chara {
 
 	public void setColor(Color color) {
 		this.color = color;
+	}
+
+	public String getFolderName() {
+		return folderName;
+	}
+
+	public void setFolderName(String folderName) {
+		this.folderName = folderName;
 	}
 }

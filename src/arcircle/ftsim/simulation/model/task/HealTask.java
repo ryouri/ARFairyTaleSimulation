@@ -44,13 +44,13 @@ public class HealTask extends Task {
 
 		Animation anime = null;
 		if (chara.direction == Chara.UP) {
-			anime = taskManager.characters.upAttackAnimeMap.get(chara.status.name);
+			anime = taskManager.characters.upAttackAnimeMap.get(chara.getFolderName());
 		} else if (chara.direction == Chara.RIGHT) {
-			anime = taskManager.characters.rightAttackAnimeMap.get(chara.status.name);
+			anime = taskManager.characters.rightAttackAnimeMap.get(chara.getFolderName());
 		} else if (chara.direction == Chara.LEFT) {
-			anime = taskManager.characters.leftAttackAnimeMap.get(chara.status.name);
+			anime = taskManager.characters.leftAttackAnimeMap.get(chara.getFolderName());
 		} else {//(chara.direction == Chara.DOWN) {
-			anime = taskManager.characters.downAttackAnimeMap.get(chara.status.name);
+			anime = taskManager.characters.downAttackAnimeMap.get(chara.getFolderName());
 		}
 
 		int changeX = 0;

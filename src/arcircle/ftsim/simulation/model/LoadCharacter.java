@@ -34,9 +34,9 @@ public class LoadCharacter {
 				+ characters.CharactersFolderName;
 		File dir = new File(charaPath);
 		String[] files = dir.list();
-		for (String charaName : files) {
-			loadCharaChip(charaPath + charaName + "/", charaName);
-			loadCharaParameter(charaPath + charaName + "/", charaName);
+		for (String charaFolderName : files) {
+			loadCharaChip(charaPath + charaFolderName + "/", charaFolderName);
+			loadCharaParameter(charaPath + charaFolderName + "/", charaFolderName);
 		}
 	}
 
@@ -48,28 +48,28 @@ public class LoadCharacter {
 	/**
 	 * キャラクターのマップチップを読み込む
 	 * @param charaFolderPath キャラクターのフォルダパス
-	 * @param charaName キャラクターの名前
+	 * @param charaFolderName キャラクターの名前
 	 */
-	private void loadCharaChip(String charaFolderPath, String charaName){
+	private void loadCharaChip(String charaFolderPath, String charaFolderName){
 		try {
-			characters.walkSheetMap.put(charaName,
+			characters.walkSheetMap.put(charaFolderName,
 					new SpriteSheet(
 							new Image(charaFolderPath + walkFile),
 							Field.MAP_CHIP_SIZE,
 							Field.MAP_CHIP_SIZE));
-			characters.readySheetMap.put(charaName,
+			characters.readySheetMap.put(charaFolderName,
 					new SpriteSheet(
 							new Image(charaFolderPath + readyFile),
 							Field.MAP_CHIP_SIZE,
 							Field.MAP_CHIP_SIZE));
-			characters.attackSheetMap.put(charaName,
+			characters.attackSheetMap.put(charaFolderName,
 					new SpriteSheet(
 							new Image(charaFolderPath + attackFile),
 							Field.MAP_CHIP_SIZE,
 							Field.MAP_CHIP_SIZE));
 
 			//キャラの顔画像を読み込む
-			characters.characterFaceStandardImageMap.put(charaName,
+			characters.characterFaceStandardImageMap.put(charaFolderName,
 					new Image(charaFolderPath + faceStandardFile).getScaledCopy(1.25f));
 		} catch (SlickException e) {
 			e.printStackTrace();
@@ -81,16 +81,16 @@ public class LoadCharacter {
 	/**
 	 * あるキャラクターのデータを読み込む
 	 * @param charaFolderPath キャラクターのフォルダパス
-	 * @param charaName キャラクターの名前
+	 * @param charaFolderName キャラクターの名前
 	 */
-	private void loadCharaParameter(String charaFolderPath, String charaName) {
+	private void loadCharaParameter(String charaFolderPath, String charaFolderName) {
 		// マップチップ読み込み
 		String charaParaPath = charaFolderPath + paramaterFile;
 		try {
 			File file = new File(charaParaPath);
 			BufferedReader br = new BufferedReader(new FileReader(file));
 
-			Chara chara = new Chara(charaName, characters);
+			Chara chara = new Chara(charaFolderName, characters);
 
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -101,7 +101,7 @@ public class LoadCharacter {
 				loadCharaParameterLine(line, chara);
 			}
 
-			characters.characterData.put(charaName, chara);
+			characters.characterData.put(charaFolderName, chara);
 
 			br.close();
 		} catch (FileNotFoundException e) {
@@ -132,9 +132,10 @@ public class LoadCharacter {
 
 //		NAMES,0,1,0
 		if (charaStrs[0].equals(NAMES)) {
-			chara.status.gender = 	Integer.valueOf(charaStrs[1]);
-			chara.status.level = 	Integer.valueOf(charaStrs[2]);
-			chara.status.exp = 		Integer.valueOf(charaStrs[3]);
+			chara.status.name  =	charaStrs[1];
+			chara.status.gender = 	Integer.valueOf(charaStrs[2]);
+			chara.status.level = 	Integer.valueOf(charaStrs[3]);
+			chara.status.exp = 		Integer.valueOf(charaStrs[4]);
 		}
 //		STATUS,20,8,5,9,6,10,5,4,6,8
 		if (charaStrs[0].equals(STATUS)) {

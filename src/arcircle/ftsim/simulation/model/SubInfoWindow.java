@@ -177,10 +177,10 @@ public class SubInfoWindow implements Renderer{
 		g.drawString("性別 : " + gender,
 				objectPos_status.get("CHARA_GENDER").x, objectPos_status.get("CHARA_GENDER").y);	//名前の描画
 		//選択キャラのアニメーションの取得
-		IMAGEAnime[0] = downWalkAnimeMap.get(charaStatus.name);
-		IMAGEAnime[1] = upWalkAnimeMap.get(charaStatus.name);
-		IMAGEAnime[2] = leftWalkAnimeMap.get(charaStatus.name);
-		IMAGEAnime[3] = rightWalkAnimeMap.get(charaStatus.name);
+		IMAGEAnime[0] = downWalkAnimeMap.get(renderInfoChara.getFolderName());
+		IMAGEAnime[1] = upWalkAnimeMap.get(renderInfoChara.getFolderName());
+		IMAGEAnime[2] = leftWalkAnimeMap.get(renderInfoChara.getFolderName());
+		IMAGEAnime[3] = rightWalkAnimeMap.get(renderInfoChara.getFolderName());
 		//アニメーションの表示
 		IMAGEAnime[0].draw(objectPos_status.get("CHARA_IMAGE").x , objectPos_status.get("CHARA_IMAGE").y);
 		IMAGEAnime[1].draw(objectPos_status.get("CHARA_IMAGE").x + CHIP_SIZE, objectPos_status.get("CHARA_IMAGE").y);
@@ -272,10 +272,10 @@ public class SubInfoWindow implements Renderer{
 		Chara enemyChara = expectBattleInfo.getSecondChara();
 		faceImageMap = field.characters.characterFaceStandardImageMap;
 		//味方キャライメージの描画
-		g.drawImage(faceImageMap.get(battleChara.status.name),
+		g.drawImage(faceImageMap.get(battleChara.getFolderName()),
 				objectPos_battle.get("CHARA_IMAGE").x, objectPos_battle.get("CHARA_IMAGE").y);
 		//敵キャライメージの描画
-		Image enemyFaceImage = faceImageMap.get(enemyChara.status.name).getFlippedCopy(true, false);
+		Image enemyFaceImage = faceImageMap.get(enemyChara.getFolderName()).getFlippedCopy(true, false);
 		int drawX = objectPos_battle.get("ENEMY_IMAGE").x - enemyFaceImage.getWidth();
 		int drawY = objectPos_battle.get("ENEMY_IMAGE").y - enemyFaceImage.getHeight();
 		g.drawImage(enemyFaceImage, drawX, drawY);
@@ -405,7 +405,7 @@ public class SubInfoWindow implements Renderer{
 		g.drawImage(test_weaponIcon,drawX, objectPos_battle.get("ENEMY_WEAPON").y);
 		drawX = objectPos_battle.get("ENEMY_WEAPON").x - font.getWidth(weaponName);
 		g.drawString(weaponName, drawX, objectPos_battle.get("ENEMY_WEAPON").y);
-		
+
 		//敵威力の描画
 		int enemy_attack = expectBattleInfo.getSecondCharaBattleInfo().getDamage();
 		g.drawString("威力  " + enemy_attack,

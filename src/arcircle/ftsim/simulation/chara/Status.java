@@ -85,5 +85,10 @@ public class Status {
 		status.magicDefense = 	this.magicDefense;
 		status.move = 			this.move;
 		status.physique = 		this.physique;
+
+		status.name = 			this.name;
+		status.gender = 		this.gender;
+		status.level = 			this.level;
+		status.exp = 			this.exp;
 	}
 }

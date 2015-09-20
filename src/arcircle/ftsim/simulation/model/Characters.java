@@ -182,10 +182,28 @@ public class Characters {
 	private void setCharaData(String folderName, Chara chara) {
 		Status charaStatus = FTSimulationGame.save.getCharaStatus(folderName);
 
-		//playerの処理
-
 		//セーブのないキャラなら
 		if (charaStatus == null) {
+			//playerの処理
+			if (folderName.length() >= 6 && folderName.substring(0, 6).equals(PLAYER_NAME)) {
+				String playerFolderName = PLAYER_NAME;
+				//男
+				if (FTSimulationGame.save.getPlayer().gender == Status.MALE) {
+					playerFolderName = playerFolderName + "Male";
+				} else if (FTSimulationGame.save.getPlayer().gender == Status.FEMALE) {
+					playerFolderName = playerFolderName + "Female";
+				} else {
+					System.err.println("Player Gender Error");
+				}
+				chara.setItemList(characterData.get(playerFolderName).getItemList());
+				characterData.get(playerFolderName).status.copyTo(chara.status);
+				characterData.get(playerFolderName).status.growRate.copyTo(chara.status.growRate);
+
+				chara.status.name = FTSimulationGame.save.getPlayer().name;
+
+				return;
+			}
+
 			//TODO: アイテムデータのコピーが未完成
 			chara.setItemList(characterData.get(folderName).getItemList());
 			characterData.get(folderName).status.copyTo(chara.status);
@@ -216,7 +234,7 @@ public class Characters {
 				continue;
 				//renderAttack(chara, g, offsetX, offsetY);
 			} else if (chara.isStand()) {
-				Animation anime = downWalkAnimeMap.get(chara.status.name);
+				Animation anime = downWalkAnimeMap.get(chara.getFolderName());
 				anime.draw(
 						chara.pX + offsetX,
 						chara.pY + offsetY,
@@ -224,13 +242,13 @@ public class Characters {
 			} else if (chara.isMoving) {
 				Animation anime = null;
 				if (chara.direction == Chara.UP) {
-					anime = upWalkAnimeMap.get(chara.status.name);
+					anime = upWalkAnimeMap.get(chara.getFolderName());
 				} else if (chara.direction == Chara.RIGHT) {
-					anime = rightWalkAnimeMap.get(chara.status.name);
+					anime = rightWalkAnimeMap.get(chara.getFolderName());
 				} else if (chara.direction == Chara.LEFT) {
-					anime = leftWalkAnimeMap.get(chara.status.name);
+					anime = leftWalkAnimeMap.get(chara.getFolderName());
 				} else {	//if (chara.direction == Chara.DOWN) {
-					anime = downWalkAnimeMap.get(chara.status.name);
+					anime = downWalkAnimeMap.get(chara.getFolderName());
 				}
 				anime.draw(
 						chara.pX + offsetX,
@@ -241,7 +259,7 @@ public class Characters {
 								chara.getAlpha()));
 			} else if (chara.isSelect) {
 				//Animation anime = selectAnimeMap.get(chara.status.name);
-				Animation anime = downAttackAnimeMap.get(chara.status.name);
+				Animation anime = downAttackAnimeMap.get(chara.getFolderName());
 				anime.draw(
 						chara.pX + offsetX,
 						chara.pY + offsetY,
@@ -251,7 +269,7 @@ public class Characters {
 								chara.getAlpha()));
 			} else {
 				//Animation anime = stayAnimeMap.get(chara.status.name);
-				Animation anime = downWalkAnimeMap.get(chara.status.name);
+				Animation anime = downWalkAnimeMap.get(chara.getFolderName());
 				anime.draw(
 						chara.pX + offsetX,
 						chara.pY + offsetY,
