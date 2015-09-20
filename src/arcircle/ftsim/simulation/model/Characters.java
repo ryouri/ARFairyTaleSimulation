@@ -15,7 +15,9 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
+import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.chara.Status;
 import arcircle.ftsim.simulation.chara.ai.SameTimeAttackAI;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.simulation.talk.BattleTalkModel;
@@ -156,23 +158,45 @@ public class Characters {
 			return;
 		}
 
-		Chara chara = new Chara(charaPuts[1], this);
+		String folderName = charaPuts[1];
+		Chara chara = new Chara(folderName, this);
 		chara.id = charaPuts[0];
 		chara.setCamp(Integer.valueOf(charaPuts[2]));
 		chara.x = Integer.valueOf(charaPuts[3]);
 		chara.y = Integer.valueOf(charaPuts[4]);
 		chara.pX = chara.x * Field.MAP_CHIP_SIZE;
 		chara.pY = chara.y * Field.MAP_CHIP_SIZE;
-		//TODO; キャラクターデータのコピーが未完成 AIの実装もね
-		chara.setItemList(characterData.get(chara.status.name).getItemList());
-		characterData.get(chara.status.name).status.copyTo(chara.status);
-		characterData.get(chara.status.name).growRateStatus.copyTo(chara.growRateStatus);
+
+		setCharaData(folderName, chara);
 
 		//TODO: 現在は，デバッグのために新しいAIを試す
-		//chara.setAI(new SimpleAI(chara));
-		chara.setAI(new SameTimeAttackAI(chara, getField(), this));
+		if (chara.getCamp() == Chara.CAMP_ENEMY) {
+			chara.setAI(new SameTimeAttackAI(chara, getField(), this));
+		}
 
 		characterArray.add(chara);
+	}
+
+	public static final String PLAYER_NAME = "player";
+
+	private void setCharaData(String folderName, Chara chara) {
+		Status charaStatus = FTSimulationGame.save.getCharaStatus(folderName);
+
+		//playerの処理
+
+		//セーブのないキャラなら
+		if (charaStatus == null) {
+			//TODO: アイテムデータのコピーが未完成
+			chara.setItemList(characterData.get(folderName).getItemList());
+			characterData.get(folderName).status.copyTo(chara.status);
+			characterData.get(folderName).status.growRate.copyTo(chara.status.growRate);
+		} else { //セーブのあるキャラなら
+			//TODO: アイテムデータのコピーが未完成
+			chara.setItemList(charaStatus.getItemList());
+			charaStatus.copyTo(chara.status);
+			charaStatus.growRate.copyTo(chara.status.growRate);
+		}
+
 	}
 
 	public static final Color standColor = new Color(0.5f, 0.5f, 0.5f, 1);

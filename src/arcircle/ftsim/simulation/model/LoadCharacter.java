@@ -152,16 +152,16 @@ public class LoadCharacter {
 		}
 //		GROW,50,40,40,60,60,60,40,40,0,0
 		if (charaStrs[0].equals(GROW)) {
-			chara.growRateStatus.hp = 			Integer.valueOf(charaStrs[1]);
-			chara.growRateStatus.power = 		Integer.valueOf(charaStrs[2]);
-			chara.growRateStatus.magicPower = 	Integer.valueOf(charaStrs[3]);
-			chara.growRateStatus.speed = 		Integer.valueOf(charaStrs[4]);
-			chara.growRateStatus.tech = 		Integer.valueOf(charaStrs[5]);
-			chara.growRateStatus.luck = 		Integer.valueOf(charaStrs[6]);
-			chara.growRateStatus.defense = 		Integer.valueOf(charaStrs[7]);
-			chara.growRateStatus.magicDefense = Integer.valueOf(charaStrs[8]);
-			chara.growRateStatus.move = 		Integer.valueOf(charaStrs[9]);
-			chara.growRateStatus.physique = 	Integer.valueOf(charaStrs[10]);
+			chara.status.growRate.hp = 			Integer.valueOf(charaStrs[1]);
+			chara.status.growRate.power = 		Integer.valueOf(charaStrs[2]);
+			chara.status.growRate.magicPower = 	Integer.valueOf(charaStrs[3]);
+			chara.status.growRate.speed = 		Integer.valueOf(charaStrs[4]);
+			chara.status.growRate.tech = 		Integer.valueOf(charaStrs[5]);
+			chara.status.growRate.luck = 		Integer.valueOf(charaStrs[6]);
+			chara.status.growRate.defense = 		Integer.valueOf(charaStrs[7]);
+			chara.status.growRate.magicDefense = Integer.valueOf(charaStrs[8]);
+			chara.status.growRate.move = 		Integer.valueOf(charaStrs[9]);
+			chara.status.growRate.physique = 	Integer.valueOf(charaStrs[10]);
 		}
 //		ITEM,けん
 		if (charaStrs[0].equals(ITEM)) {

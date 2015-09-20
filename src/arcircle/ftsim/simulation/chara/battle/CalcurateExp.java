@@ -3,21 +3,21 @@ package arcircle.ftsim.simulation.chara.battle;
 import java.util.Random;
 
 import arcircle.ftsim.simulation.chara.Chara;
-import arcircle.ftsim.simulation.chara.GrowRateStatus;
+import arcircle.ftsim.simulation.chara.GrowRate;
 
 /**
  * 計算値の加算後のレベルアップ値の計算を行う
  * 実際のレベルアップ処理は他のTaskで行う
  */
 public class CalcurateExp {
-	private GrowRateStatus levelUpStatus;
+	private GrowRate levelUpStatus;
 	private int beforeUpExp;
 	private int afterUpExp;
 	private int addExp;
 	private int upLevel;
 	private Chara chara;
 
-	public GrowRateStatus getLevelUpStatus() {
+	public GrowRate getLevelUpStatus() {
 		return levelUpStatus;
 	}
 	public int getAfterUpExp() {
@@ -39,7 +39,7 @@ public class CalcurateExp {
 	private Random random;
 
 	public CalcurateExp(Chara chara, int addExp) {
-		levelUpStatus = new GrowRateStatus();
+		levelUpStatus = new GrowRate();
 		this.chara = chara;
 		this.addExp = addExp;
 		addExp(chara, addExp);
@@ -56,16 +56,16 @@ public class CalcurateExp {
 		}
 
 		for (int i = 0; i < upLevel; i++) {
-			levelUpStatus.hp           += calcUpStatus(chara.growRateStatus.hp);
-			levelUpStatus.power        += calcUpStatus(chara.growRateStatus.power);
-			levelUpStatus.magicPower   += calcUpStatus(chara.growRateStatus.magicPower);
-			levelUpStatus.speed        += calcUpStatus(chara.growRateStatus.speed);
-			levelUpStatus.tech         += calcUpStatus(chara.growRateStatus.tech);
-			levelUpStatus.luck         += calcUpStatus(chara.growRateStatus.luck);
-			levelUpStatus.defense      += calcUpStatus(chara.growRateStatus.defense);
-			levelUpStatus.magicDefense += calcUpStatus(chara.growRateStatus.magicDefense);
-			levelUpStatus.move         += calcUpStatus(chara.growRateStatus.move);
-			levelUpStatus.physique     += calcUpStatus(chara.growRateStatus.physique);
+			levelUpStatus.hp           += calcUpStatus(chara.status.growRate.hp);
+			levelUpStatus.power        += calcUpStatus(chara.status.growRate.power);
+			levelUpStatus.magicPower   += calcUpStatus(chara.status.growRate.magicPower);
+			levelUpStatus.speed        += calcUpStatus(chara.status.growRate.speed);
+			levelUpStatus.tech         += calcUpStatus(chara.status.growRate.tech);
+			levelUpStatus.luck         += calcUpStatus(chara.status.growRate.luck);
+			levelUpStatus.defense      += calcUpStatus(chara.status.growRate.defense);
+			levelUpStatus.magicDefense += calcUpStatus(chara.status.growRate.magicDefense);
+			levelUpStatus.move         += calcUpStatus(chara.status.growRate.move);
+			levelUpStatus.physique     += calcUpStatus(chara.status.growRate.physique);
 		}
 	}
 

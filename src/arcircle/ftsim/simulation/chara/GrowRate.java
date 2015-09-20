@@ -1,6 +1,6 @@
 package arcircle.ftsim.simulation.chara;
 
-public class GrowRateStatus {
+public class GrowRate {
 	//成長率
 	public int hp;
 	public int power;
@@ -13,7 +13,7 @@ public class GrowRateStatus {
 	public int move;
 	public int physique;
 
-	public void copyTo (GrowRateStatus status) {
+	public void copyTo (GrowRate status) {
 		status.hp = 			this.hp;
 		status.power = 			this.power;
 		status.magicPower = 	this.magicPower;

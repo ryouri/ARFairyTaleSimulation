@@ -48,14 +48,12 @@ public class Chara {
 
 	public Status status;
 
-	public GrowRateStatus growRateStatus;
-
 	private float alpha;
 	private Color color;
 
 	public Chara(String name, Characters characters) {
 		this.status = new Status();
-		this.growRateStatus = new GrowRateStatus();
+		this.status.growRate = new GrowRate();
 		this.status.setItemList(new ArrayList<Item>());
 		this.status.name = name;
 		this.isStand = false;

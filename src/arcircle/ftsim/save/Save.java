@@ -1,6 +1,7 @@
 package arcircle.ftsim.save;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import arcircle.ftsim.simulation.chara.Status;
 
@@ -16,7 +17,8 @@ public class Save {
 	public static final String NOWSTAGE = "NOWSTAGE";
 
 	private Status player;
-	private ArrayList<Status> charaArray;
+	//charaFolderName, status
+	private HashMap<String, Status> charaStatusMap;
 	private ArrayList<Switch> switchArray;
 	//クリアした章（FolderName）の名前を保存する
 	private ArrayList<String> clearStoryNameArray;
@@ -25,7 +27,7 @@ public class Save {
 	public Save() {
 		super();
 		this.player = new Status();
-		this.charaArray = new ArrayList<Status>();
+		this.charaStatusMap = new HashMap<String, Status>();
 		this.switchArray = new ArrayList<Switch>();
 		this.clearStoryNameArray = new ArrayList<String>();
 		this.nowStage = new NowStage();
@@ -39,8 +41,20 @@ public class Save {
 		this.player = player;
 	}
 
-	public ArrayList<Status> getCharaArray() {
-		return charaArray;
+	public HashMap<String, Status> getCharaArray() {
+		return charaStatusMap;
+	}
+
+	public Status getCharaStatus(String folderName) {
+		if (charaStatusMap.containsKey(folderName)) {
+			return charaStatusMap.get(folderName);
+		}
+
+		return null;
+	}
+
+	public void putCharaStatus(String folderName, Status charaStatus) {
+		charaStatusMap.put(folderName, charaStatus);
 	}
 
 	public ArrayList<Switch> getSwitchArray() {

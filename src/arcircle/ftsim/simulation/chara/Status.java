@@ -17,6 +17,8 @@ public class Status {
 	public int level;
 	public int exp;
 
+	public GrowRate growRate;
+
 	//セーブデータで利用
 	//パラメータ
 	//HP
