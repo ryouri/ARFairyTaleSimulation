@@ -137,7 +137,7 @@ public class BattleTalkView implements Renderer{
 
 	        		String[] strs = line.split(",");
 	        		if(!strs[0].equals("")){
-	        			charasName.put(Num + "Name", strs[0]);
+	        			charasName.put(Num + "Name", strs[1]);
 	        		}else{
 	        			System.out.println("error_TalkView__paramater.txt読み込み");
 	        		}
