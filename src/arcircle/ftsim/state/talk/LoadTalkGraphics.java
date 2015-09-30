@@ -35,7 +35,6 @@ public class LoadTalkGraphics {
     /** 立ち絵無し画像のファイルパス "./Image/Transparent.png" */
     private final String NotStandFilePath = "./Image/Transparent.png";
 
-
 	/**キャラID(String)_種類とイメージのMap*/
 	private HashMap<String, Image> allCharaImageMap;
 	/**キャラIDとキャラネームのMap*/
