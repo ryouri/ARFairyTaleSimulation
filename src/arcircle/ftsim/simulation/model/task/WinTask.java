@@ -21,6 +21,7 @@ public class WinTask extends Task {
 	public void update(int delta) {
 		//勝利！
 		//talkStateへ
+		field.saveData();
 		field.getSgModel().nextState();
 	}
 }

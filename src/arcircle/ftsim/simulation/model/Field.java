@@ -680,4 +680,12 @@ public class Field implements KeyListner, Renderer {
 	public void occurEffect(int px, int py, String effectName) {
 		effectManager.addEffect(px, py, effectName);
 	}
+	public void saveData() {
+		for (Chara chara : characters.characterArray) {
+			if (chara.getCamp() != Chara.CAMP_ALLIES) {
+				continue;
+			}
+			FTSimulationGame.save.putCharaStatus(chara.getFolderName(), chara.status);
+		}
+	}
 }
