@@ -1,6 +1,7 @@
 package arcircle.ftsim.simulation.model.effect;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.newdawn.slick.Animation;
@@ -16,20 +17,19 @@ public class EffectManager {
 	/** エフェクト画像のあるフォルダ */
 	private final String effectFolderPath = "image/effect";
 	/** チップサイズ */
-	private final int CHIPSIZE = 32;
+	private final int CHIPSIZE = EfConst.CHIP_SIZE;
 	/** エフェクトアニメーションの1コマあたりの時間*/
 	private final int DURATION = 600;
-	/** エフェクトの描画位置や種類情報 */
-	private EffectInfo effectInfo;
 	/** エフェクト(名前,アニメーションイメージ)のMap
 	 * keyはEffectファイルの拡張子無の名前(EfConstと対応づける(手動)) */
 	private HashMap<String, Animation> effectAnimationMap;
+	private ArrayList<Effect> effectList;
 
-	/** コンストラクタ-------------------------------------------------------------------------------------
-	 *
-	 * */
-	public EffectManager(EffectInfo info){
-		this.effectInfo = info;
+	//-----------------------------------------------------------------------------------------------------
+	/** コンストラクタ */
+	public EffectManager(){
+		effectList = new ArrayList<Effect>();
+		effectAnimationMap = new HashMap<String, Animation>();
 		loadEffect();
 	}
 
@@ -58,18 +58,51 @@ public class EffectManager {
 			e.printStackTrace();
 		}
 	}
-
-
-
-	/**  */
-	public void render(Graphics g){
-		g.drawAnimation(effectAnimationMap.get(effectInfo.name), effectInfo.px, effectInfo.py);
+	/** エフェクトリストにオブジェクトがあるか判定*/
+	public boolean existEffect() {
+		return !effectList.isEmpty();
 	}
+	/**エフェクトリストに新たなエフェクトを追加する
+	 * @param px
+	 * @param py
+	 * @param effectName */
+	public void addEffect (int px, int py, String effectName) {
+		effectList.add(new Effect(px, py, effectAnimationMap.get(effectName)));
+	}
+	/** エフェクトリストにオブジェクトがあればそれをすべて描画 */
+	public void render(
+			Graphics g, int offsetX, int offsetY,
+			int firstTileX, int lastTileX,
+			int firstTileY, int lastTileY){
 
+		if (effectList.isEmpty()) {
+			return;
+		}
+		for (Effect effect : effectList) {
+			effect.render(g, offsetX, offsetY, firstTileX, lastTileX, firstTileY, lastTileY);
+		}
+	}
+	/**アップデート
+	 * @param px
+	 * @param py
+	 * @param effectName */
 	public void update(int px, int py, String effectName){
-		effectInfo.px = px;
-		effectInfo.py = py;
-		effectInfo.name = effectName;
+		// エフェクトリストにオブジェクトがなかった場合はリターン
+		if(effectList.isEmpty()){
+			return;
+		}
+		// エフェクトのアニメーションがストップしていたらそのエフェクトを削除
+		for(int i = 0 ; i < effectList.size() ; i++){
+			if(effectList.get(i).animationStopped()){
+				effectList.remove(i);
+				i--;
+			}
+		}
 	}
 
+	public void effectEnd() {
+		if (!effectList.isEmpty()) {
+			effectList.clear();
+		}
+	}
 }
