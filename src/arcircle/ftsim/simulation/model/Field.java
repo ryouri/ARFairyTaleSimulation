@@ -34,6 +34,7 @@ import arcircle.ftsim.simulation.event.EventManager;
 import arcircle.ftsim.simulation.field.Terrain;
 import arcircle.ftsim.simulation.field.TerrainManager;
 import arcircle.ftsim.simulation.item.Item;
+import arcircle.ftsim.simulation.model.effect.EffectManager;
 import arcircle.ftsim.simulation.model.task.TaskManager;
 import arcircle.ftsim.simulation.sound.SoundManager;
 import arcircle.ftsim.state.simgame.SimGameModel;
@@ -96,6 +97,8 @@ public class Field implements KeyListner, Renderer {
 
 	private SoundManager soundManager;
 
+	private EffectManager effectManager;
+
 	private SubInfoWindow subInfoWindow;
 	public SubInfoWindow getSubInfoWindow() {
 		return subInfoWindow;
@@ -153,6 +156,8 @@ public class Field implements KeyListner, Renderer {
 		this.soundManager = new SoundManager(SoundManager.battleSoundFolderPath);
 
 		this.taskManager = new TaskManager(this, characters);
+
+		this.effectManager = new EffectManager();
 	}
 
 	private void loadEndCondition(String endConditionTxt) {
@@ -254,6 +259,10 @@ public class Field implements KeyListner, Renderer {
 			renderCursor(g, offsetX, offsetY);
 		}
 
+		if (effectManager.existEffect()) {
+			effectManager.render(g, offsetX, offsetY, firstTileX, lastTileX, firstTileY, lastTileY);
+		}
+
 		if (taskManager.existTask()) {
 			taskManager.processRender(
 					g, offsetX, offsetY, firstTileX, lastTileX, firstTileY, lastTileY);
@@ -283,6 +292,10 @@ public class Field implements KeyListner, Renderer {
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		cursorAnime.update(delta);
 		getCursor().update();
+
+		if (effectManager.existEffect()) {
+			effectManager.update();
+		}
 
 		//存在するタスクを処理する
 		if (taskManager.existTask()) {
@@ -663,5 +676,8 @@ public class Field implements KeyListner, Renderer {
 	}
 	public SoundManager getSoundManager() {
 		return soundManager;
+	}
+	public void occurEffect(int px, int py, String effectName) {
+		effectManager.addEffect(px, py, effectName);
 	}
 }

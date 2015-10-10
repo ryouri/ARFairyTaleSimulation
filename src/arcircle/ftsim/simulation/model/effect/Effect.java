@@ -8,7 +8,7 @@ import org.newdawn.slick.Graphics;
  * @author ゆきねこ */
 public class Effect {
 	/** チップサイズ */
-	private final int CHIPSIZE = EfConst.CHIP_SIZE;
+	private final int CHIPSIZE = EffectConst.CHIP_SIZE;
 	// エフェクト描画位置
 	private int px,py;
 	/** エフェクトのアニメーション */
@@ -43,6 +43,5 @@ public class Effect {
 	}
 
 	public void update() {
-
 	}
 }

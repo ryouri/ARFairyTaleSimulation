@@ -121,4 +121,8 @@ public class TaskManager {
 			taskArrayArray.remove(0);
 		}
 	}
+
+	public void occurEffect(int px, int py, String effectName) {
+		field.occurEffect(px, py, effectName);
+	}
 }

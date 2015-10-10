@@ -2,7 +2,7 @@ package arcircle.ftsim.simulation.model.effect;
 
 /** effectフォルダ内のファイル名とちゃんと対応づけること
  * @author ゆきねこ */
-public class EfConst {
+public class EffectConst {
 	/** チップサイズ*/
 	public final static int CHIP_SIZE = 32;
 	/** 爆発 */

@@ -17,9 +17,9 @@ public class EffectManager {
 	/** エフェクト画像のあるフォルダ */
 	private final String effectFolderPath = "image/effect";
 	/** チップサイズ */
-	private final int CHIPSIZE = EfConst.CHIP_SIZE;
+	private final int CHIPSIZE = EffectConst.CHIP_SIZE;
 	/** エフェクトアニメーションの1コマあたりの時間*/
-	private final int DURATION = 600;
+	private final int DURATION = 60;
 	/** エフェクト(名前,アニメーションイメージ)のMap
 	 * keyはEffectファイルの拡張子無の名前(EfConstと対応づける(手動)) */
 	private HashMap<String, Animation> effectAnimationMap;
@@ -42,7 +42,7 @@ public class EffectManager {
 			// エフェクト画像フォルダ内を走査
 			for(String fileName : imageFolder.list()){
 				// ファイル名の拡張子無し部分を取得
-				tempName = (fileName.split("_")[0]);
+				tempName = (fileName.split("\\.")[0]);
 				// スプライトシートを生成
 				SpriteSheet ssheet = new SpriteSheet(new Image(effectFolderPath + "/" + fileName), CHIPSIZE, CHIPSIZE);
 				// アニメーションに必要なイメージ配列をスプライトシートから取得
@@ -51,10 +51,11 @@ public class EffectManager {
 					images[i] = ssheet.getSubImage(i, 0);
 				}
 				// エフェクトアニメーションマップにアニメーションを挿入
-				effectAnimationMap.put(tempName, new Animation(images, DURATION, true));
+				Animation generatedAnimation = new Animation(images, DURATION, true);
+				generatedAnimation.setLooping(false);
+				effectAnimationMap.put(tempName, generatedAnimation);
 			}
 		} catch (SlickException e) {
-			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
 	}
@@ -67,8 +68,12 @@ public class EffectManager {
 	 * @param py
 	 * @param effectName */
 	public void addEffect (int px, int py, String effectName) {
-		effectList.add(new Effect(px, py, effectAnimationMap.get(effectName)));
+		Animation anime = effectAnimationMap.get(effectName);
+		anime.restart();
+		effectList.add(new Effect(px, py, anime));
+
 	}
+
 	/** エフェクトリストにオブジェクトがあればそれをすべて描画 */
 	public void render(
 			Graphics g, int offsetX, int offsetY,
@@ -82,17 +87,15 @@ public class EffectManager {
 			effect.render(g, offsetX, offsetY, firstTileX, lastTileX, firstTileY, lastTileY);
 		}
 	}
-	/**アップデート
-	 * @param px
-	 * @param py
-	 * @param effectName */
-	public void update(int px, int py, String effectName){
+	/**アップデート*/
+	public void update(){
 		// エフェクトリストにオブジェクトがなかった場合はリターン
 		if(effectList.isEmpty()){
 			return;
 		}
 		// エフェクトのアニメーションがストップしていたらそのエフェクトを削除
 		for(int i = 0 ; i < effectList.size() ; i++){
+			effectList.get(i).update();
 			if(effectList.get(i).animationStopped()){
 				effectList.remove(i);
 				i--;
