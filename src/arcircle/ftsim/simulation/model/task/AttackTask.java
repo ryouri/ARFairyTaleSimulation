@@ -176,7 +176,6 @@ public class AttackTask extends Task {
 					int effectX = damageChara.pX;
 					int effectY = damageChara.pY;
 					taskManager.occurEffect(effectX, effectY, EffectConst.SLASH);
-
 				} else {
 					//外れた音
 					taskManager.field.getSoundManager().playSound(SoundManager.SOUND_AVOID);

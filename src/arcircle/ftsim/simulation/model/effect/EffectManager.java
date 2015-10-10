@@ -68,10 +68,9 @@ public class EffectManager {
 	 * @param py
 	 * @param effectName */
 	public void addEffect (int px, int py, String effectName) {
-		Animation anime = effectAnimationMap.get(effectName);
+		Animation anime = effectAnimationMap.get(effectName).copy();
 		anime.restart();
 		effectList.add(new Effect(px, py, anime));
-
 	}
 
 	/** エフェクトリストにオブジェクトがあればそれをすべて描画 */
@@ -93,6 +92,7 @@ public class EffectManager {
 		if(effectList.isEmpty()){
 			return;
 		}
+
 		// エフェクトのアニメーションがストップしていたらそのエフェクトを削除
 		for(int i = 0 ; i < effectList.size() ; i++){
 			effectList.get(i).update();
