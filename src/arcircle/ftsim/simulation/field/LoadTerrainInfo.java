@@ -9,12 +9,33 @@ import java.io.IOException;
 import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class LoadTerrainInfo {
+	private static void loadAutoTile(TerrainInfoSupplier terrainInfoSupplier, String AutoTileTxtPath) throws IOException {
+		File file = new File(AutoTileTxtPath);
+		BufferedReader br = new BufferedReader(new FileReader(file));
 
-	public static void loadTerrainInfo(TerrainInfoSupplier terrainManager) {
+		String autoTileTerrainLine = br.readLine();
+
+		while ((autoTileTerrainLine = br.readLine()) != null) {
+			if (autoTileTerrainLine.length() == 0) {
+				continue;
+			}
+
+			String[] terrainAutoTileStrs = autoTileTerrainLine.split(",");
+			if (terrainAutoTileStrs.length != 2) {
+				continue;
+			}
+
+			int autoTileNum = Integer.parseInt(terrainAutoTileStrs[0]);
+			Terrain autoTileTerrain = terrainInfoSupplier.terrainMap.get(terrainAutoTileStrs[1]);
+			terrainInfoSupplier.autoTileTerrainMap.put(autoTileNum, autoTileTerrain);
+		}
+	}
+
+	public static void loadTerrainInfo(TerrainInfoSupplier terrainInfoSupplier) {
 		// マップチップ読み込み TODO;マジックナンバー！！！
-		String itemListPath = SimGameModel.storiesFolder + "/TerrainInfo.txt";
+		String terrainListPath = SimGameModel.storiesFolder + "/TerrainInfo.txt";
 		try {
-			File file = new File(itemListPath);
+			File file = new File(terrainListPath);
 			BufferedReader br = new BufferedReader(new FileReader(file));
 
 			String terrainStr;
@@ -22,8 +43,8 @@ public class LoadTerrainInfo {
 			terrainStr = br.readLine();
 			if (terrainStr != null) {
 				String[] terrainStrs = terrainStr.split(",");
-				terrainManager.terrainChipWidth = Integer.valueOf(terrainStrs[0]);
-				terrainManager.terrainChipHeight = Integer.valueOf(terrainStrs[1]);
+				terrainInfoSupplier.terrainChipWidth = Integer.valueOf(terrainStrs[0]);
+				terrainInfoSupplier.terrainChipHeight = Integer.valueOf(terrainStrs[1]);
 			}
 
 			while ((terrainStr = br.readLine()) != null) {
@@ -33,25 +54,21 @@ public class LoadTerrainInfo {
 
 				Terrain terrain = loadTerrain(terrainStr);
 				if (terrain != null) {
-					terrainManager.terrainMap.put(terrain.terrainName, terrain);
-					terrainManager.terrainArray.add(terrain);
+					terrainInfoSupplier.terrainMap.put(terrain.terrainName, terrain);
+					terrainInfoSupplier.terrainArray.add(terrain);
 				}
 			}
 
 			br.close();
+
+			loadAutoTile(terrainInfoSupplier,
+				SimGameModel.storiesFolder + "/TerrainInfoAutoTile.txt");
 		} catch (FileNotFoundException e) {
 			System.out.println(e);
 		} catch (IOException e) {
 			System.out.println(e);
 		}
-
-		loadAutoTile(SimGameModel.storiesFolder + "/TerrainInfoAutoTile.txt");
 	}
-
-
-	private static void loadAutoTile(String AutoTileTxtPath) {
-	}
-
 
 	//地形名,マップチップの開始座標x,同左y,回避,防御
 	//平地,0,0,0,0

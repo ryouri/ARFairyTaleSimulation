@@ -8,12 +8,14 @@ public class TerrainInfoSupplier {
 	public int terrainChipWidth;
 	public int terrainChipHeight;
 	public HashMap<String, Terrain> terrainMap;
+	public HashMap<Integer, Terrain> autoTileTerrainMap;
 	public ArrayList<Terrain> terrainArray;
 
 	public static final int NONE_CHIP_NUM = 2000;
 
 	public TerrainInfoSupplier() {
 		terrainMap = new HashMap<String, Terrain>();
+		autoTileTerrainMap = new HashMap<Integer, Terrain>();
 		terrainArray = new ArrayList<Terrain>();
 		LoadTerrainInfo.loadTerrainInfo(this);
 	}
