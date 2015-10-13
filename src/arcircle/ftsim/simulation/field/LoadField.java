@@ -1,5 +1,6 @@
 package arcircle.ftsim.simulation.field;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,6 +43,7 @@ public class LoadField {
 	public static final int MAP_CHIP_ROW = 32;
 	public static final int MAP_CHIP_COL = 20;
 	public static final int MAP_CHIP_SIZE = 32;
+	public static final int MAP_CHIP_HALF_SIZE = MAP_CHIP_SIZE / 2;
 
 	public static final int MAP_VIEW_WIDTH = 800;
 	public static final int MAP_VIEW_HEIGHT = 640;
@@ -51,6 +53,8 @@ public class LoadField {
 
 	public static final String AutoTileFloderPath = "image/autotile/";
 	public static final int AUTO_TILE_CHIP_DIVIDE_SIZE = 16;
+
+	private boolean edge_close = false;
 
 	private HashMap<Integer, SpriteSheet> autoTileSSheetMap;
 
@@ -63,12 +67,74 @@ public class LoadField {
 		terrainInfoSupplier = new TerrainInfoSupplier();
 
 		loadMapAndMapChip(mapPath, mapchipPointerPath);
-		generateRenderArray();
+		try {
+			generateRenderArray();
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 
-	private void generateRenderArray() {
+	private void generateRenderArray() throws SlickException {
+		for (int y = 0; y < row; y++) {
+			for (int x = 0; x < col; x++) {
+				renderArray[y][x] = new Image(MAP_CHIP_SIZE, MAP_CHIP_SIZE);
+			}
+		}
+		generate3LayerImage();
+	}
 
+	private void generate3LayerImage() throws SlickException {
+		//3層それぞれ、マップチップを生成
+		for (int z = 0; z < MAP_CHIP_LAYER_NUM; z++) {
+			for (int y = 0; y < row; y++) {
+				for (int x = 0; x < col; x++) {
+					if (map[z][y][x] < TerrainInfoSupplier.NONE_CHIP_NUM) {
+						//通常のマップチップなら
+						int chipX = map[z][y][x] % MAP_CHIP_COL;
+						int chipY = map[z][y][x] / MAP_CHIP_COL;
+						renderArray[y][x].getGraphics().drawImage(sSheet.getSubImage(chipX, chipY), 0, 0);
+					} else if (map[z][y][x] > TerrainInfoSupplier.NONE_CHIP_NUM){
+						drawAutoTileToRenderArray(z, y, x);
+					}
+				}
+			}
+		}
+	}
 
+	private void drawAutoTileToRenderArray(int z, int y, int x) throws SlickException {
+		SpriteSheet autoTileSSheet = autoTileSSheetMap.get(map[z][y][x]);
+		//オートタイルなら
+		boolean[][] aroundInfo = generateAroundInfoArray(y, x, map[z]);
+		Point[][] drawPoint = AutoTileUtil.aroudTileArrayToDrawTileArray(aroundInfo);
+		for (int drawY = 0; drawY < drawPoint.length; drawY++) {
+			for (int drawX = 0; drawX < drawPoint[drawY].length; drawX++) {
+				int iY = drawPoint[drawY][drawX].y;
+				int iX = drawPoint[drawY][drawX].x;
+				Image drawedImage = autoTileSSheet.getSubImage(iX, iY);
+				renderArray[y][x].getGraphics().drawImage(
+						drawedImage,
+						drawX * MAP_CHIP_HALF_SIZE,
+						drawY * MAP_CHIP_HALF_SIZE);
+			}
+		}
+	}
+
+	private boolean[][] generateAroundInfoArray(int y, int x, int[][] map) {
+		int chipID = map[y][x];
+		boolean left_up = y == 0 ? edge_close : x == 0 ? edge_close : chipID != map[y-1][x-1];
+		boolean left = x == 0 ? edge_close : chipID != map[y][x-1];
+		boolean left_down = y == row - 1 ? edge_close : x == 0 ? edge_close : chipID != map[y+1][x-1];
+		boolean right_up =  y == 0 ? edge_close : x == col - 1 ? edge_close : chipID != map[y-1][x+1];
+		boolean right =  x == col - 1 ? edge_close : chipID != map[y][x+1];
+		boolean right_down =  y == row - 1 ? edge_close : x == col - 1 ? edge_close : chipID != map[y+1][x+1];
+		boolean up =  y == 0 ? edge_close : chipID != map[y-1][x];
+		boolean down =  y == row - 1 ? edge_close : chipID != map[y+1][x];
+		boolean[][] around_info = {
+			{left_up, up, right_up},
+			{left, false, right},
+			{left_down, down, right_down}
+		};
+		return around_info;
 	}
 
 	public void renderMap(Graphics g, int offsetX, int offsetY,
