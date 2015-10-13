@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -21,7 +22,8 @@ public class LoadField {
 	private int mapHeight;
 	private int mapWidth;
 
-	private int map[][];
+	private int map[][][];
+	private Image renderArray[][];
 
 	/**
 	 * 移動コストが保存される
@@ -29,11 +31,13 @@ public class LoadField {
 	 */
 	private int moveCostMap[][];
 
-	private Terrain terrainMap[][];
+	private Terrain terrainMap[][][];
 
 	TerrainInfoSupplier terrainInfoSupplier;
 
 	SpriteSheet sSheet;
+
+	public static final int MAP_CHIP_LAYER_NUM = 3;
 
 	public static final int MAP_CHIP_ROW = 32;
 	public static final int MAP_CHIP_COL = 20;
@@ -44,7 +48,11 @@ public class LoadField {
 	public static final int MAP_WIDTH_MASS = 25;
 	public static final int MAP_HEIGHT_MASS = 20;
 
-	public static final String AutoTileFloderPath = "image/autotile";
+
+	public static final String AutoTileFloderPath = "image/autotile/";
+	public static final int AUTO_TILE_CHIP_DIVIDE_SIZE = 16;
+
+	private HashMap<Integer, SpriteSheet> autoTileSSheetMap;
 
 	public LoadField(String mapPath, String mapchipPointerPath) {
 		init(mapPath, mapchipPointerPath);
@@ -55,20 +63,29 @@ public class LoadField {
 		terrainInfoSupplier = new TerrainInfoSupplier();
 
 		loadMapAndMapChip(mapPath, mapchipPointerPath);
+		generateRenderArray();
+	}
+
+	private void generateRenderArray() {
+
+
 	}
 
 	public void renderMap(Graphics g, int offsetX, int offsetY,
 			int firstTileX, int lastTileX, int firstTileY, int lastTileY) {
 		for (int y = firstTileY; y < lastTileY; y++) {
 			for (int x = firstTileX; x < lastTileX; x++) {
-				// 一番左上のタイルを描画
-				g.drawImage(sSheet.getSubImage(0, 0), Field.tilesToPixels(x)
-						+ offsetX, Field.tilesToPixels(y) + offsetY);
-				int chipX = map[y][x] % MAP_CHIP_COL;
-				int chipY = map[y][x] / MAP_CHIP_COL;
-				// 各マスのタイルを描画
-				g.drawImage(sSheet.getSubImage(chipX, chipY), Field.tilesToPixels(x)
-						+ offsetX, Field.tilesToPixels(y) + offsetY);
+				g.drawImage(renderArray[y][x],
+						Field.tilesToPixels(x) + offsetX,
+						Field.tilesToPixels(y) + offsetY);
+//				// 一番左上のタイルを描画
+//				g.drawImage(sSheet.getSubImage(0, 0), Field.tilesToPixels(x)
+//						+ offsetX, Field.tilesToPixels(y) + offsetY);
+//				int chipX = map[y][x] % MAP_CHIP_COL;
+//				int chipY = map[y][x] / MAP_CHIP_COL;
+//				// 各マスのタイルを描画
+//				g.drawImage(sSheet.getSubImage(chipX, chipY), Field.tilesToPixels(x)
+//						+ offsetX, Field.tilesToPixels(y) + offsetY);
 			}
 		}
 	}
@@ -79,7 +96,6 @@ public class LoadField {
 	 * @param mapchipPointerPath
 	 */
 	private void loadMapAndMapChip(String mapPath, String mapchipPointerPath) {
-		loadAutoTile();
 
 		// マップチップ読み込み
 		String mapChipPath = null;
@@ -106,33 +122,50 @@ public class LoadField {
 			col = in.read();
 			mapWidth = MAP_CHIP_SIZE * col;
 			// マップを読み込む
-			map = new int[row][col];
+			map = new int[MAP_CHIP_LAYER_NUM][row][col];
 			// 地形マップの初期化
-			terrainMap = new Terrain[row][col];
+			terrainMap = new Terrain[MAP_CHIP_LAYER_NUM][row][col];
+			//最終描画マップの初期化
+			renderArray = new Image[row][col];
 
 			moveCostMap = new int[row][col];
-			for (int y = 0; y < row; y++) {
-				for (int x = 0; x < col; x++) {
-					//こっちが新しいMapEditor用
-					byte[] b = new byte[4];
-					in.read(b, 0, 4);
-					int mapChipNo = fromBytes(b);
-					map[y][x] = mapChipNo;
+			for (int z = 0; z < MAP_CHIP_LAYER_NUM; z++) {
+				for (int y = 0; y < row; y++) {
+					for (int x = 0; x < col; x++) {
+						// こっちが新しいMapEditor用
+						byte[] b = new byte[4];
+						in.read(b, 0, 4);
+						int mapChipNo = fromBytes(b);
+						map[z][y][x] = mapChipNo;
 
-					//TODO:moveCostの読み込み，現在は1で初期化
-					moveCostMap[y][x] = 1;
-
-					terrainMap[y][x] = terrainInfoSupplier.getTerrain(mapChipNo);
+						terrainMap[z][y][x] = terrainInfoSupplier
+								.getTerrain(mapChipNo);
+					}
 				}
 			}
 			in.close();
+
+			loadAutoTile();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void loadAutoTile() {
+	private void loadAutoTile() throws SlickException {
+		String path = "image/autotile/";
+		autoTileSSheetMap = new HashMap<Integer, SpriteSheet>();
 
+		for (String fileName : new File(path).list()) {
+			String fileNumStr = fileName.split("\\.")[0];
+			int fileNum = Integer.parseInt(fileNumStr);
+			SpriteSheet sSheet = new SpriteSheet(
+					new Image(path + fileName),
+					AUTO_TILE_CHIP_DIVIDE_SIZE,
+					AUTO_TILE_CHIP_DIVIDE_SIZE);
+			autoTileSSheetMap.put(fileNum, sSheet);
+		}
 	}
 
 	public static int fromBytes(byte[] b) {
@@ -155,15 +188,12 @@ public class LoadField {
 	}
 
 	public Image getSelectedMapChip(int y, int x) {
-		int chipX = map[y][x] % LoadField.MAP_CHIP_COL;
-		int chipY = map[y][x] / LoadField.MAP_CHIP_COL;
-		// 各マスのタイルを描画
-		return sSheet.getSubImage(chipX, chipY);
+		return renderArray[y][x];
 	}
 
 
 	public Terrain getYXTerrain(int y, int x) {
-		return terrainInfoSupplier.getTerrain(map[y][x]);
+		return terrainInfoSupplier.getTerrain(map[0][y][x]);
 	}
 
 
@@ -200,14 +230,8 @@ public class LoadField {
 	public int getMapWidth() {
 		return mapWidth;
 	}
-	public int[][] getMap() {
-		return map;
-	}
 	public int[][] getMoveCostMap() {
 		return moveCostMap;
-	}
-	public Terrain[][] getTerrainMap() {
-		return terrainMap;
 	}
 	public TerrainInfoSupplier getTerrainManager() {
 		return terrainInfoSupplier;

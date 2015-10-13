@@ -22,7 +22,7 @@ public class TerrainInfoSupplier {
 
 	public Terrain getTerrain(int mapChipNo) {
 		if (mapChipNo >= NONE_CHIP_NUM) {
-			return getTerrainAutoTile();
+			return getTerrainAutoTile(mapChipNo);
 		}
 
 		int chipX = mapChipNo % LoadField.MAP_CHIP_COL;
@@ -36,10 +36,13 @@ public class TerrainInfoSupplier {
 				return terrain;
 			}
 		}
-		return terrainMap.get("侵入不可");
+		return null;
 	}
 
-	private Terrain getTerrainAutoTile() {
-		return null;
+	private Terrain getTerrainAutoTile(int mapChipNo) {
+		if (mapChipNo == NONE_CHIP_NUM) {
+			return null;
+		}
+		return autoTileTerrainMap.get(mapChipNo);
 	}
 }

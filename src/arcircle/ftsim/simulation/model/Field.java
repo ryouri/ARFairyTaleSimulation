@@ -365,7 +365,7 @@ public class Field implements KeyListner, Renderer {
 	public Terrain getSelectedTerrain() {
 		int y = cursor.y;
 		int x = cursor.x;
-		return loadField.getTerrainMap()[y][x];
+		return loadField.getYXTerrain(y, x);
 	}
 
 	/**
