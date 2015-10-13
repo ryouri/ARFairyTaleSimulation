@@ -10,7 +10,7 @@ import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class LoadTerrainInfo {
 
-	public static void loadTerrainInfo(TerrainManager terrainManager) {
+	public static void loadTerrainInfo(TerrainInfoSupplier terrainManager) {
 		// マップチップ読み込み TODO;マジックナンバー！！！
 		String itemListPath = SimGameModel.storiesFolder + "/TerrainInfo.txt";
 		try {

@@ -8,9 +8,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+
+import arcircle.ftsim.simulation.model.Field;
 
 public class LoadField {
 	private int row;
@@ -28,7 +31,7 @@ public class LoadField {
 
 	private Terrain terrainMap[][];
 
-	TerrainManager terrainManager;
+	TerrainInfoSupplier terrainInfoSupplier;
 
 	SpriteSheet sSheet;
 
@@ -47,10 +50,28 @@ public class LoadField {
 
 	public void init(String mapPath, String mapchipPointerPath) {
 		//地形情報の読み込み
-		terrainManager = new TerrainManager();
+		terrainInfoSupplier = new TerrainInfoSupplier();
 
 		loadMapAndMapChip(mapPath, mapchipPointerPath);
 	}
+
+	public void renderMap(Graphics g, int offsetX, int offsetY,
+			int firstTileX, int lastTileX, int firstTileY, int lastTileY) {
+		for (int y = firstTileY; y < lastTileY; y++) {
+			for (int x = firstTileX; x < lastTileX; x++) {
+				// 一番左上のタイルを描画
+				g.drawImage(sSheet.getSubImage(0, 0), Field.tilesToPixels(x)
+						+ offsetX, Field.tilesToPixels(y) + offsetY);
+				int chipX = map[y][x] % MAP_CHIP_COL;
+				int chipY = map[y][x] / MAP_CHIP_COL;
+				// 各マスのタイルを描画
+				g.drawImage(sSheet.getSubImage(chipX, chipY), Field.tilesToPixels(x)
+						+ offsetX, Field.tilesToPixels(y) + offsetY);
+			}
+		}
+	}
+
+
 
 	/**
 	 *
@@ -96,16 +117,10 @@ public class LoadField {
 					int mapChipNo = fromBytes(b);
 					map[y][x] = mapChipNo;
 
-//					int mapChipNo = in.read();
-//					map[y][x] = mapChipNo;
-
 					//TODO:moveCostの読み込み，現在は1で初期化
 					moveCostMap[y][x] = 1;
 
-					int chipX = mapChipNo % MAP_CHIP_COL;
-					int chipY = mapChipNo / MAP_CHIP_COL;
-
-					terrainMap[y][x] = terrainManager.getTerrain(chipX, chipY);
+					terrainMap[y][x] = terrainInfoSupplier.getTerrain(mapChipNo);
 				}
 			}
 			in.close();
@@ -133,12 +148,16 @@ public class LoadField {
 		}
 	}
 
+	public Image getSelectedMapChip(int y, int x) {
+		int chipX = map[y][x] % LoadField.MAP_CHIP_COL;
+		int chipY = map[y][x] / LoadField.MAP_CHIP_COL;
+		// 各マスのタイルを描画
+		return sSheet.getSubImage(chipX, chipY);
+	}
+
 
 	public Terrain getYXTerrain(int y, int x) {
-		int chipX = map[y][x] % MAP_CHIP_COL;
-		int chipY = map[y][x] / MAP_CHIP_COL;
-
-		return terrainManager.getTerrain(chipX, chipY);
+		return terrainInfoSupplier.getTerrain(map[y][x]);
 	}
 
 
@@ -184,8 +203,8 @@ public class LoadField {
 	public Terrain[][] getTerrainMap() {
 		return terrainMap;
 	}
-	public TerrainManager getTerrainManager() {
-		return terrainManager;
+	public TerrainInfoSupplier getTerrainManager() {
+		return terrainInfoSupplier;
 	}
 	public SpriteSheet getsSheet() {
 		return sSheet;

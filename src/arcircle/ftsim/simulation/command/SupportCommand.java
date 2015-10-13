@@ -152,7 +152,7 @@ public class SupportCommand extends Command implements KeyListner, Renderer {
 			if(supportJudge[field.getCursor().y][field.getCursor().x]) {
 				field.getSoundManager().playSound(SoundManager.SOUND_DECISION);
 
-				field.addCharaHeal(chara, field.getCursor().y, field.getCursor().x);
+				field.addHealTask(chara, field.getCursor().y, field.getCursor().x);
 				field.setSubInfoWindowForFieldInfo();
 
 				//他の場所に移す

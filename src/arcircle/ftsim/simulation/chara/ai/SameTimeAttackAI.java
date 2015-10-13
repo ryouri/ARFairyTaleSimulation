@@ -68,9 +68,9 @@ public class SameTimeAttackAI extends AI {
 			arcircle.ftsim.simulation.algorithm.range.Node moveNode =
 					cmRange.getNodeByXY(attackCharaData.attackPoint.x, attackCharaData.attackPoint.y);
 			if (moveNode.pointXArray.size() >= 1) {
-				field.setCharaMove(chara, moveNode);
+				field.addMoveTask(chara, moveNode);
 			}
-			field.setCharaAttack(chara,
+			field.addAttackTask(chara,
 					attackCharaData.attackPoint,
 					new Point(attackCharaData.damageChara.x, attackCharaData.damageChara.y));
 		}
@@ -139,10 +139,10 @@ public class SameTimeAttackAI extends AI {
 						cmRange.getNodeByXY(node.pos.x, node.pos.y);
 
 				if (moveNode.pointXArray.size() >= 1) {
-					field.setCharaMove(chara, moveNode);
+					field.addMoveTask(chara, moveNode);
 				}
 
-				field.setCharaStand(chara, true);
+				field.addStandCharaTask(chara, true);
 				break;
 			}
 		}

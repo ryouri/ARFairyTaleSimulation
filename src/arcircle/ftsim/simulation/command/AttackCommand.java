@@ -152,7 +152,7 @@ public class AttackCommand extends Command implements KeyListner, Renderer {
 			if(attackJudge[field.getCursor().y][field.getCursor().x]) {
 				field.getSoundManager().playSound(SoundManager.SOUND_DECISION);
 
-				field.setCharaAttack(chara,
+				field.addAttackTask(chara,
 						new Point(chara.x, chara.y),
 						new Point(field.getCursor().x, field.getCursor().y));
 				field.setSubInfoWindowForFieldInfo();

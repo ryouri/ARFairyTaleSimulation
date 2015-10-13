@@ -219,7 +219,7 @@ public class Field implements KeyListner, Renderer {
 		lastTileY = Math.min(lastTileY, loadField.getRow());
 
 		// マップを描く
-		renderMap(g, offsetX, offsetY, firstTileX, lastTileX, firstTileY,
+		loadField.renderMap(g, offsetX, offsetY, firstTileX, lastTileX, firstTileY,
 				lastTileY);
 
 		// キャラクターを描く
@@ -241,22 +241,6 @@ public class Field implements KeyListner, Renderer {
 		}
 	}
 
-	private void renderMap(Graphics g, int offsetX, int offsetY,
-			int firstTileX, int lastTileX, int firstTileY, int lastTileY) {
-		for (int y = firstTileY; y < lastTileY; y++) {
-			for (int x = firstTileX; x < lastTileX; x++) {
-				// 一番左上のタイルを描画
-				g.drawImage(loadField.getsSheet().getSubImage(0, 0), tilesToPixels(x)
-						+ offsetX, tilesToPixels(y) + offsetY);
-				int chipX = loadField.getMap()[y][x] % loadField.MAP_CHIP_COL;
-				int chipY = loadField.getMap()[y][x] / loadField.MAP_CHIP_COL;
-				// 各マスのタイルを描画
-				g.drawImage(loadField.getsSheet().getSubImage(chipX, chipY), tilesToPixels(x)
-						+ offsetX, tilesToPixels(y) + offsetY);
-			}
-		}
-	}
-
 	private void renderCursor(Graphics g, int offsetX, int offsetY) {
 		cursorAnime.draw(getCursor().pX + offsetX - 4, getCursor().pY + offsetY - 4);
 	}
@@ -269,7 +253,6 @@ public class Field implements KeyListner, Renderer {
 			effectManager.update();
 		}
 
-		//存在するタスクを処理する
 		if (taskManager.existTask()) {
 			taskManager.processUpdate(delta);
 			return;
@@ -372,10 +355,7 @@ public class Field implements KeyListner, Renderer {
 	public Image getSelectedMapChip() {
 		int y = cursor.y;
 		int x = cursor.x;
-		int chipX = loadField.getMap()[y][x] % LoadField.MAP_CHIP_COL;
-		int chipY = loadField.getMap()[y][x] / LoadField.MAP_CHIP_COL;
-		// 各マスのタイルを描画
-		return loadField.getsSheet().getSubImage(chipX, chipY);
+		return loadField.getSelectedMapChip(y, x);
 	}
 
 	/**
@@ -385,7 +365,6 @@ public class Field implements KeyListner, Renderer {
 	public Terrain getSelectedTerrain() {
 		int y = cursor.y;
 		int x = cursor.x;
-		// 各マスのタイルを描画
 		return loadField.getTerrainMap()[y][x];
 	}
 
@@ -513,7 +492,7 @@ public class Field implements KeyListner, Renderer {
 		return loseStringArray;
 	}
 
-	public void setCharaAttack(Chara chara, java.awt.Point attackPoint, java.awt.Point damagePoint) {
+	public void addAttackTask(Chara chara, java.awt.Point attackPoint, java.awt.Point damagePoint) {
 		for (Chara damageChara : characters.characterArray) {
 			if (damageChara.y == damagePoint.y && damageChara.x == damagePoint.x) {
 				taskManager.addAttackTask(chara, damageChara, attackPoint);
@@ -522,20 +501,20 @@ public class Field implements KeyListner, Renderer {
 		}
 	}
 
-	public void addCharaHeal(Chara chara, int y, int x) {
-		for (Chara healChara : characters.characterArray) {
-			if (healChara.y == y && healChara.x == x) {
-				taskManager.addHealTask(chara, healChara);
+	public void addHealTask(Chara healChara, int healedY, int healedX) {
+		for (Chara healedChara : characters.characterArray) {
+			if (healedChara.y == healedY && healedChara.x == healedX) {
+				taskManager.addHealTask(healChara, healedChara);
 				break;
 			}
 		}
 	}
 
-	public void setCharaMove(Chara chara, Node moveNode) {
+	public void addMoveTask(Chara chara, Node moveNode) {
 		taskManager.addMoveTask(chara, moveNode);
 	}
 
-	public void setCharaStand(Chara chara, boolean stand) {
+	public void addStandCharaTask(Chara chara, boolean stand) {
 		taskManager.addStandCharaTask(chara, stand);
 	}
 
@@ -546,12 +525,15 @@ public class Field implements KeyListner, Renderer {
 	public void setSubInfoWindowForAttackInfo(ExpectBattleInfo expectBattleInfo) {
 		subInfoWindow.setSubInfoWindowForAttackInfo(expectBattleInfo);
 	}
+
 	public SoundManager getSoundManager() {
 		return soundManager;
 	}
+
 	public void occurEffect(int px, int py, String effectName) {
 		effectManager.addEffect(px, py, effectName);
 	}
+
 	public void saveData() {
 		for (Chara chara : characters.characterArray) {
 			if (chara.getCamp() != Chara.CAMP_ALLIES) {

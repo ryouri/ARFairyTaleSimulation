@@ -82,8 +82,8 @@ public class TaskManager {
 		addOneTaskAndGenerateArray(levelUpTask);
 	}
 
-	public void addHealTask(Chara chara, Chara healChara) {
-		HealTask healTask = new HealTask(this, chara, healChara);
+	public void addHealTask(Chara healChara, Chara healedChara) {
+		HealTask healTask = new HealTask(this, healChara, healedChara);
 		addOneTaskAndGenerateArray(healTask);
 	}
 

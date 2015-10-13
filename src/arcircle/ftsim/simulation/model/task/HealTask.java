@@ -12,19 +12,19 @@ import arcircle.ftsim.simulation.sound.SoundManager;
 public class HealTask extends Task {
 	private int healCount;
 
-	private Chara chara;
+	private Chara healChara;
 	private Chara healedChara;
 
 	public static final int HEAL_COUNT_MAX = 50;
 
-	public HealTask(TaskManager taskManager, Chara chara, Chara healChara) {
+	public HealTask(TaskManager taskManager, Chara nealChara, Chara healedChara) {
 		super(taskManager);
 
 		healCount = 0;
-		charaAttackPrepareDir(chara, healChara);
+		charaAttackPrepareDir(nealChara, healedChara);
 
-		this.chara = chara;
-		this.healedChara = healChara;
+		this.healChara = nealChara;
+		this.healedChara = healedChara;
 
 		taskManager.field.getSoundManager().playSound(SoundManager.SOUND_HEAL);
 	}
@@ -43,33 +43,33 @@ public class HealTask extends Task {
 		}
 
 		Animation anime = null;
-		if (chara.direction == Chara.UP) {
-			anime = taskManager.characters.upAttackAnimeMap.get(chara.getFolderName());
-		} else if (chara.direction == Chara.RIGHT) {
-			anime = taskManager.characters.rightAttackAnimeMap.get(chara.getFolderName());
-		} else if (chara.direction == Chara.LEFT) {
-			anime = taskManager.characters.leftAttackAnimeMap.get(chara.getFolderName());
+		if (healChara.direction == Chara.UP) {
+			anime = taskManager.characters.upAttackAnimeMap.get(healChara.getFolderName());
+		} else if (healChara.direction == Chara.RIGHT) {
+			anime = taskManager.characters.rightAttackAnimeMap.get(healChara.getFolderName());
+		} else if (healChara.direction == Chara.LEFT) {
+			anime = taskManager.characters.leftAttackAnimeMap.get(healChara.getFolderName());
 		} else {//(chara.direction == Chara.DOWN) {
-			anime = taskManager.characters.downAttackAnimeMap.get(chara.getFolderName());
+			anime = taskManager.characters.downAttackAnimeMap.get(healChara.getFolderName());
 		}
 
 		int changeX = 0;
 		int changeY = 0;
 
-		if (chara.direction == Chara.UP) {
+		if (healChara.direction == Chara.UP) {
 			changeY = -change;
-		} else if (chara.direction == Chara.RIGHT) {
+		} else if (healChara.direction == Chara.RIGHT) {
 			changeX = change;
-			if (chara.getAttackRightLeftDirection() == Chara.UP) {
+			if (healChara.getAttackRightLeftDirection() == Chara.UP) {
 				changeY = -change;
-			} else if (chara.getAttackRightLeftDirection() == Chara.DOWN) {
+			} else if (healChara.getAttackRightLeftDirection() == Chara.DOWN) {
 				changeY = change;
 			}
-		} else if (chara.direction == Chara.LEFT) {
+		} else if (healChara.direction == Chara.LEFT) {
 			changeX = -change;
-			if (chara.getAttackRightLeftDirection() == Chara.UP) {
+			if (healChara.getAttackRightLeftDirection() == Chara.UP) {
 				changeY = -change;
-			} else if (chara.getAttackRightLeftDirection() == Chara.DOWN) {
+			} else if (healChara.getAttackRightLeftDirection() == Chara.DOWN) {
 				changeY = change;
 			}
 		} else {//(chara.direction == Chara.DOWN) {
@@ -77,8 +77,8 @@ public class HealTask extends Task {
 		}
 
 		anime.draw(
-				chara.pX + offsetX + changeX,
-				chara.pY + offsetY + changeY);
+				healChara.pX + offsetX + changeX,
+				healChara.pY + offsetY + changeY);
 	}
 
 	@Override
@@ -89,15 +89,15 @@ public class HealTask extends Task {
 
 		if (healCount > HEAL_COUNT_MAX) {
 			int healPoint = 0;
-			for (Item item : chara.status.getItemList()) {
+			for (Item item : healChara.status.getItemList()) {
 				if (item instanceof SupportItem) {
 					healPoint = ((SupportItem)item).power;
 				}
 			}
 
-			healPoint += chara.status.magicPower;
+			healPoint += healChara.status.magicPower;
 			healedChara.status.setHp(healedChara.status.getHp() + healPoint);
-			chara.setStand(true);
+			healChara.setStand(true);
 			//生きている時のみ状態を戻す
 			healedChara.resetState();
 			taskManager.field.getCursor().isVisible = true;
