@@ -17,6 +17,7 @@ import arcircle.ftsim.simulation.algorithm.range.CalculateMoveAttackRange;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
 import arcircle.ftsim.simulation.chara.battle.SupportInfo;
+import arcircle.ftsim.simulation.field.LoadField;
 import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Cursor;
 import arcircle.ftsim.simulation.model.Field;
@@ -66,7 +67,7 @@ public class SupportCommand extends Command implements KeyListner, Renderer {
 		cursorFirstX = field.getCursor().x;
 		cursorFirstY = field.getCursor().y;
 
-		this.supportRange = new boolean[field.row][field.col];
+		this.supportRange = new boolean[field.getFieldRow()][field.getFieldCol()];
 
 		int rangedType = CalculateMoveAttackRange.judgeAttackRangedType(chara.getItemList());
 		CalculateMoveAttackRange.calculateAttackRange(chara.x, chara.y, supportRange, rangedType, field);;
@@ -93,8 +94,8 @@ public class SupportCommand extends Command implements KeyListner, Renderer {
 			}
 		}
 
-		for (int y = 0; y < field.row; y++) {
-			for (int x = 0; x < field.col; x++) {
+		for (int y = 0; y < field.getFieldRow(); y++) {
+			for (int x = 0; x < field.getFieldCol(); x++) {
 				if (charaPut[y][x] == true && supportRange[y][x] == true) {
 					supportJudge[y][x] = true;
 				}
@@ -127,8 +128,8 @@ public class SupportCommand extends Command implements KeyListner, Renderer {
 		//カーソルをキャラの最初の位置まで戻す
 		field.getCursor().x = cursorFirstX;
 		field.getCursor().y = cursorFirstY;
-		field.getCursor().pX = cursorFirstX * Field.MAP_CHIP_SIZE;
-		field.getCursor().pY = cursorFirstY * Field.MAP_CHIP_SIZE;
+		field.getCursor().pX = cursorFirstX * LoadField.MAP_CHIP_SIZE;
+		field.getCursor().pY = cursorFirstY * LoadField.MAP_CHIP_SIZE;
 	}
 
 	@Override

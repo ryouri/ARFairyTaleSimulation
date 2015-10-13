@@ -2,11 +2,9 @@ package arcircle.ftsim.simulation.model;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,7 +14,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.StateBasedGame;
 
 import arcircle.ftsim.keyinput.KeyInput;
@@ -31,8 +28,8 @@ import arcircle.ftsim.simulation.command.CharaCommandWindow;
 import arcircle.ftsim.simulation.command.OptionCommandWindow;
 import arcircle.ftsim.simulation.event.Event;
 import arcircle.ftsim.simulation.event.EventManager;
+import arcircle.ftsim.simulation.field.LoadField;
 import arcircle.ftsim.simulation.field.Terrain;
-import arcircle.ftsim.simulation.field.TerrainManager;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.simulation.model.effect.EffectManager;
 import arcircle.ftsim.simulation.model.task.TaskManager;
@@ -45,32 +42,6 @@ public class Field implements KeyListner, Renderer {
 	public SimGameModel getSgModel() {
 		return sgModel;
 	}
-
-	private int map[][];
-	private Terrain terrainMap[][];
-
-	/**
-	 * 移動コストが保存される
-	 * -1は移動不可能
-	 */
-	private int moveCostMap[][];
-
-	public static final int MAP_CHIP_ROW = 32;
-	public static final int MAP_CHIP_COL = 20;
-	public static final int MAP_CHIP_SIZE = 32;
-
-	public static final int MAP_VIEW_WIDTH = 800;
-	public static final int MAP_VIEW_HEIGHT = 640;
-	public static final int MAP_WIDTH_MASS = 25;
-	public static final int MAP_HEIGHT_MASS = 20;
-
-	SpriteSheet sSheet;
-
-	public int row;
-	public int col;
-
-	public int mapWidth;
-	public int mapHeight;
 
 	// カーソル関連のデータ
 	private Cursor cursor;
@@ -87,8 +58,6 @@ public class Field implements KeyListner, Renderer {
 	public static final int TURN_FRIEND = 0;
 	public static final int TURN_ENEMY = 1;
 
-	public TerrainManager terrainManager;
-
 	private String partName;
 
 	public EventManager eventManager;
@@ -100,6 +69,9 @@ public class Field implements KeyListner, Renderer {
 	private EffectManager effectManager;
 
 	private SubInfoWindow subInfoWindow;
+
+	private LoadField loadField;
+
 	public SubInfoWindow getSubInfoWindow() {
 		return subInfoWindow;
 	}
@@ -139,14 +111,14 @@ public class Field implements KeyListner, Renderer {
 		this.sgModel = sgModel;
 		this.itemList = itemList;
 		this.characters = new Characters();
-		this.sSheet = null;;
 		this.setNowTurn(TURN_FRIEND);
 	}
 
 	//TODO:マジックナンバー多発地帯！
 	public void init(String subStoryFolderPath) {
-		loadMapAndMapChip(subStoryFolderPath + "map.dat", subStoryFolderPath
+		loadField = new LoadField(subStoryFolderPath + "map.dat", subStoryFolderPath
 				+ "mapchip.txt");
+
 		initCursor();
 		initCharacters(subStoryFolderPath);
 		loadMapName(subStoryFolderPath + "partName.txt");
@@ -185,12 +157,12 @@ public class Field implements KeyListner, Renderer {
 	}
 
 	private void initCharacters(String subStoryFolderPath) {
-		characters.init(sgModel, this, row, col, itemList);
+		characters.init(sgModel, this, loadField.getRow(), loadField.getCol(), itemList);
 		characters.addCharacters(subStoryFolderPath + "putCharacter.txt");
 	}
 
 	private void initCursor() {
-		setCursor(new Cursor(this));
+		setCursor(new Cursor(this, loadField));
 		cursorImage = new Image[2];
 		try {
 			cursorImage[0] = new Image("image/cursor/simGameStateCorsor1.png");
@@ -224,27 +196,27 @@ public class Field implements KeyListner, Renderer {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
 		// X方向のオフセットを計算
-		offsetX = MAP_VIEW_WIDTH / 2 - getCursor().pX;
+		offsetX = LoadField.MAP_VIEW_WIDTH / 2 - getCursor().pX;
 		// マップの端ではスクロールしないようにする
 		offsetX = Math.min(offsetX, 0);
-		offsetX = Math.max(offsetX, MAP_VIEW_WIDTH - mapWidth);
+		offsetX = Math.max(offsetX, LoadField.MAP_VIEW_WIDTH - loadField.getMapWidth());
 
 		// Y方向のオフセットを計算
-		offsetY = MAP_VIEW_HEIGHT / 2 - getCursor().pY;
+		offsetY = LoadField.MAP_VIEW_HEIGHT / 2 - getCursor().pY;
 		// マップの端ではスクロールしないようにする
 		offsetY = Math.min(offsetY, 0);
-		offsetY = Math.max(offsetY, MAP_VIEW_HEIGHT - mapHeight);
+		offsetY = Math.max(offsetY, LoadField.MAP_VIEW_HEIGHT - loadField.getMapHeight());
 
 		// オフセットを元に描画範囲を求める
 		firstTileX = pixelsToTiles(-offsetX);
-		lastTileX = firstTileX + pixelsToTiles(MAP_VIEW_WIDTH) + 2;
+		lastTileX = firstTileX + pixelsToTiles(LoadField.MAP_VIEW_WIDTH) + 2;
 		// 描画範囲がマップの大きさより大きくならないように調整
-		lastTileX = Math.min(lastTileX, col);
+		lastTileX = Math.min(lastTileX, loadField.getCol());
 
 		firstTileY = pixelsToTiles(-offsetY);
-		lastTileY = firstTileY + pixelsToTiles(MAP_VIEW_HEIGHT) + 1;
+		lastTileY = firstTileY + pixelsToTiles(LoadField.MAP_VIEW_HEIGHT) + 1;
 		// 描画範囲がマップの大きさより大きくならないように調整
-		lastTileY = Math.min(lastTileY, row);
+		lastTileY = Math.min(lastTileY, loadField.getRow());
 
 		// マップを描く
 		renderMap(g, offsetX, offsetY, firstTileX, lastTileX, firstTileY,
@@ -274,12 +246,12 @@ public class Field implements KeyListner, Renderer {
 		for (int y = firstTileY; y < lastTileY; y++) {
 			for (int x = firstTileX; x < lastTileX; x++) {
 				// 一番左上のタイルを描画
-				g.drawImage(sSheet.getSubImage(0, 0), tilesToPixels(x)
+				g.drawImage(loadField.getsSheet().getSubImage(0, 0), tilesToPixels(x)
 						+ offsetX, tilesToPixels(y) + offsetY);
-				int chipX = map[y][x] % MAP_CHIP_COL;
-				int chipY = map[y][x] / MAP_CHIP_COL;
+				int chipX = loadField.getMap()[y][x] % loadField.MAP_CHIP_COL;
+				int chipY = loadField.getMap()[y][x] / loadField.MAP_CHIP_COL;
 				// 各マスのタイルを描画
-				g.drawImage(sSheet.getSubImage(chipX, chipY), tilesToPixels(x)
+				g.drawImage(loadField.getsSheet().getSubImage(chipX, chipY), tilesToPixels(x)
 						+ offsetX, tilesToPixels(y) + offsetY);
 			}
 		}
@@ -319,7 +291,7 @@ public class Field implements KeyListner, Renderer {
 	 * @return マス単位
 	 */
 	public static int pixelsToTiles(double pixels) {
-		return (int) Math.floor(pixels / MAP_CHIP_SIZE);
+		return (int) Math.floor(pixels / LoadField.MAP_CHIP_SIZE);
 	}
 
 	/**
@@ -330,7 +302,7 @@ public class Field implements KeyListner, Renderer {
 	 * @return ピクセル単位
 	 */
 	public static int tilesToPixels(int tiles) {
-		return tiles * MAP_CHIP_SIZE;
+		return tiles * LoadField.MAP_CHIP_SIZE;
 	}
 
 	@Override
@@ -400,10 +372,10 @@ public class Field implements KeyListner, Renderer {
 	public Image getSelectedMapChip() {
 		int y = cursor.y;
 		int x = cursor.x;
-		int chipX = map[y][x] % MAP_CHIP_COL;
-		int chipY = map[y][x] / MAP_CHIP_COL;
+		int chipX = loadField.getMap()[y][x] % LoadField.MAP_CHIP_COL;
+		int chipY = loadField.getMap()[y][x] / LoadField.MAP_CHIP_COL;
 		// 各マスのタイルを描画
-		return sSheet.getSubImage(chipX, chipY);
+		return loadField.getsSheet().getSubImage(chipX, chipY);
 	}
 
 	/**
@@ -414,7 +386,7 @@ public class Field implements KeyListner, Renderer {
 		int y = cursor.y;
 		int x = cursor.x;
 		// 各マスのタイルを描画
-		return terrainMap[y][x];
+		return loadField.getTerrainMap()[y][x];
 	}
 
 	/**
@@ -442,95 +414,8 @@ public class Field implements KeyListner, Renderer {
 		sgModel.addRendererArray(oCWindow);
 	}
 
-	/**
-	 *
-	 * @param mapPath
-	 * @param mapchipPointerPath
-	 */
-	public void loadMapAndMapChip(String mapPath, String mapchipPointerPath) {
-		//地形情報の読み込み
-		terrainManager = new TerrainManager();
-
-		// マップチップ読み込み
-		String mapChipPath = null;
-		try {
-			File file = new File(mapchipPointerPath);
-			BufferedReader br = new BufferedReader(new FileReader(file));
-
-			mapChipPath = br.readLine();
-
-			br.close();
-		} catch (FileNotFoundException e) {
-			System.out.println(e);
-		} catch (IOException e) {
-			System.out.println(e);
-		}
-		loadMapChip(mapChipPath);
-
-		// マップの読み込み
-		try {
-			FileInputStream in = new FileInputStream(mapPath);
-			// 行数・列数を読み込む
-			row = in.read();
-			mapHeight = MAP_CHIP_SIZE * row;
-			col = in.read();
-			mapWidth = MAP_CHIP_SIZE * col;
-			// マップを読み込む
-			map = new int[row][col];
-			// 地形マップの初期化
-			terrainMap = new Terrain[row][col];
-
-			moveCostMap = new int[row][col];
-			for (int y = 0; y < row; y++) {
-				for (int x = 0; x < col; x++) {
-					//こっちが新しいMapEditor用
-					byte[] b = new byte[4];
-					in.read(b, 0, 4);
-					int mapChipNo = fromBytes(b);
-					map[y][x] = mapChipNo;
-
-//					int mapChipNo = in.read();
-//					map[y][x] = mapChipNo;
-
-					//TODO:moveCostの読み込み，現在は1で初期化
-					moveCostMap[y][x] = 1;
-
-					int chipX = mapChipNo % MAP_CHIP_COL;
-					int chipY = mapChipNo / MAP_CHIP_COL;
-
-					terrainMap[y][x] = terrainManager.getTerrain(chipX, chipY);
-				}
-			}
-			in.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static int fromBytes(byte[] b) {
-		return ByteBuffer.wrap(b).getInt();
-	}
-
-	/**
-	 * マップチップイメージをロード
-	 *
-	 * @param mapChipPath
-	 *            mapChipのパス
-	 */
-	private void loadMapChip(String mapChipPath) {
-		try {
-			sSheet = new SpriteSheet(new Image(mapChipPath), MAP_CHIP_SIZE,
-					MAP_CHIP_SIZE);
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public Terrain getYXTerrain(int y, int x) {
-		int chipX = map[y][x] % MAP_CHIP_COL;
-		int chipY = map[y][x] / MAP_CHIP_COL;
-
-		return terrainManager.getTerrain(chipX, chipY);
+		return loadField.getYXTerrain(y, x);
 	}
 
 	/**
@@ -538,19 +423,7 @@ public class Field implements KeyListner, Renderer {
 	 * @return そのマップのコストが記録されたマップ
 	 */
 	public int[][] createMoveCostArray(int charaX, int charaY) {
-		int [][] moveCostArray = new int[moveCostMap.length][moveCostMap[0].length];
-
-		//Mapのコストを格納する
-		//TODO: 地形のコストを格納するように変更が必要
-		for (int row = 0; row < moveCostArray.length; row++) {
-			for (int col = 0 ; col < moveCostArray[0].length; col++) {
-				moveCostArray[row][col] = moveCostMap[row][col];
-
-				if (getYXTerrain(row, col).terrainName.equals("河") ) {
-					moveCostArray[row][col] += 10;
-				}
-			}
-		}
+		int [][] moveCostArray = loadField.createMoveCostArray(charaX, charaY);
 
 		Chara moveChara = null;
 		//移動するキャラを取得する
@@ -562,7 +435,6 @@ public class Field implements KeyListner, Renderer {
 		}
 
 		if (moveChara == null) {
-			//エラー！！！
 			System.exit(1);
 		}
 
@@ -687,5 +559,13 @@ public class Field implements KeyListner, Renderer {
 			}
 			FTSimulationGame.save.putCharaStatus(chara.getFolderName(), chara.status);
 		}
+	}
+
+	public int getFieldRow() {
+		return loadField.getRow();
+	}
+
+	public int getFieldCol() {
+		return loadField.getCol();
 	}
 }

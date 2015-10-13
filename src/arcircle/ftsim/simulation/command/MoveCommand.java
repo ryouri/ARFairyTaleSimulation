@@ -13,6 +13,7 @@ import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.simulation.algorithm.range.CalculateMoveAttackRange;
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.field.LoadField;
 import arcircle.ftsim.simulation.model.Cursor;
 import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.simulation.sound.SoundManager;
@@ -86,8 +87,8 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		//カーソルをキャラの最初の位置まで戻す
 		field.getCursor().x = cursorFirstX;
 		field.getCursor().y = cursorFirstY;
-		field.getCursor().pX = cursorFirstX * Field.MAP_CHIP_SIZE;
-		field.getCursor().pY = cursorFirstY * Field.MAP_CHIP_SIZE;
+		field.getCursor().pX = cursorFirstX * LoadField.MAP_CHIP_SIZE;
+		field.getCursor().pY = cursorFirstY * LoadField.MAP_CHIP_SIZE;
 
 		//キャラを最初の位置まで戻す
 		chara.isMoving = false;
@@ -149,8 +150,8 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 			chara.pX = field.getCursor().pX;
 			chara.pY = field.getCursor().pY;
 		} else {
-			chara.pX = chara.x * field.MAP_CHIP_SIZE;
-			chara.pY = chara.y * field.MAP_CHIP_SIZE;
+			chara.pX = chara.x * LoadField.MAP_CHIP_SIZE;
+			chara.pY = chara.y * LoadField.MAP_CHIP_SIZE;
 		}
 
 		//決定キーが押されたとき

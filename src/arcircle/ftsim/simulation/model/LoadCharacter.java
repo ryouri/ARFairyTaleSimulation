@@ -12,6 +12,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.field.LoadField;
 
 public class LoadCharacter {
 	private Characters characters;
@@ -55,18 +56,18 @@ public class LoadCharacter {
 			characters.walkSheetMap.put(charaFolderName,
 					new SpriteSheet(
 							new Image(charaFolderPath + walkFile),
-							Field.MAP_CHIP_SIZE,
-							Field.MAP_CHIP_SIZE));
+							LoadField.MAP_CHIP_SIZE,
+							LoadField.MAP_CHIP_SIZE));
 			characters.readySheetMap.put(charaFolderName,
 					new SpriteSheet(
 							new Image(charaFolderPath + readyFile),
-							Field.MAP_CHIP_SIZE,
-							Field.MAP_CHIP_SIZE));
+							LoadField.MAP_CHIP_SIZE,
+							LoadField.MAP_CHIP_SIZE));
 			characters.attackSheetMap.put(charaFolderName,
 					new SpriteSheet(
 							new Image(charaFolderPath + attackFile),
-							Field.MAP_CHIP_SIZE,
-							Field.MAP_CHIP_SIZE));
+							LoadField.MAP_CHIP_SIZE,
+							LoadField.MAP_CHIP_SIZE));
 
 			//キャラの顔画像を読み込む
 			characters.characterFaceStandardImageMap.put(charaFolderName,

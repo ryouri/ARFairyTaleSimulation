@@ -43,8 +43,8 @@ public class SimpleAI extends AI {
 				chara);
 		boolean[][] moveRange = cmRange.calculateRange();
 
-		// boolean[][] attackRange = new boolean[field.row][field.col];
-		// boolean[][] attackJudge = new boolean[field.row][field.col];
+		// boolean[][] attackRange = new boolean[field.getFieldRow()][field.getFieldCol()];
+		// boolean[][] attackJudge = new boolean[field.getFieldRow()][field.getFieldCol()];
 		//
 		// CalculateMoveAttackRange.calculateAttackRange(chara.x, chara.y,
 		// attackRange, weaponType, field);;

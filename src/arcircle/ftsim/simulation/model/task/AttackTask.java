@@ -10,8 +10,8 @@ import org.newdawn.slick.Graphics;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
 import arcircle.ftsim.simulation.chara.battle.SupportInfo;
+import arcircle.ftsim.simulation.field.LoadField;
 import arcircle.ftsim.simulation.model.AttackInfo;
-import arcircle.ftsim.simulation.model.Field;
 import arcircle.ftsim.simulation.model.effect.EffectConst;
 import arcircle.ftsim.simulation.sound.SoundManager;
 
@@ -131,8 +131,8 @@ public class AttackTask extends Task {
 				damageChara.pX += (sign * 2f) * Integer.signum(changeY);
 				damageChara.pY += (sign * 2f) * Integer.signum(changeX);
 			} else if (chara.getAttackTime() >= 36) {
-				damageChara.pX = damageChara.x * Field.MAP_CHIP_SIZE;
-				damageChara.pY = damageChara.y * Field.MAP_CHIP_SIZE;
+				damageChara.pX = damageChara.x * LoadField.MAP_CHIP_SIZE;
+				damageChara.pY = damageChara.y * LoadField.MAP_CHIP_SIZE;
 			}
 		}
 	}

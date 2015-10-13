@@ -16,7 +16,7 @@ public class Algorithm {
 			boolean[][] moveRange, Field field, Characters characters) {
 		ArrayList<AttackCharaData> attackCharaArray = new ArrayList<AttackCharaData>();
 
-		Chara[][] charaPut = new Chara[field.row][field.col];
+		Chara[][] charaPut = new Chara[field.getFieldRow()][field.getFieldCol()];
 
 		for (Chara putChara : characters.characterArray) {
 			if (chara.getCamp() == Chara.CAMP_FRIEND) {
@@ -31,8 +31,8 @@ public class Algorithm {
 			}
 		}
 
-		for (int y = 0; y < field.row; y++) {
-			for (int x = 0; x < field.col; x++) {
+		for (int y = 0; y < field.getFieldRow(); y++) {
+			for (int x = 0; x < field.getFieldCol(); x++) {
 				if (!moveRange[y][x]) {
 					continue;
 				}
@@ -54,8 +54,8 @@ public class Algorithm {
 		if (weaponType == Weapon.RANGE_NEAR || weaponType == Weapon.RANGE_NEAR_FAR) {
 			for (int[] range : nearAttackRange) {
 				if (charaX + range[0] < 0 || charaY + range[1] < 0
-						|| charaX + range[0] >= field.col
-						|| charaY + range[1] >= field.row) {
+						|| charaX + range[0] >= field.getFieldCol()
+						|| charaY + range[1] >= field.getFieldRow()) {
 					continue;
 				}
 				if (charaPut[charaY + range[1]][charaX + range[0]] != null) {
@@ -70,8 +70,8 @@ public class Algorithm {
 		if (weaponType == Weapon.RANGE_FAR || weaponType == Weapon.RANGE_NEAR_FAR) {
 			for (int[] range : farAttackRange) {
 				if (charaX + range[0] < 0 || charaY + range[1] < 0
-						|| charaX + range[0] >= field.col
-						|| charaY + range[1] >= field.row) {
+						|| charaX + range[0] >= field.getFieldCol()
+						|| charaY + range[1] >= field.getFieldRow()) {
 					continue;
 				}
 				if (charaPut[charaY + range[1]][charaX + range[0]] != null) {

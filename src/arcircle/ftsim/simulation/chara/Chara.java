@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import org.newdawn.slick.Color;
 
 import arcircle.ftsim.simulation.chara.ai.AI;
+import arcircle.ftsim.simulation.field.LoadField;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.simulation.model.Characters;
-import arcircle.ftsim.simulation.model.Field;
 
 /**
  * 現在，耐久値を設定できるようになっていない
@@ -170,33 +170,33 @@ public class Chara {
 
 		if (direction == UP) {
 			pY -= speed;
-			if (y * Field.MAP_CHIP_SIZE - pY >= Field.MAP_CHIP_SIZE) {
+			if (y * LoadField.MAP_CHIP_SIZE - pY >= LoadField.MAP_CHIP_SIZE) {
 				y--;
-				pY = y * Field.MAP_CHIP_SIZE;
+				pY = y * LoadField.MAP_CHIP_SIZE;
 				isMoving = false;
 			}
 		}
 		if (direction == RIGHT) {
 			pX += speed;
-			if (pX - x * Field.MAP_CHIP_SIZE >= Field.MAP_CHIP_SIZE) {
+			if (pX - x * LoadField.MAP_CHIP_SIZE >= LoadField.MAP_CHIP_SIZE) {
 				x++;
-				pX = x * Field.MAP_CHIP_SIZE;
+				pX = x * LoadField.MAP_CHIP_SIZE;
 				isMoving = false;
 			}
 		}
 		if (direction == DOWN) {
 			pY += speed;
-			if (pY - y * Field.MAP_CHIP_SIZE >= Field.MAP_CHIP_SIZE) {
+			if (pY - y * LoadField.MAP_CHIP_SIZE >= LoadField.MAP_CHIP_SIZE) {
 				y++;
-				pY = y * Field.MAP_CHIP_SIZE;
+				pY = y * LoadField.MAP_CHIP_SIZE;
 				isMoving = false;
 			}
 		}
 		if (direction == LEFT) {
 			pX -= speed;
-			if (x * Field.MAP_CHIP_SIZE - pX >= Field.MAP_CHIP_SIZE) {
+			if (x * LoadField.MAP_CHIP_SIZE - pX >= LoadField.MAP_CHIP_SIZE) {
 				x--;
-				pX = x * Field.MAP_CHIP_SIZE;
+				pX = x * LoadField.MAP_CHIP_SIZE;
 				isMoving = false;
 			}
 		}

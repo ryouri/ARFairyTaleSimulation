@@ -8,6 +8,7 @@ import org.newdawn.slick.UnicodeFont;
 
 import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.simulation.chara.Chara;
+import arcircle.ftsim.simulation.field.LoadField;
 import arcircle.ftsim.simulation.model.Characters;
 
 public class TurnEndTask extends Task {
@@ -41,8 +42,8 @@ public class TurnEndTask extends Task {
 		UnicodeFont font = FTSimulationGame.font;
 		g.setFont(font);
 		g.drawString(TURN_END,
-				(taskManager.field.MAP_VIEW_WIDTH / 2) - font.getWidth(TURN_END),
-				(taskManager.field.MAP_VIEW_HEIGHT / 2) - font.getHeight(TURN_END));
+				(LoadField.MAP_VIEW_WIDTH / 2) - font.getWidth(TURN_END),
+				(LoadField.MAP_VIEW_HEIGHT / 2) - font.getHeight(TURN_END));
 	}
 
 	@Override

@@ -86,10 +86,10 @@ abstract class CommandWindow implements KeyListner, Renderer {
 		if (field.getCursor().y < 10) {
 			cursorViewPosY = 1;
 		}
-		if (field.getCursor().x > field.col - 10) {
+		if (field.getCursor().x > field.getFieldCol() - 10) {
 			cursorViewPosX = -1;
 		}
-		if (field.getCursor().y > field.row - 10) {
+		if (field.getCursor().y > field.getFieldRow() - 10) {
 			cursorViewPosY = -1;
 		}
 		int cursorRenderX = field.getCursor().pX + field.offsetX;

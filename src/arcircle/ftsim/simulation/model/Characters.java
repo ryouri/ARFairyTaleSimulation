@@ -19,6 +19,7 @@ import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.Status;
 import arcircle.ftsim.simulation.chara.ai.SameTimeAttackAI;
+import arcircle.ftsim.simulation.field.LoadField;
 import arcircle.ftsim.simulation.item.Item;
 import arcircle.ftsim.simulation.talk.BattleTalkModel;
 import arcircle.ftsim.state.simgame.SimGameModel;
@@ -164,8 +165,8 @@ public class Characters {
 		chara.setCamp(Integer.valueOf(charaPuts[2]));
 		chara.x = Integer.valueOf(charaPuts[3]);
 		chara.y = Integer.valueOf(charaPuts[4]);
-		chara.pX = chara.x * Field.MAP_CHIP_SIZE;
-		chara.pY = chara.y * Field.MAP_CHIP_SIZE;
+		chara.pX = chara.x * LoadField.MAP_CHIP_SIZE;
+		chara.pY = chara.y * LoadField.MAP_CHIP_SIZE;
 
 		setCharaData(folderName, chara);
 

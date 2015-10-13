@@ -30,7 +30,7 @@ public class CalculateMoveAttackRange {
 
 		moveCost = field.createMoveCostArray(startX, startY);
 
-		moveRange =   new boolean[field.row][field.col];
+		moveRange =   new boolean[field.getFieldRow()][field.getFieldCol()];
 		searchedNodeArray = new ArrayList<Node>();
 		searchingNodeArray = new ArrayList<Node>();
 	}
@@ -124,10 +124,10 @@ public class CalculateMoveAttackRange {
 
 	private void addSearchingNodeArray(int toX, int toY, Node searchNode, int direction) {
 		//マップ外の座標なら移動できない
-		if (!(0 <= toX && toX < field.col)) {
+		if (!(0 <= toX && toX < field.getFieldCol())) {
 			return;
 		}
-		if (!(0 <= toY && toY < field.row)) {
+		if (!(0 <= toY && toY < field.getFieldRow())) {
 			return;
 		}
 
@@ -193,12 +193,12 @@ public class CalculateMoveAttackRange {
 	}
 
 	public static boolean[][] createJudgeAttackArray(Field field, Chara chara, boolean[][] moveRange) {
-		boolean[][] attackRange = new boolean[field.row][field.col];
+		boolean[][] attackRange = new boolean[field.getFieldRow()][field.getFieldCol()];
 
 		int weaponType = CalculateMoveAttackRange.judgeAttackRangedType(chara.getItemList());
 
-		for (int y = 0; y < field.row; y++) {
-			for (int x = 0; x < field.col; x++) {
+		for (int y = 0; y < field.getFieldRow(); y++) {
+			for (int x = 0; x < field.getFieldCol(); x++) {
 				if (!moveRange[y][x]) {
 					continue;
 				}
@@ -249,8 +249,8 @@ public class CalculateMoveAttackRange {
 		if (rangedType == RangedItem.RANGE_NEAR || rangedType == RangedItem.RANGE_NEAR_FAR) {
 			for (int[] range : nearAttackRange) {
 				if (charaX + range[0] < 0 || charaY + range[1] < 0
-						|| charaX + range[0] >= field.col
-						|| charaY + range[1] >= field.row) {
+						|| charaX + range[0] >= field.getFieldCol()
+						|| charaY + range[1] >= field.getFieldRow()) {
 					continue;
 				}
 				attackRange[charaY + range[1]][charaX + range[0]] = true;
@@ -259,8 +259,8 @@ public class CalculateMoveAttackRange {
 		if (rangedType == RangedItem.RANGE_FAR || rangedType == RangedItem.RANGE_NEAR_FAR) {
 			for (int[] range : farAttackRange) {
 				if (charaX + range[0] < 0 || charaY + range[1] < 0
-						|| charaX + range[0] >= field.col
-						|| charaY + range[1] >= field.row) {
+						|| charaX + range[0] >= field.getFieldCol()
+						|| charaY + range[1] >= field.getFieldRow()) {
 					continue;
 				}
 				attackRange[charaY + range[1]][charaX + range[0]] = true;
@@ -269,8 +269,8 @@ public class CalculateMoveAttackRange {
 	}
 
 	public static boolean[][] calculateJudgeAttack(Field field, boolean[][] attackRange, Chara chara) {
-		boolean[][] attackJudge = new boolean[field.row][field.col];
-		boolean[][] charaPut = new boolean[field.row][field.col];
+		boolean[][] attackJudge = new boolean[field.getFieldRow()][field.getFieldCol()];
+		boolean[][] charaPut = new boolean[field.getFieldRow()][field.getFieldCol()];
 		Characters characters = field.getCharacters();
 
 		for (Chara putChara : characters.characterArray) {
@@ -286,8 +286,8 @@ public class CalculateMoveAttackRange {
 			}
 		}
 
-		for (int y = 0; y < field.row; y++) {
-			for (int x = 0; x < field.col; x++) {
+		for (int y = 0; y < field.getFieldRow(); y++) {
+			for (int x = 0; x < field.getFieldCol(); x++) {
 				if (charaPut[y][x] == true && attackRange[y][x] == true) {
 					attackJudge[y][x] = true;
 				}

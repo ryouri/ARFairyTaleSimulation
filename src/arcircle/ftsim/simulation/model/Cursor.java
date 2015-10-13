@@ -1,5 +1,6 @@
 package arcircle.ftsim.simulation.model;
 
+import arcircle.ftsim.simulation.field.LoadField;
 import arcircle.ftsim.simulation.sound.SoundManager;
 
 public class Cursor {
@@ -19,6 +20,7 @@ public class Cursor {
 	public static final int LEFT = 3;
 
 	private Field field;
+	private LoadField loadField;
 
 	private int direction;
 	public int getDirection() {
@@ -34,8 +36,9 @@ public class Cursor {
 	private int speed;
 	public static final int SPEED = 8;
 
-	public Cursor(Field field) {
+	public Cursor(Field field, LoadField loadField) {
 		this.field = field;
+		this.loadField = loadField;
 		speed = SPEED;
 		directionPressedTime = DIRECTION_PRESSED_DURATION;
 		stopTime = 0;
@@ -43,8 +46,8 @@ public class Cursor {
 	}
 
 	public void stop() {
-		pX = x * Field.MAP_CHIP_SIZE;
-		pY = y * Field.MAP_CHIP_SIZE;
+		pX = x * LoadField.MAP_CHIP_SIZE;
+		pY = y * LoadField.MAP_CHIP_SIZE;
 		isMoving = false;
 		directionPressedTime = DIRECTION_PRESSED_DURATION;
 		stopTime = 0;
@@ -72,13 +75,13 @@ public class Cursor {
 			}
 		}
 		if (direction == RIGHT) {
-			if (x < field.col - 1) {
+			if (x < loadField.getCol() - 1) {
 				isMoving = true;
 				this.setDirection(RIGHT);
 			}
 		}
 		if (direction == DOWN) {
-			if (y < field.row - 1) {
+			if (y < loadField.getRow() - 1) {
 				isMoving = true;
 				this.setDirection(DOWN);
 			}
@@ -117,13 +120,13 @@ public class Cursor {
 			}
 		}
 		if (direction == RIGHT && directionPressedTime < 0) {
-			if (x < field.col - 1) {
+			if (x < loadField.getCol() - 1) {
 				isMoving = true;
 				this.setDirection(RIGHT);
 			}
 		}
 		if (direction == DOWN && directionPressedTime < 0) {
-			if (y < field.row - 1) {
+			if (y < loadField.getRow() - 1) {
 				isMoving = true;
 				this.setDirection(DOWN);
 			}
@@ -154,33 +157,33 @@ public class Cursor {
 
 		if (getDirection() == UP) {
 			pY -= speed;
-			if (y * Field.MAP_CHIP_SIZE - pY >= Field.MAP_CHIP_SIZE) {
+			if (y * LoadField.MAP_CHIP_SIZE - pY >= LoadField.MAP_CHIP_SIZE) {
 				y--;
-				pY = y * Field.MAP_CHIP_SIZE;
+				pY = y * LoadField.MAP_CHIP_SIZE;
 				isMoving = false;
 			}
 		}
 		if (getDirection() == RIGHT) {
 			pX += speed;
-			if (pX - x * Field.MAP_CHIP_SIZE >= Field.MAP_CHIP_SIZE) {
+			if (pX - x * LoadField.MAP_CHIP_SIZE >= LoadField.MAP_CHIP_SIZE) {
 				x++;
-				pX = x * Field.MAP_CHIP_SIZE;
+				pX = x * LoadField.MAP_CHIP_SIZE;
 				isMoving = false;
 			}
 		}
 		if (getDirection() == DOWN) {
 			pY += speed;
-			if (pY - y * Field.MAP_CHIP_SIZE >= Field.MAP_CHIP_SIZE) {
+			if (pY - y * LoadField.MAP_CHIP_SIZE >= LoadField.MAP_CHIP_SIZE) {
 				y++;
-				pY = y * Field.MAP_CHIP_SIZE;
+				pY = y * LoadField.MAP_CHIP_SIZE;
 				isMoving = false;
 			}
 		}
 		if (getDirection() == LEFT) {
 			pX -= speed;
-			if (x * Field.MAP_CHIP_SIZE - pX >= Field.MAP_CHIP_SIZE) {
+			if (x * LoadField.MAP_CHIP_SIZE - pX >= LoadField.MAP_CHIP_SIZE) {
 				x--;
-				pX = x * Field.MAP_CHIP_SIZE;
+				pX = x * LoadField.MAP_CHIP_SIZE;
 				isMoving = false;
 			}
 		}
@@ -193,12 +196,12 @@ public class Cursor {
 			pX = 0;
 			isMoving = false;
 		}
-		if (pY > (field.row - 1) * Field.MAP_CHIP_SIZE) {
-			pY = (field.row - 1) * Field.MAP_CHIP_SIZE;
+		if (pY > (loadField.getRow() - 1) * LoadField.MAP_CHIP_SIZE) {
+			pY = (loadField.getRow() - 1) * LoadField.MAP_CHIP_SIZE;
 			isMoving = false;
 		}
-		if (pX > (field.col - 1) * Field.MAP_CHIP_SIZE) {
-			pX = (field.col - 1) * Field.MAP_CHIP_SIZE;
+		if (pX > (loadField.getCol() - 1) * LoadField.MAP_CHIP_SIZE) {
+			pX = (loadField.getCol() - 1) * LoadField.MAP_CHIP_SIZE;
 			isMoving = false;
 		}
 	}
