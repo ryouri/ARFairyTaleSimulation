@@ -32,7 +32,9 @@ public class LoadField {
 	 */
 	private int moveCostMap[][];
 
-	private Terrain terrainMap[][][];
+	private Terrain tempTerrainMap[][][];
+
+	private Terrain terrainArray[][];
 
 	TerrainInfoSupplier terrainInfoSupplier;
 
@@ -75,12 +77,31 @@ public class LoadField {
 	}
 
 	private void generateRenderArray() throws SlickException {
+
+		moveCostMap = new int[row][col];
 		for (int y = 0; y < row; y++) {
 			for (int x = 0; x < col; x++) {
 				renderArray[y][x] = new Image(MAP_CHIP_SIZE, MAP_CHIP_SIZE);
+				//ついでにmoveCostArrayも初期化
+				moveCostMap[y][x] = 1;
 			}
 		}
 		generate3LayerImage();
+
+		generateTerrainArray();
+	}
+
+	private void generateTerrainArray() {
+		for (int z = 0; z < MAP_CHIP_LAYER_NUM; z++) {
+			for (int y = 0; y < row; y++) {
+				for (int x = 0; x < col; x++) {
+					if (tempTerrainMap[z][y][x] == null) {
+						continue;
+					}
+					terrainArray[y][x] = tempTerrainMap[z][y][x];
+				}
+			}
+		}
 	}
 
 	private void generate3LayerImage() throws SlickException {
@@ -190,11 +211,12 @@ public class LoadField {
 			// マップを読み込む
 			map = new int[MAP_CHIP_LAYER_NUM][row][col];
 			// 地形マップの初期化
-			terrainMap = new Terrain[MAP_CHIP_LAYER_NUM][row][col];
+			tempTerrainMap = new Terrain[MAP_CHIP_LAYER_NUM][row][col];
 			//最終描画マップの初期化
 			renderArray = new Image[row][col];
+			//地形配列の初期化
+			terrainArray = new Terrain[row][col];
 
-			moveCostMap = new int[row][col];
 			for (int z = 0; z < MAP_CHIP_LAYER_NUM; z++) {
 				for (int y = 0; y < row; y++) {
 					for (int x = 0; x < col; x++) {
@@ -204,7 +226,7 @@ public class LoadField {
 						int mapChipNo = fromBytes(b);
 						map[z][y][x] = mapChipNo;
 
-						terrainMap[z][y][x] = terrainInfoSupplier
+						tempTerrainMap[z][y][x] = terrainInfoSupplier
 								.getTerrain(mapChipNo);
 					}
 				}
@@ -259,7 +281,7 @@ public class LoadField {
 
 
 	public Terrain getYXTerrain(int y, int x) {
-		return terrainInfoSupplier.getTerrain(map[0][y][x]);
+		return terrainArray[y][x];
 	}
 
 
@@ -272,12 +294,14 @@ public class LoadField {
 
 		//Mapのコストを格納する
 		//TODO: 地形のコストを格納するように変更が必要
-		for (int row = 0; row < moveCostArray.length; row++) {
-			for (int col = 0 ; col < moveCostArray[0].length; col++) {
-				moveCostArray[row][col] = moveCostMap[row][col];
+		for (int y = 0; y < moveCostArray.length; y++) {
+			for (int x = 0 ; x < moveCostArray[0].length; x++) {
+				moveCostArray[y][x] = moveCostMap[y][x];
 
-				if (getYXTerrain(row, col).terrainName.equals("河") ) {
-					moveCostArray[row][col] += 10;
+				Terrain terrain = getYXTerrain(y, x);
+
+				if (terrain != null && terrain.terrainName.equals("河") ) {
+					moveCostArray[y][x] += 10;
 				}
 			}
 		}
