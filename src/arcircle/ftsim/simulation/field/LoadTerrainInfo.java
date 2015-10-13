@@ -44,6 +44,12 @@ public class LoadTerrainInfo {
 		} catch (IOException e) {
 			System.out.println(e);
 		}
+
+		loadAutoTile(SimGameModel.storiesFolder + "/TerrainInfoAutoTile.txt");
+	}
+
+
+	private static void loadAutoTile(String AutoTileTxtPath) {
 	}
 
 

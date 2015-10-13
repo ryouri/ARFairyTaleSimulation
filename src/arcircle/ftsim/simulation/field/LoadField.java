@@ -44,6 +44,8 @@ public class LoadField {
 	public static final int MAP_WIDTH_MASS = 25;
 	public static final int MAP_HEIGHT_MASS = 20;
 
+	public static final String AutoTileFloderPath = "image/autotile";
+
 	public LoadField(String mapPath, String mapchipPointerPath) {
 		init(mapPath, mapchipPointerPath);
 	}
@@ -71,14 +73,14 @@ public class LoadField {
 		}
 	}
 
-
-
 	/**
 	 *
 	 * @param mapPath
 	 * @param mapchipPointerPath
 	 */
 	private void loadMapAndMapChip(String mapPath, String mapchipPointerPath) {
+		loadAutoTile();
+
 		// マップチップ読み込み
 		String mapChipPath = null;
 		try {
@@ -127,6 +129,10 @@ public class LoadField {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void loadAutoTile() {
+
 	}
 
 	public static int fromBytes(byte[] b) {

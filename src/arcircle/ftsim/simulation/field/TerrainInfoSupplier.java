@@ -12,7 +12,6 @@ public class TerrainInfoSupplier {
 
 	public static final int NONE_CHIP_NUM = 2000;
 
-
 	public TerrainInfoSupplier() {
 		terrainMap = new HashMap<String, Terrain>();
 		terrainArray = new ArrayList<Terrain>();
