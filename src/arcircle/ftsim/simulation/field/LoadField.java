@@ -23,7 +23,9 @@ public class LoadField {
 	private int mapHeight;
 	private int mapWidth;
 
-	private int map[][][];
+	private int mapChipNoArray[][][];
+	private DrawPoint drawPointArray[][][];
+
 	private Image renderArray[][];
 
 	/**
@@ -52,7 +54,6 @@ public class LoadField {
 	public static final int MAP_WIDTH_MASS = 25;
 	public static final int MAP_HEIGHT_MASS = 20;
 
-
 	public static final String AutoTileFloderPath = "image/autotile/";
 	public static final int AUTO_TILE_CHIP_DIVIDE_SIZE = 16;
 
@@ -69,26 +70,10 @@ public class LoadField {
 		terrainInfoSupplier = new TerrainInfoSupplier();
 
 		loadMapAndMapChip(mapPath, mapchipPointerPath);
-		try {
-			generateRenderArray();
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void generateRenderArray() throws SlickException {
-
-		moveCostMap = new int[row][col];
-		for (int y = 0; y < row; y++) {
-			for (int x = 0; x < col; x++) {
-				renderArray[y][x] = new Image(MAP_CHIP_SIZE, MAP_CHIP_SIZE);
-				//ついでにmoveCostArrayも初期化
-				moveCostMap[y][x] = 1;
-			}
-		}
-		generate3LayerImage();
 
 		generateTerrainArray();
+
+		generateDrawPointArray();
 	}
 
 	private void generateTerrainArray() {
@@ -104,52 +89,31 @@ public class LoadField {
 		}
 	}
 
-	private void generate3LayerImage() throws SlickException {
-		//3層それぞれ、マップチップを生成
+	private void generateDrawPointArray() {
+		drawPointArray = new DrawPoint[MAP_CHIP_LAYER_NUM][row][col];
 		for (int z = 0; z < MAP_CHIP_LAYER_NUM; z++) {
 			for (int y = 0; y < row; y++) {
 				for (int x = 0; x < col; x++) {
-					if (map[z][y][x] < TerrainInfoSupplier.NONE_CHIP_NUM) {
-						//通常のマップチップなら
-						int chipX = map[z][y][x] % MAP_CHIP_COL;
-						int chipY = map[z][y][x] / MAP_CHIP_COL;
-						renderArray[y][x].getGraphics().drawImage(sSheet.getSubImage(chipX, chipY), 0, 0);
-					} else if (map[z][y][x] > TerrainInfoSupplier.NONE_CHIP_NUM){
-						drawAutoTileToRenderArray(z, y, x);
+					if (mapChipNoArray[z][y][x] > TerrainInfoSupplier.NONE_CHIP_NUM){
+						boolean[][] aroundInfo = generateAroundInfoArray(y, x, mapChipNoArray[z]);
+						Point[][] drawPoint = AutoTileUtil.aroudTileArrayToDrawTileArray(aroundInfo);
+						drawPointArray[z][y][x] = new DrawPoint(drawPoint);
 					}
 				}
 			}
 		}
 	}
 
-	private void drawAutoTileToRenderArray(int z, int y, int x) throws SlickException {
-		SpriteSheet autoTileSSheet = autoTileSSheetMap.get(map[z][y][x]);
-		//オートタイルなら
-		boolean[][] aroundInfo = generateAroundInfoArray(y, x, map[z]);
-		Point[][] drawPoint = AutoTileUtil.aroudTileArrayToDrawTileArray(aroundInfo);
-		for (int drawY = 0; drawY < drawPoint.length; drawY++) {
-			for (int drawX = 0; drawX < drawPoint[drawY].length; drawX++) {
-				int iY = drawPoint[drawY][drawX].y;
-				int iX = drawPoint[drawY][drawX].x;
-				Image drawedImage = autoTileSSheet.getSubImage(iX, iY);
-				renderArray[y][x].getGraphics().drawImage(
-						drawedImage,
-						drawX * MAP_CHIP_HALF_SIZE,
-						drawY * MAP_CHIP_HALF_SIZE);
-			}
-		}
-	}
-
 	private boolean[][] generateAroundInfoArray(int y, int x, int[][] map) {
 		int chipID = map[y][x];
-		boolean left_up = y == 0 ? edge_close : x == 0 ? edge_close : chipID != map[y-1][x-1];
-		boolean left = x == 0 ? edge_close : chipID != map[y][x-1];
-		boolean left_down = y == row - 1 ? edge_close : x == 0 ? edge_close : chipID != map[y+1][x-1];
-		boolean right_up =  y == 0 ? edge_close : x == col - 1 ? edge_close : chipID != map[y-1][x+1];
-		boolean right =  x == col - 1 ? edge_close : chipID != map[y][x+1];
-		boolean right_down =  y == row - 1 ? edge_close : x == col - 1 ? edge_close : chipID != map[y+1][x+1];
-		boolean up =  y == 0 ? edge_close : chipID != map[y-1][x];
-		boolean down =  y == row - 1 ? edge_close : chipID != map[y+1][x];
+		boolean left_up 	= y == 0 		? edge_close : x == 0 		? edge_close : chipID != map[y-1][x-1];
+		boolean left  		= x == 0 		? edge_close : chipID != map[y][x-1];
+		boolean left_down 	= y == row - 1 	? edge_close : x == 0 		? edge_close : chipID != map[y+1][x-1];
+		boolean right_up 	= y == 0 		? edge_close : x == col - 1 ? edge_close : chipID != map[y-1][x+1];
+		boolean right 		= x == col - 1 	? edge_close : chipID != map[y][x+1];
+		boolean right_down 	= y == row - 1 	? edge_close : x == col - 1 ? edge_close : chipID != map[y+1][x+1];
+		boolean up 			= y == 0 		? edge_close : chipID != map[y-1][x];
+		boolean down 		= y == row - 1 	? edge_close : chipID != map[y+1][x];
 		boolean[][] around_info = {
 			{left_up, up, right_up},
 			{left, false, right},
@@ -158,21 +122,40 @@ public class LoadField {
 		return around_info;
 	}
 
+	private void renderMapChip(Graphics g, int z, int y, int x, int drawX,
+			int drawY) {
+		if (mapChipNoArray[z][y][x] < TerrainInfoSupplier.NONE_CHIP_NUM) {
+			//通常のマップチップなら
+			int chipX = mapChipNoArray[z][y][x] % MAP_CHIP_COL;
+			int chipY = mapChipNoArray[z][y][x] / MAP_CHIP_COL;
+			g.drawImage(sSheet.getSubImage(chipX, chipY), drawX, drawY);
+		} else if (mapChipNoArray[z][y][x] > TerrainInfoSupplier.NONE_CHIP_NUM && drawPointArray[z][y][x] != null){
+			//AutoTileなら
+			SpriteSheet autoTileSSheet = autoTileSSheetMap.get(mapChipNoArray[z][y][x]);
+			Point[][] drawPoint = drawPointArray[z][y][x].drawPoint;
+			for (int pointY = 0; pointY < drawPoint.length; pointY++) {
+				for (int pointX = 0; pointX < drawPoint[pointY].length; pointX++) {
+					int iY = drawPoint[pointY][pointX].y;
+					int iX = drawPoint[pointY][pointX].x;
+					Image drawedImage = autoTileSSheet.getSubImage(iX, iY);
+					g.drawImage(
+							drawedImage,
+							drawX + pointX * MAP_CHIP_HALF_SIZE,
+							drawY + pointY * MAP_CHIP_HALF_SIZE);
+				}
+			}
+		}
+	}
+
 	public void renderMap(Graphics g, int offsetX, int offsetY,
 			int firstTileX, int lastTileX, int firstTileY, int lastTileY) {
-		for (int y = firstTileY; y < lastTileY; y++) {
-			for (int x = firstTileX; x < lastTileX; x++) {
-				g.drawImage(renderArray[y][x],
-						Field.tilesToPixels(x) + offsetX,
-						Field.tilesToPixels(y) + offsetY);
-//				// 一番左上のタイルを描画
-//				g.drawImage(sSheet.getSubImage(0, 0), Field.tilesToPixels(x)
-//						+ offsetX, Field.tilesToPixels(y) + offsetY);
-//				int chipX = map[y][x] % MAP_CHIP_COL;
-//				int chipY = map[y][x] / MAP_CHIP_COL;
-//				// 各マスのタイルを描画
-//				g.drawImage(sSheet.getSubImage(chipX, chipY), Field.tilesToPixels(x)
-//						+ offsetX, Field.tilesToPixels(y) + offsetY);
+		for (int z = 0; z < MAP_CHIP_LAYER_NUM; z++) {
+			for (int y = firstTileY; y < lastTileY; y++) {
+				for (int x = firstTileX; x < lastTileX; x++) {
+					int drawX = Field.tilesToPixels(x) + offsetX;
+					int drawY = Field.tilesToPixels(y) + offsetY;
+					renderMapChip(g, z, y, x, drawX, drawY);
+				}
 			}
 		}
 	}
@@ -208,14 +191,8 @@ public class LoadField {
 			mapHeight = MAP_CHIP_SIZE * row;
 			col = in.read();
 			mapWidth = MAP_CHIP_SIZE * col;
-			// マップを読み込む
-			map = new int[MAP_CHIP_LAYER_NUM][row][col];
-			// 地形マップの初期化
-			tempTerrainMap = new Terrain[MAP_CHIP_LAYER_NUM][row][col];
-			//最終描画マップの初期化
-			renderArray = new Image[row][col];
-			//地形配列の初期化
-			terrainArray = new Terrain[row][col];
+
+			initDependentRowColArray();
 
 			for (int z = 0; z < MAP_CHIP_LAYER_NUM; z++) {
 				for (int y = 0; y < row; y++) {
@@ -224,7 +201,7 @@ public class LoadField {
 						byte[] b = new byte[4];
 						in.read(b, 0, 4);
 						int mapChipNo = fromBytes(b);
-						map[z][y][x] = mapChipNo;
+						mapChipNoArray[z][y][x] = mapChipNo;
 
 						tempTerrainMap[z][y][x] = terrainInfoSupplier
 								.getTerrain(mapChipNo);
@@ -238,6 +215,28 @@ public class LoadField {
 			e.printStackTrace();
 		} catch (SlickException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void initDependentRowColArray () {
+		// マップを読み込む
+		mapChipNoArray = new int[MAP_CHIP_LAYER_NUM][row][col];
+		// 地形マップの初期化
+		tempTerrainMap = new Terrain[MAP_CHIP_LAYER_NUM][row][col];
+		//最終描画マップの初期化
+		renderArray = new Image[row][col];
+		//地形配列の初期化
+		terrainArray = new Terrain[row][col];
+
+		initMoveCostArray();
+	}
+
+	private void initMoveCostArray() {
+		moveCostMap = new int[row][col];
+		for (int y = 0; y < row; y++) {
+			for (int x = 0; x < col; x++) {
+				moveCostMap[y][x] = 1;
+			}
 		}
 	}
 
@@ -328,5 +327,12 @@ public class LoadField {
 	}
 	public SpriteSheet getsSheet() {
 		return sSheet;
+	}
+
+	class DrawPoint {
+		public Point[][] drawPoint;
+		public DrawPoint(Point[][] drawPoint) {
+			this.drawPoint = drawPoint;
+		}
 	}
 }
