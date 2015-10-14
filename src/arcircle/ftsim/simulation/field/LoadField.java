@@ -299,8 +299,8 @@ public class LoadField {
 
 				Terrain terrain = getYXTerrain(y, x);
 
-				if (terrain != null && terrain.terrainName.equals("河") ) {
-					moveCostArray[y][x] += 10;
+				if (terrain != null) {
+					moveCostArray[y][x] = terrain.classNameCostMap.get("normal");
 				}
 			}
 		}
