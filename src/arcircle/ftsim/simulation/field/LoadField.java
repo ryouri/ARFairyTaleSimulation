@@ -299,6 +299,7 @@ public class LoadField {
 
 				Terrain terrain = getYXTerrain(y, x);
 
+				//TODO; キャラのクラスが実装されていないので、テストクラスでコストを計算している
 				if (terrain != null) {
 					moveCostArray[y][x] = terrain.classNameCostMap.get("normal");
 				}
