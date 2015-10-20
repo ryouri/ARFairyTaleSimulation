@@ -50,7 +50,12 @@ public class GameStartState extends KeyInputState {
 					new FadeInTransition(Color.black, 100));
 		}
 		// ロードを選択
-		if (gsModel.state == 0){
+		if (gsModel.state == 1){
+			LoadSaveState loadSaveState = (LoadSaveState)stateGame.getState(StateConst.LOAD_STATE);
+			loadSaveState.setLastBGM(bgm);
+			stateGame.enterState(StateConst.LOAD_STATE,
+					new FadeOutTransition(Color.black, 100),
+					new FadeInTransition(Color.black, 100));
 		}
 	}
 
