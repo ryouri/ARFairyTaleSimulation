@@ -536,11 +536,12 @@ public class Field implements KeyListner, Renderer {
 
 	public void saveData() {
 		for (Chara chara : characters.characterArray) {
-			if (chara.getCamp() != Chara.CAMP_ALLIES) {
+			if (chara.getCamp() != Chara.CAMP_FRIEND) {
 				continue;
 			}
 			FTSimulationGame.save.putCharaStatus(chara.getFolderName(), chara.status);
 		}
+		FTSimulationGame.save.clearNowStage();
 	}
 
 	public int getFieldRow() {
