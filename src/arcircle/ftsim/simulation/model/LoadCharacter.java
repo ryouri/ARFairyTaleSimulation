@@ -42,9 +42,7 @@ public class LoadCharacter {
 	}
 
 
-	public static String readyFile = "ready.png";
 	public static String walkFile = "walk.png";
-	public static String attackFile = "attack.png";
 	public static String faceStandardFile = "faceStandard.png";
 	/**
 	 * キャラクターのマップチップを読み込む
@@ -56,16 +54,6 @@ public class LoadCharacter {
 			characters.walkSheetMap.put(charaFolderName,
 					new SpriteSheet(
 							new Image(charaFolderPath + walkFile),
-							LoadField.MAP_CHIP_SIZE,
-							LoadField.MAP_CHIP_SIZE));
-			characters.readySheetMap.put(charaFolderName,
-					new SpriteSheet(
-							new Image(charaFolderPath + readyFile),
-							LoadField.MAP_CHIP_SIZE,
-							LoadField.MAP_CHIP_SIZE));
-			characters.attackSheetMap.put(charaFolderName,
-					new SpriteSheet(
-							new Image(charaFolderPath + attackFile),
 							LoadField.MAP_CHIP_SIZE,
 							LoadField.MAP_CHIP_SIZE));
 
@@ -191,14 +179,6 @@ public class LoadCharacter {
 			Image[] leftImages = generateImageArray(walkSheet, 1);
 			Image[] rightImages = generateImageArray(walkSheet, 2);
 
-			SpriteSheet readySheet = characters.readySheetMap.get(charaName);
-			//
-			Image[] stayImages = generateImageArray(readySheet, 0);
-			Image[] cursorImages = generateImageArray(readySheet, 3);
-
-			SpriteSheet attackSheet = characters.attackSheetMap.get(charaName);
-			Image[] nearAttackImages = generateImageArray(attackSheet, 0);
-
 			characters.upWalkAnimeMap.put(charaName, new Animation(upImages, duration, true));
 			characters.downWalkAnimeMap.put(charaName, new Animation(downImages, duration, true));
 			characters.leftWalkAnimeMap.put(charaName, new Animation(leftImages, duration, true));
@@ -208,11 +188,6 @@ public class LoadCharacter {
 			characters.downAttackAnimeMap.put(charaName, new Animation(downImages, attackDuration, true));
 			characters.leftAttackAnimeMap.put(charaName, new Animation(leftImages, attackDuration, true));
 			characters.rightAttackAnimeMap.put(charaName, new Animation(rightImages, attackDuration, true));
-
-			characters.stayAnimeMap.put(charaName, new Animation(stayImages, duration, true));
-			characters.cursorAnimeMap.put(charaName, new Animation(cursorImages, duration, true));
-
-			characters.selectAnimeMap.put(charaName, new Animation(nearAttackImages, selectDuration, true));
 		}
 	}
 

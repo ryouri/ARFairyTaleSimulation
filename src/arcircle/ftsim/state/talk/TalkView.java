@@ -258,10 +258,10 @@ public class TalkView implements Renderer{
 	/**updateから呼ばれ，各オブジェクト(変更される可能性のあるものだけ)の位置を更新する*/
 	private void updateObjectPos(){
 		//左配置の立ち絵の位置調整
-		objectPos.get(LC).x = 0;
+		objectPos.get(LC).x = 100;
 		objectPos.get(LC).y = objectPos.get(MB).y - (objectImg.get(LC).getHeight() * 3 / 4);
 		//右配置の立ち絵の位置調整
-		objectPos.get(RC).x = FTSimulationGame.WIDTH - objectImg.get(RC).getWidth();
+		objectPos.get(RC).x = FTSimulationGame.WIDTH - objectImg.get(RC).getWidth() - 100;
 		objectPos.get(RC).y = objectPos.get(MB).y - (objectImg.get(RC).getHeight() * 3 / 4);
 		//テキストボックスの位置調整
 		if(objectImg.get(SF).equals(allCharasImg.get(T_Const.NO_STAND))){
@@ -289,11 +289,11 @@ public class TalkView implements Renderer{
 			if(playerGender == Status.MALE){
 				/* 主人公が男の場合*/
 				// 左配置のキャラを男主人公画像にする(左配置の立ち絵は反転させる)
-				objectImg.put(LC, allCharasImg.get(T_Const.PLAYER_M + T_Const.STAND).getFlippedCopy(true, false));
+				objectImg.put(LC, allCharasImg.get(T_Const.PLAYER_M + T_Const.STAND));
 			}else if(playerGender == Status.FEMALE){
 				/* 主人公が女の場合*/
 				// 左配置のキャラを女主人公画像にする(左配置の立ち絵は反転させる)
-				objectImg.put(LC, allCharasImg.get(T_Const.PLAYER_F + T_Const.STAND).getFlippedCopy(true, false));
+				objectImg.put(LC, allCharasImg.get(T_Const.PLAYER_F + T_Const.STAND));
 			}else{
 				//エラー
 				System.out.println("ERROR_TalkView_playerGender");
@@ -301,7 +301,7 @@ public class TalkView implements Renderer{
 		}else{
 			/* 左キャラがIDで管理されるキャラの場合 */
 			// 左配置のキャラを指定された立ち絵画像にする(左配置の立ち絵は反転させる)
-			objectImg.put(LC, allCharasImg.get(curTag.getLeftCharaName() + T_Const.STAND).getFlippedCopy(true, false));
+			objectImg.put(LC, allCharasImg.get(curTag.getLeftCharaName() + T_Const.STAND));
 		}
 
 		//右配置のキャラを設定
@@ -314,10 +314,10 @@ public class TalkView implements Renderer{
 			if(playerGender == Status.MALE){
 				/* 主人公が男の場合*/
 				// 右配置のキャラを男主人公画像にする
-				objectImg.put(RC, allCharasImg.get(T_Const.PLAYER_M + T_Const.STAND));
+				objectImg.put(RC, allCharasImg.get(T_Const.PLAYER_M + T_Const.STAND).getFlippedCopy(true, false));
 			}else if(playerGender == Status.FEMALE){
 				/* 主人公が女の場合*/
-				objectImg.put(RC, allCharasImg.get(T_Const.PLAYER_F + T_Const.STAND));
+				objectImg.put(RC, allCharasImg.get(T_Const.PLAYER_F + T_Const.STAND).getFlippedCopy(true, false));
 			}else{
 				//エラー
 				System.out.println("ERROR_TalkView_playerGender");
@@ -325,7 +325,7 @@ public class TalkView implements Renderer{
 		}else{
 			/* 右キャラがIDで管理されるキャラの場合 */
 			// 右配置のキャラを指定された立ち絵画像にする
-			objectImg.put(RC, allCharasImg.get(curTag.getRightCharaName() + T_Const.STAND));
+			objectImg.put(RC, allCharasImg.get(curTag.getRightCharaName() + T_Const.STAND).getFlippedCopy(true, false));
 		}
 	}
 

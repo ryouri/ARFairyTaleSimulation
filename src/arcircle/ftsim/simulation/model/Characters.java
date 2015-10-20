@@ -37,8 +37,6 @@ public class Characters {
 	public static String CharactersFolderName = "Characters/";
 
 	public HashMap<String, SpriteSheet> walkSheetMap;
-	public HashMap<String, SpriteSheet> readySheetMap;
-	public HashMap<String, SpriteSheet> attackSheetMap;
 
 	public HashMap<String, Animation> upWalkAnimeMap;
 	public HashMap<String, Animation> downWalkAnimeMap;
@@ -75,8 +73,6 @@ public class Characters {
 
 	public Characters() {
 		this.walkSheetMap = new HashMap<String, SpriteSheet>();
-		this.readySheetMap = new HashMap<String, SpriteSheet>();
-		this.attackSheetMap = new HashMap<String, SpriteSheet>();
 
 		this.upWalkAnimeMap = new HashMap<String, Animation>();
 		this.downWalkAnimeMap = new HashMap<String, Animation>();
