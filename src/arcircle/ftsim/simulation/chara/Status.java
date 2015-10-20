@@ -1,10 +1,11 @@
 package arcircle.ftsim.simulation.chara;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import arcircle.ftsim.simulation.item.Item;
 
-public class Status {
+public class Status implements Serializable {
 	//セーブデータで利用
 	public static final int MALE = 0;
 	public static final int FEMALE = 1;

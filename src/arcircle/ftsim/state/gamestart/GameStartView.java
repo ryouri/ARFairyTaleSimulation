@@ -33,5 +33,33 @@ public class GameStartView implements Renderer{
 		g.setColor(Color.cyan);
 		g.fillRect(0, 0, FTSimulationGame.WIDTH, FTSimulationGame.HEIGHT);
 		g.drawImage(title, 0, 0);
+
+		g.setFont(gsState.getFont());
+		g.setColor(Color.blue);
+		// 開始
+		int messageWidth = gsState.getFont().getWidth(gsModel.start);
+		g.drawString(gsModel.start,
+				(FTSimulationGame.WIDTH - messageWidth) / 2 - 50, 400);
+		// ロード
+		messageWidth = gsState.getFont().getWidth(gsModel.load);
+		g.drawString(gsModel.load,
+				(FTSimulationGame.WIDTH - messageWidth) / 2 + 50, 400);
+
+
+		// 選択の枠を表示
+		g.setColor(Color.red);
+		// 開始
+		if (gsModel.state == 0){
+			messageWidth = gsState.getFont().getWidth(gsModel.start);
+			int messageHeight = gsState.getFont().getHeight(gsModel.start);
+			g.drawRect((FTSimulationGame.WIDTH - messageWidth) / 2 - 50, 401, messageWidth, messageHeight);
+		}
+		// ロード
+		if (gsModel.state == 1){
+			messageWidth = gsState.getFont().getWidth(gsModel.load);
+			int messageHeight = gsState.getFont().getHeight(gsModel.load);
+			g.drawRect((FTSimulationGame.WIDTH - messageWidth) / 2 + 50, 401, messageWidth, messageHeight);
+		}
+
 	}
 }

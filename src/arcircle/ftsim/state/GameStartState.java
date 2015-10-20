@@ -19,7 +19,7 @@ public class GameStartState extends KeyInputState {
 
 	public GameStartState(int state) {
 		super(state);
-		
+
 	}
 
 	@Override
@@ -41,11 +41,22 @@ public class GameStartState extends KeyInputState {
 	}
 
 	public void nextState() {
-		SelectGenderState selectGenderState = (SelectGenderState)stateGame.getState(StateConst.SELECT_GENDER);
-		selectGenderState.setLastBGM(bgm);
-		stateGame.enterState(StateConst.SELECT_GENDER,
-				new FadeOutTransition(Color.black, 100),
-				new FadeInTransition(Color.black, 100));
+		// 開始を選択
+		if (gsModel.state == 0){
+			SelectGenderState selectGenderState = (SelectGenderState)stateGame.getState(StateConst.SELECT_GENDER);
+			selectGenderState.setLastBGM(bgm);
+			stateGame.enterState(StateConst.SELECT_GENDER,
+					new FadeOutTransition(Color.black, 100),
+					new FadeInTransition(Color.black, 100));
+		}
+		// ロードを選択
+		if (gsModel.state == 1){
+			LoadSaveState loadSaveState = (LoadSaveState)stateGame.getState(StateConst.LOAD_SAVE_DATA);
+			loadSaveState.setLastBGM(bgm);
+			stateGame.enterState(StateConst.LOAD_SAVE_DATA,
+					new FadeOutTransition(Color.black, 100),
+					new FadeInTransition(Color.black, 100));
+		}
 	}
 
 	@Override
