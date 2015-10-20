@@ -406,4 +406,59 @@ public class Characters {
 	public Field getField() {
 		return field;
 	}
+
+	public int [][] modifyMoveCostArray(int charaX, int charaY, int[][] moveCostArray) {
+		Chara moveChara = null;
+		//移動するキャラを取得する
+		for (Chara chara : characterArray) {
+			if (charaX == chara.x && charaY == chara.y) {
+				moveChara = chara;
+				break;
+			}
+		}
+
+		if (moveChara == null) {
+			System.err.println("移動コスト計算でエラー 移動キャラが取得できない");
+			System.exit(1);
+		}
+
+		//今は同じ所属(Camp)のキャラなら通過できるようにする
+		//TODO: Friendは友軍のキャラを通過できるようにしたいなら，処理を変えよう
+		for (Chara chara : characterArray) {
+			if (charaX == chara.x && charaY == chara.y) {
+				continue;
+			}
+			//同じ所属のキャラなら通過可能とする
+			if (moveChara.getCamp() == chara.getCamp()) {
+				continue;
+			}
+			moveCostArray[chara.y][chara.x] = -1;
+		}
+
+		return moveCostArray;
+	}
+
+	/**
+	 * あるキャラの周囲のキャラを探索し格納して返す．
+	 * @param chara 探索の中心のキャラ，これと同じ所属のキャラを返す
+	 * @param aroundMassNum マスいくつ分離れているキャラを探索するか
+	 * @return 探索できたキャラが入る
+	 */
+	public ArrayList<Chara> getAroundChara(Chara chara, int aroundMassNum) {
+		ArrayList<Chara> aroundCharaArray = new ArrayList<Chara>();
+
+		for (Chara targetChara : characterArray) {
+			if (chara.equals(targetChara)) {
+				continue;
+			}
+			int xDiff = Math.abs(chara.x - targetChara.x);
+			int yDiff = Math.abs(chara.y - targetChara.y);
+
+			if (xDiff + yDiff <= aroundMassNum) {
+				aroundCharaArray.add(targetChara);
+			}
+		}
+
+		return aroundCharaArray;
+	}
 }

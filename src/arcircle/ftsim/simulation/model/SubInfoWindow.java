@@ -145,8 +145,10 @@ public class SubInfoWindow implements Renderer{
 		g.drawString("・" + "敗北条件内容",
 				objectPos_status.get("LOSE_STRING").x, objectPos_status.get("LOSE_STRING").y);
 		//地形情報の描画
-//		selectedMapChip = field.getSelectedMapChip();
-//		g.drawImage(selectedMapChip.getScaledCopy(2), objectPos_status.get("MAP_INFOIMAGE").x, objectPos_status.get("MAP_INFOIMAGE").y);
+		selectedMapChip = field.getSelectedMapChip();
+		if (selectedMapChip != null) {
+			g.drawImage(selectedMapChip.getScaledCopy(2), objectPos_status.get("MAP_INFOIMAGE").x, objectPos_status.get("MAP_INFOIMAGE").y);
+		}
 		//地形の名前
 		terrainName = field.getSelectedTerrain().terrainName;
 		g.drawString(terrainName,

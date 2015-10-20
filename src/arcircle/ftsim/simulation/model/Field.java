@@ -18,7 +18,6 @@ import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.renderer.Renderer;
-import arcircle.ftsim.save.NowStage;
 import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
@@ -40,17 +39,24 @@ public class Field implements KeyListner, Renderer {
 		return sgModel;
 	}
 
-	HashMap<String, Item> itemList;
-
 	private int nowTurn;
 	public static final int TURN_FRIEND = 0;
 	public static final int TURN_ENEMY = 1;
+
+	private static int[][] RELATED_KEY_CURSOR = {
+			{Input.KEY_UP, Cursor.UP},
+			{Input.KEY_RIGHT, Cursor.RIGHT},
+			{Input.KEY_DOWN, Cursor.DOWN},
+			{Input.KEY_LEFT, Cursor.LEFT},
+		};
 
 	private String partName;
 
 	private Cursor cursor;
 
 	Characters characters;
+
+	HashMap<String, Item> itemList;
 
 	public EventManager eventManager;
 
@@ -76,30 +82,6 @@ public class Field implements KeyListner, Renderer {
 	}
 	public void setSubInfoWindow(SubInfoWindow subInfoWindow) {
 		this.subInfoWindow = subInfoWindow;
-	}
-
-	/**
-	 * あるキャラの周囲のキャラを探索し格納して返す．
-	 * @param chara 探索の中心のキャラ，これと同じ所属のキャラを返す
-	 * @param aroundMassNum マスいくつ分離れているキャラを探索するか
-	 * @return 探索できたキャラが入る
-	 */
-	public ArrayList<Chara> getAroundChara(Chara chara, int aroundMassNum) {
-		ArrayList<Chara> aroundCharaArray = new ArrayList<Chara>();
-
-		for (Chara targetChara : characters.characterArray) {
-			if (chara.equals(targetChara)) {
-				continue;
-			}
-			int xDiff = Math.abs(chara.x - targetChara.x);
-			int yDiff = Math.abs(chara.y - targetChara.y);
-
-			if (xDiff + yDiff <= aroundMassNum) {
-				aroundCharaArray.add(targetChara);
-			}
-		}
-
-		return aroundCharaArray;
 	}
 
 	public TaskManager getTaskManager() {
@@ -244,33 +226,6 @@ public class Field implements KeyListner, Renderer {
 		}
 
 		characters.update(delta);
-
-		if (characters.isGameEnd()) {
-			FTSimulationGame.save.getNowStage().selectLogue = NowStage.EPILOGUE;
-			sgModel.nextState();
-		}
-	}
-
-	/**
-	 * ピクセル単位をマス単位に変更する
-	 *
-	 * @param pixels
-	 *            ピクセル単位
-	 * @return マス単位
-	 */
-	public static int pixelsToTiles(double pixels) {
-		return (int) Math.floor(pixels / LoadField.MAP_CHIP_SIZE);
-	}
-
-	/**
-	 * マス単位をピクセル単位に変更する
-	 *
-	 * @param tiles
-	 *            マス単位
-	 * @return ピクセル単位
-	 */
-	public static int tilesToPixels(int tiles) {
-		return tiles * LoadField.MAP_CHIP_SIZE;
 	}
 
 	@Override
@@ -279,30 +234,13 @@ public class Field implements KeyListner, Renderer {
 			return;
 		}
 
-		if (keyInput.isKeyDown(Input.KEY_UP)) {
-			getCursor().startMove(Cursor.UP);
-		}
-		if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
-			getCursor().startMove(Cursor.RIGHT);
-		}
-		if (keyInput.isKeyDown(Input.KEY_DOWN)) {
-			getCursor().startMove(Cursor.DOWN);
-		}
-		if (keyInput.isKeyDown(Input.KEY_LEFT)) {
-			getCursor().startMove(Cursor.LEFT);
-		}
-
-		if (keyInput.isKeyPressed(Input.KEY_UP)) {
-			getCursor().pressed(Cursor.UP);
-		}
-		if (keyInput.isKeyPressed(Input.KEY_RIGHT)) {
-			getCursor().pressed(Cursor.RIGHT);
-		}
-		if (keyInput.isKeyPressed(Input.KEY_DOWN)) {
-			getCursor().pressed(Cursor.DOWN);
-		}
-		if (keyInput.isKeyPressed(Input.KEY_LEFT)) {
-			getCursor().pressed(Cursor.LEFT);
+		for (int i = 0; i < RELATED_KEY_CURSOR.length; i++) {
+			if (keyInput.isKeyDown(RELATED_KEY_CURSOR[i][0])) {
+				getCursor().startMove(RELATED_KEY_CURSOR[i][1]);
+			}
+			if (keyInput.isKeyPressed(RELATED_KEY_CURSOR[i][0])) {
+				getCursor().startMove(RELATED_KEY_CURSOR[i][1]);
+			}
 		}
 
 		// 決定キーが押されたとき
@@ -389,33 +327,17 @@ public class Field implements KeyListner, Renderer {
 	public int[][] createMoveCostArray(int charaX, int charaY) {
 		int [][] moveCostArray = loadField.createMoveCostArray(charaX, charaY);
 
-		Chara moveChara = null;
-		//移動するキャラを取得する
-		for (Chara chara : characters.characterArray) {
-			if (charaX == chara.x && charaY == chara.y) {
-				moveChara = chara;
-				break;
-			}
-		}
+		return characters.modifyMoveCostArray(charaX, charaY, moveCostArray);
+	}
 
-		if (moveChara == null) {
-			System.exit(1);
-		}
-
-		//今は同じ所属(Camp)のキャラなら通過できるようにする
-		//TODO: Friendは友軍のキャラを通過できるようにしたいなら，処理を変えよう
-		for (Chara chara : characters.characterArray) {
-			if (charaX == chara.x && charaY == chara.y) {
-				continue;
-			}
-			//同じ所属のキャラなら通過可能とする
-			if (moveChara.getCamp() == chara.getCamp()) {
-				continue;
-			}
-			moveCostArray[chara.y][chara.x] = -1;
-		}
-
-		return moveCostArray;
+	/**
+	 * あるキャラの周囲のキャラを探索し格納して返す．
+	 * @param chara 探索の中心のキャラ，これと同じ所属のキャラを返す
+	 * @param aroundMassNum マスいくつ分離れているキャラを探索するか
+	 * @return 探索できたキャラが入る
+	 */
+	public ArrayList<Chara> getAroundChara(Chara chara, int aroundMassNum) {
+		return characters.getAroundChara(chara, aroundMassNum);
 	}
 
 	public Cursor getCursor() {
@@ -517,5 +439,27 @@ public class Field implements KeyListner, Renderer {
 
 	public int getFieldCol() {
 		return loadField.getCol();
+	}
+
+	/**
+	 * ピクセル単位をマス単位に変更する
+	 *
+	 * @param pixels
+	 *            ピクセル単位
+	 * @return マス単位
+	 */
+	public static int pixelsToTiles(double pixels) {
+		return (int) Math.floor(pixels / LoadField.MAP_CHIP_SIZE);
+	}
+
+	/**
+	 * マス単位をピクセル単位に変更する
+	 *
+	 * @param tiles
+	 *            マス単位
+	 * @return ピクセル単位
+	 */
+	public static int tilesToPixels(int tiles) {
+		return tiles * LoadField.MAP_CHIP_SIZE;
 	}
 }

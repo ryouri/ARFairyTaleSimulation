@@ -223,8 +223,6 @@ public class LoadField {
 		mapChipNoArray = new int[MAP_CHIP_LAYER_NUM][row][col];
 		// 地形マップの初期化
 		tempTerrainMap = new Terrain[MAP_CHIP_LAYER_NUM][row][col];
-		//最終描画マップの初期化
-		renderArray = new Image[row][col];
 		//地形配列の初期化
 		terrainArray = new Terrain[row][col];
 
@@ -274,8 +272,25 @@ public class LoadField {
 		}
 	}
 
+	/**
+	 * 通常のマップチップのみ渡せる
+	 * @param y
+	 * @param x
+	 * @return
+	 */
 	public Image getSelectedMapChip(int y, int x) {
-		return renderArray[y][x];
+		for (int z = mapChipNoArray.length - 1; z >= 0; z--) {
+			if (mapChipNoArray[z][y][x] == TerrainInfoSupplier.NONE_CHIP_NUM) {
+				continue;
+			} else if (mapChipNoArray[z][y][x] > TerrainInfoSupplier.NONE_CHIP_NUM) {
+				break;
+			}
+			//通常のマップチップなら
+			int chipX = mapChipNoArray[z][y][x] % MAP_CHIP_COL;
+			int chipY = mapChipNoArray[z][y][x] / MAP_CHIP_COL;
+			return sSheet.getSubImage(chipX, chipY);
+		}
+		return null;
 	}
 
 

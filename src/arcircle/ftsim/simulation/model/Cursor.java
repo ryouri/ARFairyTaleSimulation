@@ -54,6 +54,7 @@ public class Cursor {
 		directionPressedTime = DIRECTION_PRESSED_DURATION;
 		stopTime = 0;
 		this.isVisible = true;
+		init();
 	}
 
 	private void init() {
