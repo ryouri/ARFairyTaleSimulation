@@ -34,7 +34,7 @@ public class FTSimulationGame extends StateBasedGame {
 		this.addState(new SimGameState(StateConst.SIM_GAME));
 		this.addState(new TalkState(StateConst.TALK));
 		this.addState(new SelectStoryState(StateConst.SELECT_STORY));
-		this.addState(new LoadSaveState(StateConst.LOAD_STATE));
+		this.addState(new LoadSaveState(StateConst.LOAD_SAVE_DATA));
 	}
 
 	public static String Savename;
@@ -48,7 +48,7 @@ public class FTSimulationGame extends StateBasedGame {
 		this.getState(StateConst.SIM_GAME).init(container, this);
 		this.getState(StateConst.TALK).init(container, this);
 		this.getState(StateConst.SELECT_STORY).init(container, this);
-		this.getState(StateConst.LOAD_STATE).init(container, this);
+		this.getState(StateConst.LOAD_SAVE_DATA).init(container, this);
 		//コンストラクタで実行するとエラー発生するよー
 		font = JapaneseFontGenerater.generateFont(24, false, false, null);
 	}

@@ -51,9 +51,9 @@ public class GameStartState extends KeyInputState {
 		}
 		// ロードを選択
 		if (gsModel.state == 1){
-			LoadSaveState loadSaveState = (LoadSaveState)stateGame.getState(StateConst.LOAD_STATE);
+			LoadSaveState loadSaveState = (LoadSaveState)stateGame.getState(StateConst.LOAD_SAVE_DATA);
 			loadSaveState.setLastBGM(bgm);
-			stateGame.enterState(StateConst.LOAD_STATE,
+			stateGame.enterState(StateConst.LOAD_SAVE_DATA,
 					new FadeOutTransition(Color.black, 100),
 					new FadeInTransition(Color.black, 100));
 		}
