@@ -13,7 +13,7 @@ public class LoadTerrainInfo {
 		File file = new File(AutoTileTxtPath);
 		BufferedReader br = new BufferedReader(new FileReader(file));
 
-		String autoTileTerrainLine = br.readLine();
+		String autoTileTerrainLine;
 
 		while ((autoTileTerrainLine = br.readLine()) != null) {
 			if (autoTileTerrainLine.length() == 0) {
@@ -63,6 +63,8 @@ public class LoadTerrainInfo {
 
 			loadAutoTile(terrainInfoSupplier,
 				SimGameModel.storiesFolder + "/TerrainInfoAutoTile.txt");
+			loadTerrainCostOfClass(terrainInfoSupplier,
+					SimGameModel.storiesFolder + "/TerrainCostOfClass.csv");
 		} catch (FileNotFoundException e) {
 			System.out.println(e);
 		} catch (IOException e) {
@@ -72,7 +74,7 @@ public class LoadTerrainInfo {
 
 	//地形名,マップチップの開始座標x,同左y,回避,防御
 	//平地,0,0,0,0
-	public static Terrain loadTerrain(String terrainStr) {
+	private static Terrain loadTerrain(String terrainStr) {
 		String[] terrainStrs = terrainStr.split(",");
 
 		if (terrainStrs.length <= 4) {
@@ -88,5 +90,32 @@ public class LoadTerrainInfo {
 		terrain.defencePoint = Integer.valueOf(terrainStrs[4]);
 
 		return terrain;
+	}
+
+	private static void loadTerrainCostOfClass(TerrainInfoSupplier terrainInfoSupplier, String TerrainCostCSVPath)
+			throws IOException {
+		File file = new File(TerrainCostCSVPath);
+		BufferedReader br = new BufferedReader(new FileReader(file));
+
+		String terrainCostLine = br.readLine();
+
+		if (terrainCostLine == null){
+			System.err.println("TerrainCostOfClass.csv error");
+			System.exit(-1);
+		}
+		String[] terrainNameStrs = terrainCostLine.split(",");
+
+		while ((terrainCostLine = br.readLine()) != null) {
+			if (terrainCostLine.length() == 0) {
+				continue;
+			}
+
+			String[] terrainCostStrs = terrainCostLine.split(",");
+
+			for (int i = 1; i < terrainNameStrs.length; i++) {
+				Terrain addTerrainClassData = terrainInfoSupplier.terrainMap.get(terrainNameStrs[i]);
+				addTerrainClassData.classNameCostMap.put(terrainCostStrs[0], Integer.parseInt(terrainCostStrs[i]));
+			}
+		}
 	}
 }
