@@ -46,8 +46,9 @@ public class GameStartView implements Renderer{
 				(FTSimulationGame.WIDTH - messageWidth) / 2 + 50, 400);
 
 
+		// 選択の枠を表示
 		g.setColor(Color.red);
-		// 選択が左(開始)
+		// 開始
 		if (gsModel.state == 0){
 			messageWidth = gsState.getFont().getWidth(gsModel.start);
 			int messageHeight = gsState.getFont().getHeight(gsModel.start);
@@ -59,6 +60,6 @@ public class GameStartView implements Renderer{
 			int messageHeight = gsState.getFont().getHeight(gsModel.load);
 			g.drawRect((FTSimulationGame.WIDTH - messageWidth) / 2 + 50, 401, messageWidth, messageHeight);
 		}
-		
+
 	}
 }

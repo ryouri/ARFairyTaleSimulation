@@ -2,7 +2,7 @@ package arcircle.ftsim.save;
 
 import java.io.Serializable;
 
-public class NowStage  implements Serializable {
+public class NowStage implements Serializable {
 	public String storyName;
 	public String subStoryNum;
 
