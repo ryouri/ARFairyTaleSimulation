@@ -1,6 +1,8 @@
 package arcircle.ftsim.state.loadsave;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
 
 import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
@@ -9,10 +11,21 @@ import arcircle.ftsim.state.LoadSaveState;
 public class LoadSaveModel implements KeyListner{
 	private LoadSaveState lsState;
 	public String message = "ロードするデータを選択してください";
+	private String path = "./image/loadWindow/";
+	public Image background, box, box2;
+
 
 	public LoadSaveModel(LoadSaveState lsState){
 		super();
 		this.lsState = lsState;
+		try {
+			background = new Image(path + "window.png");
+			box = new Image(path + "box.png");
+			box2 = new Image(path + "box2.png");
+		} catch (SlickException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -31,6 +44,8 @@ public class LoadSaveModel implements KeyListner{
 			}
 		} else if (keyInput.isKeyDown(Input.KEY_Z)) {
 			lsState.nextState();
+		} else if (keyInput.isKeyDown(Input.KEY_X)) {
+			lsState.backState();
 		}
 	}
 
