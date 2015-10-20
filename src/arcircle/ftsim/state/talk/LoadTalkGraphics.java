@@ -155,7 +155,7 @@ public class LoadTalkGraphics {
 
 			if(!strs[0].equals("")){
 				/* キャラの名前をallCharaNameMapに格納．キーはキャラID+Name */
-				allCharaNameMap.put(charaIDArray[i]+T_Const.NAME, strs[0]);
+				allCharaNameMap.put(charaIDArray[i]+T_Const.NAME, strs[1]);
 			}else{
 				System.out.println("error_LoadTalkGraphics__paramater.txt読み込み");
 			}
