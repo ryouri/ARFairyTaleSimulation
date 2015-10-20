@@ -51,13 +51,13 @@ public class GameStartView implements Renderer{
 		if (gsModel.state == 0){
 			messageWidth = gsState.getFont().getWidth(gsModel.start);
 			int messageHeight = gsState.getFont().getHeight(gsModel.start);
-			g.drawRect((FTSimulationGame.WIDTH - messageWidth) / 2 - 50, 400, messageWidth, messageHeight);
+			g.drawRect((FTSimulationGame.WIDTH - messageWidth) / 2 - 50, 401, messageWidth, messageHeight);
 		}
 		// ロード
 		if (gsModel.state == 1){
 			messageWidth = gsState.getFont().getWidth(gsModel.load);
 			int messageHeight = gsState.getFont().getHeight(gsModel.load);
-			g.drawRect((FTSimulationGame.WIDTH - messageWidth) / 2 + 50, 400, messageWidth, messageHeight);
+			g.drawRect((FTSimulationGame.WIDTH - messageWidth) / 2 + 50, 401, messageWidth, messageHeight);
 		}
 		
 	}
