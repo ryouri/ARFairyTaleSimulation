@@ -9,12 +9,13 @@ import arcircle.ftsim.state.GameStartState;
 public class GameStartModel implements KeyListner {
 
 	public String title = "F a i r y  T a l e  S i m u l a t i o n !!!!!!!!!!!!!!!!!!!";
+	public String load = "ロード";
+	public String start = "開始";
 
 	private GameStartState gsState;
 
-	//テスト用の四角の座標
-	public int x;
-	public int y;
+	// 選択状態 左0, 右1
+	public int state = 0;
 
 	public GameStartModel(GameStartState gsState) {
 		super();
@@ -30,18 +31,12 @@ public class GameStartModel implements KeyListner {
 			gsState.nextState();
 		}
 		if(keyInput.isKeyDown(Input.KEY_RIGHT)) {
-			x += 1;
+			state = 1;
 		}
 		if(keyInput.isKeyDown(Input.KEY_LEFT)) {
-			x -= 1;
-		}
-		if(keyInput.isKeyDown(Input.KEY_UP)) {
-			y -= 1;
-		}
-		if(keyInput.isKeyDown(Input.KEY_DOWN)) {
-			y += 1;
+			state = 0;
 		}
 	}
-	
-	
+
+
 }

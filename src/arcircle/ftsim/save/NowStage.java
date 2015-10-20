@@ -1,6 +1,8 @@
 package arcircle.ftsim.save;
 
-public class NowStage {
+import java.io.Serializable;
+
+public class NowStage implements Serializable {
 	public String storyName;
 	public String subStoryNum;
 

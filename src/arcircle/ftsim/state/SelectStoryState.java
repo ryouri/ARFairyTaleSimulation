@@ -18,15 +18,16 @@ public class SelectStoryState extends KeyInputState {
 
 	private SelectStoryModel ssModel;
 	private SelectStoryView ssView;
-	
+
 	public int storyNum = 6;
 	public boolean[] isClearStage;
-	
+
 	public SelectStoryState(int state) {
 		super(state);
 	}
 
 	public void nextState() {
+		FTSimulationGame.save.save();
 		TalkState talkState = (TalkState)stateGame.getState(StateConst.TALK);
 		talkState.setLastBGM(bgm);
 		stateGame.enterState(StateConst.TALK,
@@ -38,9 +39,10 @@ public class SelectStoryState extends KeyInputState {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enter(container, game);
+
 		ssModel = new SelectStoryModel(this);
 		ssView = new SelectStoryView(ssModel, this);
-		
+
 		isClearStage = new boolean[storyNum];	//初期値は多分false
 		ArrayList<String> clearStage = FTSimulationGame.save.getClearStoryNameArray();
 		if(!clearStage.isEmpty()){
@@ -62,9 +64,9 @@ public class SelectStoryState extends KeyInputState {
 				}
 			}
 		}
-		
+
 		isClearStage[2] = true;
-		
+
 		try {
 			bgm = new Sound("./Stories/BGM/FTSim003.ogg");
 		} catch (SlickException e) {
