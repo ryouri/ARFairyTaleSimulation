@@ -116,6 +116,11 @@ public class Save implements Serializable{
 		return clearStoryNameArray;
 	}
 
+	public void clearNowStage() {
+		clearStoryNameArray.add(nowStage.storyName);
+	}
+
+
 	public NowStage getNowStage() {
 		return nowStage;
 	}

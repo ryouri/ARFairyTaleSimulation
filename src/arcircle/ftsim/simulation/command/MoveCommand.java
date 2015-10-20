@@ -165,7 +165,7 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		 *  その後はまたあとで考える
 		 *
 		 */
-		if (keyInput.isKeyDown(Input.KEY_Z)) {
+		if (keyInput.isKeyDown(Input.KEY_Z) && !field.getCursor().isMoving) {
 			field.getSoundManager().playSound(SoundManager.SOUND_DECISION);
 
 			//TODO;キャラクターが動いた時の処理を書く

@@ -27,7 +27,6 @@ public class SelectStoryState extends KeyInputState {
 	}
 
 	public void nextState() {
-		FTSimulationGame.save.save();
 		TalkState talkState = (TalkState)stateGame.getState(StateConst.TALK);
 		talkState.setLastBGM(bgm);
 		stateGame.enterState(StateConst.TALK,
