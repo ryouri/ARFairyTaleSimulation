@@ -42,6 +42,9 @@ public class Save implements Serializable{
 		this.nowStage = new NowStage();
 	}
 
+	/**
+	 * このインスタンスをsaveディレクトリに直列化する
+	 */
 	public void save() {
 		String path = "./save/";
 		// 現在日時をTimestamp型で取得
@@ -60,6 +63,11 @@ public class Save implements Serializable{
 		}
 	}
 
+	/**
+	 * 指定されたファイルからこのSaveクラスのインスタンスを返す
+	 * @param path 直列化して保存されたバイナリファイルのパス
+	 * @return Saveインスタンス
+	 */
 	public Save load(String path) {
 		ObjectInputStream ois;
 		Save obj = null;
