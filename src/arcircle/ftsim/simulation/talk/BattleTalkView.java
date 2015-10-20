@@ -186,21 +186,21 @@ public class BattleTalkView implements Renderer{
 			if(curTag.getLeftCharaName().equals("@")){	//キャラなしの場合
 				leftCharaImg = nothingCharaImg;
 			}else if(curTag.getLeftCharaName().equals("*")){	//主人公の場合
-				leftCharaImg = playerImg.getFlippedCopy(true, false);
+				leftCharaImg = playerImg;
 			}else{
-				leftCharaImg = charasImg.get(curTag.getLeftCharaName() + "Stand").getFlippedCopy(true, false);
+				leftCharaImg = charasImg.get(curTag.getLeftCharaName() + "Stand");
 			}
 
 			//右配置のキャラを設定
 			if(curTag.getRightCharaName().equals("@")){	//キャラなしの場合
 				rightCharaImg = nothingCharaImg;
 			}else if(curTag.getRightCharaName().equals("*")){	//主人公の場合
-				rightCharaImg = playerImg;
+				rightCharaImg = playerImg.getFlippedCopy(true, false);
 			}else{
-				rightCharaImg = charasImg.get(curTag.getRightCharaName() + "Stand");
+				rightCharaImg = charasImg.get(curTag.getRightCharaName() + "Stand").getFlippedCopy(true, false);
 			}
 
-			charaPosX = FTSimulationGame.WIDTH - rightCharaImg.getWidth();
+			charaPosX = FTSimulationGame.WIDTH - rightCharaImg.getWidth() - 100;
 			charaLPosY = msgBoxPosY - (leftCharaImg.getHeight() * 3 / 4);	//キャラ立ち絵は体の半分がメッセージボックス上に出る
 			charaRPosY = msgBoxPosY - (rightCharaImg.getHeight() * 3 / 4);
 
@@ -303,9 +303,9 @@ public class BattleTalkView implements Renderer{
 
 		//左キャラの描画
 		if(curTag.isLeftBright()){
-			g.drawImage(leftCharaImg, 0, charaLPosY);	//左に書くキャラの描画
+			g.drawImage(leftCharaImg, 100, charaLPosY);	//左に書くキャラの描画
 		}else{
-			g.drawImage(leftCharaImg, 0, charaLPosY, filterColor);	//左に書くキャラを半透明で描画
+			g.drawImage(leftCharaImg, 100, charaLPosY, filterColor);	//左に書くキャラを半透明で描画
 		}
 
 		//右キャラの描画
