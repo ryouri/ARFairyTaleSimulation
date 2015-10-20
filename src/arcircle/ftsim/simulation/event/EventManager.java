@@ -36,6 +36,32 @@ public class EventManager {
 
 	Field field;
 
+	public ArrayList<String> getWinConditionString() {
+		ArrayList<String> winStringArray = new ArrayList<String>();
+
+		if (winConditionEachPhaseArray.isEmpty()) {
+			return null;
+		}
+
+		for (Event event : winConditionEachPhaseArray.get(0)) {
+			winStringArray.add(event.eventID);
+		}
+		return winStringArray;
+	}
+
+	public ArrayList<String> getLoseConditionString() {
+		ArrayList<String> loseStringArray = new ArrayList<String>();
+
+		if (loseConditionEachPhaseArray.isEmpty()) {
+			return null;
+		}
+
+		for (Event event : loseConditionEachPhaseArray.get(0)) {
+			loseStringArray.add(event.eventID);
+		}
+		return loseStringArray;
+	}
+
 	public ArrayList<ArrayList<Event>> getWinConditionEachPhaseArray() {
 		return winConditionEachPhaseArray;
 	}

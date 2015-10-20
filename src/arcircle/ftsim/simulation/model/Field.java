@@ -8,12 +8,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import arcircle.ftsim.keyinput.KeyInput;
@@ -26,7 +24,6 @@ import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
 import arcircle.ftsim.simulation.command.CharaCommandWindow;
 import arcircle.ftsim.simulation.command.OptionCommandWindow;
-import arcircle.ftsim.simulation.event.Event;
 import arcircle.ftsim.simulation.event.EventManager;
 import arcircle.ftsim.simulation.field.LoadField;
 import arcircle.ftsim.simulation.field.Terrain;
@@ -43,15 +40,6 @@ public class Field implements KeyListner, Renderer {
 		return sgModel;
 	}
 
-	// カーソル関連のデータ
-	private Cursor cursor;
-	Image[] cursorImage;
-	int[] cursorDuration;
-	Animation cursorAnime;
-
-	// キャラクターを管理するクラス
-	Characters characters;
-
 	HashMap<String, Item> itemList;
 
 	private int nowTurn;
@@ -59,6 +47,10 @@ public class Field implements KeyListner, Renderer {
 	public static final int TURN_ENEMY = 1;
 
 	private String partName;
+
+	private Cursor cursor;
+
+	Characters characters;
 
 	public EventManager eventManager;
 
@@ -71,6 +63,13 @@ public class Field implements KeyListner, Renderer {
 	private SubInfoWindow subInfoWindow;
 
 	private LoadField loadField;
+
+	public int offsetX;
+	public int offsetY;
+	public int firstTileX;
+	public int lastTileX;
+	public int firstTileY;
+	public int lastTileY;
 
 	public SubInfoWindow getSubInfoWindow() {
 		return subInfoWindow;
@@ -163,17 +162,6 @@ public class Field implements KeyListner, Renderer {
 
 	private void initCursor() {
 		setCursor(new Cursor(this, loadField));
-		cursorImage = new Image[2];
-		try {
-			cursorImage[0] = new Image("image/cursor/simGameStateCorsor1.png");
-			cursorImage[1] = new Image("image/cursor/simGameStateCorsor2.png");
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-		cursorDuration = new int[2];
-		cursorDuration[0] = 600;
-		cursorDuration[1] = 600;
-		cursorAnime = new Animation(cursorImage, cursorDuration, true);
 	}
 
 	public void changeTurnFriend() {
@@ -185,13 +173,6 @@ public class Field implements KeyListner, Renderer {
 		setNowTurn(TURN_ENEMY);
 		cursor.setVisible(false);
 	}
-
-	public int offsetX;
-	public int offsetY;
-	public int firstTileX;
-	public int lastTileX;
-	public int firstTileY;
-	public int lastTileY;
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
@@ -228,7 +209,7 @@ public class Field implements KeyListner, Renderer {
 
 		if (cursor.isVisible()) {
 			// カーソルを描く
-			renderCursor(g, offsetX, offsetY);
+			cursor.draw(g, offsetX, offsetY);
 		}
 
 		if (effectManager.existEffect()) {
@@ -241,13 +222,8 @@ public class Field implements KeyListner, Renderer {
 		}
 	}
 
-	private void renderCursor(Graphics g, int offsetX, int offsetY) {
-		cursorAnime.draw(getCursor().pX + offsetX - 4, getCursor().pY + offsetY - 4);
-	}
-
 	public void update(GameContainer container, StateBasedGame game, int delta) {
-		cursorAnime.update(delta);
-		getCursor().update();
+		getCursor().update(container, game, delta);
 
 		if (effectManager.existEffect()) {
 			effectManager.update();
@@ -260,7 +236,7 @@ public class Field implements KeyListner, Renderer {
 			return;
 		}
 
-		//タスクがないときはターンによってカーソルの可視の可否を変える
+		//タスクがないときはターンによってカーソルの可視を変える
 		if (nowTurn == TURN_FRIEND) {
 			getCursor().setVisible(true);
 		} else {
@@ -472,16 +448,7 @@ public class Field implements KeyListner, Renderer {
 	 * @return 勝利条件のStringが入った配列を返す， 勝利条件がない場合は，nullを返す
 	 */
 	public ArrayList<String> getWinConditionString() {
-		ArrayList<String> winStringArray = new ArrayList<String>();
-
-		if (eventManager.getWinConditionEachPhaseArray().isEmpty()) {
-			return null;
-		}
-
-		for (Event event : eventManager.getWinConditionEachPhaseArray().get(0)) {
-			winStringArray.add(event.eventID);
-		}
-		return winStringArray;
+		return eventManager.getWinConditionString();
 	}
 
 	/**
@@ -489,16 +456,7 @@ public class Field implements KeyListner, Renderer {
 	 * @return 敗北条件のStringが入った配列を返す， 敗北条件がない場合は，nullを返す
 	 */
 	public ArrayList<String> getLoseConditionString() {
-		ArrayList<String> loseStringArray = new ArrayList<String>();
-
-		if (eventManager.getLoseConditionEachPhaseArray().isEmpty()) {
-			return null;
-		}
-
-		for (Event event : eventManager.getLoseConditionEachPhaseArray().get(0)) {
-			loseStringArray.add(event.eventID);
-		}
-		return loseStringArray;
+		return eventManager.getLoseConditionString();
 	}
 
 	public void addAttackTask(Chara chara, java.awt.Point attackPoint, java.awt.Point damagePoint) {

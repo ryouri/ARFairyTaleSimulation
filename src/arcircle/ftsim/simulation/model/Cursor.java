@@ -1,5 +1,12 @@
 package arcircle.ftsim.simulation.model;
 
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
+
 import arcircle.ftsim.simulation.field.LoadField;
 import arcircle.ftsim.simulation.sound.SoundManager;
 
@@ -36,6 +43,10 @@ public class Cursor {
 	private int speed;
 	public static final int SPEED = 8;
 
+	Image[] cursorImage;
+	int[] cursorDuration;
+	Animation cursorAnime;
+
 	public Cursor(Field field, LoadField loadField) {
 		this.field = field;
 		this.loadField = loadField;
@@ -43,6 +54,20 @@ public class Cursor {
 		directionPressedTime = DIRECTION_PRESSED_DURATION;
 		stopTime = 0;
 		this.isVisible = true;
+	}
+
+	private void init() {
+		cursorImage = new Image[2];
+		try {
+			cursorImage[0] = new Image("image/cursor/simGameStateCorsor1.png");
+			cursorImage[1] = new Image("image/cursor/simGameStateCorsor2.png");
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+		cursorDuration = new int[2];
+		cursorDuration[0] = 600;
+		cursorDuration[1] = 600;
+		cursorAnime = new Animation(cursorImage, cursorDuration, true);
 	}
 
 	public void stop() {
@@ -145,7 +170,9 @@ public class Cursor {
 		return isMoving;
 	}
 
-	public void update() {
+	public void update(GameContainer container, StateBasedGame game, int delta) {
+		cursorAnime.update(delta);
+
 		if (field.getNowTurn() == field.TURN_ENEMY) {
 			isVisible = false;
 		}
@@ -208,6 +235,10 @@ public class Cursor {
 			pX = (loadField.getCol() - 1) * LoadField.MAP_CHIP_SIZE;
 			isMoving = false;
 		}
+	}
+
+	public void draw(Graphics g, int offsetX, int offsetY) {
+		cursorAnime.draw(pX + offsetX - 4, pY + offsetY - 4);
 	}
 
 	public void setDirection(int direction) {
