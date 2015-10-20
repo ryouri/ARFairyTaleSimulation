@@ -38,6 +38,14 @@ public class LoadSaveState extends KeyInputState {
 				new FadeInTransition(Color.black, 100));
 	}
 
+	public void backState() {
+		GameStartState gameStartState = (GameStartState)stateGame.getState(StateConst.GAME_START);
+		gameStartState.setLastBGM(lastBGM);
+		stateGame.enterState(StateConst.GAME_START,
+				new FadeOutTransition(Color.black, 100),
+				new FadeInTransition(Color.black, 100));
+	}
+
 	@Override
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {

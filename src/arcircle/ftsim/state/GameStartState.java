@@ -65,12 +65,14 @@ public class GameStartState extends KeyInputState {
 		gsModel = new GameStartModel(this);
 		gsView = new GameStartView(gsModel, this);
 		try {
-			bgm = new Sound("./Stories/BGM/FTSim001_bpm120.ogg");
+				bgm = new Sound("./Stories/BGM/FTSim001_bpm120.ogg");
 		} catch (SlickException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
-		bgm.loop();
+		if (lastBGM == null){
+			bgm.loop();
+		}
 		System.out.println("Enter Game Start State");
 		keyInputStack.clear();
 		keyInputStack.push(gsModel);
