@@ -26,9 +26,7 @@ public class TurnEndTask extends Task {
 		timer = new Timer();
 		task = new TETask();
 		timer_start_flag = false;
-		taskManager.field.getCursor().isVisible = false;
 	}
-
 
 	public static final String TURN_END = "TURN END";
 
@@ -68,7 +66,6 @@ public class TurnEndTask extends Task {
 			characters.standForAllCampChara(Chara.CAMP_ENEMY);
 			taskManager.taskEnd();
 		}
-		taskManager.field.getCursor().isVisible = true;
 	}
 
 	private class TETask extends TimerTask {

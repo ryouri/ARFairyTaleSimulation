@@ -12,7 +12,7 @@ public class Cursor {
 
 	public boolean isMoving;
 
-	public boolean isVisible;
+	private boolean isVisible;
 
 	public static final int UP = 0;
 	public static final int RIGHT = 1;
@@ -146,6 +146,10 @@ public class Cursor {
 	}
 
 	public void update() {
+		if (field.getNowTurn() == field.TURN_ENEMY) {
+			isVisible = false;
+		}
+
 		if (!isMoving) {
 			//動いてない時は停止時間を増やしておく
 			stopTime++;
@@ -208,5 +212,16 @@ public class Cursor {
 
 	public void setDirection(int direction) {
 		this.direction = direction;
+	}
+
+	public boolean isVisible() {
+		return isVisible;
+	}
+
+	public void setVisible(boolean settingVisible) {
+		if (settingVisible == true && field.getNowTurn() == field.TURN_ENEMY) {
+			return;
+		}
+		this.isVisible = settingVisible;
 	}
 }

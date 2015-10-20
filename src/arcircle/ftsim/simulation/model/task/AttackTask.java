@@ -207,7 +207,6 @@ public class AttackTask extends Task {
 					};
 					attackInfoArray.clear();
 					taskManager.taskEnd();
-					taskManager.field.getCursor().isVisible = true;
 
 					//経験値の追加処理を入れる
 					//attackCharaに経験値
@@ -235,7 +234,6 @@ public class AttackTask extends Task {
 
 
 	private void charaAttackPrepareDir(Chara chara, Chara damageChara) {
-		taskManager.field.getCursor().isVisible = false;
 		chara.setAttack(true);
 		if (damageChara.x > chara.x) {
 			chara.direction = Chara.RIGHT;

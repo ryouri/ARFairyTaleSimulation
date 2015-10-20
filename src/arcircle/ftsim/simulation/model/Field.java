@@ -178,12 +178,12 @@ public class Field implements KeyListner, Renderer {
 
 	public void changeTurnFriend() {
 		setNowTurn(TURN_FRIEND);
-		cursor.isVisible = true;
+		cursor.setVisible(true);
 	}
 
 	public void changeTurnEnemy() {
 		setNowTurn(TURN_ENEMY);
-		cursor.isVisible = false;
+		cursor.setVisible(false);
 	}
 
 	public int offsetX;
@@ -226,7 +226,7 @@ public class Field implements KeyListner, Renderer {
 		characters.render(g, offsetX, offsetY, firstTileX, lastTileX,
 				firstTileY, lastTileY);
 
-		if (cursor.isVisible) {
+		if (cursor.isVisible()) {
 			// カーソルを描く
 			renderCursor(g, offsetX, offsetY);
 		}
@@ -253,9 +253,18 @@ public class Field implements KeyListner, Renderer {
 			effectManager.update();
 		}
 
+		//タスクがあるときはカーソルは不可視
 		if (taskManager.existTask()) {
+			getCursor().setVisible(false);
 			taskManager.processUpdate(delta);
 			return;
+		}
+
+		//タスクがないときはターンによってカーソルの可視の可否を変える
+		if (nowTurn == TURN_FRIEND) {
+			getCursor().setVisible(true);
+		} else {
+			getCursor().setVisible(false);
 		}
 
 		characters.update(delta);
@@ -290,7 +299,7 @@ public class Field implements KeyListner, Renderer {
 
 	@Override
 	public void keyInput(KeyInput keyInput) {
-		if (!cursor.isVisible) {
+		if (!cursor.isVisible()) {
 			return;
 		}
 
