@@ -100,13 +100,11 @@ public class HealTask extends Task {
 			healChara.setStand(true);
 			//生きている時のみ状態を戻す
 			healedChara.resetState();
-			taskManager.field.getCursor().isVisible = true;
 			taskManager.taskEnd();
 		}
 	}
 
 	private void charaAttackPrepareDir(Chara chara, Chara damageChara) {
-		taskManager.field.getCursor().isVisible = false;
 		chara.setAttack(true);
 		if (damageChara.x > chara.x) {
 			chara.direction = Chara.RIGHT;

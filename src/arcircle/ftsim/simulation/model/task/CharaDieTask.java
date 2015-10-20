@@ -17,7 +17,6 @@ public class CharaDieTask extends Task {
 		super(taskManager);
 		this.dieChara = chara;
 		this.timer = 0;
-		taskManager.field.getCursor().isVisible = false;
 	}
 
 	@Override
@@ -41,7 +40,6 @@ public class CharaDieTask extends Task {
 			taskManager.characters.removeChara(dieChara);
 			taskManager.checkCharaDieEvent(dieChara.id);
 			taskManager.taskEnd();
-			taskManager.field.getCursor().isVisible = true;
 		}
 	}
 }

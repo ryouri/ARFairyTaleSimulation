@@ -42,7 +42,6 @@ public class LevelUpTask extends Task {
 		}
 		calcPos();
 		counter = 0;
-		taskManager.field.getCursor().isVisible = false;
 		taskManager.field.getSoundManager().playSound(SoundManager.SOUND_LEVEL_UP_OPEN);
 	}
 
@@ -235,7 +234,6 @@ public class LevelUpTask extends Task {
 			charaStatus.move         += calcurateExp.getLevelUpStatus().move;
 			charaStatus.physique     += calcurateExp.getLevelUpStatus().physique;
 			taskManager.taskEnd();
-			taskManager.field.getCursor().isVisible = true;
 		}
 	}
 }

@@ -47,8 +47,6 @@ public class AddExpTask extends Task {
 		expLength = calcurateExp.getBeforeUpExp() * 4;
 		counter = 0;
 		calcPos();
-
-		taskManager.field.getCursor().isVisible = false;
 	}
 
 	/** 描画位置の計算メソッド */
@@ -96,7 +94,6 @@ public class AddExpTask extends Task {
 				taskManager.addLevelUpTask(chara, calcurateExp);
 			}
 			taskManager.taskEnd();
-			taskManager.field.getCursor().isVisible = true;
 		}else{}
 	}
 }
