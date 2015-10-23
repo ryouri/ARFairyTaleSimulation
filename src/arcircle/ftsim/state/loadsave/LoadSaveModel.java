@@ -13,7 +13,7 @@ public class LoadSaveModel implements KeyListner{
 	public String message = "ロードするデータを選択してください";
 	private String path = "./image/loadWindow/";
 	public Image background, box, box2;
-	// スクロール用の変数
+	// スクロール用の表示のオフセット変数
 	public int current_start_position = 0;
 	public int show_max = 5;
 
