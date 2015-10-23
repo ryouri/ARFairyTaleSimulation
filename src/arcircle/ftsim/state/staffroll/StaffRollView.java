@@ -39,7 +39,7 @@ public class StaffRollView implements Renderer {
 			e1.printStackTrace();
 		}
 		String message;
-		int h = srModel.output_height;
+		int h = srModel.getOutputHeight();
 		try {
 			while((message = br.readLine()) != null) {
 				int messageWidth = srState.getFont().getWidth(message);
@@ -53,7 +53,9 @@ public class StaffRollView implements Renderer {
 		}
 
 		if (h > FTSimulationGame.HEIGHT /2) {
-			srModel.output_height -= 1;
+			srModel.decrementOutputHeight();
+		} else {
+			srModel.setFinishTrue();
 		}
 	}
 
