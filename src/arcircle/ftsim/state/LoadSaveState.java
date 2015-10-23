@@ -2,6 +2,8 @@ package arcircle.ftsim.state;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.Arrays;
+import java.util.Collections;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -70,6 +72,8 @@ public class LoadSaveState extends KeyInputState {
 				return false;
 			}
 		};
-		return dir.listFiles(filter);
+		File[] files = dir.listFiles(filter);
+		Arrays.sort(files, Collections.reverseOrder());
+		return files;
 	}
 }
