@@ -38,6 +38,15 @@ public class SelectStoryState extends KeyInputState {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enter(container, game);
+		// 全部クリアしてたらスタッフロールへ
+		if (FTSimulationGame.save.getClearStoryNameArray().size() == 6) {
+			StaffRollState staffRollState = (StaffRollState)stateGame.getState(StateConst.STAFF_ROLL);
+			staffRollState.setLastBGM(lastBGM);
+			stateGame.enterState(StateConst.STAFF_ROLL,
+					new FadeOutTransition(Color.black, 100),
+					new FadeInTransition(Color.black, 100));
+			return;
+		}
 
 		ssModel = new SelectStoryModel(this);
 		ssView = new SelectStoryView(ssModel, this);
