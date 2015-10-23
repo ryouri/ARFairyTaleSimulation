@@ -5,4 +5,6 @@ public class SupportItem extends RangedItem {
 	public static String RANGE_NEAR_STR = "RANGE_NEAR";
 
 	public int power;
+
+	public String effectName;
 }

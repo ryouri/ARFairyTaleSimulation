@@ -11,8 +11,8 @@ import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
 import arcircle.ftsim.simulation.chara.battle.SupportInfo;
 import arcircle.ftsim.simulation.field.LoadField;
+import arcircle.ftsim.simulation.item.Weapon;
 import arcircle.ftsim.simulation.model.AttackInfo;
-import arcircle.ftsim.simulation.model.effect.EffectConst;
 import arcircle.ftsim.simulation.sound.SoundManager;
 
 public class AttackTask extends Task {
@@ -172,10 +172,18 @@ public class AttackTask extends Task {
 					int nextHp = damageChara.status.getHp() - damage;
 					damageChara.status.setHp(nextHp);
 
+					Weapon attackWeapon = null;
+					if (attackChara.getEquipedWeapon() instanceof Weapon) {
+						attackWeapon = (Weapon) attackChara.getEquipedWeapon();
+					} else {
+						System.err.println("攻撃出来てるのに、Weaponを装備してない");
+						System.exit(1);
+					}
+
 					//TODO:エフェクト
 					int effectX = damageChara.pX;
 					int effectY = damageChara.pY;
-					taskManager.occurEffect(effectX, effectY, EffectConst.SLASH);
+					taskManager.occurEffect(effectX, effectY, attackWeapon.effectName);
 				} else {
 					//外れた音
 					taskManager.field.getSoundManager().playSound(SoundManager.SOUND_AVOID);
