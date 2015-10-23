@@ -2,6 +2,8 @@ package arcircle.ftsim.state;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.Arrays;
+import java.util.Collections;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -38,6 +40,14 @@ public class LoadSaveState extends KeyInputState {
 				new FadeInTransition(Color.black, 100));
 	}
 
+	public void backState() {
+		GameStartState gameStartState = (GameStartState)stateGame.getState(StateConst.GAME_START);
+		gameStartState.setLastBGM(lastBGM);
+		stateGame.enterState(StateConst.GAME_START,
+				new FadeOutTransition(Color.black, 100),
+				new FadeInTransition(Color.black, 100));
+	}
+
 	@Override
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
@@ -62,6 +72,8 @@ public class LoadSaveState extends KeyInputState {
 				return false;
 			}
 		};
-		return dir.listFiles(filter);
+		File[] files = dir.listFiles(filter);
+		Arrays.sort(files, Collections.reverseOrder());
+		return files;
 	}
 }
