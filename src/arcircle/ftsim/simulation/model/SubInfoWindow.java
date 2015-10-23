@@ -176,7 +176,7 @@ public class SubInfoWindow implements Renderer{
 		g.drawString("名前 : " + charaStatus.name,
 				objectPos_status.get("CHARA_NAME").x, objectPos_status.get("CHARA_NAME").y);	//名前の描画
 		//性別の描画
-		g.drawString("性別 : " + gender,
+		g.drawString("性別 : " + gender + " " + charaStatus.className,
 				objectPos_status.get("CHARA_GENDER").x, objectPos_status.get("CHARA_GENDER").y);	//名前の描画
 		//選択キャラのアニメーションの取得
 		IMAGEAnime[0] = downWalkAnimeMap.get(renderInfoChara.getFolderName());

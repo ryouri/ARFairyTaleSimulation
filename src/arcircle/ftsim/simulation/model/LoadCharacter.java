@@ -88,6 +88,11 @@ public class LoadCharacter {
 				}
 
 				loadCharaParameterLine(line, chara);
+
+				//
+				if (chara.status.className == null) {
+					chara.status.className = "normal";
+				}
 			}
 
 			characters.characterData.put(charaFolderName, chara);
@@ -110,6 +115,7 @@ public class LoadCharacter {
 	public static final String NAMES = "NAMES";
 	public static final String STATUS = "STATUS";
 	public static final String GROW = "GROW";
+	public static final String CLASS = "CLASS";
 	public static final String ITEM = "ITEM";
 	/**
 	 * ファイルの１行を読み込み，キャラクターデータに追記する
@@ -152,6 +158,15 @@ public class LoadCharacter {
 			chara.status.growRate.magicDefense = Integer.valueOf(charaStrs[8]);
 			chara.status.growRate.move = 		Integer.valueOf(charaStrs[9]);
 			chara.status.growRate.physique = 	Integer.valueOf(charaStrs[10]);
+		}
+//		CLASS,クラス名
+		if (charaStrs[0].equals(CLASS)) {
+			if (this.characters.getField().getLoadField().getTerrainManager().existClassMap.containsKey(charaStrs[1])) {
+				chara.status.className = charaStrs[1];
+			} else {
+				System.err.println("Character class settings error");
+				System.exit(1);
+			}
 		}
 //		ITEM,けん
 		if (charaStrs[0].equals(ITEM)) {

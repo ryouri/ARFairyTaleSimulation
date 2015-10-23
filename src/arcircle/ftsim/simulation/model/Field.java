@@ -462,4 +462,9 @@ public class Field implements KeyListner, Renderer {
 	public static int tilesToPixels(int tiles) {
 		return tiles * LoadField.MAP_CHIP_SIZE;
 	}
+
+	public LoadField getLoadField() {
+		return loadField;
+	}
+
 }

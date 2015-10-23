@@ -11,6 +11,7 @@ public class Status implements Serializable {
 	public static final int FEMALE = 1;
 	public int gender;
 	public String name;
+	public String className;
 
 	//TODO:クラス（職業）を表示したいので，そこに気をつけて描画！
 
@@ -88,8 +89,10 @@ public class Status implements Serializable {
 		status.physique = 		this.physique;
 
 		status.name = 			this.name;
+		status.className = 		this.className;
 		status.gender = 		this.gender;
 		status.level = 			this.level;
 		status.exp = 			this.exp;
+		status.growRate = 		this.growRate;
 	}
 }
