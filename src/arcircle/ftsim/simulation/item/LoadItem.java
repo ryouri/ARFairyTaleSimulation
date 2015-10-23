@@ -63,17 +63,13 @@ public class LoadItem {
 			}
 			weapon.power = Integer.valueOf(itemStrs[3]);
 			weapon.weight = Integer.valueOf(itemStrs[4]);
-			String itemIconPath = "image/item/" + itemStrs[5];
-			try {
-				weapon.itemIcon = new Image(itemIconPath);
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}
+			weapon.itemIcon = loadItemIcon(itemStrs[5]);
+			weapon.effectName = itemStrs[6];
 
 			return weapon;
 		}
 
-		//けん,TYPE_WEAPON,RANGE_NEAR,5,4,longsword.png
+		//つえ,TYPE_SUPPORT,RANGE_NEAR,5
 		if (itemStrs[1].equals(Item.TYPE_SUPPORT_STR)) {
 			SupportItem supportItem = new SupportItem();
 			supportItem.name = itemStrs[0];
@@ -82,6 +78,8 @@ public class LoadItem {
 				supportItem.rangeType = SupportItem.RANGE_NEAR;
 			}
 			supportItem.power = Integer.valueOf(itemStrs[3]);
+			supportItem.itemIcon = loadItemIcon(itemStrs[4]);
+			supportItem.effectName = itemStrs[5];
 
 			return supportItem;
 		}
@@ -89,5 +87,16 @@ public class LoadItem {
 		}
 
 		return null;
+	}
+
+	private static Image loadItemIcon(String itemIconName) {
+		String itemIconPath = "image/item/" + itemIconName;
+		Image image = null;
+		try {
+			image = new Image(itemIconPath);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+		return image;
 	}
 }
