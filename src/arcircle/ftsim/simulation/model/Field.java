@@ -27,6 +27,7 @@ import arcircle.ftsim.simulation.event.EventManager;
 import arcircle.ftsim.simulation.field.LoadField;
 import arcircle.ftsim.simulation.field.Terrain;
 import arcircle.ftsim.simulation.item.Item;
+import arcircle.ftsim.simulation.item.LoadItem;
 import arcircle.ftsim.simulation.model.effect.EffectManager;
 import arcircle.ftsim.simulation.model.task.TaskManager;
 import arcircle.ftsim.simulation.sound.SoundManager;
@@ -88,15 +89,16 @@ public class Field implements KeyListner, Renderer {
 		return taskManager;
 	}
 
-	public Field(SimGameModel sgModel, HashMap<String, Item> itemList) {
+	public Field(SimGameModel sgModel) {
 		this.sgModel = sgModel;
-		this.itemList = itemList;
 		this.characters = new Characters();
 		this.setNowTurn(TURN_FRIEND);
 	}
 
 	//TODO:マジックナンバー多発地帯！
 	public void init(String subStoryFolderPath) {
+		itemList = LoadItem.loadItemList();
+
 		loadField = new LoadField(subStoryFolderPath + "map.dat", subStoryFolderPath
 				+ "mapchip.txt");
 
