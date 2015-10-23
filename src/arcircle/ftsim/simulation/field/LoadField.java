@@ -15,6 +15,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
+import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.model.Field;
 
 public class LoadField {
@@ -301,9 +302,10 @@ public class LoadField {
 
 	/**
 	 * Fieldのコストが入った配列を返すメソッド
+	 * @param chara
 	 * @return そのマップのコストが記録されたマップ
 	 */
-	public int[][] createMoveCostArray(int charaX, int charaY) {
+	public int[][] createMoveCostArray(int charaX, int charaY, Chara chara) {
 		int [][] moveCostArray = new int[moveCostMap.length][moveCostMap[0].length];
 
 		//Mapのコストを格納する
@@ -316,7 +318,7 @@ public class LoadField {
 
 				//TODO; キャラのクラスが実装されていないので、テストクラスでコストを計算している
 				if (terrain != null) {
-					moveCostArray[y][x] = terrain.classNameCostMap.get("normal");
+					moveCostArray[y][x] = terrain.classNameCostMap.get(chara.status.className);
 				}
 			}
 		}

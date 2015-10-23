@@ -325,7 +325,7 @@ public class Field implements KeyListner, Renderer {
 	 * @return そのマップのコストが記録されたマップ
 	 */
 	public int[][] createMoveCostArray(int charaX, int charaY) {
-		int [][] moveCostArray = loadField.createMoveCostArray(charaX, charaY);
+		int [][] moveCostArray = loadField.createMoveCostArray(charaX, charaY, getXYChara(charaX, charaY));
 
 		return characters.modifyMoveCostArray(charaX, charaY, moveCostArray);
 	}
