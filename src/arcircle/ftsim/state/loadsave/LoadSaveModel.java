@@ -43,6 +43,9 @@ public class LoadSaveModel implements KeyListner{
 					current_start_position++;
 				}
 				lsState.selected++;
+			} else {
+				lsState.selected = 0;
+				current_start_position = 0;
 			}
 		} else if (keyInput.isKeyDown(Input.KEY_UP)) {
 			if (lsState.selected > 0){
@@ -50,6 +53,9 @@ public class LoadSaveModel implements KeyListner{
 					current_start_position--;
 				}
 				lsState.selected--;
+			} else {
+				lsState.selected = lsState.files.length - 1;
+				current_start_position = lsState.files.length - show_max;
 			}
 		} else if (keyInput.isKeyDown(Input.KEY_Z)) {
 			lsState.nextState();
