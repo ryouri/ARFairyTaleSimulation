@@ -13,6 +13,9 @@ public class LoadSaveModel implements KeyListner{
 	public String message = "ロードするデータを選択してください";
 	private String path = "./image/loadWindow/";
 	public Image background, box, box2;
+	// スクロール用の変数
+	public int current_start_position = 0;
+	public int show_max = 5;
 
 
 	public LoadSaveModel(LoadSaveState lsState){
@@ -36,10 +39,16 @@ public class LoadSaveModel implements KeyListner{
 		}
 		if (keyInput.isKeyDown(Input.KEY_DOWN)) {
 			if (lsState.selected < lsState.files.length - 1){
+				if (current_start_position + show_max -1 == lsState.selected){
+					current_start_position++;
+				}
 				lsState.selected++;
 			}
 		} else if (keyInput.isKeyDown(Input.KEY_UP)) {
 			if (lsState.selected > 0){
+				if (current_start_position == lsState.selected){
+					current_start_position--;
+				}
 				lsState.selected--;
 			}
 		} else if (keyInput.isKeyDown(Input.KEY_Z)) {

@@ -41,18 +41,20 @@ public class LoadSaveView implements Renderer{
 				(FTSimulationGame.WIDTH - messageWidth) / 2, 50);
 
 		// セーブデータの一覧と選択
-		int show_max = 5;
 		g.setColor(Color.blue);
 		g.setFont(lsState.getFont());
 		int height_offset = FTSimulationGame.HEIGHT / 7 * 4 - lsModel.background.getHeight() / 2 + 10;
 		int width_offset = (FTSimulationGame.WIDTH - lsModel.background.getWidth()) / 2;
+		
 		// それぞれのセーブデータの情報を取得する
-		for (int i = 0; i < show_max && i < lsState.files.length; i++){
-			Save save = FTSimulationGame.save.load(lsState.files[i].getPath());
-			String date = lsState.files[i].getName().replaceAll(".sav", "");
+		
+		for (int i = 0; i < lsModel.show_max && i < lsState.files.length; i++){
+			int index = lsModel.current_start_position + i;
+			Save save = FTSimulationGame.save.load(lsState.files[index].getPath());
+			String date = lsState.files[index].getName().replaceAll(".sav", "");
 			String name = save.getPlayer().name;
 			int lv = save.getPlayer().level;
-			ArrayList<String> creaed = save.getClearStoryNameArray();
+			ArrayList<String> cleared = save.getClearStoryNameArray();
 
 			// ボックスの表示
 			g.drawImage(lsModel.box, width_offset, height_offset + i * lsModel.box.getHeight());
@@ -65,7 +67,7 @@ public class LoadSaveView implements Renderer{
 		}
 
 		// 選択している枠の表示
-		int i = lsState.selected < show_max ? lsState.selected : show_max - 1;
+		int i = lsState.selected - lsModel.current_start_position;
 		g.drawImage(lsModel.box2, width_offset, height_offset + i * lsModel.box2.getHeight());
 
 
