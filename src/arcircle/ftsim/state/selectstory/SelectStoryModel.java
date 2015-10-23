@@ -24,6 +24,7 @@ public class SelectStoryModel implements KeyListner {
 
 	public SelectStoryModel(SelectStoryState ssState) {
 		super();
+
 		this.ssState = ssState;
 	}
 
@@ -43,7 +44,7 @@ public class SelectStoryModel implements KeyListner {
 					story = 5;
 				}
 			}while(ssState.isClearStage[story]);
-			
+
 		} else if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
 			do{
 				story++;
@@ -58,7 +59,7 @@ public class SelectStoryModel implements KeyListner {
 					story += 6;
 				}
 			}while(ssState.isClearStage[story]);
-			
+
 		} else if (keyInput.isKeyDown(Input.KEY_DOWN)) {
 			do{
 				story += 3;
@@ -66,14 +67,14 @@ public class SelectStoryModel implements KeyListner {
 					story -= 6;
 				}
 			}while(ssState.isClearStage[story]);
-			
+
 		} else if (keyInput.isKeyDown(Input.KEY_Z)) {
 			FTSimulationGame.save.getNowStage().storyName = "0" + (story + 1) + "_Story";
 			FTSimulationGame.save.getNowStage().subStoryNum = "01";
 			FTSimulationGame.save.getNowStage().selectLogue = 0;
 			ssState.nextState();
 		}
-		
-		
+
+
 	}
 }

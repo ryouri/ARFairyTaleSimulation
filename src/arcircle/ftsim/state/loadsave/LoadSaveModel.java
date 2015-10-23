@@ -56,6 +56,9 @@ public class LoadSaveModel implements KeyListner{
 			} else {
 				lsState.selected = lsState.files.length - 1;
 				current_start_position = lsState.files.length - show_max;
+				if (current_start_position < 0) {
+					current_start_position = 0;
+				}
 			}
 		} else if (keyInput.isKeyDown(Input.KEY_Z)) {
 			lsState.nextState();
