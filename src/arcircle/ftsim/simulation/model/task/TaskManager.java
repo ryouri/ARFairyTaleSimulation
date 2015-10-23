@@ -87,6 +87,15 @@ public class TaskManager {
 		addOneTaskAndGenerateArray(healTask);
 	}
 
+	public void addNextWinConditionTask(
+			ArrayList<ArrayList<Event>> winConditionEachPhaseArray,
+			ArrayList<ArrayList<Event>> loseConditionEachPhaseArray,
+			int currentPhase) {
+		ChangeWinConditionTask changeTask =
+				new ChangeWinConditionTask(this, winConditionEachPhaseArray, loseConditionEachPhaseArray, currentPhase);
+
+	}
+
 	public boolean existTask() {
 		return !taskArrayArray.isEmpty();
 	}

@@ -32,7 +32,7 @@ public class EventManager {
 	/**
 	 * 今のフェイズの進行状況（intで表現）
 	 */
-	public int phaseNow;
+	public int currentPhase;
 
 	Field field;
 
@@ -80,7 +80,7 @@ public class EventManager {
 		loseConditionEachPhaseArray = new ArrayList<ArrayList<Event>>();
 
 		this.field = field;
-		this.phaseNow = 0;
+		this.currentPhase = 0;
 	}
 
 	public void checkStandEvent(Chara chara) {
@@ -152,24 +152,30 @@ public class EventManager {
 	}
 
 	public void checkEndConditionEvent(Event checkEvent) {
-		for (Event event : winConditionEachPhaseArray.get(phaseNow)) {
+		for (Event event : winConditionEachPhaseArray.get(currentPhase)) {
 			if(eventEquals(event, checkEvent)) {
 				startBattleTalk(event);
-				phaseNow++;
+				currentPhase++;
 				//TODO:勝利の処理！ phaseNowが配列の閾値以上なら終了する
-				if (phaseNow >= winConditionEachPhaseArray.size()) {
+				if (currentPhase >= winConditionEachPhaseArray.size()) {
 					field.getTaskManager().addWinTask();
 					return;
+				} else {
+					//条件の変化タスクを発生
+					field.getTaskManager().addNextWinConditionTask(
+							winConditionEachPhaseArray, loseConditionEachPhaseArray,
+							currentPhase);
 				}
+
 			}
 		}
-		for (Event event : loseConditionEachPhaseArray.get(phaseNow)) {
+		for (Event event : loseConditionEachPhaseArray.get(currentPhase)) {
 			if(eventEquals(event, checkEvent)) {
 				startBattleTalk(event);
-				phaseNow++;
+				currentPhase++;
 				//TODO:敗北の処理！
-				if (phaseNow >= winConditionEachPhaseArray.size()) {
-					System.out.println("勝利");
+				if (currentPhase >= loseConditionEachPhaseArray.size()) {
+					System.out.println("敗北!");
 					System.exit(0);
 					return;
 				}
