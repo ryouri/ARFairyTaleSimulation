@@ -13,6 +13,7 @@ import arcircle.ftsim.state.LoadSaveState;
 import arcircle.ftsim.state.SelectGenderState;
 import arcircle.ftsim.state.SelectStoryState;
 import arcircle.ftsim.state.SimGameState;
+import arcircle.ftsim.state.StaffRollState;
 import arcircle.ftsim.state.StateConst;
 import arcircle.ftsim.state.TalkState;
 
@@ -35,6 +36,7 @@ public class FTSimulationGame extends StateBasedGame {
 		this.addState(new TalkState(StateConst.TALK));
 		this.addState(new SelectStoryState(StateConst.SELECT_STORY));
 		this.addState(new LoadSaveState(StateConst.LOAD_SAVE_DATA));
+		this.addState(new StaffRollState(StateConst.STAFF_ROLL));
 	}
 
 	public static String Savename;
@@ -49,6 +51,7 @@ public class FTSimulationGame extends StateBasedGame {
 		this.getState(StateConst.TALK).init(container, this);
 		this.getState(StateConst.SELECT_STORY).init(container, this);
 		this.getState(StateConst.LOAD_SAVE_DATA).init(container, this);
+		this.getState(StateConst.STAFF_ROLL).init(container, this);
 		//コンストラクタで実行するとエラー発生するよー
 		font = JapaneseFontGenerater.generateFont(24, false, false, null);
 	}
