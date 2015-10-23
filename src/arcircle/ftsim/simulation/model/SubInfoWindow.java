@@ -136,13 +136,13 @@ public class SubInfoWindow implements Renderer{
 		g.drawString("勝利条件",
 				objectPos_status.get("WIN_TERM").x, objectPos_status.get("WIN_TERM").y);	//ステージ名の描画
 		//勝利条件内容の描画
-		g.drawString("・" + "勝利条件内容",
+		g.drawString("・" + field.getWinConditionString().get(0),
 				objectPos_status.get("WIN_STRING").x, objectPos_status.get("WIN_STRING").y);
 		//敗北条件
 		g.drawString("敗北条件",
 				objectPos_status.get("LOSE_TERM").x, objectPos_status.get("LOSE_TERM").y);
 		//敗北条件内容
-		g.drawString("・" + "敗北条件内容",
+		g.drawString("・" + field.getLoseConditionString().get(0),
 				objectPos_status.get("LOSE_STRING").x, objectPos_status.get("LOSE_STRING").y);
 		//地形情報の描画
 		selectedMapChip = field.getSelectedMapChip();
