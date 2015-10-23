@@ -25,7 +25,7 @@ public class LoadSaveView implements Renderer{
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
-		g.setColor(Color.yellow);
+		g.setColor(Color.gray);
 		g.fillRect(0, 0, FTSimulationGame.WIDTH, FTSimulationGame.HEIGHT);
 
 		// 背景ウィンドウの表示
