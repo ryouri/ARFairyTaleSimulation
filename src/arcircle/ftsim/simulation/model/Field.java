@@ -241,7 +241,7 @@ public class Field implements KeyListner, Renderer {
 				getCursor().startMove(RELATED_KEY_CURSOR[i][1]);
 			}
 			if (keyInput.isKeyPressed(RELATED_KEY_CURSOR[i][0])) {
-				getCursor().startMove(RELATED_KEY_CURSOR[i][1]);
+				getCursor().pressed(RELATED_KEY_CURSOR[i][1]);
 			}
 		}
 
