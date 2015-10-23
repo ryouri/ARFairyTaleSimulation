@@ -11,6 +11,7 @@ import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.save.Save;
 import arcircle.ftsim.state.LoadSaveState;
+import arcircle.ftsim.state.selectstory.SelectStoryModel;
 
 public class LoadSaveView implements Renderer{
 	LoadSaveModel lsModel;
@@ -63,6 +64,30 @@ public class LoadSaveView implements Renderer{
 			g.drawString(name, width_offset + 20, height_offset + i * lsModel.box.getHeight() + 10);
 			g.drawString(date, width_offset + 340, height_offset + i * lsModel.box.getHeight() + 10);
 			g.drawString("Lv: " + lv, width_offset + 20, height_offset + i * lsModel.box.getHeight() + 40);
+			for (String folder_name: cleared) {
+				int id = Integer.parseInt(folder_name.substring(0, 2)) - 1;
+				switch (id){
+				case SelectStoryModel.MOMOTARO:
+					g.drawString("桃", width_offset + 400, height_offset + i * lsModel.box.getHeight() + 40);
+					break;
+				case SelectStoryModel.KAGUYA:
+					g.drawString("竹", width_offset + 430, height_offset + i * lsModel.box.getHeight() + 40);
+					break;
+				case SelectStoryModel.AKAZUKIN:
+					g.drawString("赤", width_offset + 460, height_offset + i * lsModel.box.getHeight() + 40);
+					break;
+				case SelectStoryModel.MAMENOKI:
+					g.drawString("豆", width_offset + 490, height_offset + i * lsModel.box.getHeight() + 40);
+					break;
+				case SelectStoryModel.SHINDERERA:
+					g.drawString("シ", width_offset + 520, height_offset + i * lsModel.box.getHeight() + 40);
+					break;
+				case SelectStoryModel.KOBUTA:
+					g.drawString("豚", width_offset + 550, height_offset + i * lsModel.box.getHeight() + 40);
+					break;
+				}
+			}
+			
 
 		}
 
