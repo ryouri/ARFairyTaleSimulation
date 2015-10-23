@@ -7,7 +7,7 @@ SPEAK_@_@_NR_0
 SPEAKEND
 
 SPEAK_@_@_NR_0
-ドスッ！！(何かが落ちる音)
+[otiru2]ドスッ！！(何かが落ちる音)
 SPEAKEND
 
 SPEAK_*_@_L_3
@@ -69,7 +69,7 @@ SPEAKEND
 SPEAK_003_@_L_2
 ピギャース！！ブルルン！！♂/
 ドゥ！ドゥ！コッケー！！%
-テリヤキチキンバーガーひとつお願いします！！
+テリヤキチキンバーガーひとつお願いします！！[nandeyanen]
 SPEAKEND
 
 SPEAK_001_004_L_0
@@ -102,7 +102,7 @@ SPEAK_907_013_L_0
 待て，大鬼．/
 SPEAKEND
 
-SPEAK_903_907_L_4
+SPEAK_903_907_L_3
 お前は，，，ハミルトン！
 SPEAKEND
 
