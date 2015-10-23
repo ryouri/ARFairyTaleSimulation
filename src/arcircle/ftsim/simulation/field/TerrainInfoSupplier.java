@@ -9,6 +9,7 @@ public class TerrainInfoSupplier {
 	public int terrainChipHeight;
 	public HashMap<String, Terrain> terrainMap;
 	public HashMap<Integer, Terrain> autoTileTerrainMap;
+	public HashMap<String, Boolean> existClassMap;
 	public ArrayList<Terrain> terrainArray;
 
 	public static final int NONE_CHIP_NUM = 2000;
@@ -18,6 +19,16 @@ public class TerrainInfoSupplier {
 		autoTileTerrainMap = new HashMap<Integer, Terrain>();
 		terrainArray = new ArrayList<Terrain>();
 		LoadTerrainInfo.loadTerrainInfo(this);
+		generateClassNameMap();
+	}
+
+	private void generateClassNameMap() {
+		existClassMap = new HashMap<String, Boolean>();
+		for (Terrain terrain : terrainArray) {
+			for (String className : terrain.classNameCostMap.keySet()) {
+				existClassMap.put(className, true);
+			}
+		}
 	}
 
 	public Terrain getTerrain(int mapChipNo) {
