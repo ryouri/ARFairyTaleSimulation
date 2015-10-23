@@ -8,4 +8,5 @@ public class StateConst {
 	public static final int SIM_GAME = 5;
 	public static final int SELECT_STORY = 6;
 	public static final int LOAD_SAVE_DATA = 7;
+	public static final int STAFF_ROLL = 8;
 }
