@@ -45,6 +45,7 @@ public class SelectStoryState extends KeyInputState {
 			stateGame.enterState(StateConst.STAFF_ROLL,
 					new FadeOutTransition(Color.black, 100),
 					new FadeInTransition(Color.black, 100));
+			return;
 		}
 
 		ssModel = new SelectStoryModel(this);

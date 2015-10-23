@@ -3,6 +3,7 @@ package arcircle.ftsim.state;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -19,9 +20,8 @@ public class StaffRollState extends KeyInputState {
 	private StaffRollView srView;
 
 	public void nextState() {
+		bgm.stop();
 		// ゲーム開始画面へ
-		GameStartState gameStartState = (GameStartState)stateGame.getState(StateConst.GAME_START);
-		gameStartState.setLastBGM(lastBGM);
 		stateGame.enterState(StateConst.GAME_START,
 				new FadeOutTransition(Color.black, 100),
 				new FadeInTransition(Color.black, 100));
@@ -33,6 +33,14 @@ public class StaffRollState extends KeyInputState {
 		super.enter(container, game);
 		srModel = new StaffRollModel(this);
 		srView = new StaffRollView(srModel, this);
+		try {
+			bgm = new Sound("./Stories/BGM/FTSim003.ogg");
+		} catch (SlickException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		lastBGM.stop();
+		bgm.loop();
 
 		keyInputStack.clear();
 		keyInputStack.push(srModel);
