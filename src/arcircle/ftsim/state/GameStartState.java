@@ -9,6 +9,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import arcircle.ftsim.main.FTSimulationGame;
+import arcircle.ftsim.save.Save;
 import arcircle.ftsim.state.gamestart.GameStartModel;
 import arcircle.ftsim.state.gamestart.GameStartView;
 
@@ -43,6 +45,8 @@ public class GameStartState extends KeyInputState {
 	public void nextState() {
 		// 開始を選択
 		if (gsModel.state == 0){
+			// セーブデータの作成
+	        FTSimulationGame.save = new Save();
 			SelectGenderState selectGenderState = (SelectGenderState)stateGame.getState(StateConst.SELECT_GENDER);
 			selectGenderState.setLastBGM(bgm);
 			stateGame.enterState(StateConst.SELECT_GENDER,

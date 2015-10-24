@@ -3,8 +3,6 @@ package arcircle.ftsim.main;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
-import arcircle.ftsim.save.Save;
-
 /**
  * v0.0
  * ゲームの開始，生成部分
@@ -15,8 +13,6 @@ import arcircle.ftsim.save.Save;
 public class GameMain {
 	public static void main(String[] args) {
         System.out.println("Hello World");
-
-        FTSimulationGame.save = new Save();
 
         //エントリーポイント
         AppGameContainer app;
