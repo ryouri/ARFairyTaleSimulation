@@ -17,9 +17,14 @@ public class SelectStoryModel implements KeyListner {
 	public static final int KOBUTA = 5;
 	public static final int BOSS = 6;
 
+	public static final int STORY_NUM = 7;
+
 	public int story = 0;
 
 	private SelectStoryState ssState;
+
+	public boolean[] isClearStage;
+
 
 //	public String message = "どのストーリーで遊びますか？";
 
@@ -27,6 +32,7 @@ public class SelectStoryModel implements KeyListner {
 		super();
 
 		this.ssState = ssState;
+		isClearStage = FTSimulationGame.save.isClearStages();
 	}
 
 	@Override
@@ -42,32 +48,32 @@ public class SelectStoryModel implements KeyListner {
 			do{
 				story--;
 				if(story < 0){
-					story = SelectStoryState.STORY_NUM - 2; // boss stage分 1引く
+					story = STORY_NUM - 2; // boss stage分 1引く
 				}
-			}while(ssState.isClearStage[story]);
+			}while(isClearStage[story]);
 
 		} else if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
 			do{
 				story++;
-				if(story > SelectStoryState.STORY_NUM - 2){ // boss stage分 1引く
+				if(story > STORY_NUM - 2){ // boss stage分 1引く
 					story = 0;
 				}
-			}while(ssState.isClearStage[story]);
+			}while(isClearStage[story]);
 		} else if (keyInput.isKeyDown(Input.KEY_UP)) {
 			do{
 				story -= 3;
 				if(story < 0){
 					story += 6;
 				}
-			}while(ssState.isClearStage[story]);
+			}while(isClearStage[story]);
 
 		} else if (keyInput.isKeyDown(Input.KEY_DOWN)) {
 			do{
 				story += 3;
-				if(story > SelectStoryState.STORY_NUM - 2){ // boss stage分 1引く
+				if(story > STORY_NUM - 2){ // boss stage分 1引く
 					story -= 6;
 				}
-			}while(ssState.isClearStage[story]);
+			}while(isClearStage[story]);
 
 		} else if (keyInput.isKeyDown(Input.KEY_Z)) {
 			FTSimulationGame.save.getNowStage().storyName = "0" + (story + 1) + "_Story";

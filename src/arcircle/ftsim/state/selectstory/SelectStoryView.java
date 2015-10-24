@@ -29,7 +29,7 @@ public class SelectStoryView implements Renderer {
 
 
 		try {
-			for(int i = 0 ; i < SelectStoryState.STORY_NUM - 1 ; i++){ // boss stageの分 1引く
+			for(int i = 0 ; i < SelectStoryModel.STORY_NUM - 1 ; i++){ // boss stageの分 1引く
 				storyTitleImg[i] = new Image(imagePath + "/storyTitle0" + (i+1) + ".png");
 			}
 			frame = new Image("./image/frame.png");
@@ -38,7 +38,7 @@ public class SelectStoryView implements Renderer {
 			e.printStackTrace();
 		}
 
-		for(int i = 0 ; i < SelectStoryState.STORY_NUM - 1; i++){ // boss stageの分 1引く
+		for(int i = 0 ; i < SelectStoryModel.STORY_NUM - 1; i++){ // boss stageの分 1引く
 			storyTitlePos[i][0] = 60 + (i % 3) * 350;
 			storyTitlePos[i][1] = 120 + (i / 3) * 270;
 		}
@@ -54,8 +54,8 @@ public class SelectStoryView implements Renderer {
 
 		g.drawImage(frame, flamePosX, flamePosY);
 
-		for(int i = 0 ; i < SelectStoryState.STORY_NUM - 1 ; i++){ // boss stageの分 引く
-			if(ssState.isClearStage[i]){
+		for(int i = 0 ; i < SelectStoryModel.STORY_NUM - 1 ; i++){ // boss stageの分 引く
+			if(ssModel.isClearStage[i]){
 				g.drawImage(storyTitleImg[i] , storyTitlePos[i][0], storyTitlePos[i][1], filterColor);
 			}else{
 				g.drawImage(storyTitleImg[i] , storyTitlePos[i][0], storyTitlePos[i][1]);

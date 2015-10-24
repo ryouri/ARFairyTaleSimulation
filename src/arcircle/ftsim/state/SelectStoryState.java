@@ -17,9 +17,6 @@ public class SelectStoryState extends KeyInputState {
 	private SelectStoryModel ssModel;
 	private SelectStoryView ssView;
 
-	public static final int STORY_NUM = 7;
-	public boolean[] isClearStage;
-
 	public SelectStoryState(int state) {
 		super(state);
 	}
@@ -40,7 +37,6 @@ public class SelectStoryState extends KeyInputState {
 		ssModel = new SelectStoryModel(this);
 		ssView = new SelectStoryView(ssModel, this);
 
-		isClearStage = FTSimulationGame.save.isClearStages();
 
 		// 全部クリアしてたらスタッフロールへ
 		if (FTSimulationGame.save.isAllCleared()) {
@@ -51,8 +47,6 @@ public class SelectStoryState extends KeyInputState {
 					new FadeInTransition(Color.black, 100));
 			return;
 		}
-
-		isClearStage[2] = true;
 
 		try {
 			bgm = new Sound("./Stories/BGM/FTSim003.ogg");
