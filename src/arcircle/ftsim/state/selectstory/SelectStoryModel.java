@@ -42,14 +42,14 @@ public class SelectStoryModel implements KeyListner {
 			do{
 				story--;
 				if(story < 0){
-					story = ssState.storyNum - 1; // boss stage分 1引く
+					story = SelectStoryState.STORY_NUM - 2; // boss stage分 1引く
 				}
 			}while(ssState.isClearStage[story]);
 
 		} else if (keyInput.isKeyDown(Input.KEY_RIGHT)) {
 			do{
 				story++;
-				if(story > ssState.storyNum - 1){ // boss stage分 1引く
+				if(story > SelectStoryState.STORY_NUM - 2){ // boss stage分 1引く
 					story = 0;
 				}
 			}while(ssState.isClearStage[story]);
@@ -64,7 +64,7 @@ public class SelectStoryModel implements KeyListner {
 		} else if (keyInput.isKeyDown(Input.KEY_DOWN)) {
 			do{
 				story += 3;
-				if(story > ssState.storyNum - 1){ // boss stage分 1引く
+				if(story > SelectStoryState.STORY_NUM - 2){ // boss stage分 1引く
 					story -= 6;
 				}
 			}while(ssState.isClearStage[story]);

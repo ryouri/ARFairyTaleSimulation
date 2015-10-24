@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import arcircle.ftsim.simulation.chara.Status;
+import arcircle.ftsim.state.SelectStoryState;
 
 /**
  * キャラクターの持っている武器が保存されないよ！
@@ -94,7 +95,7 @@ public class Save implements Serializable{
 	}
 
 	public boolean[] isClearStages() {
-		boolean[] isClearStage = new boolean[clearStoryNameArray.size()];	//初期値は多分false
+		boolean[] isClearStage = new boolean[SelectStoryState.STORY_NUM];	//初期値は多分false
 		if(!clearStoryNameArray.isEmpty()){
 			for(int i = 0 ; i < clearStoryNameArray.size() ; i++){
 				if(clearStoryNameArray.get(i).equals("01_Story")){

@@ -17,7 +17,7 @@ public class SelectStoryState extends KeyInputState {
 	private SelectStoryModel ssModel;
 	private SelectStoryView ssView;
 
-	public int storyNum = 7;
+	public static final int STORY_NUM = 7;
 	public boolean[] isClearStage;
 
 	public SelectStoryState(int state) {
