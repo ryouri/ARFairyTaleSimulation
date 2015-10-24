@@ -46,7 +46,7 @@ public class GameStartState extends KeyInputState {
 		// 開始を選択
 		if (gsModel.state == 0){
 			// セーブデータの作成
-	        FTSimulationGame.save = new Save();
+			FTSimulationGame.save = new Save();
 			SelectGenderState selectGenderState = (SelectGenderState)stateGame.getState(StateConst.SELECT_GENDER);
 			selectGenderState.setLastBGM(bgm);
 			stateGame.enterState(StateConst.SELECT_GENDER,
