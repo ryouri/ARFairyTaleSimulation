@@ -19,17 +19,17 @@ public class SelectStoryView implements Renderer {
 	private Image frame;
 	private static final String imagePath = "./image";
 	private Color filterColor = new Color(0.75f,0.75f,0.75f,0.5f);
-	 
-	
+
+
 	public SelectStoryView(SelectStoryModel ssModel, SelectStoryState ssState) {
 		super();
 		this.ssModel = ssModel;
 		this.ssState = ssState;
-		
-		
-		
+
+
+
 		try {
-			for(int i = 0 ; i < ssState.storyNum ; i++){
+			for(int i = 0 ; i < ssState.storyNum - 1 ; i++){ // boss stageの分 1引く
 				storyTitleImg[i] = new Image(imagePath + "/storyTitle0" + (i+1) + ".png");
 			}
 			frame = new Image("./image/frame.png");
@@ -37,8 +37,8 @@ public class SelectStoryView implements Renderer {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-		
-		for(int i = 0 ; i < ssState.storyNum ; i++){
+
+		for(int i = 0 ; i < ssState.storyNum - 1; i++){ // boss stageの分 1引く
 			storyTitlePos[i][0] = 60 + (i % 3) * 350;
 			storyTitlePos[i][1] = 120 + (i / 3) * 270;
 		}
