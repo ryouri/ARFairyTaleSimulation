@@ -63,9 +63,6 @@ public class SelectStoryState extends KeyInputState {
 				}
 			}
 		}
-
-		isClearStage[2] = true;
-
 		try {
 			bgm = new Sound("./Stories/BGM/FTSim003.ogg");
 		} catch (SlickException e) {
