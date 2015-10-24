@@ -13,6 +13,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import arcircle.ftsim.main.FTSimulationGame;
+import arcircle.ftsim.save.SaveLoader;
 import arcircle.ftsim.state.loadsave.LoadSaveModel;
 import arcircle.ftsim.state.loadsave.LoadSaveView;
 
@@ -33,7 +34,7 @@ public class LoadSaveState extends KeyInputState {
 		// 現Stateで鳴らしているBGMをSelectStoryStateのlastBGMとして保存
 		selectStoryState.setLastBGM(lastBGM);
 		// ここでロード
-		FTSimulationGame.save = FTSimulationGame.save.load(files[selected].getPath());
+		FTSimulationGame.save = SaveLoader.load(files[selected].getPath());
 		// SelectStoryStateへ
 		stateGame.enterState(StateConst.SELECT_STORY,
 				new FadeOutTransition(Color.black, 100),

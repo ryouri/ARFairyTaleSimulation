@@ -1,10 +1,8 @@
 package arcircle.ftsim.save;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -61,27 +59,6 @@ public class Save implements Serializable{
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * 指定されたファイルからこのSaveクラスのインスタンスを返す
-	 * @param path 直列化して保存されたバイナリファイルのパス
-	 * @return Saveインスタンス
-	 */
-	public Save load(String path) {
-		ObjectInputStream ois;
-		Save obj = null;
-		try {
-			ois = new ObjectInputStream(new FileInputStream(path));
-			obj = (Save)ois.readObject();
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
-		return obj;
 	}
 
 	public Status getPlayer() {
