@@ -64,6 +64,13 @@ public class LoadSaveState extends KeyInputState {
 	private File[] getSaveFiles(){
 		String path = "./save/";
 		File dir = new File(path);
+		// save dirがなければ作る
+		if (!dir.exists()) {
+			if (!dir.mkdir()) {
+				// 作れないのはなんかおかしい
+				throw new InternalError("./save ディレクトリが作れませんでした。");
+			}
+		}
 		FilenameFilter filter = new FilenameFilter(){
 			public boolean accept(File dir, String name){
 				if (name.endsWith(".sav")) {
