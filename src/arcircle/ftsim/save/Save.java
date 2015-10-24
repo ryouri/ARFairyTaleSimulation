@@ -93,6 +93,55 @@ public class Save implements Serializable{
 		return clearStoryNameArray;
 	}
 
+	public boolean[] isClearStages() {
+		boolean[] isClearStage = new boolean[clearStoryNameArray.size()];	//初期値は多分false
+		if(!clearStoryNameArray.isEmpty()){
+			for(int i = 0 ; i < clearStoryNameArray.size() ; i++){
+				if(clearStoryNameArray.get(i).equals("01_Story")){
+					isClearStage[0] = true;
+				}else if(clearStoryNameArray.get(i).equals("02_Story")){
+					isClearStage[1] = true;
+				}else if(clearStoryNameArray.get(i).equals("03_Story")){
+					isClearStage[2] = true;
+				}else if(clearStoryNameArray.get(i).equals("04_Story")){
+					isClearStage[3] = true;
+				}else if(clearStoryNameArray.get(i).equals("05_Story")){
+					isClearStage[4] = true;
+				}else if(clearStoryNameArray.get(i).equals("06_Story")){
+					isClearStage[5] = true;
+				}else if(clearStoryNameArray.get(i).equals("07_Story")){
+					isClearStage[6] = true;
+				}else{
+					System.out.println("error_SelectStoryView_clearStage");
+				}
+			}
+		}
+		return isClearStage;
+	}
+
+	public boolean isAllCleared() {
+		for (boolean flag: isClearStages()) {
+			if (!flag) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean isAllClearedWOBoss() {
+		boolean[] isClearStages = isClearStages();
+		for (int i = 0; i < isClearStages.length; i++) {
+			if (i == isClearStages.length - 1 && isClearStages[i]) {
+				// ボスをクリアしていたらfalse
+				return false;
+			} else if (!isClearStages[i]) {
+				// ボス以外でクリアしていないステージがあるならflase
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public void clearNowStage() {
 		clearStoryNameArray.add(nowStage.storyName);
 	}

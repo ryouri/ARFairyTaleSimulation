@@ -1,8 +1,5 @@
 package arcircle.ftsim.state;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -43,32 +40,10 @@ public class SelectStoryState extends KeyInputState {
 		ssModel = new SelectStoryModel(this);
 		ssView = new SelectStoryView(ssModel, this);
 
-		isClearStage = new boolean[storyNum];	//初期値は多分false
-		ArrayList<String> clearStage = FTSimulationGame.save.getClearStoryNameArray();
-		if(!clearStage.isEmpty()){
-			for(int i = 0 ; i < clearStage.size() ; i++){
-				if(clearStage.get(i).equals("01_Story")){
-					isClearStage[0] = true;
-				}else if(clearStage.get(i).equals("02_Story")){
-					isClearStage[1] = true;
-				}else if(clearStage.get(i).equals("03_Story")){
-					isClearStage[2] = true;
-				}else if(clearStage.get(i).equals("04_Story")){
-					isClearStage[3] = true;
-				}else if(clearStage.get(i).equals("05_Story")){
-					isClearStage[4] = true;
-				}else if(clearStage.get(i).equals("06_Story")){
-					isClearStage[5] = true;
-				}else if(clearStage.get(i).equals("07_Story")){
-					isClearStage[6] = true;
-				}else{
-					System.out.println("error_SelectStoryView_clearStage");
-				}
-			}
-		}
+		isClearStage = FTSimulationGame.save.isClearStages();
 
 		// 全部クリアしてたらスタッフロールへ
-		if (!Arrays.asList(isClearStage).contains(false)) {
+		if (FTSimulationGame.save.isAllCleared()) {
 			StaffRollState staffRollState = (StaffRollState)stateGame.getState(StateConst.STAFF_ROLL);
 			staffRollState.setLastBGM(lastBGM);
 			stateGame.enterState(StateConst.STAFF_ROLL,
