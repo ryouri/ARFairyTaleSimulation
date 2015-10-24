@@ -15,6 +15,7 @@ public class SelectStoryModel implements KeyListner {
 	public static final int MAMENOKI = 3;
 	public static final int SHINDERERA = 4;
 	public static final int KOBUTA = 5;
+	public static final int BOSS = 6;
 
 	public int story = 0;
 

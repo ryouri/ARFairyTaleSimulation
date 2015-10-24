@@ -1,6 +1,7 @@
 package arcircle.ftsim.state;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -19,7 +20,7 @@ public class SelectStoryState extends KeyInputState {
 	private SelectStoryModel ssModel;
 	private SelectStoryView ssView;
 
-	public int storyNum = 6;
+	public int storyNum = 7;
 	public boolean[] isClearStage;
 
 	public SelectStoryState(int state) {
@@ -38,15 +39,6 @@ public class SelectStoryState extends KeyInputState {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.enter(container, game);
-		// 全部クリアしてたらスタッフロールへ
-		if (FTSimulationGame.save.getClearStoryNameArray().size() == 6) {
-			StaffRollState staffRollState = (StaffRollState)stateGame.getState(StateConst.STAFF_ROLL);
-			staffRollState.setLastBGM(lastBGM);
-			stateGame.enterState(StateConst.STAFF_ROLL,
-					new FadeOutTransition(Color.black, 100),
-					new FadeInTransition(Color.black, 100));
-			return;
-		}
 
 		ssModel = new SelectStoryModel(this);
 		ssView = new SelectStoryView(ssModel, this);
@@ -67,10 +59,22 @@ public class SelectStoryState extends KeyInputState {
 					isClearStage[4] = true;
 				}else if(clearStage.get(i).equals("06_Story")){
 					isClearStage[5] = true;
+				}else if(clearStage.get(i).equals("07_Story")){
+					isClearStage[6] = true;
 				}else{
 					System.out.println("error_SelectStoryView_clearStage");
 				}
 			}
+		}
+
+		// 全部クリアしてたらスタッフロールへ
+		if (!Arrays.asList(isClearStage).contains(false)) {
+			StaffRollState staffRollState = (StaffRollState)stateGame.getState(StateConst.STAFF_ROLL);
+			staffRollState.setLastBGM(lastBGM);
+			stateGame.enterState(StateConst.STAFF_ROLL,
+					new FadeOutTransition(Color.black, 100),
+					new FadeInTransition(Color.black, 100));
+			return;
 		}
 
 		isClearStage[2] = true;
