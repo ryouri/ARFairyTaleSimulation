@@ -71,6 +71,7 @@ public class LoadSaveState extends KeyInputState {
 				throw new InternalError("./save ディレクトリが作れませんでした。");
 			}
 		}
+		// .savで終わるファイルのみを持ってくる
 		FilenameFilter filter = new FilenameFilter(){
 			public boolean accept(File dir, String name){
 				if (name.endsWith(".sav")) {
