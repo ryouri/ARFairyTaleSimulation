@@ -8,6 +8,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.state.inputname.InputNameModel;
 import arcircle.ftsim.state.inputname.InputNameView;
 
@@ -15,7 +16,7 @@ public class InputNameState extends KeyInputState {
 
 	private InputNameModel inModel;
 	private InputNameView inView;
-	
+
 	public Image [] sprite = new Image[1];
 
 	public InputNameState(int state) {
@@ -23,9 +24,12 @@ public class InputNameState extends KeyInputState {
 	}
 
 	public void nextState() {
-		SelectStoryState selectStoryState = (SelectStoryState)stateGame.getState(StateConst.SELECT_STORY);
-		selectStoryState.setLastBGM(lastBGM);
-		stateGame.enterState(StateConst.SELECT_STORY,
+		FTSimulationGame.save.getNowStage().storyName = "00_Story";
+		FTSimulationGame.save.getNowStage().subStoryNum = "01";
+		FTSimulationGame.save.getNowStage().selectLogue = 1;
+		TalkState talkState = (TalkState)stateGame.getState(StateConst.TALK);
+		talkState.setLastBGM(lastBGM);
+		stateGame.enterState(StateConst.TALK,
 				new FadeOutTransition(Color.black, 100),
 				new FadeInTransition(Color.black, 100));
 	}
@@ -48,7 +52,7 @@ public class InputNameState extends KeyInputState {
 		rendererArray.clear();
 		rendererArray.add(inView);
 	}
-	
+
 	//前のステートで流していたBGMを受け取るためのメソッド
-	
+
 }
