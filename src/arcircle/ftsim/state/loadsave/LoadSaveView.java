@@ -10,6 +10,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.save.Save;
+import arcircle.ftsim.save.SaveLoader;
 import arcircle.ftsim.state.LoadSaveState;
 import arcircle.ftsim.state.selectstory.SelectStoryModel;
 
@@ -46,12 +47,12 @@ public class LoadSaveView implements Renderer{
 		g.setFont(lsState.getFont());
 		int height_offset = FTSimulationGame.HEIGHT / 7 * 4 - lsModel.background.getHeight() / 2 + 10;
 		int width_offset = (FTSimulationGame.WIDTH - lsModel.background.getWidth()) / 2;
-		
+
 		// それぞれのセーブデータの情報を取得する
-		
+
 		for (int i = 0; i < lsModel.show_max && i < lsState.files.length; i++){
 			int index = lsModel.current_start_position + i;
-			Save save = FTSimulationGame.save.load(lsState.files[index].getPath());
+			Save save = SaveLoader.load(lsState.files[index].getPath());
 			String date = lsState.files[index].getName().replaceAll(".sav", "");
 			String name = save.getPlayer().name;
 			int lv = save.getPlayer().level;
@@ -87,7 +88,7 @@ public class LoadSaveView implements Renderer{
 					break;
 				}
 			}
-			
+
 
 		}
 
