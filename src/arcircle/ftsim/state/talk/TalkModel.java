@@ -247,7 +247,7 @@ public class TalkModel implements KeyListner {
 //        			}
 //        		}else if(strs[0].equals("CHOICE1")){
 //        			choice[0] = strs[1];
-//        		}else if(strs[0].equals("CHOICE2")){
+//        		}else if(strs[0].equals("CHOICE2")){d
 //        			choice[1] = strs[1];
 //        		}else if(strs[0].equals("CHOICE3")){
 //        			choice[2] = strs[1];
