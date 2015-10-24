@@ -37,7 +37,7 @@ public class GameStartView implements Renderer{
 		g.setFont(gsState.getFont());
 		g.setColor(Color.blue);
 
-		// セーブデータがなければ開始ボタンのみ
+		// セーブデータがなければ開始ボタンのみ表示
 		if (gsModel.onlyStart) {
 			// 開始
 			int messageWidth = gsState.getFont().getWidth(gsModel.start);
