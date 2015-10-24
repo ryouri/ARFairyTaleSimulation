@@ -132,9 +132,11 @@ public class Save implements Serializable{
 	public boolean isAllClearedWOBoss() {
 		boolean[] isClearStages = isClearStages();
 		for (int i = 0; i < isClearStages.length; i++) {
-			if (i == isClearStages.length - 1 && isClearStages[i]) {
+			if (i == isClearStages.length - 1) {
 				// ボスをクリアしていたらfalse
-				return false;
+				if (isClearStages[i]) {
+					return false;
+				}
 			} else if (!isClearStages[i]) {
 				// ボス以外でクリアしていないステージがあるならflase
 				return false;
