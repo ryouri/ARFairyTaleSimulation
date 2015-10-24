@@ -86,6 +86,9 @@ public class LoadSaveView implements Renderer{
 				case SelectStoryModel.KOBUTA:
 					g.drawString("豚", width_offset + 550, height_offset + i * lsModel.box.getHeight() + 40);
 					break;
+				case SelectStoryModel.BOSS:
+					g.drawString("ALL CLEAR", width_offset + 250, height_offset + i * lsModel.box.getHeight() + 40);
+					break;
 				}
 			}
 
