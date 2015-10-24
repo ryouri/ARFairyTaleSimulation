@@ -36,30 +36,42 @@ public class GameStartView implements Renderer{
 
 		g.setFont(gsState.getFont());
 		g.setColor(Color.blue);
-		// 開始
-		int messageWidth = gsState.getFont().getWidth(gsModel.start);
-		g.drawString(gsModel.start,
-				(FTSimulationGame.WIDTH - messageWidth) / 2 - 50, 400);
-		// ロード
-		messageWidth = gsState.getFont().getWidth(gsModel.load);
-		g.drawString(gsModel.load,
-				(FTSimulationGame.WIDTH - messageWidth) / 2 + 50, 400);
 
-
-		// 選択の枠を表示
-		g.setColor(Color.red);
-		// 開始
-		if (gsModel.state == 0){
-			messageWidth = gsState.getFont().getWidth(gsModel.start);
+		// セーブデータがなければ開始ボタンのみ
+		if (gsModel.onlyStart) {
+			// 開始
+			int messageWidth = gsState.getFont().getWidth(gsModel.start);
+			g.drawString(gsModel.start,
+					(FTSimulationGame.WIDTH - messageWidth) / 2, 400);
+			// 項目選択の枠を表示
+			g.setColor(Color.red);
 			int messageHeight = gsState.getFont().getHeight(gsModel.start);
-			g.drawRect((FTSimulationGame.WIDTH - messageWidth) / 2 - 50, 401, messageWidth, messageHeight);
-		}
-		// ロード
-		if (gsModel.state == 1){
+			g.drawRect((FTSimulationGame.WIDTH - messageWidth) / 2, 401, messageWidth, messageHeight);
+		} else {
+			// 開始
+			int messageWidth = gsState.getFont().getWidth(gsModel.start);
+			g.drawString(gsModel.start,
+					(FTSimulationGame.WIDTH - messageWidth) / 2 - 50, 400);
+			// ロード
 			messageWidth = gsState.getFont().getWidth(gsModel.load);
-			int messageHeight = gsState.getFont().getHeight(gsModel.load);
-			g.drawRect((FTSimulationGame.WIDTH - messageWidth) / 2 + 50, 401, messageWidth, messageHeight);
-		}
+			g.drawString(gsModel.load,
+					(FTSimulationGame.WIDTH - messageWidth) / 2 + 50, 400);
 
+
+			// 項目選択の枠を表示
+			g.setColor(Color.red);
+			// 開始
+			if (gsModel.state == 0){
+				messageWidth = gsState.getFont().getWidth(gsModel.start);
+				int messageHeight = gsState.getFont().getHeight(gsModel.start);
+				g.drawRect((FTSimulationGame.WIDTH - messageWidth) / 2 - 50, 401, messageWidth, messageHeight);
+			}
+			// ロード
+			if (gsModel.state == 1){
+				messageWidth = gsState.getFont().getWidth(gsModel.load);
+				int messageHeight = gsState.getFont().getHeight(gsModel.load);
+				g.drawRect((FTSimulationGame.WIDTH - messageWidth) / 2 + 50, 401, messageWidth, messageHeight);
+			}
+		}
 	}
 }
