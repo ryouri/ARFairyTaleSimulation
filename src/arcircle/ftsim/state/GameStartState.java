@@ -41,16 +41,15 @@ public class GameStartState extends KeyInputState {
 	}
 
 	public void nextState() {
-		// 開始を選択
-		if (gsModel.state == 0){
+		if (gsModel.state == 0 || gsModel.onlyStart){
+			// 開始を選択
 			SelectGenderState selectGenderState = (SelectGenderState)stateGame.getState(StateConst.SELECT_GENDER);
 			selectGenderState.setLastBGM(bgm);
 			stateGame.enterState(StateConst.SELECT_GENDER,
 					new FadeOutTransition(Color.black, 100),
 					new FadeInTransition(Color.black, 100));
-		}
-		// ロードを選択
-		if (gsModel.state == 1){
+		} else if (gsModel.state == 1){
+			// ロードを選択
 			LoadSaveState loadSaveState = (LoadSaveState)stateGame.getState(StateConst.LOAD_SAVE_DATA);
 			loadSaveState.setLastBGM(bgm);
 			stateGame.enterState(StateConst.LOAD_SAVE_DATA,
