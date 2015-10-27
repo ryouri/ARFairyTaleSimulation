@@ -7,6 +7,7 @@ import org.newdawn.slick.Graphics;
 
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.event.EventCharaDie;
+import arcircle.ftsim.simulation.field.LoadField;
 import arcircle.ftsim.simulation.model.Cursor;
 import arcircle.ftsim.simulation.model.task.ConfirmTargetTask;
 
@@ -33,24 +34,24 @@ public class ConfirmCharaDie extends ConfirmTargetTaskLogic {
 
 		//TODO: とりあえず最初の一体をターゲットとする
 		targetChara = charaList.get(0);
-	};
+	}
 
 	@Override
 	public void render(Graphics g, int offsetX, int offsetY, int firstTileX,
 			int lastTileX, int firstTileY, int lastTileY) {
-		g.setColor(new Color(Color.red));
+		g.setColor(Color.red);
 		if (count % 30 < 15) {
 			g.drawRect(targetChara.pX + offsetX, targetChara.pY + offsetY, 32,
-					32);
+					LoadField.MAP_CHIP_SIZE);
 			g.drawRect(targetChara.pX + offsetX - 1, targetChara.pY + offsetY
-					- 1, 34, 34);
+					- 1, LoadField.MAP_CHIP_SIZE + 2, LoadField.MAP_CHIP_SIZE + 2);
 		} else {
 			g.drawRect(targetChara.pX + offsetX - 2, targetChara.pY + offsetY
-					- 2, 36, 36);
+					- 2, LoadField.MAP_CHIP_SIZE + 4, LoadField.MAP_CHIP_SIZE + 4);
 			g.drawRect(targetChara.pX + offsetX - 3, targetChara.pY + offsetY
-					- 3, 38, 38);
+					- 3, LoadField.MAP_CHIP_SIZE + 6, LoadField.MAP_CHIP_SIZE + 6);
 		}
-		g.setColor(new Color(Color.white));
+		g.setColor(Color.white);
 	}
 
 	@Override
