@@ -376,4 +376,8 @@ public class EventManager {
 
 		return null;
 	}
+
+	public Field getField() {
+		return field;
+	}
 }

@@ -9,6 +9,7 @@ import arcircle.ftsim.simulation.model.task.confirmtarget.ConfirmTargetTaskLogic
 public class ConfirmTargetTask extends Task {
 	private EventManager eventManager;
 	private ConfirmTargetTaskLogic confirmTargetTaskLogic;
+	private Event event;
 
 	public EventManager getEventManager() {
 		return eventManager;
@@ -18,7 +19,7 @@ public class ConfirmTargetTask extends Task {
 		super(taskManager);
 		this.eventManager = eventManager;
 
-		Event event = eventManager.getWinConditionEachPhaseArray().get(0).get(0);
+		this.event = eventManager.getWinConditionEachPhaseArray().get(0).get(0);
 
 
 		String className = ConfirmTargetTaskLogic.packageName
@@ -43,7 +44,9 @@ public class ConfirmTargetTask extends Task {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		confirmTargetTaskLogic.setConfirmTargetTask(this);
+
+
+		confirmTargetTaskLogic.init(this);
 	}
 
 	@Override
@@ -55,6 +58,14 @@ public class ConfirmTargetTask extends Task {
 	@Override
 	public void update(int delta) {
 		confirmTargetTaskLogic.update(delta);
+
+	}
+
+	public Event getEvent() {
+		return event;
+	}
+
+	public void finishTask() {
 		taskManager.taskEnd();
 	}
 }

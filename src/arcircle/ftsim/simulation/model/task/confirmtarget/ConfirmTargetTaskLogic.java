@@ -22,7 +22,7 @@ public abstract class ConfirmTargetTaskLogic {
 	public ConfirmTargetTask getConfirmTargetTask() {
 		return confirmTargetTask;
 	}
-	public void setConfirmTargetTask(ConfirmTargetTask confirmTargetTask) {
+	public void init(ConfirmTargetTask confirmTargetTask) {
 		this.confirmTargetTask = confirmTargetTask;
 	}
 	public abstract void render(Graphics g, int offsetX, int offsetY, int firstTileX,
