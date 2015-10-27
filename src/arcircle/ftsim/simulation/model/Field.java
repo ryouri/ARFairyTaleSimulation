@@ -367,6 +367,18 @@ public class Field implements KeyListner, Renderer {
 		return characters.getXYChara(x, y);
 	}
 
+	public ArrayList<Chara> getCharaListByCharaID(String charaID) {
+		ArrayList<Chara> charaList = new ArrayList<Chara>();
+
+		for (Chara chara : characters.characterArray) {
+			if (chara.id.equals(charaID)) {
+				charaList.add(chara);
+			}
+		}
+
+		return charaList;
+	}
+
 	/**
 	 * 勝利条件を渡すメソッド
 	 * @return 勝利条件のStringが入った配列を返す， 勝利条件がない場合は，nullを返す
