@@ -175,9 +175,7 @@ public class EventManager {
 				currentPhase++;
 				//TODO:敗北の処理！
 				if (currentPhase >= loseConditionEachPhaseArray.size()) {
-					System.out.println("敗北!");
-					System.exit(0);
-					return;
+					field.getTaskManager().addLoseTask();
 				}
 			}
 		}

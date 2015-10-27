@@ -10,6 +10,7 @@ import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.battle.CalcurateExp;
 import arcircle.ftsim.simulation.event.Event;
+import arcircle.ftsim.simulation.event.EventManager;
 import arcircle.ftsim.simulation.model.Characters;
 import arcircle.ftsim.simulation.model.Field;
 
@@ -35,7 +36,10 @@ public class TaskManager {
 		WinTask winTask = new WinTask(this, field);
 		addOneTaskAndGenerateArray(winTask);
 	}
-
+	public void addLoseTask() {
+		LoseTask loseTask = new LoseTask(this, field);
+		addOneTaskAndGenerateArray(loseTask);
+	}
 	public void addOneTaskAndGenerateArray (Task task) {
 		ArrayList<Task> taskArray = new ArrayList<Task>();
 		taskArray.add(task);
@@ -85,6 +89,10 @@ public class TaskManager {
 	public void addHealTask(Chara healChara, Chara healedChara) {
 		HealTask healTask = new HealTask(this, healChara, healedChara);
 		addOneTaskAndGenerateArray(healTask);
+	}
+	public void addConfirmTargetTask(EventManager eventManager) {
+		ConfirmTargetTask confirmTargetTask = new ConfirmTargetTask(this, eventManager);
+		addOneTaskAndGenerateArray(confirmTargetTask);
 	}
 
 	public void addNextWinConditionTask(
