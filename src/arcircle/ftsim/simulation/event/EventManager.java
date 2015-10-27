@@ -120,6 +120,20 @@ public class EventManager {
 		checkEvent(eventCharaDie);
 	}
 
+	public void checkEnemyBelowEvent(int enemyNum) {
+		//キャラが死んだ時のイベントの処理
+		EventEnemyBelow eventEnemyBelow = new EventEnemyBelow("");
+		eventEnemyBelow.enemyThreshold = enemyNum;
+		checkEvent(eventEnemyBelow);
+
+	}
+
+	public void checkTurnElapsed(int nowTurn) {
+		EventTurnProgress eventTurnProgress = new EventTurnProgress("");
+		eventTurnProgress.progressTurn = nowTurn;
+		checkEvent(eventTurnProgress);
+	}
+
 	private void startEvent(Event processEvent
 			, ArrayList<Event> removeEventArray) {
 		startBattleTalk(processEvent);
@@ -152,6 +166,11 @@ public class EventManager {
 	}
 
 	public void checkEndConditionEvent(Event checkEvent) {
+		//Eventのチェックが2つ同時に発生し、勝利条件を満たすとcurrentPhaseが大きい状態でここに到達する可能性がある
+		if (winConditionEachPhaseArray.size() <= currentPhase) {
+			return;
+		}
+
 		for (Event event : winConditionEachPhaseArray.get(currentPhase)) {
 			if(eventEquals(event, checkEvent)) {
 				startBattleTalk(event);
@@ -222,6 +241,13 @@ public class EventManager {
 			EventKillEnemy searchEvent = (EventKillEnemy)checkEvent;
 			EventKillEnemy processEvent = (EventKillEnemy)event;
 			if (searchEvent.killEnemyNum >= processEvent.killEnemyNum) {
+				return true;
+			}
+		} else if (event instanceof EventTurnProgress
+				&& checkEvent instanceof EventTurnProgress ) {
+			EventTurnProgress searchEvent = (EventTurnProgress)checkEvent;
+			EventTurnProgress processEvent = (EventTurnProgress)event;
+			if (searchEvent.progressTurn >= processEvent.startTurn + processEvent.progressTurn) {
 				return true;
 			}
 		}

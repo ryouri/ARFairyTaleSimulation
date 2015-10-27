@@ -78,6 +78,8 @@ public class Field implements KeyListner, Renderer {
 	public int firstTileY;
 	public int lastTileY;
 
+	private int nowTurnNum;
+
 	public SubInfoWindow getSubInfoWindow() {
 		return subInfoWindow;
 	}
@@ -113,6 +115,8 @@ public class Field implements KeyListner, Renderer {
 		this.taskManager = new TaskManager(this, characters);
 
 		this.effectManager = new EffectManager();
+
+		this.nowTurnNum = 1;
 	}
 
 	private void loadEndCondition(String endConditionTxt) {
@@ -151,6 +155,8 @@ public class Field implements KeyListner, Renderer {
 	public void changeTurnFriend() {
 		setNowTurn(TURN_FRIEND);
 		cursor.setVisible(true);
+		nowTurnNum++;
+		eventManager.checkTurnElapsed(nowTurnNum);
 	}
 
 	public void changeTurnEnemy() {
@@ -481,4 +487,17 @@ public class Field implements KeyListner, Renderer {
 		return loadField;
 	}
 
+	public int getNowTurnNum() {
+		return nowTurnNum;
+	}
+	public void checkEnemyBelowEvent() {
+		int enemyNum = 0;
+		for (Chara chara : characters.characterArray) {
+			if (chara.getCamp() != Chara.CAMP_ENEMY) {
+				continue;
+			}
+			enemyNum++;
+		}
+		eventManager.checkEnemyBelowEvent(enemyNum);
+	}
 }

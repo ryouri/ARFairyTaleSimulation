@@ -153,10 +153,12 @@ public class SubInfoWindow implements Renderer{
 		terrainName = field.getSelectedTerrain().terrainName;
 		g.drawString(terrainName,
 				objectPos_status.get("MAP_NAME").x, objectPos_status.get("MAP_NAME").y);
+		g.drawString("ターン:" + field.getNowTurnNum(),
+				objectPos_status.get("MAP_NAME").x + 75, objectPos_status.get("MAP_NAME").y);
 		//地形の回避,防御値
 		avoidPoint = field.getSelectedTerrain().avoidPoint;
 		defencePoint = field.getSelectedTerrain().defencePoint;
-		g.drawString("回避:" + avoidPoint + "% 防御:" + defencePoint + "%",
+		g.drawString("回避:" + avoidPoint + "% 防御:" + defencePoint,
 				objectPos_status.get("MAP_ABOID").x, objectPos_status.get("MAP_ABOID").y);
 		//情報を描画する対象のCharaを取得
 		//TODO: 下で取得したキャラの情報を描画してくれればOK

@@ -142,4 +142,8 @@ public class TaskManager {
 	public void occurEffect(int px, int py, String effectName) {
 		field.occurEffect(px, py, effectName);
 	}
+
+	public void checkEnemyBelowEvent() {
+		field.checkEnemyBelowEvent();
+	}
 }
