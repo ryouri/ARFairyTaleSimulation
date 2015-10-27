@@ -84,6 +84,10 @@ public class SimGameModel{
 		sgState.nextState();
 	}
 
+	public void returnGameStartState() {
+		sgState.returnGameStartState();
+	}
+
 	//BGMの切り替えを行うメソッド(TalkViewに呼び出される)--------------------------------------
 	public void changeBGM(String bgmFilePath) {
 		sgState.changeBGM(bgmFilePath);
