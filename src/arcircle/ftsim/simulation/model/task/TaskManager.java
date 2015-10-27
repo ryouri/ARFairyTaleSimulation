@@ -36,7 +36,10 @@ public class TaskManager {
 		WinTask winTask = new WinTask(this, field);
 		addOneTaskAndGenerateArray(winTask);
 	}
-
+	public void addLoseTask() {
+		LoseTask loseTask = new LoseTask(this, field);
+		addOneTaskAndGenerateArray(loseTask);
+	}
 	public void addOneTaskAndGenerateArray (Task task) {
 		ArrayList<Task> taskArray = new ArrayList<Task>();
 		taskArray.add(task);
