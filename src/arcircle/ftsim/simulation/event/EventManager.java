@@ -120,6 +120,12 @@ public class EventManager {
 		checkEvent(eventCharaDie);
 	}
 
+	public void checkTurnElapsed(int nowTurn) {
+		EventTurnProgress eventTurnProgress = new EventTurnProgress("");
+		eventTurnProgress.progressTurn = nowTurn;
+		checkEvent(eventTurnProgress);
+	}
+
 	private void startEvent(Event processEvent
 			, ArrayList<Event> removeEventArray) {
 		startBattleTalk(processEvent);
@@ -222,6 +228,13 @@ public class EventManager {
 			EventKillEnemy searchEvent = (EventKillEnemy)checkEvent;
 			EventKillEnemy processEvent = (EventKillEnemy)event;
 			if (searchEvent.killEnemyNum >= processEvent.killEnemyNum) {
+				return true;
+			}
+		} else if (event instanceof EventTurnProgress
+				&& checkEvent instanceof EventTurnProgress ) {
+			EventTurnProgress searchEvent = (EventTurnProgress)checkEvent;
+			EventTurnProgress processEvent = (EventTurnProgress)event;
+			if (searchEvent.progressTurn >= processEvent.startTurn + processEvent.progressTurn) {
 				return true;
 			}
 		}

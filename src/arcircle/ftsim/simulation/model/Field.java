@@ -156,6 +156,7 @@ public class Field implements KeyListner, Renderer {
 		setNowTurn(TURN_FRIEND);
 		cursor.setVisible(true);
 		nowTurnNum++;
+		eventManager.checkTurnElapsed(nowTurnNum);
 	}
 
 	public void changeTurnEnemy() {
