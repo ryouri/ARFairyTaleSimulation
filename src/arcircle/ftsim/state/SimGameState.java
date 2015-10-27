@@ -45,6 +45,14 @@ public class SimGameState extends KeyInputState {
 				new FadeInTransition(Color.black, 500));
 	}
 
+	public void returnGameStartState(){
+		bgm.stop();
+		newBGM.stop();
+		stateGame.enterState(StateConst.GAME_START,
+				new FadeOutTransition(Color.black, 100),
+				new FadeInTransition(Color.black, 100));
+	}
+
 	@Override
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {

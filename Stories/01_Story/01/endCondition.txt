@@ -1,4 +1,4 @@
 PHASE
 WIN,ボス（右下）を倒せ,CHARA_DIE,boss,battleTalk02.txt
-LOSE,＊＊＊がやられる,CHARA_DIE,no1,none
+LOSE,＊＊＊がやられる,CHARA_DIE,no1,loseTalk.txt
 PHASEEND
