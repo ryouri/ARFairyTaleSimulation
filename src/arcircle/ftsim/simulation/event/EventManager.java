@@ -166,6 +166,11 @@ public class EventManager {
 	}
 
 	public void checkEndConditionEvent(Event checkEvent) {
+		//Eventのチェックが2つ同時に発生し、勝利条件を満たすとcurrentPhaseが大きい状態でここに到達する可能性がある
+		if (winConditionEachPhaseArray.size() <= currentPhase) {
+			return;
+		}
+
 		for (Event event : winConditionEachPhaseArray.get(currentPhase)) {
 			if(eventEquals(event, checkEvent)) {
 				startBattleTalk(event);

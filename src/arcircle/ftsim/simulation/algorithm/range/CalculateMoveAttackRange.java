@@ -145,9 +145,9 @@ public class CalculateMoveAttackRange {
 		//移動先のノードを生成
 		Node nextNode = new Node(toX, toY, leftMove);
 
-		if (nextNode.x == 0 && nextNode.y == 9) {
-			System.out.println("aaa");
-		}
+//		if (nextNode.x == 0 && nextNode.y == 9) {
+//			System.out.println("aaa");
+//		}
 
 		//探索リストに探索中のノードと同座標のノードが登録されているかを検索
 		int searchingIndex = Collections.binarySearch(searchingNodeArray, nextNode);
