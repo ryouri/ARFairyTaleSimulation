@@ -120,6 +120,14 @@ public class EventManager {
 		checkEvent(eventCharaDie);
 	}
 
+	public void checkEnemyBelowEvent(int enemyNum) {
+		//キャラが死んだ時のイベントの処理
+		EventEnemyBelow eventEnemyBelow = new EventEnemyBelow("");
+		eventEnemyBelow.enemyThreshold = enemyNum;
+		checkEvent(eventEnemyBelow);
+
+	}
+
 	public void checkTurnElapsed(int nowTurn) {
 		EventTurnProgress eventTurnProgress = new EventTurnProgress("");
 		eventTurnProgress.progressTurn = nowTurn;

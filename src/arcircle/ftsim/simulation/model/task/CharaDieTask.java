@@ -39,6 +39,7 @@ public class CharaDieTask extends Task {
 		if (timer > CHARA_DIE_TIME) {
 			taskManager.characters.removeChara(dieChara);
 			taskManager.checkCharaDieEvent(dieChara.id);
+			taskManager.checkEnemyBelowEvent();
 			taskManager.taskEnd();
 		}
 	}

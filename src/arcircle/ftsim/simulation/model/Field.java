@@ -490,4 +490,14 @@ public class Field implements KeyListner, Renderer {
 	public int getNowTurnNum() {
 		return nowTurnNum;
 	}
+	public void checkEnemyBelowEvent() {
+		int enemyNum = 0;
+		for (Chara chara : characters.characterArray) {
+			if (chara.getCamp() != Chara.CAMP_ENEMY) {
+				continue;
+			}
+			enemyNum++;
+		}
+		eventManager.checkEnemyBelowEvent(enemyNum);
+	}
 }
