@@ -7,29 +7,27 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.state.SelectStoryState;
 
 public class SelectStoryView implements Renderer {
 	SelectStoryModel ssModel;
-	private SelectStoryState ssState;
-	private Image[] storyTitleImg = new Image[6];
-	private int[][] storyTitlePos = new int[6][2];
+	private Image[] storyTitleImg = new Image[SelectStoryModel.STORY_NUM];
+	private int[][] storyTitlePos = new int[SelectStoryModel.STORY_NUM][2];
 	private Image backGroundImg;
 	private Image frame;
 	private static final String imagePath = "./image";
 	private Color filterColor = new Color(0.75f,0.75f,0.75f,0.5f);
-	 
-	
+
+
 	public SelectStoryView(SelectStoryModel ssModel, SelectStoryState ssState) {
 		super();
 		this.ssModel = ssModel;
-		this.ssState = ssState;
-		
-		
-		
+
+		// 画像のロード
 		try {
-			for(int i = 0 ; i < ssState.storyNum ; i++){
+			for(int i = 0 ; i < SelectStoryModel.STORY_NUM; i++){
 				storyTitleImg[i] = new Image(imagePath + "/storyTitle0" + (i+1) + ".png");
 			}
 			frame = new Image("./image/frame.png");
@@ -37,10 +35,17 @@ public class SelectStoryView implements Renderer {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-		
-		for(int i = 0 ; i < ssState.storyNum ; i++){
-			storyTitlePos[i][0] = 60 + (i % 3) * 350;
-			storyTitlePos[i][1] = 120 + (i / 3) * 270;
+
+		// 位置の設定
+		for(int i = 0 ; i < SelectStoryModel.STORY_NUM; i++){
+			// ボスステージの場合
+			if (i == SelectStoryModel.STORY_NUM - 1) {
+				storyTitlePos[i][0] = (FTSimulationGame.WIDTH - storyTitleImg[i].getWidth()) / 2;
+				storyTitlePos[i][1] = (FTSimulationGame.HEIGHT - storyTitleImg[i].getHeight()) / 2;
+			} else {
+				storyTitlePos[i][0] = 60 + (i % 3) * 350;
+				storyTitlePos[i][1] = 120 + (i / 3) * 270;
+			}
 		}
 	}
 
@@ -49,17 +54,28 @@ public class SelectStoryView implements Renderer {
 		g.drawImage(backGroundImg,0,0);
 
 		int selectStory = ssModel.story;
-		int flamePosX = 50 + (selectStory % 3) * 350;
-		int flamePosY = 110 + (selectStory / 3) * 270;
+		int[] flamePos = new int[2];
+		flamePos[0] = storyTitlePos[selectStory][0] - 10;
+		flamePos[1] = storyTitlePos[selectStory][1] - 10;
 
-		g.drawImage(frame, flamePosX, flamePosY);
+		// フレームの描画
+		g.drawImage(frame, flamePos[0], flamePos[1]);
 
-		for(int i = 0 ; i < ssState.storyNum ; i++){
-			if(ssState.isClearStage[i]){
+		// 各ストーリーのタイトル画像の描画
+		for(int i = 0 ; i < SelectStoryModel.STORY_NUM - 1 ; i++){ // boss stageの分 引く
+			if(ssModel.isClearStage[i]){
 				g.drawImage(storyTitleImg[i] , storyTitlePos[i][0], storyTitlePos[i][1], filterColor);
 			}else{
 				g.drawImage(storyTitleImg[i] , storyTitlePos[i][0], storyTitlePos[i][1]);
 			}
+		}
+
+		// ボスステージのタイトル画像の描画
+		if (ssModel.onlyBossStage) {
+			// フレームを他のステージの上の描画するため再描画
+			g.drawImage(frame, flamePos[0], flamePos[1]);
+			int i = SelectStoryModel.STORY_NUM - 1;
+			g.drawImage(storyTitleImg[i] , storyTitlePos[i][0], storyTitlePos[i][1]);
 		}
 	}
 }
