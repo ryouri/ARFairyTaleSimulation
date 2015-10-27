@@ -46,7 +46,8 @@ public class SimGameState extends KeyInputState {
 	}
 
 	public void returnGameStartState(){
-		GameStartState gameStartState = (GameStartState)stateGame.getState(StateConst.GAME_START);
+		bgm.stop();
+		newBGM.stop();
 		stateGame.enterState(StateConst.GAME_START,
 				new FadeOutTransition(Color.black, 100),
 				new FadeInTransition(Color.black, 100));

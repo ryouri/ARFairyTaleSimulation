@@ -16,6 +16,7 @@ public class LoseTask extends Task{
 	public LoseTask(TaskManager taskManager, Field field) {
 		super(taskManager);
 		this.field = field;
+		field.getSgModel().changeBGM("./Stories/BGM/FTSim002_01.ogg");
 		isActivate = false;
 	}
 

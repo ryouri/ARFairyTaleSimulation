@@ -37,7 +37,6 @@ public class LoseTaskView implements Renderer {
 			g.drawString(ltModel.messageGameover, (FTSimulationGame.WIDTH - font.getWidth(ltModel.messageGameover)) / 2, (FTSimulationGame.HEIGHT - font.getHeight(ltModel.messageGameover)) / 2 - 20);
 			g.drawString(ltModel.messageRestart, (FTSimulationGame.WIDTH - font.getWidth(ltModel.messageRestart)) / 2, (FTSimulationGame.HEIGHT - font.getHeight(ltModel.messageRestart)) / 2 + 20);
 		}
-
 	}
 
 }
