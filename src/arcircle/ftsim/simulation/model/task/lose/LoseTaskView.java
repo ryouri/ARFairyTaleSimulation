@@ -25,7 +25,6 @@ public class LoseTaskView implements Renderer {
 			ltModel.isActive = true;
 		}
 
-
 		// 暗転の描画
 		g.setColor(new Color(0f, 0f, 0f, ltModel.alpha));
 		g.fillRect(0, 0, FTSimulationGame.WIDTH, FTSimulationGame.HEIGHT);
