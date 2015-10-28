@@ -22,6 +22,7 @@ import arcircle.ftsim.simulation.algorithm.range.Node;
 import arcircle.ftsim.simulation.chara.Chara;
 import arcircle.ftsim.simulation.chara.battle.ExpectBattleInfo;
 import arcircle.ftsim.simulation.command.CharaCommandWindow;
+import arcircle.ftsim.simulation.command.DisplayEnemyMoveCommand;
 import arcircle.ftsim.simulation.command.OptionCommandWindow;
 import arcircle.ftsim.simulation.event.EventManager;
 import arcircle.ftsim.simulation.field.LoadField;
@@ -256,6 +257,8 @@ public class Field implements KeyListner, Renderer {
 			for (Chara chara : characters.characterArray) {
 				if (chara.isSelect && !chara.isStand() && chara.getCamp() == Chara.CAMP_FRIEND) {
 					pushZKey(chara);
+				} else if (chara.isSelect && chara.getCamp() == Chara.CAMP_ENEMY) {
+					pushZkeyOnEnemy(chara);
 				}
 			}
 		}
@@ -322,6 +325,14 @@ public class Field implements KeyListner, Renderer {
 				chara);
 		sgModel.pushKeyInputStack(oCWindow);
 		sgModel.addRendererArray(oCWindow);
+	}
+
+	private void pushZkeyOnEnemy(Chara chara) {
+		soundManager.playSound(SoundManager.SOUND_DECISION);
+		cursor.stop();
+		DisplayEnemyMoveCommand demCommand = new DisplayEnemyMoveCommand(sgModel, this, chara);
+		sgModel.pushKeyInputStack(demCommand);
+		sgModel.addRendererArray(demCommand);
 	}
 
 	public Terrain getYXTerrain(int y, int x) {

@@ -19,8 +19,8 @@ import arcircle.ftsim.state.simgame.SimGameModel;
 
 public class MoveCommand extends Command implements KeyListner, Renderer {
 	CalculateMoveAttackRange cmRange;
-	private Chara chara;
-	private Field field;
+	protected Chara chara;
+	protected Field field;
 
 	private int cursorFirstX;
 	private int cursorFirstY;
@@ -37,8 +37,7 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		super(commandName, sgModel, charaCommandWindow);
 	}
 
-	@Override
-	public int pushed(Field field, Chara chara) {
+	public void init(Field field, Chara chara) {
 		this.chara = chara;
 		this.field = field;
 		cmRange = new CalculateMoveAttackRange(field, chara);
@@ -50,10 +49,15 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		cursorFirstY = field.getCursor().y;
 		field.getCursor().setDirection(Cursor.DOWN);
 
+		setVisible(true);
+	}
+
+	@Override
+	public int pushed(Field field, Chara chara) {
+		init(field, chara);
+
 		field.getSgModel().pushKeyInputStack(this);
 		field.getSgModel().addRendererArray(this);
-
-		setVisible(true);
 
 		return Command.PUSHED_NOT_VISIBLE;
 	}
