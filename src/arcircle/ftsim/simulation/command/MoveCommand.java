@@ -3,9 +3,7 @@ package arcircle.ftsim.simulation.command;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import arcircle.ftsim.keyinput.KeyInput;
@@ -24,23 +22,19 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 	private Chara chara;
 	private Field field;
 
-	Image moveRange;
-	Color moveColor;
-
 	private int cursorFirstX;
 	private int cursorFirstY;
 
 	private boolean visible;
 
+	private boolean[][] attackRange;
+
+	private static final Color attackColor = new Color(1.0f, 0.5f, 0.5f, 0.2f);
+	private static final Color moveColor = new Color(0.4f, 0.4f, 1.0f, 0.2f);
+
 	public MoveCommand(String commandName, SimGameModel sgModel,
 			CharaCommandWindow charaCommandWindow) {
 		super(commandName, sgModel, charaCommandWindow);
-		try {
-			moveRange = new Image("image/commandWindow/moveRange.png");
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-		moveColor = new Color(1, 1, 1, 0.3f);
 	}
 
 	@Override
@@ -49,6 +43,8 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 		this.field = field;
 		cmRange = new CalculateMoveAttackRange(field, chara);
 		cmRange.calculateRange();
+
+		attackRange = CalculateMoveAttackRange.createJudgeAttackArray(field, chara, cmRange.moveRange);
 
 		cursorFirstX = field.getCursor().x;
 		cursorFirstY = field.getCursor().y;
@@ -70,17 +66,20 @@ public class MoveCommand extends Command implements KeyListner, Renderer {
 
 		for (int y = field.firstTileY; y < field.lastTileY; y++) {
 			for (int x = field.firstTileX; x < field.lastTileX; x++) {
-				if (!cmRange.moveRange[y][x]) {
-					continue;
+				if (cmRange.moveRange[y][x]) {
+					g.setColor(moveColor);
+					g.fillRect(Field.tilesToPixels(x) + field.offsetX,
+							   Field.tilesToPixels(y) + field.offsetY,
+							   LoadField.MAP_CHIP_SIZE, LoadField.MAP_CHIP_SIZE);
+				} else if (attackRange[y][x]) {
+					g.setColor(attackColor);
+					g.fillRect(Field.tilesToPixels(x) + field.offsetX,
+							   Field.tilesToPixels(y) + field.offsetY,
+							   LoadField.MAP_CHIP_SIZE, LoadField.MAP_CHIP_SIZE);
 				}
-
-				// 各マスのタイルを描画
-				g.drawImage(moveRange,
-						field.tilesToPixels(x) + field.offsetX,
-						field.tilesToPixels(y) + field.offsetY,
-						moveColor);
 			}
 		}
+		g.setColor(Color.white);
 	}
 
 	public void setFirstPosition() {
