@@ -178,7 +178,9 @@ public class Characters {
 		characterArray.add(chara);
 	}
 
-	public static final String PLAYER_NAME = "player";
+	public static final String PLAYER_NORMAL_FOLDER = "player";
+	public static final String PLAYER_MALE_FOLDER = "playerMale";
+	public static final String PLAYER_FEMALE_FOLDER = "playerFemale";
 
 	private void setCharaData(String folderName, Chara chara) {
 		Status charaStatus = FTSimulationGame.save.getCharaStatus(folderName);
@@ -186,13 +188,13 @@ public class Characters {
 		//セーブのないキャラなら
 		if (charaStatus == null) {
 			//playerの処理
-			if (folderName.length() >= 6 && folderName.substring(0, 6).equals(PLAYER_NAME)) {
-				String playerFolderName = PLAYER_NAME;
+			if (folderName.length() >= 6 && folderName.substring(0, 6).equals(PLAYER_NORMAL_FOLDER)) {
+				String playerFolderName = "";
 				//男
 				if (FTSimulationGame.save.getPlayer().gender == Status.MALE) {
-					playerFolderName = playerFolderName + "Male";
+					playerFolderName = PLAYER_MALE_FOLDER;
 				} else if (FTSimulationGame.save.getPlayer().gender == Status.FEMALE) {
-					playerFolderName = playerFolderName + "Female";
+					playerFolderName = PLAYER_FEMALE_FOLDER;
 				} else {
 					System.err.println("Player Gender Error");
 				}
@@ -201,6 +203,8 @@ public class Characters {
 				characterData.get(playerFolderName).status.growRate.copyTo(chara.status.growRate);
 
 				chara.status.name = FTSimulationGame.save.getPlayer().name;
+				chara.status.gender = FTSimulationGame.save.getPlayer().gender;
+				chara.setFolderName(playerFolderName);
 
 				return;
 			}
