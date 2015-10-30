@@ -1,6 +1,5 @@
 akazukin,201,0,10,9
 ryoushi,203,0,10,10
-bba,408,0,9,9
 player,player,0,9,11
 fairy,903,0,10,11
 ookami,205,1,9,10

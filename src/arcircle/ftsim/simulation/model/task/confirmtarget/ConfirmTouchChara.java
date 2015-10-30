@@ -10,5 +10,6 @@ public class ConfirmTouchChara extends ConfirmTargetTaskLogic {
 
 	@Override
 	public void update(int delta) {
+		getConfirmTargetTask().finishTask();
 	}
 }
