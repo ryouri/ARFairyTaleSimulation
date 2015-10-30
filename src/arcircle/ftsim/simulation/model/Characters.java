@@ -65,6 +65,10 @@ public class Characters {
 
 	private Image hpBar;
 
+	private final static Color enemyHP = Color.red;
+	private final static Color friendHP = Color.blue;
+	private final static int HP_BAR_HEIGHT = 3;
+
 //	private TaskManager taskManager;
 
 	public void checkStandEvent(Chara chara) {
@@ -276,11 +280,18 @@ public class Characters {
 								chara.getAlpha()));
 			}
 
-			hpBar.getSubImage(chara.pX + offsetX + 1,
-					chara.pY + offsetY,
-					(int)(((chara.status.getHp() * 1.0) / (chara.status.maxHp * 1.0)) * 30),
-					4).draw(chara.pX + offsetX,
-					chara.pY + offsetY);
+			if (chara.getCamp() == Chara.CAMP_FRIEND) {
+				g.setColor(friendHP);
+				g.fillRect(chara.pX + offsetX + 1, chara.pY + offsetY,
+						(int)(((chara.status.getHp() * 1.0) / (chara.status.maxHp * 1.0)) * 30),
+						HP_BAR_HEIGHT);
+			} else if (chara.getCamp() == Chara.CAMP_ENEMY) {
+				g.setColor(enemyHP);
+				g.fillRect(chara.pX + offsetX + 1, chara.pY + offsetY,
+						(int)(((chara.status.getHp() * 1.0) / (chara.status.maxHp * 1.0)) * 30),
+						HP_BAR_HEIGHT);
+			}
+			g.setColor(Color.white);
 		}
 
 //		if (taskManager.existTask()) {
