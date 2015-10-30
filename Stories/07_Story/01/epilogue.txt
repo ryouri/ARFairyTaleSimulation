@@ -1,7 +1,15 @@
 
-SPEAK_*_@_L_0
-やったぁ！とうとう悪い魔法遣いを倒したぞぉ！/
- [mezame]zzzzzz%
+SPEAK_*_201_L_1
+これで僕の役目も終わりかな．
+SPEAKEND
+
+SPEAK_*_201_L_3
+あれっなんか視界がぼやけて，，，
+SPEAKEND
+
+SPEAK_@_@_NR_0
+ [mezame]%
+zzzzzzz%
 zzzz%
 zz%
 z%
