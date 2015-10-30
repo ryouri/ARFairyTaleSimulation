@@ -2,7 +2,7 @@ package arcircle.ftsim.state.talk;
 
 public class T_Const {
 	/** テキストボックス1行の最大文字数 */
-	public static final int MAX_CHARS_PER_LINE = 32;
+	public static final int MAX_CHARS_PER_LINE = 28;
     /** テキストボックス1ページに表示できる最大行数*/
     public static final int MAX_LINES_PER_PAGE = 5;
     /** テキストボックス1ページに表示できる最大文字数*/

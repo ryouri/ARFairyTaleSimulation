@@ -193,9 +193,9 @@ public class TalkView implements Renderer{
 		}
 
 		//最後のページでない場合は▼を表示する
-		if (talkModel.isNextPageFlag()) {
-			int dx = objectPos.get(TB).x + ((maxCharsPerLine - 2) * FONT_WIDTH);
-			int dy = objectPos.get(TB).y + (maxLinesPerPage * FONT_HEIGHT);
+		if (talkModel.isNextTalkFlag() || talkModel.isNextPageFlag()) {
+			int dx = objectPos.get(MB).x + ((maxCharsPerLine+4) * FONT_WIDTH);
+			int dy = objectPos.get(MB).y + ((maxLinesPerPage+2) * FONT_HEIGHT);
 			g.drawString("次へ", dx, dy);
 		}
 	}
