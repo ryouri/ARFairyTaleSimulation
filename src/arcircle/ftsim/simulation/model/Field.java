@@ -190,6 +190,13 @@ public class Field implements KeyListner, Renderer {
 		// 描画範囲がマップの大きさより大きくならないように調整
 		lastTileY = Math.min(lastTileY, loadField.getRow());
 
+		if (firstTileX < 0) {
+			firstTileX = 0;
+		}
+		if (firstTileY < 0) {
+			firstTileY = 0;
+		}
+
 		// マップを描く
 		loadField.renderMap(g, offsetX, offsetY, firstTileX, lastTileX, firstTileY,
 				lastTileY);

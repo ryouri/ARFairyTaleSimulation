@@ -125,6 +125,12 @@ public class LoadField {
 
 	private void renderMapChip(Graphics g, int z, int y, int x, int drawX,
 			int drawY) {
+		if (z < 0 || MAP_CHIP_LAYER_NUM < z
+		 || y < 0 || mapChipNoArray[0].length <= y
+		 || x < 0 || mapChipNoArray[0][0].length <= x) {
+			return;
+		}
+
 		if (mapChipNoArray[z][y][x] < TerrainInfoSupplier.NONE_CHIP_NUM) {
 			//通常のマップチップなら
 			int chipX = mapChipNoArray[z][y][x] % MAP_CHIP_COL;
