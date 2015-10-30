@@ -49,8 +49,9 @@ public class TalkTask extends Task {
 	private void start() {
 		SimGameModel sgModel = field.getSgModel();
 
-		this.btModel = new BattleTalkModel(sgModel, processEvent.eventFileName);
-		this.btView = new BattleTalkView(btModel, sgModel);
+		this.btModel = new BattleTalkModel(processEvent.eventFileName);
+		this.btModel.init(sgModel.getSimGameState());
+		this.btView = new BattleTalkView(btModel, sgModel.getSimGameState());
 
 		sgModel.pushKeyInputStack(btModel);
 		sgModel.addRendererArray(btView);

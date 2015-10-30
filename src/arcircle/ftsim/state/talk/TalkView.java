@@ -15,7 +15,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.renderer.Renderer;
 import arcircle.ftsim.simulation.chara.Status;
-import arcircle.ftsim.state.TalkState;
+import arcircle.ftsim.state.TalkManagerState;
 
 
 
@@ -53,7 +53,7 @@ public class TalkView implements Renderer{
 	/**トークモデル */
 	private TalkModel talkModel;
 	/** トークステート*/
-	private TalkState talkState;
+	private TalkManagerState talkManagerState;
 	/** 各オブジェクトの画像 - BG, MSB, LC, RC, SF */
 	private HashMap<String, Image> objectImg = new HashMap<String, Image>();
 	/** 各オブジェクトの描画位置 - BG, MSB, LC, RC, SN, SF, TB */
@@ -73,10 +73,10 @@ public class TalkView implements Renderer{
 	private HashMap<String, String> allCharasName;
 
 	//コンストラクタ--------------------------------------------------------------------------------------------------
-	public TalkView(TalkModel tModel, TalkState tState) {
+	public TalkView(TalkModel tModel, TalkManagerState tState) {
 		super();
 		this.talkModel = tModel;
-		this.talkState = tState;
+		this.talkManagerState = tState;
 		//各画像の準備
 		setImage();
 		//各オブジェクトの描画位置を設定する
@@ -118,8 +118,8 @@ public class TalkView implements Renderer{
 	/** 画像の読み込み，効果音の読み込み，各オブジェクトへのセット */
 	private void setImage(){
 		//全キャラの画像参照を取得
-		allCharasImg = talkState.getTalkGraphics().getAllCharaImageMap();
-		allCharasName = talkState.getTalkGraphics().getAllCharaNameMap();
+		allCharasImg = talkManagerState.getTalkGraphics().getAllCharaImageMap();
+		allCharasName = talkManagerState.getTalkGraphics().getAllCharaNameMap();
 		//各画像データの読み込み
 		try{
 			// 背景画像の読み込み
@@ -165,7 +165,7 @@ public class TalkView implements Renderer{
 		// メッセージボックスに描く文字の色は白
 		g.setColor(Color.white);
 		// フォントを設定
-		g.setFont(talkState.getFont());
+		g.setFont(talkManagerState.getFont());
 
 		//スピーカーネームの描画
 		g.drawString(speakerName, objectPos.get(SN).x, objectPos.get(SN).y);
@@ -238,7 +238,7 @@ public class TalkView implements Renderer{
 		}else if(curTag.getTagName().equals(T_Const.CHANGE_BGM)){
 			/* 現在のタグの種類が"CHANGEBGM"の場合 */
 			//トークステートで管理しているBGMをタグに格納されているファイルパスの音楽に変更する
-			talkState.changeBGM(curTag.getFilePath());
+			talkManagerState.changeBGM(curTag.getFilePath());
 			// タグを次に進める
 			talkModel.nextTalk();
 		}

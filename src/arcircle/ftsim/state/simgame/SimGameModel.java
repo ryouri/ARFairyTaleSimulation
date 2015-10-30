@@ -80,6 +80,10 @@ public class SimGameModel{
 		return storiesFolder;
 	}
 
+	public SimGameState getSimGameState() {
+		return sgState;
+	}
+
 	public void nextState() {
 		sgState.nextState();
 	}

@@ -14,7 +14,7 @@ import arcircle.ftsim.state.simgame.SimGameModel;
 import arcircle.ftsim.state.simgame.SimGameView;
 
 
-public class SimGameState extends KeyInputState {
+public class SimGameState extends TalkManagerState {
 	private SimGameModel sgModel;
 	private SimGameView sgView;
 //	private BattleTalkModel btModel;

@@ -14,7 +14,7 @@ import arcircle.ftsim.keyinput.KeyInput;
 import arcircle.ftsim.keyinput.KeyListner;
 import arcircle.ftsim.main.FTSimulationGame;
 import arcircle.ftsim.save.NowStage;
-import arcircle.ftsim.state.TalkState;
+import arcircle.ftsim.state.KeyInputState;
 
 public class TalkModel implements KeyListner {
 	//TODO CHANGEBACKGROUND, SELECT タグを使えるようにする
@@ -35,25 +35,25 @@ public class TalkModel implements KeyListner {
     /** メッセージを格納する配列 */
     private char[] curText = new char[maxCharsPerPage];
     /** 現在のタグのテキスト */
-    private char[] curTagText = new char[maxChars];
+    protected char[] curTagText = new char[maxChars];
 
     /**トークステート(相互) */
-	private TalkState talkState;
+	protected KeyInputState keyInputState;
     /** テキストタグを格納した配列 */
-    private TextTag[] talkTagArray = new TextTag[256];
+    protected TextTag[] talkTagArray = new TextTag[256];
     /** 次のページに進めるか？ */
-    private boolean nextPageFlag = false;
+    protected boolean nextPageFlag = false;
     /** 次の会話(タグ)に進めるか？ */
-    private boolean nextTalkFlag = false;
+    protected boolean nextTalkFlag = false;
     /** ウィンドウを隠せるか？（最後まで表示したらtrueになる）*/
-    private boolean nextStateFlag = false;
+    protected boolean nextStateFlag = false;
 
     /** プレイヤー(主人公)の名前 */
     private String playerName = "";
     /** 現在のストーリーステージの名前 */
-    private String nowStoryName = "";
+    protected String nowStoryName = "";
     /** 現在のストーリー章の名前 */
-    private String nowSubStoryName = "";
+    protected String nowSubStoryName = "";
     /** プロローグかエピローグかの判断 */
     private int nowLogue = 0;
 
@@ -62,14 +62,14 @@ public class TalkModel implements KeyListner {
     /** 現在の表示ページ */
     private int curPage = 0;
 	/** 現在の表示タグ */
-	private int curTagPointer = 0;
+	protected int curTagPointer = 0;
 
 	/** タグ生成時に用いるポインタ */
 	private int makingTagP = 0;
     /** テキストを流すTimerTask */
-    private Timer timer;
+    protected Timer timer;
     /** タイマータスク */
-    private TimerTask task;
+    protected TimerTask task;
 
     //アクセッタ------------------------------------------------------------------------------------------------------
   	public TextTag getCurTag() { return talkTagArray[curTagPointer]; }
@@ -98,9 +98,12 @@ public class TalkModel implements KeyListner {
     //-------------------------------------------------------------------------------------------------------------
 	/**コンストラクタ
 	 * @param talkState トークステート(相互) */
-	public TalkModel(TalkState talkState) {
+	public TalkModel() {
 		super();	//おまじない
-		this.talkState = talkState;
+	}
+
+	public void init(KeyInputState talkState) {
+		this.keyInputState = talkState;
 		//セーブデータを読み込み
 		readSaveData();
 		// 各フラッグの初期化
@@ -108,7 +111,7 @@ public class TalkModel implements KeyListner {
 		nextTalkFlag = false;
 		nextStateFlag = false;
 		//会話文テキスト(plorogue/epilogue)を読み込んで各タグを生成する
-		loadTextData();
+		generateTagData();
 		//現在のタグ番号
 		curTagPointer = 0;
 		//現在のタグの会話文を取得する
@@ -123,7 +126,7 @@ public class TalkModel implements KeyListner {
 
 	//-------------------------------------------------------------------------------------------------------------
 	/** セーブデータにある内容を取得する，[playerName, storyName, subStoryName, selectLogue] */
-	private void readSaveData(){
+	protected void readSaveData(){
 		//セーブデータからプレーヤー(主人公)の名前を取得
 		readPlayerName();
 		//セーブデータから今のストーリーステージの名前を取得
@@ -158,9 +161,7 @@ public class TalkModel implements KeyListner {
 		}
 	}
 
-	//------------------------------------------------------------------------------------------------------------
-    /** 会話用テキストデータをロードして，テキストタグを生成していくメソッド */
-    private void loadTextData(){
+	protected void generateTagData() {
     	//会話文のあるストーリー章のフォルダパス
     	String logueFilePath = "";
 		//プロローグかエピローグかの判定
@@ -174,7 +175,12 @@ public class TalkModel implements KeyListner {
     		System.out.println("ERROR_TalkModel_Logue");
     	}
 //    	logueFilePath = "Stories/" + nowStoryName + "/" + nowSubStoryName + "/kaiwa.txt";
+    	loadTextData(logueFilePath);
+	}
 
+	//------------------------------------------------------------------------------------------------------------
+    /** 会話用テキストデータをロードして，テキストタグを生成していくメソッド */
+    protected void loadTextData(String logueFilePath){
     	try {
     		// バッファリーダーの作成
     		BufferedReader br;
@@ -320,7 +326,7 @@ public class TalkModel implements KeyListner {
 
     //-------------------------------------------------------------------------------------------------------------
     /** timerで設定した時間毎に行われるタスク */
-    private class DrawingMessageTask extends TimerTask {
+    public class DrawingMessageTask extends TimerTask {
         public void run() {
             if (!nextPageFlag && !nextTalkFlag) {
                 curPosOfPage++;  // 1文字増やす
@@ -349,12 +355,12 @@ public class TalkModel implements KeyListner {
 	public void keyInput(KeyInput keyInput) {
 		//デバッグ用キー
 		if(keyInput.isKeyDown(Input.KEY_D)){
-			talkState.nextState();
+			keyInputState.nextState();
 		}
 		if(keyInput.isKeyDown(Input.KEY_Z)){
 			//次のステートへ
 			if(nextTalkFlag && nextStateFlag == true){
-				talkState.nextState();
+				keyInputState.nextState();
 			//ページ送り処理
 			}else if(nextPageFlag && !nextTalkFlag){
 				nextPage();
@@ -369,7 +375,7 @@ public class TalkModel implements KeyListner {
 
 	// ----------------------------------------------------------------------------------------------------------
 	/** ページ送りメソッド */
-	private void nextPage(){
+	protected void nextPage(){
 		curPage++;
 		curPosOfPage = 0;
 		nextPageFlag = false;
