@@ -32,8 +32,8 @@ public class FTSimulationGame extends StateBasedGame {
 		this.addState(new GameStartState(StateConst.GAME_START));
 		this.addState(new SelectGenderState(StateConst.SELECT_GENDER));
 		this.addState(new InputNameState(StateConst.INPUT_NAME));
-		this.addState(new SimGameState(StateConst.SIM_GAME));
 		this.addState(new TalkState(StateConst.TALK));
+		this.addState(new SimGameState(StateConst.SIM_GAME));
 		this.addState(new SelectStoryState(StateConst.SELECT_STORY));
 		this.addState(new LoadSaveState(StateConst.LOAD_SAVE_DATA));
 		this.addState(new StaffRollState(StateConst.STAFF_ROLL));

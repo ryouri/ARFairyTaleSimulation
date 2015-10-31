@@ -13,6 +13,8 @@ public class TerrainInfoSupplier {
 	public ArrayList<Terrain> terrainArray;
 
 	public static final int NONE_CHIP_NUM = 2000;
+	public static final int DO_NOT_ENTER = 240;
+	public static final String DO_NOT_ENTER_STR = "進入不可";
 
 	public TerrainInfoSupplier() {
 		terrainMap = new HashMap<String, Terrain>();
@@ -47,6 +49,11 @@ public class TerrainInfoSupplier {
 				return terrain;
 			}
 		}
+
+		if (mapChipNo >= DO_NOT_ENTER) {
+			return terrainMap.get(DO_NOT_ENTER_STR);
+		}
+
 		return null;
 	}
 

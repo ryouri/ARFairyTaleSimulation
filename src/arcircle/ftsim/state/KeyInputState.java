@@ -131,6 +131,8 @@ abstract public class KeyInputState extends BasicGameState {
 		this.lastBGM = lastBGM;
 	}
 
+	public abstract void nextState();
+
 	@Override
 	public void leave(GameContainer container, StateBasedGame game)
 			throws SlickException {
