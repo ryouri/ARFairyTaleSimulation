@@ -142,14 +142,18 @@ public class TalkView implements Renderer{
 	@Override
 	//レンダー---------------------------------------------------------------------------------------
 	public void render(GameContainer container, StateBasedGame game, Graphics g) {
-		//背景画像の描画
-		g.drawImage(objectImg.get(BG), 0, 0);
+		drawBackGround(container, game, g);
 		//現在のタグを取得,(update/drawで用いるため，先に取得)
 		TextTag curTag = talkModel.getCurTag();
 		//各キャラの配置などのデータを更新
 		update(curTag);
 		//updateした情報で画面に描画
 		draw(g, curTag);
+	}
+
+	protected void drawBackGround(GameContainer container, StateBasedGame game, Graphics g) {
+		//背景画像の描画
+		g.drawImage(objectImg.get(BG), 0, 0);
 	}
 
 	//----------------------------------------------------------------------------------------------------------------
