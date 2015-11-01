@@ -3,3 +3,7 @@ SPEAK_@_@_NR_0
 ３匹の子豚エピローグだよ！
 ダミーダミー
 SPEAKEND
+
+SPEAK_@_@_NR_0
+ダミーダミー
+SPEAKEND

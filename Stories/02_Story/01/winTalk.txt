@@ -1,0 +1,8 @@
+
+SPEAK_@_@_NR_0
+勝った！
+SPEAKEND
+
+SPEAK_@_@_NR_0
+やったね！
+SPEAKEND

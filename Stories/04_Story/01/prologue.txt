@@ -1,5 +1,9 @@
-﻿
+
 SPEAK_@_@_NR_0
 ジャックと豆の木プロローグだよ！
+ダミーダミー
+SPEAKEND
+
+SPEAK_@_@_NR_0
 ダミーダミー
 SPEAKEND
