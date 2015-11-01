@@ -1,7 +1,0 @@
-SPEAK_*_006_L_0
-お前の負けだ！
-SPEAKEND
-
-SPEAK_*_006_R_0
-グハッ！！！！
-SPEAKEND

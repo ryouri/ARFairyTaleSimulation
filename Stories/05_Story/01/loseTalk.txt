@@ -1,3 +1,8 @@
-﻿SPEAK_*_@_L_0
+
+SPEAK_@_@_NR_0
 GAMEOVER!!!
+SPEAKEND
+
+SPEAK_@_@_NR_0
+ストーリー選択へ戻ります
 SPEAKEND
