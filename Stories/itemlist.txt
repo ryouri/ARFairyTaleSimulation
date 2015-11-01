@@ -1,3 +1,4 @@
 けん,TYPE_WEAPON,RANGE_NEAR,1,4,longsword.png,slash
 ゆみ,TYPE_WEAPON,RANGE_FAR,1,4,bow.png,bomb
+てすと！,TYPE_WEAPON,RANGE_NEAR_FAR,5,6,bow.png,slash
 つえ,TYPE_SUPPORT,RANGE_NEAR,5,bow.png,holy
