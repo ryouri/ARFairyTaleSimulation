@@ -108,7 +108,7 @@ public class LoadCharacter {
 
 	/*
 	NAMES,0,1,0
-	STATUS,20,8,5,9,6,10,5,4,6,8
+	STATUS,16,6,6,5,5,5,4,4,5,4
 	GROW,50,40,40,60,60,60,40,40,0,0
 	ITEM,けん
 	 */
@@ -132,7 +132,7 @@ public class LoadCharacter {
 			chara.status.level = 	Integer.valueOf(charaStrs[3]);
 			chara.status.exp = 		Integer.valueOf(charaStrs[4]);
 		}
-//		STATUS,20,8,5,9,6,10,5,4,6,8
+//		STATUS,16,6,6,5,5,5,4,4,5,4
 		if (charaStrs[0].equals(STATUS)) {
 			chara.status.maxHp = 		Integer.valueOf(charaStrs[1]);
 			chara.status.setHp(Integer.valueOf(charaStrs[1]));
