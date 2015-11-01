@@ -1,4 +1,5 @@
 PHASE
-WIN,ボス（右下）を倒せ,CHARA_DIE,boss,battleTalk02.txt
-LOSE,＊＊＊がやられる,CHARA_DIE,no1,loseTalk.txt
+WIN,偽王子を倒せ！,CHARA_DIE,niseOzi,winTalk.txt
+LOSE,20ターンになる,TURN_PROGRESS,20,loseTalk.txt
+LOSE,主人公がやられる,CHARA_DIE,player,loseTalk.txt
 PHASEEND
