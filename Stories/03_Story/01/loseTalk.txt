@@ -1,7 +1,3 @@
-SPEAK_*_006_L_0
-進捗ツライ
-SPEAKEND
-
-SPEAK_*_006_R_0
-わかる
+﻿SPEAK_*_@_L_0
+GAMEOVER!!!
 SPEAKEND
