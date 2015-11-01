@@ -1,4 +1,4 @@
 PHASE
-WIN,ボス（右下）を倒せ,CHARA_DIE,boss,battleTalk02.txt
-LOSE,＊＊＊がやられる,CHARA_DIE,no1,loseTalk.txt
+WIN,悪い魔法使いを倒せ！,CHARA_DIE,evilMagician,winTalk.txt
+LOSE,主人公がやられる,CHARA_DIE,player,loseTalk.txt
 PHASEEND
