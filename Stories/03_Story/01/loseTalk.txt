@@ -1,7 +1,8 @@
-SPEAK_*_006_L_0
-進捗ツライ
+
+SPEAK_@_@_NR_0
+GAMEOVER!!!
 SPEAKEND
 
-SPEAK_*_006_R_0
-わかる
+SPEAK_@_@_NR_0
+ストーリー選択へ戻ります
 SPEAKEND

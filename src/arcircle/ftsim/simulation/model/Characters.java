@@ -155,7 +155,7 @@ public class Characters {
 
 	private void addCharacter(String charaLine) {
 		String[] charaPuts = charaLine.split(",");
-		if (charaPuts.length == 0) {
+		if (charaPuts.length <= 1) {
 			return;
 		}
 

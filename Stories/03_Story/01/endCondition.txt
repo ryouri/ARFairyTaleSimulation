@@ -1,5 +1,5 @@
 PHASE
-WIN,敵を全部倒せ,ENEMY_BELOW,0,battleTalk02.txt
+WIN,敵を全部倒せ,ENEMY_BELOW,0,winTalk.txt
 LOSE,赤ずきんがやられる,CHARA_DIE,akazukin,loseTalk.txt
 LOSE,主人公がやられる,CHARA_DIE,player,loseTalk.txt
 PHASEEND

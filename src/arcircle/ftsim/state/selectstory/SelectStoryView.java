@@ -72,8 +72,6 @@ public class SelectStoryView implements Renderer {
 
 		// ボスステージのタイトル画像の描画
 		if (ssModel.onlyBossStage) {
-			// フレームを他のステージの上の描画するため再描画
-			g.drawImage(frame, flamePos[0], flamePos[1]);
 			int i = SelectStoryModel.STORY_NUM - 1;
 			g.drawImage(storyTitleImg[i] , storyTitlePos[i][0], storyTitlePos[i][1]);
 		}

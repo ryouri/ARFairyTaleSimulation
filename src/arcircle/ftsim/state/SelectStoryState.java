@@ -62,6 +62,8 @@ public class SelectStoryState extends KeyInputState {
 		keyInputStack.push(ssModel);
 		rendererArray.clear();
 		rendererArray.add(ssView);
+
+		FTSimulationGame.save.save();
 	}
 	//前のステートで流していたBGMを受け取るためのメソッド
 	public void receiveBGM(Sound lastBGM){
