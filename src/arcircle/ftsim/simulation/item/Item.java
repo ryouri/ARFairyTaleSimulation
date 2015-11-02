@@ -1,8 +1,10 @@
 package arcircle.ftsim.simulation.item;
 
+import java.io.Serializable;
+
 import org.newdawn.slick.Image;
 
-public class Item {
+public class Item implements Serializable {
 	public String name;
 
 	public int type;
