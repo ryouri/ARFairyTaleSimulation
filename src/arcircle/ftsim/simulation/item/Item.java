@@ -1,8 +1,8 @@
 package arcircle.ftsim.simulation.item;
 
-import org.newdawn.slick.Image;
+import java.io.Serializable;
 
-public class Item {
+public class Item implements Serializable {
 	public String name;
 
 	public int type;
@@ -16,5 +16,6 @@ public class Item {
 	public static int TYPE_USE = 2;
 	public static String TYPE_USE_STR = "TYPE_USE";
 
-	public Image itemIcon;
+	//直列化出来ないため、いったん削除
+//	public Image itemIcon;
 }

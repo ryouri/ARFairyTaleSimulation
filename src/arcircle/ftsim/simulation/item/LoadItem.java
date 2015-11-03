@@ -63,7 +63,8 @@ public class LoadItem {
 			}
 			weapon.power = Integer.valueOf(itemStrs[3]);
 			weapon.weight = Integer.valueOf(itemStrs[4]);
-			weapon.itemIcon = loadItemIcon(itemStrs[5]);
+			//直列化出来ないため、いったん削除
+//			weapon.itemIcon = loadItemIcon(itemStrs[5]);
 			weapon.effectName = itemStrs[6];
 
 			return weapon;
@@ -78,7 +79,8 @@ public class LoadItem {
 				supportItem.rangeType = SupportItem.RANGE_NEAR;
 			}
 			supportItem.power = Integer.valueOf(itemStrs[3]);
-			supportItem.itemIcon = loadItemIcon(itemStrs[4]);
+			//直列化出来ないため、いったん削除
+//			supportItem.itemIcon = loadItemIcon(itemStrs[4]);
 			supportItem.effectName = itemStrs[5];
 
 			return supportItem;

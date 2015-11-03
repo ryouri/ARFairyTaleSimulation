@@ -1,6 +1,8 @@
 package arcircle.ftsim.simulation.chara;
 
-public class GrowRate {
+import java.io.Serializable;
+
+public class GrowRate implements Serializable {
 	//成長率
 	public int hp;
 	public int power;

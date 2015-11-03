@@ -183,21 +183,21 @@ public class Characters {
 	public static final String PLAYER_FEMALE_FOLDER = "playerFemale";
 
 	private void setCharaData(String folderName, Chara chara) {
-		Status charaStatus = FTSimulationGame.save.getCharaStatus(folderName);
+		//playerの処理
+		if (folderName.length() >= 6 && folderName.substring(0, 6).equals(PLAYER_NORMAL_FOLDER)) {
+			String playerFolderName = "";
+			//男
+			if (FTSimulationGame.save.getPlayer().gender == Status.MALE) {
+				playerFolderName = PLAYER_MALE_FOLDER;
+			} else if (FTSimulationGame.save.getPlayer().gender == Status.FEMALE) {
+				playerFolderName = PLAYER_FEMALE_FOLDER;
+			} else {
+				System.err.println("Player Gender Error");
+			}
 
-		//セーブのないキャラなら
-		if (charaStatus == null) {
-			//playerの処理
-			if (folderName.length() >= 6 && folderName.substring(0, 6).equals(PLAYER_NORMAL_FOLDER)) {
-				String playerFolderName = "";
-				//男
-				if (FTSimulationGame.save.getPlayer().gender == Status.MALE) {
-					playerFolderName = PLAYER_MALE_FOLDER;
-				} else if (FTSimulationGame.save.getPlayer().gender == Status.FEMALE) {
-					playerFolderName = PLAYER_FEMALE_FOLDER;
-				} else {
-					System.err.println("Player Gender Error");
-				}
+			Status charaStatus = FTSimulationGame.save.getCharaStatus(playerFolderName);
+
+			if (charaStatus == null) {
 				chara.setItemList(characterData.get(playerFolderName).getItemList());
 				characterData.get(playerFolderName).status.copyTo(chara.status);
 				characterData.get(playerFolderName).status.growRate.copyTo(chara.status.growRate);
@@ -205,10 +205,21 @@ public class Characters {
 				chara.status.name = FTSimulationGame.save.getPlayer().name;
 				chara.status.gender = FTSimulationGame.save.getPlayer().gender;
 				chara.setFolderName(playerFolderName);
-
-				return;
+			} else {
+				//TODO: アイテムデータのコピーが未完成
+				chara.setItemList(charaStatus.getItemList());
+				charaStatus.copyTo(chara.status);
+				charaStatus.growRate.copyTo(chara.status.growRate);
 			}
 
+			return;
+		}
+
+
+		Status charaStatus = FTSimulationGame.save.getCharaStatus(folderName);
+
+		//セーブのないキャラなら
+		if (charaStatus == null) {
 			//TODO: アイテムデータのコピーが未完成
 			chara.setItemList(characterData.get(folderName).getItemList());
 			characterData.get(folderName).status.copyTo(chara.status);
